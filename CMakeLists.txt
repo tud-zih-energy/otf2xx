@@ -33,7 +33,7 @@ project(otf2xx)
 
 cmake_minimum_required(VERSION 3.0)
 
-include(OTF2.cmake)
+include(OTF2XX.cmake)
 
 include(CTest)
 
