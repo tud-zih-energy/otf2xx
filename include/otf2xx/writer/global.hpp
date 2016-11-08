@@ -588,11 +588,11 @@ namespace writer
             store(location_properties_);
             store(regions_);
 
-            store(regions_groups_);
-            store(locations_groups_);
             store(comm_locations_groups_);
-            store(comm_groups_);
             store(comm_self_groups_);
+            store(comm_groups_);
+            store(locations_groups_);
+            store(regions_groups_);
             //             store(metric_groups);
 
             store(comms_);

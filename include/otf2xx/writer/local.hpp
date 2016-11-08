@@ -271,6 +271,19 @@ namespace writer
             location_.event_written();
         }
 
+
+        // TODO find a better solution to allow high-performance writing of this event without
+        // using shread ptrs
+        void write_calling_context_sample(otf2::chrono::time_point timestamp,
+                                          OTF2_CallingContextRef ref, uint32_t unwind_distance,
+                                          OTF2_InterruptGeneratorRef interrupt_generator_ref)
+        {
+            check(OTF2_EvtWriter_CallingContextSample(evt_wrt_, nullptr, convert(timestamp), ref,
+                                                      unwind_distance, interrupt_generator_ref),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
     public:
         void write(const otf2::event::thread_acquire_lock& data)
         {

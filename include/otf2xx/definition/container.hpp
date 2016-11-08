@@ -116,9 +116,10 @@ namespace definition
         template <typename... Args>
         value_type emplace(key_type ref, Args... args)
         {
-            return *(data.emplace(std::piecewise_construct, std::forward_as_tuple(ref),
-                                  std::forward_as_tuple(ref, args...))
-                         .first);
+            return data
+                .emplace(std::piecewise_construct, std::forward_as_tuple(ref),
+                         std::forward_as_tuple(ref, args...))
+                .first->second;
         }
 
         void add_definition(Definition def)

@@ -44,7 +44,9 @@
 #include <otf2xx/writer/global.hpp>
 #include <otf2xx/writer/local.hpp>
 
+#ifdef OTF2XX_HAS_MPI
 #include <boost/mpi.hpp>
+#endif
 
 #include <functional>
 #include <string>
@@ -58,6 +60,7 @@ namespace writer
     class archive
     {
     public:
+#ifdef OTF2XX_HAS_MPI
         archive(const std::string& path, const std::string& name, boost::mpi::communicator& comm,
                 OTF2_FileMode_enum mode = OTF2_FILEMODE_WRITE,
                 std::size_t event_chunk_size = 1024 * 1024,
@@ -74,7 +77,7 @@ namespace writer
             set_flush_callbacks();
             set_collective_callbacks();
         }
-
+#endif
         archive(const std::string& path, const std::string& name,
                 OTF2_FileMode_enum mode = OTF2_FILEMODE_WRITE,
                 std::size_t event_chunk_size = 1024 * 1024,
@@ -104,11 +107,13 @@ namespace writer
             OTF2_Archive_Close(ar);
         }
 
+#ifdef OTF2XX_HAS_MPI
         /* Takes ownership !*/
         explicit archive(OTF2_Archive* ar, boost::mpi::communicator& comm)
         : ar(ar), serial(false), comm_(comm)
         {
         }
+#endif
 
         /* Takes ownership !*/
         explicit archive(OTF2_Archive* ar) : ar(ar), serial(true)
@@ -121,6 +126,7 @@ namespace writer
         }
 
     private:
+#ifdef OTF2XX_HAS_MPI
         void set_collective_callbacks()
         {
             collective_callbacks_.otf2_barrier = &detail::callbacks::collective::barrier;
@@ -138,6 +144,7 @@ namespace writer
             OTF2_Archive_SetCollectiveCallbacks(ar, &collective_callbacks_,
                                                 static_cast<void*>(this), nullptr, nullptr);
         }
+#endif
 
         void set_flush_callbacks()
         {
@@ -157,7 +164,12 @@ namespace writer
 
         bool is_master() const
         {
+#ifdef OTF2XX_HAS_MPI
             return serial || comm_.rank() == 0;
+#else
+            assert(serial);
+            return true;
+#endif
         }
 
     public:
@@ -381,10 +393,12 @@ namespace writer
                                                 bool);
         friend OTF2_TimeStamp detail::post_flush(void*, OTF2_FileType, OTF2_LocationRef);
 
+#ifdef OTF2XX_HAS_MPI
         boost::mpi::communicator& comm()
         {
             return comm_;
         }
+#endif
 
     private:
         global& get_global_writer()
@@ -422,7 +436,9 @@ namespace writer
     private:
         OTF2_Archive* ar;
         bool serial;
+#ifdef OTF2XX_HAS_MPI
         boost::mpi::communicator comm_;
+#endif
         // OTF2_GlobalDefWriter *wrt;
         OTF2_FlushCallbacks flush_callbacks_;
         OTF2_CollectiveCallbacks collective_callbacks_;
@@ -495,6 +511,9 @@ namespace writer
 }
 } // namespace otf2
 
+#ifdef OTF2XX_HAS_MPI
+// FIXME @bmario NEVER EVER INCLUDE ANYTHING BELOW SOMETHING THAT IS NOT AN INCLUDE
 #include <otf2xx/writer/detail/collective.hpp>
+#endif
 
 #endif // INCLUDE_OTF2XX_ARCHIVE_HPP
