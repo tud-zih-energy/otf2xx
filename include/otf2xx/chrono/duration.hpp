@@ -85,7 +85,7 @@ namespace chrono
     /**
      * \brief otf2::chrono::duration defaults to picoseconds
      */
-    typedef picoseconds duration;
+    typedef nanoseconds duration;
 
     /**
      * \brief convert between durations
