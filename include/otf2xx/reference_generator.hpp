@@ -76,7 +76,7 @@ public:
     typedef RefType ref_type;
 
     template <typename Definition>
-    void register_definition(Definition def)
+    void register_definition(const Definition& def)
     {
         static_assert(
             std::is_same<
@@ -111,9 +111,7 @@ public:
     }
 
 private:
-    // TODO old_max should be initialized with -1, but I don't want to recreate all test traces
-    // just for this minor change.
-    typename ref_type::ref_type old_max = 0;
+    typename ref_type::ref_type old_max = -1;
 };
 
 namespace detail
