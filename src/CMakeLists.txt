@@ -33,6 +33,10 @@ set(SRCS reader/callback/definitions.cpp reader/callback/events.cpp)
 
 add_library(otf2xx ${SRCS})
 
+if(OTF2XX_WITH_MPI)
+    target_link_libraries(otf2xx ${Boost_LIBRARIES})
+endif()
+
 set(OTF2XX_LIBRARIES otf2xx)
 
 install(TARGETS otf2xx DESTINATION lib)
