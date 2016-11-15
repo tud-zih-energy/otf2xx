@@ -64,8 +64,8 @@ namespace definition
     public:
         typedef typename impl_type::attribute_type attribute_type;
 
-        attribute(otf2::reference<attribute> ref, otf2::definition::string name,
-                  otf2::definition::string description, attribute_type type)
+        attribute(otf2::reference<attribute> ref, const otf2::definition::string& name,
+                  const otf2::definition::string& description, attribute_type type)
         : base(std::make_shared<impl_type>(ref, name, description, type))
         {
         }
@@ -76,7 +76,7 @@ namespace definition
          * \brief Returns a string definition containing the name
          * \return otf2::definition::string containing the name
          */
-        otf2::definition::string name() const
+        const otf2::definition::string& name() const
         {
             assert(this->is_valid());
             return data_->name();
@@ -86,7 +86,7 @@ namespace definition
          * \brief Returns a string definition containing the name
          * \return otf2::definition::string containing the name
          */
-        otf2::definition::string description() const
+        const otf2::definition::string& description() const
         {
             assert(this->is_valid());
             return data_->description();

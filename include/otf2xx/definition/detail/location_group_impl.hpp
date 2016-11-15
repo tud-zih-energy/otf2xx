@@ -54,8 +54,8 @@ namespace definition
         public:
             typedef otf2::common::location_group_type location_group_type;
 
-            location_group_impl(reference<location_group> ref, string name,
-                                location_group_type type, system_tree_node stm)
+            location_group_impl(reference<location_group> ref, const otf2::definition::string& name,
+                                location_group_type type, const otf2::definition::system_tree_node& stm)
             : ref_(ref), name_(name), type_(type), stm_(stm)
             {
             }
@@ -81,7 +81,7 @@ namespace definition
                 return ref_;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
@@ -91,16 +91,16 @@ namespace definition
                 return type_;
             }
 
-            system_tree_node parent() const
+            const otf2::definition::system_tree_node& parent() const
             {
                 return stm_;
             }
 
         private:
             reference<location_group> ref_;
-            string name_;
+            otf2::definition::string name_;
             location_group_type type_;
-            system_tree_node stm_;
+            otf2::definition::system_tree_node stm_;
         };
     }
 }

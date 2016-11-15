@@ -57,7 +57,8 @@ namespace definition
             using type_type = otf2::common::type;
             using value_type = OTF2_AttributeValue;
 
-            property_impl(Definition def, string name, type_type type, value_type value)
+            property_impl(const Definition& def, const otf2::definition::string& name,
+                          type_type type, value_type value)
             : def_(def), name_(name), type_(type), value_(value)
             {
             }
@@ -76,7 +77,7 @@ namespace definition
                 return undef;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
@@ -91,7 +92,7 @@ namespace definition
                 return value_;
             }
 
-            Definition def() const
+            const Definition& def() const
             {
                 return def_;
             }
@@ -103,7 +104,7 @@ namespace definition
 
         private:
             Definition def_;
-            string name_;
+            otf2::definition::string name_;
             type_type type_;
             value_type value_;
         };

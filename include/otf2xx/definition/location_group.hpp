@@ -65,8 +65,8 @@ namespace definition
     public:
         typedef otf2::common::location_group_type location_group_type;
 
-        location_group(reference<location_group> ref, otf2::definition::string name,
-                       location_group_type type, otf2::definition::system_tree_node stm)
+        location_group(reference<location_group> ref, const otf2::definition::string& name,
+                       location_group_type type, const otf2::definition::system_tree_node& stm)
         : base(std::make_shared<impl_type>(ref, name, type, stm))
         {
         }
@@ -79,7 +79,7 @@ namespace definition
          * \returns a string definiton containing the name
          *
          */
-        otf2::definition::string name() const
+        const otf2::definition::string& name() const
         {
             assert(this->is_valid());
             return data_->name();
@@ -99,7 +99,7 @@ namespace definition
          * \brief returns the parentof the location group definition
          * \returns otf2::definition_system_tree_node
          */
-        otf2::definition::system_tree_node parent() const
+        const otf2::definition::system_tree_node& parent() const
         {
             assert(this->is_valid());
             return data_->parent();

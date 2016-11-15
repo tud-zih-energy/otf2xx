@@ -76,7 +76,8 @@ namespace definition
             typedef MemberType value_type;
 
         public:
-            group_impl(otf2::reference<detail::group_base> ref, string name, paradigm_type paradigm,
+            group_impl(otf2::reference<detail::group_base> ref,
+                       const otf2::definition::string& name, paradigm_type paradigm,
                        group_flag_type group_flag)
             : ref_(ref), name_(name), paradigm_(paradigm), group_flag_(group_flag)
             {
@@ -102,7 +103,7 @@ namespace definition
                 return ref_;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
@@ -139,19 +140,24 @@ namespace definition
                 return members_.size();
             }
 
-            value_type operator[](std::size_t i) const
+            const value_type& operator[](std::size_t i) const
             {
                 return members_[i];
             }
 
-            void add_member(value_type member)
+            void add_member(value_type&& member)
+            {
+                members_.emplace_back(std::forward(member));
+            }
+
+            void add_member(const value_type& member)
             {
                 members_.push_back(member);
             }
 
         private:
             otf2::reference<detail::group_base> ref_;
-            string name_;
+            otf2::definition::string name_;
             members_type members_;
             paradigm_type paradigm_;
             group_flag_type group_flag_;

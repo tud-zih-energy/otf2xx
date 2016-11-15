@@ -68,7 +68,11 @@ namespace definition
             typedef otf2::reference<typename otf2::traits::reference_param_type<Def>::type>
                 reference_type;
 
-            base(std::shared_ptr<Impl> data) : data_(data)
+            base(const std::shared_ptr<Impl>& data) : data_(data)
+            {
+            }
+
+            base(std::shared_ptr<Impl>&& data) : data_(std::move(data))
             {
             }
 
@@ -101,7 +105,7 @@ namespace definition
              *
              * \return a definiton object
              */
-            static Def undefined()
+            static const Def& undefined()
             {
                 static Def undef(Impl::undefined());
                 return undef;
@@ -142,6 +146,19 @@ namespace definition
             std::shared_ptr<Impl> get() const
             {
                 return data_;
+            }
+
+            /**
+             * \brief Returns the impl object
+             *
+             * \warning { This method isn't part of the public interface of definition
+             *          objects. You're disencouraged to relie on it. }
+             *
+             * \return const Impl& to the referenced object
+             */
+            const Impl& data() const
+            {
+                return *data_.get();
             }
 
         protected:

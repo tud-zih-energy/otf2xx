@@ -60,11 +60,11 @@ namespace definition
             typedef otf2::common::base_type value_base_type;
             typedef std::int64_t value_exponent_type;
 
-            metric_member_impl(reference<metric_member> ref, otf2::definition::string name,
-                               otf2::definition::string description, metric_type type,
+            metric_member_impl(reference<metric_member> ref, const otf2::definition::string& name,
+                               const otf2::definition::string& description, metric_type type,
                                metric_mode mode, value_type_type value_type,
                                value_base_type value_base, value_exponent_type value_exponent,
-                               otf2::definition::string value_unit)
+                               const otf2::definition::string& value_unit)
             : ref_(ref), name_(name), description_(description), type_(type), mode_(mode),
               value_type_(value_type), value_base_(value_base), value_exponent_(value_exponent),
               value_unit_(value_unit)
@@ -95,12 +95,12 @@ namespace definition
                 return ref_;
             }
 
-            otf2::definition::string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
 
-            otf2::definition::string description() const
+            const otf2::definition::string& description() const
             {
                 return description_;
             }
@@ -130,7 +130,7 @@ namespace definition
                 return value_exponent_;
             }
 
-            otf2::definition::string value_unit() const
+            const otf2::definition::string& value_unit() const
             {
                 return value_unit_;
             }

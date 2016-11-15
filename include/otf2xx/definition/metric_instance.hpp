@@ -61,31 +61,31 @@ namespace definition
         typedef impl_type::metric_scope metric_scope;
 
         metric_instance(reference<detail::metric_base> ref,
-                        otf2::definition::metric_class metric_class,
-                        otf2::definition::location recorder, otf2::definition::location scope)
+                        const otf2::definition::metric_class& metric_class,
+                        const otf2::definition::location& recorder, const otf2::definition::location& scope)
         : base(std::make_shared<impl_type>(ref, metric_class, recorder, scope))
         {
         }
 
         metric_instance(reference<detail::metric_base> ref,
-                        otf2::definition::metric_class metric_class,
-                        otf2::definition::location recorder, otf2::definition::location_group scope)
+                        const otf2::definition::metric_class& metric_class,
+                        const otf2::definition::location& recorder, const otf2::definition::location_group& scope)
         : base(std::make_shared<impl_type>(ref, metric_class, recorder, scope))
         {
         }
 
         metric_instance(reference<detail::metric_base> ref,
-                        otf2::definition::metric_class metric_class,
-                        otf2::definition::location recorder,
-                        otf2::definition::system_tree_node scope)
+                        const otf2::definition::metric_class& metric_class,
+                        const otf2::definition::location& recorder,
+                        const otf2::definition::system_tree_node& scope)
         : base(std::make_shared<impl_type>(ref, metric_class, recorder, scope))
         {
         }
 
         metric_instance(reference<detail::metric_base> ref,
-                        otf2::definition::metric_class metric_class,
-                        otf2::definition::location recorder,
-                        otf2::definition::locations_group scope)
+                        const otf2::definition::metric_class& metric_class,
+                        const otf2::definition::location& recorder,
+                        const otf2::definition::locations_group& scope)
         : base(std::make_shared<impl_type>(ref, metric_class, recorder, scope))
         {
         }
@@ -106,7 +106,7 @@ namespace definition
         /**
          * \brief returns the referenced metric class
          */
-        otf2::definition::metric_class metric_class() const
+        const otf2::definition::metric_class& metric_class() const
         {
             assert(this->is_valid());
             return this->data_->metric_class();
@@ -117,7 +117,7 @@ namespace definition
          *
          * The recorder is the location, where this metric was recorded
          */
-        otf2::definition::location recorder() const
+        const otf2::definition::location& recorder() const
         {
             assert(this->is_valid());
             return this->data_->recorder();
@@ -145,7 +145,7 @@ namespace definition
          * \note It might not be a valid definition
          * \see scope()
          */
-        otf2::definition::location location_scope() const
+        const otf2::definition::location& location_scope() const
         {
             assert(this->is_valid());
             return this->data_->location_scope();
@@ -159,7 +159,7 @@ namespace definition
          * \note It might not be a valid definition
          * \see scope()
          */
-        otf2::definition::location_group location_group_scope() const
+        const otf2::definition::location_group& location_group_scope() const
         {
             assert(this->is_valid());
             return this->data_->location_group_scope();
@@ -173,7 +173,7 @@ namespace definition
          * \note It might not be a valid definition
          * \see scope()
          */
-        otf2::definition::system_tree_node system_tree_node_scope() const
+        const otf2::definition::system_tree_node& system_tree_node_scope() const
         {
             assert(this->is_valid());
             return this->data_->system_tree_node_scope();
@@ -187,7 +187,7 @@ namespace definition
          * \note It might not be a valid definition
          * \see scope()
          */
-        otf2::definition::locations_group group_scope() const
+        const otf2::definition::locations_group& group_scope() const
         {
             assert(this->is_valid());
             return this->data_->group_scope();

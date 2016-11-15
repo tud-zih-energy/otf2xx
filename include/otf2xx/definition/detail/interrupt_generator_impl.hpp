@@ -59,7 +59,7 @@ namespace definition
             using base_type = otf2::common::base_type;
 
             interrupt_generator_impl(reference<interrupt_generator> ref,
-                                     otf2::definition::string name,
+                                     const otf2::definition::string& name,
                                      interrupt_generator_mode_type interrupt_generator_mode,
                                      base_type base, std::int64_t exponent, std::uint64_t period)
             : ref_(ref), name_(name), interrupt_generator_mode_(interrupt_generator_mode),
@@ -88,7 +88,7 @@ namespace definition
                 return ref_;
             }
 
-            otf2::definition::string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }

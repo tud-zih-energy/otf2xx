@@ -55,8 +55,8 @@ namespace definition
         public:
             typedef otf2::common::type attribute_type;
 
-            attribute_impl(otf2::reference<attribute> ref, string name, string description,
-                           attribute_type type)
+            attribute_impl(otf2::reference<attribute> ref, const otf2::definition::string& name,
+                           const otf2::definition::string& description, attribute_type type)
             : ref_(ref), name_(name), description_(description), type_(type)
             {
             }
@@ -68,12 +68,12 @@ namespace definition
             attribute_impl(attribute_impl&&) = default;
             attribute_impl& operator=(attribute_impl&&) = default;
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
 
-            string description() const
+            const otf2::definition::string& description() const
             {
                 return description_;
             }
@@ -98,8 +98,8 @@ namespace definition
 
         private:
             otf2::reference<attribute> ref_;
-            string name_;
-            string description_;
+            otf2::definition::string name_;
+            otf2::definition::string description_;
             attribute_type type_;
         };
     }

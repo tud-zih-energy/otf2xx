@@ -91,7 +91,12 @@ namespace definition
                 return members_.size();
             }
 
-            void add_member(otf2::definition::metric_member member)
+            void add_member(otf2::definition::metric_member&& member)
+            {
+                members_.emplace_back(std::move(member));
+            }
+
+            void add_member(const otf2::definition::metric_member& member)
             {
                 members_.push_back(member);
             }
@@ -101,7 +106,7 @@ namespace definition
                 return occurence_;
             }
 
-            otf2::definition::metric_member operator[](std::size_t i) const
+            const otf2::definition::metric_member& operator[](std::size_t i) const
             {
                 return members_[i];
             }

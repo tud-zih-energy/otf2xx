@@ -56,24 +56,27 @@ namespace definition
         class comm_impl
         {
         public:
-            comm_impl(reference<comm> ref, string name, otf2::definition::comm_group group,
-                      std::shared_ptr<comm_impl> parent)
+            comm_impl(reference<comm> ref, const otf2::definition::string& name,
+                      const otf2::definition::comm_group& group, std::shared_ptr<comm_impl> parent)
             : ref_(ref), name_(name), group_(group), self_group_(nullptr), parent_(parent)
             {
             }
 
-            comm_impl(reference<comm> ref, string name, otf2::definition::comm_group group)
+            comm_impl(reference<comm> ref, const otf2::definition::string& name,
+                      const otf2::definition::comm_group& group)
             : ref_(ref), name_(name), group_(group), self_group_(nullptr), parent_(nullptr)
             {
             }
 
-            comm_impl(reference<comm> ref, string name, otf2::definition::comm_self_group group,
+            comm_impl(reference<comm> ref, const otf2::definition::string& name,
+                      const otf2::definition::comm_self_group& group,
                       std::shared_ptr<comm_impl> parent)
             : ref_(ref), name_(name), group_(nullptr), self_group_(group), parent_(parent)
             {
             }
 
-            comm_impl(reference<comm> ref, string name, otf2::definition::comm_self_group group)
+            comm_impl(reference<comm> ref, const otf2::definition::string& name,
+                      const otf2::definition::comm_self_group& group)
             : ref_(ref), name_(name), group_(nullptr), self_group_(group), parent_(nullptr)
             {
             }
@@ -97,12 +100,12 @@ namespace definition
                 return ref_;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
 
-            otf2::definition::comm_group group() const
+            const otf2::definition::comm_group& group() const
             {
                 if (has_self_group())
                     make_exception("The comm with id ", ref_.get(),
@@ -111,7 +114,7 @@ namespace definition
                 return group_;
             }
 
-            otf2::definition::comm_self_group self_group() const
+            const otf2::definition::comm_self_group& self_group() const
             {
                 if (!has_self_group())
                     make_exception("The comm with id ", ref_.get(), " hasn't got a self group");
@@ -143,9 +146,9 @@ namespace definition
 
         private:
             reference<comm> ref_;
-            string name_;
-            comm_group group_;
-            comm_self_group self_group_;
+            otf2::definition::string name_;
+            otf2::definition::comm_group group_;
+            otf2::definition::comm_self_group self_group_;
             std::shared_ptr<comm_impl> parent_;
         };
     }

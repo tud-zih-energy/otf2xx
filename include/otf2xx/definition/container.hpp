@@ -122,7 +122,13 @@ namespace definition
                 .first->second;
         }
 
-        void add_definition(Definition def)
+        void add_definition(Definition&& def)
+        {
+            auto ref = def.ref();
+            data.emplace(ref, std::move(def));
+        }
+
+        void add_definition(const Definition& def)
         {
             data.emplace(def.ref(), def);
         }
@@ -194,9 +200,14 @@ namespace definition
             return data.back();
         }
 
-        void add_definition(otf2::definition::property<Definition> def)
+        void add_definition(const otf2::definition::property<Definition>& def)
         {
             data.push_back(def);
+        }
+
+        void add_definition(otf2::definition::property<Definition>&& def)
+        {
+            data.emplace_back(std::move(def));
         }
 
         std::size_t count(key_type key) const

@@ -72,7 +72,7 @@ namespace definition
          *
          * \returns a \ref string definiton containing the file
          */
-        otf2::definition::string file() const
+        const otf2::definition::string& file() const
         {
             assert(this->is_valid());
             return data_->file();

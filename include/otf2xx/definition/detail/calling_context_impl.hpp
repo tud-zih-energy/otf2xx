@@ -55,16 +55,18 @@ namespace definition
         class calling_context_impl
         {
         public:
-            calling_context_impl(reference<calling_context> ref, otf2::definition::region region,
-                                 otf2::definition::source_code_location source_code_location,
+            calling_context_impl(reference<calling_context> ref,
+                                 const otf2::definition::region& region,
+                                 const otf2::definition::source_code_location& source_code_location,
                                  std::shared_ptr<calling_context_impl> parent)
             : ref_(ref), region_(region), source_code_location_(source_code_location),
               parent_(parent)
             {
             }
 
-            calling_context_impl(reference<calling_context> ref, otf2::definition::region region,
-                                 otf2::definition::source_code_location source_code_location)
+            calling_context_impl(reference<calling_context> ref,
+                                 const otf2::definition::region& region,
+                                 const otf2::definition::source_code_location& source_code_location)
             : ref_(ref), region_(region), source_code_location_(source_code_location), parent_()
             {
             }
@@ -91,12 +93,12 @@ namespace definition
                 return ref_;
             }
 
-            otf2::definition::region region() const
+            const otf2::definition::region& region() const
             {
                 return region_;
             }
 
-            otf2::definition::source_code_location source_code_location() const
+            const otf2::definition::source_code_location& source_code_location() const
             {
                 return source_code_location_;
             }

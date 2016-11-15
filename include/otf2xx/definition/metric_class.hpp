@@ -88,7 +88,7 @@ namespace definition
         /**
          * \brief add a metric member to this metric class
          */
-        void add_member(otf2::definition::metric_member member)
+        void add_member(const otf2::definition::metric_member& member)
         {
             assert(this->is_valid());
             this->data_->add_member(member);
@@ -108,7 +108,7 @@ namespace definition
         /**
          * \brief returns the i-th metric member
          */
-        otf2::definition::metric_member operator[](std::size_t i) const
+        const otf2::definition::metric_member& operator[](std::size_t i) const
         {
             assert(this->is_valid());
             return this->data_->operator[](i);

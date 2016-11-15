@@ -102,7 +102,7 @@ namespace definition
     /**
      * @brief operator<< for easily printing out string definitions
      */
-    inline std::ostream& operator<<(std::ostream& s, otf2::definition::string str)
+    inline std::ostream& operator<<(std::ostream& s, const otf2::definition::string& str)
     {
         return s << str.str();
     }

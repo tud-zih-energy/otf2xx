@@ -55,7 +55,8 @@ namespace definition
         public:
             typedef otf2::common::parameter_type parameter_type;
 
-            parameter_impl(otf2::reference<parameter> ref, string name, parameter_type type)
+            parameter_impl(otf2::reference<parameter> ref, const otf2::definition::string& name,
+                           parameter_type type)
             : ref_(ref), name_(name), type_(type)
             {
                 //             std::cout << "Created Paramter_impl @" << this << " name: '" << &name
@@ -83,7 +84,7 @@ namespace definition
                 return undef;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
@@ -100,7 +101,7 @@ namespace definition
 
         private:
             otf2::reference<parameter> ref_;
-            string name_;
+            otf2::definition::string name_;
             parameter_type type_;
         };
     }

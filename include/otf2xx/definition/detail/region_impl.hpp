@@ -57,9 +57,11 @@ namespace definition
             typedef otf2::common::paradigm_type paradigm_type;
             typedef otf2::common::flags_type flags_type;
 
-            region_impl(otf2::reference<region> ref, string name, string canonical_name,
-                        string description, role_type role, paradigm_type paradigm,
-                        flags_type flags, string source_file, uint32_t begin_line,
+            region_impl(otf2::reference<region> ref, const otf2::definition::string& name,
+                        const otf2::definition::string& canonical_name,
+                        const otf2::definition::string& description, role_type role,
+                        paradigm_type paradigm, flags_type flags,
+                        const otf2::definition::string& source_file, uint32_t begin_line,
                         uint32_t end_line)
             : ref_(ref), name_(name), canonical_name_(canonical_name), description_(description),
               role_(role), paradigm_(paradigm), flags_(flags), source_file_(source_file),
@@ -89,17 +91,17 @@ namespace definition
                 return ref_;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
 
-            string canonical_name() const
+            const otf2::definition::string& canonical_name() const
             {
                 return canonical_name_;
             }
 
-            string description() const
+            const otf2::definition::string& description() const
             {
                 return description_;
             }
@@ -119,7 +121,7 @@ namespace definition
                 return flags_;
             }
 
-            string source_file() const
+            const otf2::definition::string& source_file() const
             {
                 return source_file_;
             }
@@ -136,13 +138,13 @@ namespace definition
 
         private:
             otf2::reference<region> ref_;
-            string name_;
-            string canonical_name_;
-            string description_;
+            otf2::definition::string name_;
+            otf2::definition::string canonical_name_;
+            otf2::definition::string description_;
             role_type role_;
             paradigm_type paradigm_;
             flags_type flags_;
-            string source_file_;
+            otf2::definition::string source_file_;
             uint32_t begin_line_;
             uint32_t end_line_;
         };

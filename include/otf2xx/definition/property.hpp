@@ -80,7 +80,7 @@ namespace definition
          * \returns a \ref string definiton containing the name
          *
          */
-        otf2::definition::string name() const
+        const otf2::definition::string& name() const
         {
             assert(this->is_valid());
             return this->data_->name();

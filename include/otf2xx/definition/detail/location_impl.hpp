@@ -56,7 +56,7 @@ namespace definition
         public:
             typedef otf2::common::location_type location_type;
 
-            location_impl(otf2::reference<location> ref, string name, location_group lg,
+            location_impl(otf2::reference<location> ref, const otf2::definition::string& name, const otf2::definition::location_group& lg,
                           location_type type, std::uint64_t events = 0)
             : ref_(ref), name_(name), type_(type), lg_(lg), events_(events)
             {
@@ -77,12 +77,12 @@ namespace definition
                 return undef;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
 
-            otf2::definition::location_group location_group() const
+            const otf2::definition::location_group& location_group() const
             {
                 return lg_;
             }
@@ -111,7 +111,7 @@ namespace definition
 
         private:
             otf2::reference<location> ref_;
-            string name_;
+            otf2::definition::string name_;
             location_type type_;
             otf2::definition::location_group lg_;
             std::uint64_t events_;

@@ -63,7 +63,7 @@ namespace definition
             string_impl(string_impl&&) = default;
             string_impl& operator=(string_impl&&) = default;
 
-            static std::shared_ptr<string_impl> undefined()
+            static const std::shared_ptr<string_impl>& undefined()
             {
                 static std::shared_ptr<string_impl> undef(std::make_shared<string_impl>(
                     otf2::reference<string>::undefined(), std::string("")));

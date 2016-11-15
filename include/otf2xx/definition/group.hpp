@@ -80,7 +80,7 @@ namespace definition
         typedef typename impl_type::value_type value_type;
 
     public:
-        group(otf2::reference<detail::group_base> ref, otf2::definition::string name,
+        group(otf2::reference<detail::group_base> ref, const otf2::definition::string& name,
               paradigm_type paradigm, group_flag_type group_flag)
         : base(std::make_shared<impl_type>(ref, name, paradigm, group_flag))
         {
@@ -94,7 +94,7 @@ namespace definition
          * \returns a string definiton containing the name
          *
          */
-        otf2::definition::string name() const
+        const otf2::definition::string& name() const
         {
             assert(this->is_valid());
             return this->data_->name();

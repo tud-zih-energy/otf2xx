@@ -55,7 +55,8 @@ namespace definition
         {
         public:
             source_code_location_impl(reference<source_code_location> ref,
-                                      otf2::definition::string file, std::uint32_t line_number)
+                                      const otf2::definition::string& file,
+                                      std::uint32_t line_number)
             : ref_(ref), file_(file), line_number_(line_number)
             {
             }
@@ -81,7 +82,7 @@ namespace definition
                 return ref_;
             }
 
-            otf2::definition::string file() const
+            const otf2::definition::string& file() const
             {
                 return file_;
             }

@@ -54,14 +54,17 @@ namespace definition
         class system_tree_node_impl
         {
         public:
-            system_tree_node_impl(reference<system_tree_node> ref, string name, string class_name,
+            system_tree_node_impl(reference<system_tree_node> ref,
+                                  const otf2::definition::string& name,
+                                  const otf2::definition::string& class_name,
                                   std::shared_ptr<system_tree_node_impl> parent)
             : ref_(ref), name_(name), class_name_(class_name), parent_(parent)
             {
             }
 
-            system_tree_node_impl(reference<system_tree_node> ref, string name,
-                                  const string& class_name)
+            system_tree_node_impl(reference<system_tree_node> ref,
+                                  const otf2::definition::string& name,
+                                  const otf2::definition::string& class_name)
             : ref_(ref), name_(name), class_name_(class_name), parent_()
             {
             }
@@ -73,7 +76,7 @@ namespace definition
             system_tree_node_impl(system_tree_node_impl&&) = default;
             system_tree_node_impl& operator=(system_tree_node_impl&&) = default;
 
-            static std::shared_ptr<system_tree_node_impl> undefined()
+            static const std::shared_ptr<system_tree_node_impl>& undefined()
             {
                 static std::shared_ptr<system_tree_node_impl> undef(
                     std::make_shared<system_tree_node_impl>(
@@ -87,12 +90,12 @@ namespace definition
                 return ref_;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
 
-            string class_name() const
+            const otf2::definition::string& class_name() const
             {
                 return class_name_;
             }
@@ -115,8 +118,8 @@ namespace definition
 
         private:
             reference<system_tree_node> ref_;
-            string name_;
-            string class_name_;
+            otf2::definition::string name_;
+            otf2::definition::string class_name_;
             std::shared_ptr<system_tree_node_impl> parent_;
         };
     }

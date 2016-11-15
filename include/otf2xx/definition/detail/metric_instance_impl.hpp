@@ -62,36 +62,36 @@ namespace definition
             typedef otf2::common::metric_occurence metric_occurence;
 
             metric_instance_impl(reference<detail::metric_base> ref,
-                                 otf2::definition::metric_class metric_class,
-                                 otf2::definition::location recorder,
-                                 otf2::definition::location scope)
+                                 const otf2::definition::metric_class& metric_class,
+                                 const otf2::definition::location& recorder,
+                                 const otf2::definition::location& scope)
             : ref_(ref), metric_class_(metric_class), recorder_(recorder), location_scope_(scope),
               location_group_scope_(), system_tree_node_scope_(), group_scope_()
             {
             }
 
             metric_instance_impl(reference<detail::metric_base> ref,
-                                 otf2::definition::metric_class metric_class,
-                                 otf2::definition::location recorder,
-                                 otf2::definition::location_group scope)
+                                 const otf2::definition::metric_class& metric_class,
+                                 const otf2::definition::location& recorder,
+                                 const otf2::definition::location_group& scope)
             : ref_(ref), metric_class_(metric_class), recorder_(recorder), location_scope_(),
               location_group_scope_(scope), system_tree_node_scope_(), group_scope_()
             {
             }
 
             metric_instance_impl(reference<detail::metric_base> ref,
-                                 otf2::definition::metric_class metric_class,
-                                 otf2::definition::location recorder,
-                                 otf2::definition::system_tree_node scope)
+                                 const otf2::definition::metric_class& metric_class,
+                                 const otf2::definition::location& recorder,
+                                 const otf2::definition::system_tree_node& scope)
             : ref_(ref), metric_class_(metric_class), recorder_(recorder), location_scope_(),
               location_group_scope_(), system_tree_node_scope_(scope), group_scope_()
             {
             }
 
             metric_instance_impl(reference<detail::metric_base> ref,
-                                 otf2::definition::metric_class metric_class,
-                                 otf2::definition::location recorder,
-                                 otf2::definition::locations_group scope)
+                                 const otf2::definition::metric_class& metric_class,
+                                 const otf2::definition::location& recorder,
+                                 const otf2::definition::locations_group& scope)
             : ref_(ref), metric_class_(metric_class), recorder_(recorder), location_scope_(),
               location_group_scope_(), system_tree_node_scope_(), group_scope_(scope)
             {
@@ -125,12 +125,12 @@ namespace definition
                 return metric_occurence::async;
             }
 
-            otf2::definition::metric_class metric_class() const
+            const otf2::definition::metric_class& metric_class() const
             {
                 return metric_class_;
             }
 
-            otf2::definition::location recorder() const
+            const otf2::definition::location& recorder() const
             {
                 return recorder_;
             }
@@ -154,22 +154,22 @@ namespace definition
                 return metric_scope::group;
             }
 
-            otf2::definition::location location_scope() const
+            const otf2::definition::location& location_scope() const
             {
                 return location_scope_;
             }
 
-            otf2::definition::location_group location_group_scope() const
+            const otf2::definition::location_group& location_group_scope() const
             {
                 return location_group_scope_;
             }
 
-            otf2::definition::system_tree_node system_tree_node_scope() const
+            const otf2::definition::system_tree_node& system_tree_node_scope() const
             {
                 return system_tree_node_scope_;
             }
 
-            otf2::definition::locations_group group_scope() const
+            const otf2::definition::locations_group& group_scope() const
             {
                 return group_scope_;
             }
