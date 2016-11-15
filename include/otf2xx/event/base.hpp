@@ -80,9 +80,9 @@ namespace event
         }
 
         template <otf2::attribute_list::attribute_type Type, typename T>
-        Event& add_attribute(otf2::definition::attribute attribute, T value)
+        Event& add_attribute(const otf2::definition::attribute& attribute, const T& value)
         {
-            attribute_list_.add<Type, T>(std::move(attribute), std::move(value));
+            attribute_list_.add<Type, T>(attribute, value);
 
             return *static_cast<Event*>(this);
         }
