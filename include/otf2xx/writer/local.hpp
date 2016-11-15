@@ -91,7 +91,7 @@ namespace writer
         void write(const otf2::event::enter& data)
         {
             check(OTF2_EvtWriter_Enter(evt_wrt_, data.attribute_list().clone().get(),
-                                       convert(data.timestamp()), data.region().ref().get()),
+                                       convert(data.timestamp()), data.region_->ref().get()),
                   "Couldn't write event to local event writer.");
             location_.event_written();
         }
@@ -270,7 +270,6 @@ namespace writer
                   "Couldn't write event to local event writer.");
             location_.event_written();
         }
-
 
         // TODO find a better solution to allow high-performance writing of this event without
         // using shread ptrs
