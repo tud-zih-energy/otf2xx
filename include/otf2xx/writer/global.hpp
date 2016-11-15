@@ -82,7 +82,7 @@ namespace writer
         }
 
     private:
-        void store(otf2::definition::attribute data)
+        void store(const otf2::definition::attribute& data)
         {
             check(OTF2_GlobalDefWriter_WriteAttribute(wrt, data.ref(), data.name().ref(),
                                                       data.description().ref(),
@@ -106,7 +106,7 @@ namespace writer
         // writer");
         //         }
 
-        void store(otf2::definition::comm data)
+        void store(const otf2::definition::comm& data)
         {
             otf2::reference<otf2::definition::detail::group_base>::ref_type group_ref;
 
@@ -127,7 +127,7 @@ namespace writer
         }
 
         template <typename T, otf2::common::group_type GroupType>
-        void store(otf2::definition::group<T, GroupType> data)
+        void store(const otf2::definition::group<T, GroupType>& data)
         {
             auto members = data.members();
             check(OTF2_GlobalDefWriter_WriteGroup(
@@ -137,7 +137,7 @@ namespace writer
                   "Couldn't write group to global definitions writer");
         }
 
-        void store(otf2::definition::comm_group data)
+        void store(const otf2::definition::comm_group& data)
         {
             auto members = data.members();
 
@@ -176,7 +176,7 @@ namespace writer
                   "Couldn't write group to global definitions writer");
         }
 
-        void store(otf2::definition::location data)
+        void store(const otf2::definition::location& data)
         {
             check(OTF2_GlobalDefWriter_WriteLocation(wrt, data.ref(), data.name().ref(),
                                                      static_cast<OTF2_LocationType>(data.type()),
@@ -185,7 +185,7 @@ namespace writer
                   "Couldn't write location to global definitions writer");
         }
 
-        void store(otf2::definition::location_group data)
+        void store(const otf2::definition::location_group& data)
         {
             check(OTF2_GlobalDefWriter_WriteLocationGroup(
                       wrt, data.ref(), data.name().ref(),
@@ -254,14 +254,14 @@ namespace writer
                   "Couldn't write metric member to global definitions writer");
         }
 
-        void store(otf2::definition::parameter data)
+        void store(const otf2::definition::parameter& data)
         {
             check(OTF2_GlobalDefWriter_WriteParameter(wrt, data.ref(), data.name().ref(),
                                                       static_cast<OTF2_ParameterType>(data.type())),
                   "Couldn't write paramter to global definitions writer");
         }
 
-        void store(otf2::definition::region data)
+        void store(const otf2::definition::region& data)
         {
             check(OTF2_GlobalDefWriter_WriteRegion(
                       wrt, data.ref(), data.name().ref(), data.canonical_name().ref(),
@@ -279,13 +279,13 @@ namespace writer
         // global definitions writer");
         //         }
 
-        void store(otf2::definition::string data)
+        void store(const otf2::definition::string& data)
         {
             check(OTF2_GlobalDefWriter_WriteString(wrt, data.ref(), data.str().c_str()),
                   "Couldn't write string to global definitions writer");
         }
 
-        void store(otf2::definition::system_tree_node data)
+        void store(const otf2::definition::system_tree_node& data)
         {
             if (data.has_parent())
                 check(OTF2_GlobalDefWriter_WriteSystemTreeNode(wrt, data.ref(), data.name().ref(),
@@ -301,7 +301,7 @@ namespace writer
                       "writer");
         }
 
-        void store(otf2::definition::clock_properties data)
+        void store(const otf2::definition::clock_properties& data)
         {
             check(OTF2_GlobalDefWriter_WriteClockProperties(wrt, data.ticks_per_second().count(),
                                                             data.start_time().count(),
@@ -317,7 +317,7 @@ namespace writer
         // data.ref()), "Couldn't write to global definitions writer");
         //         }
 
-        void store(otf2::definition::system_tree_node_property data)
+        void store(const otf2::definition::system_tree_node_property& data)
         {
             check(OTF2_GlobalDefWriter_WriteSystemTreeNodeProperty(
                       wrt, data.def().ref(), data.name().ref(), static_cast<OTF2_Type>(data.type()),
@@ -325,7 +325,7 @@ namespace writer
                   "Couldn't write to global definitions writer");
         }
 
-        void store(otf2::definition::location_property data)
+        void store(const otf2::definition::location_property& data)
         {
             check(OTF2_GlobalDefWriter_WriteLocationProperty(
                       wrt, data.def().ref(), data.name().ref(), static_cast<OTF2_Type>(data.type()),
@@ -333,7 +333,7 @@ namespace writer
                   "Couldn't write to global definitions writer");
         }
 
-        void store(otf2::definition::location_group_property data)
+        void store(const otf2::definition::location_group_property& data)
         {
             check(OTF2_GlobalDefWriter_WriteLocationGroupProperty(
                       wrt, data.def().ref(), data.name().ref(), static_cast<OTF2_Type>(data.type()),
@@ -341,14 +341,14 @@ namespace writer
                   "Couldn't write to global definitions writer");
         }
 
-        void store(otf2::definition::source_code_location data)
+        void store(const otf2::definition::source_code_location& data)
         {
             check(OTF2_GlobalDefWriter_WriteSourceCodeLocation(wrt, data.ref(), data.file().ref(),
                                                                data.line_number()),
                   "Couldn't write to global definitions writer");
         }
 
-        void store(otf2::definition::calling_context data)
+        void store(const otf2::definition::calling_context& data)
         {
             if (data.has_parent())
             {
@@ -366,7 +366,7 @@ namespace writer
             }
         }
 
-        void store(otf2::definition::calling_context_property data)
+        void store(const otf2::definition::calling_context_property& data)
         {
             check(OTF2_GlobalDefWriter_WriteCallingContextProperty(
                       wrt, data.def().ref(), data.name().ref(), static_cast<OTF2_Type>(data.type()),
@@ -374,7 +374,7 @@ namespace writer
                   "Couldn't write to global definitions writer");
         }
 
-        void store(otf2::definition::interrupt_generator data)
+        void store(const otf2::definition::interrupt_generator& data)
         {
             check(OTF2_GlobalDefWriter_WriteInterruptGenerator(
                       wrt, data.ref(), data.name().ref(),
@@ -384,7 +384,7 @@ namespace writer
                   "Couldn't write to global definitions writer");
         }
 
-        void store(otf2::definition::marker data)
+        void store(const otf2::definition::marker& data)
         {
             check(OTF2_MarkerWriter_WriteDefMarker(
                       marker_wrt_, data.ref(), data.group().c_str(), data.category().c_str(),
