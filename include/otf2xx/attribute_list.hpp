@@ -304,7 +304,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::attribute>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -314,7 +314,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::comm>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -425,7 +425,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::metric>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -449,7 +449,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::parameter>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -459,7 +459,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::region>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -469,7 +469,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::string>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -533,44 +533,64 @@ class attribute_list
 public:
     using attribute_type = otf2::definition::attribute::attribute_type;
 
-    attribute_list() : attribute_list_(nullptr)
+    attribute_list() : attribute_list(nullptr, false)
     {
     }
 
-    attribute_list(const attribute_list& other)
-    : attribute_list_(detail::OTF2_AttributeList_Clone(other.attribute_list_))
+    explicit attribute_list(OTF2_AttributeList* list, bool take_ownership = true)
+    : attribute_list_(list), owned_(take_ownership)
     {
     }
 
-    explicit attribute_list(OTF2_AttributeList* list) : attribute_list_(list)
+    attribute_list(const attribute_list&) = delete;
+    attribute_list& operator=(const attribute_list&) = delete;
+
+    attribute_list(attribute_list&& other)
+    : attribute_list_(other.attribute_list_), owned_(other.owned_)
     {
+        other.owned_ = false;
     }
 
-    attribute_list& operator=(attribute_list other)
+    attribute_list& operator=(attribute_list&& other)
     {
         std::swap(attribute_list_, other.attribute_list_);
+        std::swap(other.owned_, owned_);
 
         return *this;
     }
 
     template <attribute_type Type, typename T>
-    void add(otf2::definition::attribute attribute, T value)
+    void add(const otf2::definition::attribute& attribute, T value)
     {
         if (attribute_list_ == nullptr)
+        {
             allocate_list();
+        }
+        else if (!owned_)
+        {
+            attribute_list_ = detail::OTF2_AttributeList_Clone(attribute_list_);
+            owned_ = true;
+        }
 
         detail::add_attribute<Type>()(this->get(), attribute, value);
     }
 
+    bool has(const otf2::definition::attribute& attribute) const
+    {
+        return attribute_list_ != nullptr ?
+                   OTF2_AttributeList_TestAttributeByID(attribute_list_, attribute.ref().get()) :
+                   false;
+    }
+
     template <attribute_type Type>
-    auto get(otf2::definition::attribute attribute) const
+    auto get(const otf2::definition::attribute& attribute) const
     {
         return detail::get_attribute<Type>()(this->get(), attribute);
     }
 
     ~attribute_list()
     {
-        if (attribute_list_ != nullptr)
+        if (attribute_list_ != nullptr && owned_)
             OTF2_AttributeList_Delete(attribute_list_);
     }
 
@@ -586,6 +606,11 @@ public:
 
     attribute_list clone() const
     {
+        if (attribute_list_ == nullptr ||
+            OTF2_AttributeList_GetNumberOfElements(attribute_list_) == 0)
+        {
+            return attribute_list();
+        }
         return attribute_list(detail::OTF2_AttributeList_Clone(attribute_list_));
     }
 
@@ -597,11 +622,16 @@ private:
         attribute_list_ = OTF2_AttributeList_New();
 
         if (attribute_list_ == nullptr)
+        {
             make_exception("Couldn't create a new attribute list.");
+        }
+
+        owned_ = true;
     }
 
 private:
     OTF2_AttributeList* attribute_list_;
+    bool owned_;
 };
 }
 
