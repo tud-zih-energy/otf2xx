@@ -39,6 +39,8 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
+#include <otf2xx/definition/detail/impl_base.hpp>
+
 #include <otf2xx/definition/string.hpp>
 
 #include <memory>
@@ -50,7 +52,7 @@ namespace definition
     namespace detail
     {
 
-        class region_impl
+        class region_impl : public impl_base<region_impl>
         {
         public:
             typedef otf2::common::role_type role_type;
@@ -62,10 +64,10 @@ namespace definition
                         const otf2::definition::string& description, role_type role,
                         paradigm_type paradigm, flags_type flags,
                         const otf2::definition::string& source_file, uint32_t begin_line,
-                        uint32_t end_line)
-            : ref_(ref), name_(name), canonical_name_(canonical_name), description_(description),
-              role_(role), paradigm_(paradigm), flags_(flags), source_file_(source_file),
-              begin_line_(begin_line), end_line_(end_line)
+                        uint32_t end_line, std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), name_(name), canonical_name_(canonical_name),
+              description_(description), role_(role), paradigm_(paradigm), flags_(flags),
+              source_file_(source_file), begin_line_(begin_line), end_line_(end_line)
             {
             }
 
@@ -76,13 +78,13 @@ namespace definition
             region_impl(region_impl&&) = default;
             region_impl& operator=(region_impl&&) = default;
 
-            static std::shared_ptr<region_impl> undefined()
+            static region_impl* undefined()
             {
-                static std::shared_ptr<region_impl> undef(std::make_shared<region_impl>(
-                    reference<region>::undefined(), string::undefined(), string::undefined(),
-                    string::undefined(), role_type::unknown, paradigm_type::unknown,
-                    flags_type::none, string::undefined(), 0, 0));
-                return undef;
+                static region_impl undef(reference<region>::undefined(), string::undefined(),
+                                         string::undefined(), string::undefined(),
+                                         role_type::unknown, paradigm_type::unknown,
+                                         flags_type::none, string::undefined(), 0, 0, 1);
+                return &undef;
             }
 
         public:

@@ -46,6 +46,9 @@ namespace definition
     {
         class group_base;
 
+        template <typename Impl>
+        class impl_base;
+
         class location_impl;
         class location_group_impl;
         class system_tree_node_impl;

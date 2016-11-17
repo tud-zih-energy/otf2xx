@@ -41,7 +41,7 @@
 
 #include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
+#include <otf2xx/definition/detail/base2.hpp>
 #include <otf2xx/definition/detail/region_impl.hpp>
 
 namespace otf2
@@ -52,9 +52,9 @@ namespace definition
     /**
      * \brief class for represening a region definition
      */
-    class region : public detail::base<region>
+    class region : public detail::base2<region>
     {
-        typedef detail::base<region> base;
+        typedef detail::base2<region> base;
         typedef otf2::traits::definition_impl_type<region>::type impl_type;
         using base::base;
 
@@ -68,8 +68,8 @@ namespace definition
                const otf2::definition::string& description, role_type role, paradigm_type paradigm,
                flags_type flags, const otf2::definition::string& source_file, uint32_t begin_line,
                uint32_t end_line)
-        : base(std::make_shared<impl_type>(ref, name, canonical_name, description, role, paradigm,
-                                           flags, source_file, begin_line, end_line))
+        : base(new impl_type(ref, name, canonical_name, description, role, paradigm, flags,
+                             source_file, begin_line, end_line))
         {
         }
 

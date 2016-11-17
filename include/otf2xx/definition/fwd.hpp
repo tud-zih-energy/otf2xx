@@ -49,6 +49,10 @@ namespace definition
         template <typename Def,
                   typename Impl = typename otf2::traits::definition_impl_type<Def>::type>
         class base;
+
+        template <typename Def,
+                  typename Impl = typename otf2::traits::definition_impl_type<Def>::type>
+        class base2;
     }
 }
 

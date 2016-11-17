@@ -37,9 +37,9 @@
 
 #include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/event/base.hpp>
-#include <otf2xx/writer/fwd.hpp>
 
 #include <otf2xx/definition/detail/weak_ref.hpp>
+#include <otf2xx/writer/fwd.hpp>
 
 #include <otf2xx/chrono/chrono.hpp>
 
@@ -65,13 +65,13 @@ namespace event
 
         // copy constructor with new timestamp
         enter(const otf2::event::enter& other, otf2::chrono::time_point timestamp)
-        : base<enter>(other, timestamp), region_(other.region())
+        : base<enter>(other, timestamp), region_(other.region_)
         {
         }
 
         otf2::definition::region region() const
         {
-            return region_.lock();
+            return region_;
         }
 
         friend class otf2::writer::local;

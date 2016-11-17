@@ -38,6 +38,9 @@
 #include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/event/base.hpp>
 
+#include <otf2xx/definition/detail/weak_ref.hpp>
+#include <otf2xx/writer/fwd.hpp>
+
 #include <otf2xx/chrono/chrono.hpp>
 
 namespace otf2
@@ -56,13 +59,13 @@ namespace event
          * @param timestamp the timestamp, when the event has happen
          * @param region the region, which was entered
          */
-        leave(otf2::chrono::time_point timestamp, otf2::definition::region region)
+        leave(otf2::chrono::time_point timestamp, const otf2::definition::region& region)
         : base<leave>(timestamp), region_(region)
         {
         }
 
         leave(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-              otf2::definition::region region)
+              const otf2::definition::region& region)
         : base<leave>(al, timestamp), region_(region)
         {
         }
@@ -73,7 +76,7 @@ namespace event
          * @param timestamp the new timestamp
          */
         leave(const otf2::event::leave& other, otf2::chrono::time_point timestamp)
-        : base<leave>(other, timestamp), region_(other.region())
+        : base<leave>(other, timestamp), region_(other.region_)
         {
         }
 
@@ -86,8 +89,10 @@ namespace event
             return region_;
         }
 
+        friend class otf2::writer::local;
+
     private:
-        otf2::definition::region region_;
+        otf2::definition::detail::weak_ref<otf2::definition::region> region_;
     };
 }
 } // namespace otf2::event

@@ -32,11 +32,12 @@
  *
  */
 
-#pragma once
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IMPL_BASE_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IMPL_BASE_HPP
 
-#include <otf2xx/traits/definition.hpp>
+#include <otf2xx/definition/fwd.hpp>
 
-#include <memory>
+#include <atomic>
 
 namespace otf2
 {
@@ -44,53 +45,41 @@ namespace definition
 {
     namespace detail
     {
-        template <typename Definition>
-        class weak_ref
+        template <typename Impl>
+        class impl_base
         {
-            static_assert(otf2::traits::is_definition<Definition>::value,
-                          "Definition must be an otf2xx definition.");
-
-            using Impl = typename otf2::traits::definition_impl_type<Definition>::type;
-
         public:
-            weak_ref(const Definition& def) : ptr_(def.get())
+            impl_base(std::int64_t retain_count = 0) : ref_count_(retain_count)
             {
             }
 
-            weak_ref(const weak_ref&) = default;
-            weak_ref& operator=(const weak_ref&) = default;
+            impl_base(const impl_base&) = delete;
+            impl_base& operator=(const impl_base&) = delete;
 
-            weak_ref(weak_ref&&) = default;
-            weak_ref& operator=(weak_ref&&) = default;
+            impl_base(impl_base&&) = delete;
+            impl_base& operator=(impl_base&&) = delete;
 
-            operator Definition() const
+        private:
+            template <typename Definition, typename Impl2>
+            friend class otf2::definition::detail::base2;
+
+            Impl* retain()
             {
-                return lock();
+                ref_count_.fetch_add(1, std::memory_order_relaxed);
+
+                return static_cast<Impl*>(this);
             }
 
-            Definition lock() const
+            int64_t release()
             {
-                return ptr_;
-            }
-
-            const Impl& get() const
-            {
-                return *ptr_;
-            }
-
-            const Impl* operator->() const
-            {
-                return ptr_;
-            }
-
-            const Impl& operator*() const
-            {
-                return *ptr_;
+                return ref_count_.fetch_sub(1, std::memory_order_acq_rel);
             }
 
         private:
-            Impl* ptr_;
+            std::atomic<int64_t> ref_count_;
         };
     }
 }
 }
+
+#endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IMPL_BASE_HPP
