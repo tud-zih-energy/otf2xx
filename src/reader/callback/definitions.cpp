@@ -306,13 +306,14 @@ namespace reader
                         { self, static_cast<otf2::common::metric_occurence>(metricOccurrence),
                           static_cast<otf2::common::recorder_kind>(recorderKind) });
 
+                    auto mc = reader->metric_classes()[self];
+
                     for (std::size_t i = 0; i < numberOfMetrics; i++)
                     {
-                        reader->metric_classes()[self].add_member(
-                            reader->metric_members()[metricMembers[i]]);
+                        mc.add_member(reader->metric_members()[metricMembers[i]]);
                     }
 
-                    reader->callback().definition(reader->metric_classes()[self]);
+                    reader->callback().definition(std::move(mc));
 
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
