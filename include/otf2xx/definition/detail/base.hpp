@@ -143,7 +143,7 @@ namespace definition
              *
              * \return std::shared_ptr<Impl> to the referenced object
              */
-            std::shared_ptr<Impl> get() const
+            const std::shared_ptr<Impl>& get() const
             {
                 return data_;
             }
@@ -158,7 +158,7 @@ namespace definition
              */
             const Impl& data() const
             {
-                return *data_.get();
+                return *(data_.get());
             }
 
         protected:

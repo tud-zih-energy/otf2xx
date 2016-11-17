@@ -376,7 +376,7 @@ namespace writer
         }
 
     public:
-        writer::local& operator()(otf2::definition::location loc)
+        writer::local& operator()(const otf2::definition::location& loc)
         {
             return get_local_writer(loc);
         }
@@ -420,17 +420,19 @@ namespace writer
             return *global_writer_;
         }
 
-        local& get_local_writer(otf2::definition::location loc)
+        local& get_local_writer(const otf2::definition::location& loc)
         {
-            if (local_writers_.count(loc.ref()) == 0)
+            auto it = local_writers_.find(loc.ref());
+            if (it == local_writers_.end())
             {
                 auto evt = OTF2_Archive_GetEvtWriter(ar, loc.ref());
                 auto def = OTF2_Archive_GetDefWriter(ar, loc.ref());
 
-                local_writers_.emplace(loc.ref(), local(evt, def, loc));
+                auto res = local_writers_.emplace(loc.ref(), local(evt, def, loc));
+                it = res.first;
             }
 
-            return local_writers_.at(loc.ref());
+            return it->second;
         }
 
     private:

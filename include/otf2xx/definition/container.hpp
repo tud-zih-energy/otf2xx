@@ -105,7 +105,7 @@ namespace definition
         self& operator=(self&&) = default;
 
     public:
-        value_type operator[](key_type key)
+        const value_type& operator[](key_type key) const
         {
             if (key == otf2::reference<Definition>::undefined())
                 return value_type::undefined();
@@ -114,7 +114,7 @@ namespace definition
         }
 
         template <typename... Args>
-        value_type emplace(key_type ref, Args... args)
+        const value_type& emplace(key_type ref, Args... args)
         {
             return data
                 .emplace(std::piecewise_construct, std::forward_as_tuple(ref),
@@ -187,13 +187,13 @@ namespace definition
         self& operator=(self&&) = default;
 
     public:
-        value_type operator[](key_type key)
+        const value_type& operator[](key_type key)
         {
             return data[key];
         }
 
         template <typename... Args>
-        value_type emplace(Args... args)
+        const value_type& emplace(Args... args)
         {
             data.emplace_back(args...);
 
