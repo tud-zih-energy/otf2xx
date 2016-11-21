@@ -49,14 +49,14 @@ namespace event
     class thread_task_create : public base<thread_task_create>
     {
     public:
-        thread_task_create(otf2::chrono::time_point timestamp, otf2::definition::comm team,
+        thread_task_create(otf2::chrono::time_point timestamp, const otf2::definition::comm& team,
                            uint32_t thread, uint32_t generation)
         : base<thread_task_create>(timestamp), team_(team), thread_(thread), generation_(generation)
         {
         }
 
         thread_task_create(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                           otf2::definition::comm team, uint32_t thread, uint32_t generation)
+                           const otf2::definition::comm& team, uint32_t thread, uint32_t generation)
         : base<thread_task_create>(al, timestamp), team_(team), thread_(thread),
           generation_(generation)
         {
@@ -84,8 +84,10 @@ namespace event
             return thread_;
         }
 
+        friend class otf2::writer::local;
+
     private:
-        otf2::definition::comm team_;
+        otf2::definition::detail::weak_ref<otf2::definition::comm> team_;
         uint32_t thread_;
         uint32_t generation_;
     };

@@ -63,7 +63,6 @@ namespace event
         {
         }
 
-        // copy constructor with new timestamp
         base(const otf2::event::base<Event>& other)
         : timestamp_(other.timestamp_), attribute_list_(other.attribute_list_.clone())
         {

@@ -69,8 +69,7 @@ namespace definition
                             const otf2::definition::string& name,
                             interrupt_generator_mode_type interrupt_generator_mode,
                             base_type period_base, std::int64_t exponent, std::uint64_t period)
-        : base(std::make_shared<impl_type>(ref, name, interrupt_generator_mode, period_base,
-                                           exponent, period))
+        : base(new impl_type(ref, name, interrupt_generator_mode, period_base, exponent, period))
         {
         }
 

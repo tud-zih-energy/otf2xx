@@ -41,6 +41,9 @@
 
 #include <otf2xx/event/base.hpp>
 
+#include <otf2xx/definition/detail/weak_ref.hpp>
+#include <otf2xx/writer/fwd.hpp>
+
 namespace otf2
 {
 namespace event
@@ -49,15 +52,15 @@ namespace event
     class mpi_send : public base<mpi_send>
     {
     public:
-        mpi_send(otf2::chrono::time_point timestamp, uint32_t receiver, otf2::definition::comm comm,
-                 uint32_t msg_tag, uint64_t msg_length)
+        mpi_send(otf2::chrono::time_point timestamp, uint32_t receiver,
+                 const otf2::definition::comm& comm, uint32_t msg_tag, uint64_t msg_length)
         : base<mpi_send>(timestamp), receiver_(receiver), comm_(comm), msg_tag_(msg_tag),
           msg_length_(msg_length)
         {
         }
 
         mpi_send(OTF2_AttributeList* al, otf2::chrono::time_point timestamp, uint32_t receiver,
-                 otf2::definition::comm comm, uint32_t msg_tag, uint64_t msg_length)
+                 const otf2::definition::comm& comm, uint32_t msg_tag, uint64_t msg_length)
         : base<mpi_send>(al, timestamp), receiver_(receiver), comm_(comm), msg_tag_(msg_tag),
           msg_length_(msg_length)
         {
@@ -89,9 +92,11 @@ namespace event
             return msg_length_;
         }
 
+        friend class otf2::writer::local;
+
     private:
         uint32_t receiver_;
-        otf2::definition::comm comm_;
+        otf2::definition::detail::weak_ref<otf2::definition::comm> comm_;
         uint32_t msg_tag_;
         uint64_t msg_length_;
     };

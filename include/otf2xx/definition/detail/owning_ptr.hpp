@@ -32,65 +32,51 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_PARAMETER_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_PARAMETER_HPP
-
-#include <otf2xx/common.hpp>
-#include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
-
-#include <otf2xx/definition/string.hpp>
-
-#include <otf2xx/definition/detail/base.hpp>
-#include <otf2xx/definition/detail/parameter_impl.hpp>
+#pragma once
 
 namespace otf2
 {
 namespace definition
 {
-
-    /**
-     * \brief class for representing parameter definitions
-     */
-    class parameter : public detail::base<parameter>
+    namespace detail
     {
-        typedef detail::base<parameter> base;
-        typedef otf2::traits::definition_impl_type<parameter>::type impl_type;
-        using base::base;
-
-    public:
-        typedef impl_type::parameter_type parameter_type;
-
-        parameter(otf2::reference<parameter> ref, string name, parameter_type type)
-        : base(new impl_type(ref, name, type))
+        template <typename T>
+        class owning_ptr
         {
-        }
+        public:
+            explicit owning_ptr(T* ptr) : ptr_(ptr)
+            {
+                if (ptr_ != nullptr)
+                {
+                    ptr_->retain();
+                }
+            }
 
-        parameter() = default;
+            ~owning_ptr()
+            {
+                if (ptr_ != nullptr)
+                {
+                    if (ptr_->release() == 0)
+                    {
+                        delete ptr_;
+                    }
+                }
+            }
 
-        /**
-         * \brief returns the name of the paramter definion as a string definition
-         *
-         * \returns a \ref string definiton containing the name
-         *
-         */
-        const otf2::definition::string& name() const
-        {
-            assert(this->is_valid());
-            return data_->name();
-        }
+            owning_ptr(const owning_ptr&) = delete;
+            owning_ptr& operator=(const owning_ptr&) = delete;
 
-        /**
-         * \brief returns the type of the parameter defintion
-         * \see otf2::common::parameter_type
-         */
-        parameter_type type() const
-        {
-            assert(this->is_valid());
-            return data_->type();
-        }
-    };
+            owning_ptr(owning_ptr&&) = default;
+            owning_ptr& operator=(owning_ptr&&) = default;
+
+            T* get() const
+            {
+                return ptr_;
+            }
+
+        private:
+            T* ptr_;
+        };
+    }
 }
-} // namespace otf2::definition
-
-#endif // INCLUDE_OTF2XX_DEFINITIONS_PARAMETER_HPP
+}

@@ -82,7 +82,7 @@ namespace definition
     public:
         group(otf2::reference<detail::group_base> ref, const otf2::definition::string& name,
               paradigm_type paradigm, group_flag_type group_flag)
-        : base(std::make_shared<impl_type>(ref, name, paradigm, group_flag))
+        : base(new impl_type(ref, name, paradigm, group_flag))
         {
         }
 

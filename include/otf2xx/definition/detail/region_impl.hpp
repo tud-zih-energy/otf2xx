@@ -43,8 +43,6 @@
 
 #include <otf2xx/definition/string.hpp>
 
-#include <memory>
-
 namespace otf2
 {
 namespace definition

@@ -41,6 +41,9 @@
 
 #include <otf2xx/event/base.hpp>
 
+#include <otf2xx/definition/detail/weak_ref.hpp>
+#include <otf2xx/writer/fwd.hpp>
+
 namespace otf2
 {
 namespace event
@@ -50,13 +53,13 @@ namespace event
     {
     public:
         parameter_unsigned_int(otf2::chrono::time_point timestamp,
-                               otf2::definition::parameter parameter, std::uint64_t value)
+                               const otf2::definition::parameter& parameter, std::uint64_t value)
         : base<parameter_unsigned_int>(timestamp), parameter_(parameter), value_(value)
         {
         }
 
         parameter_unsigned_int(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                               otf2::definition::parameter parameter, std::uint64_t value)
+                               const otf2::definition::parameter& parameter, std::uint64_t value)
         : base<parameter_unsigned_int>(al, timestamp), parameter_(parameter), value_(value)
         {
         }
@@ -78,8 +81,10 @@ namespace event
             return value_;
         }
 
+        friend class otf2::writer::local;
+
     private:
-        otf2::definition::parameter parameter_;
+        otf2::definition::detail::weak_ref<otf2::definition::parameter> parameter_;
         std::uint64_t value_;
     };
 }

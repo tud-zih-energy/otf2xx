@@ -39,7 +39,8 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <memory>
+#include <otf2xx/definition/detail/impl_base.hpp>
+
 #include <string>
 
 namespace otf2
@@ -49,14 +50,16 @@ namespace definition
     namespace detail
     {
 
-        class marker_impl
+        class marker_impl : public impl_base<marker_impl>
         {
         public:
             using severity_type = otf2::common::marker_severity_type;
 
             marker_impl(otf2::reference<otf2::definition::marker> ref, const std::string& group,
-                        const std::string& category, severity_type severity)
-            : ref_(ref), group_(group), category_(category), severity_(severity)
+                        const std::string& category, severity_type severity,
+                        std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), group_(group), category_(category),
+              severity_(severity)
             {
             }
 
@@ -67,12 +70,11 @@ namespace definition
             marker_impl(marker_impl&&) = default;
             marker_impl& operator=(marker_impl&&) = default;
 
-            static std::shared_ptr<marker_impl> undefined()
+            static marker_impl* undefined()
             {
-                static std::shared_ptr<marker_impl> undef(std::make_shared<marker_impl>(
-                    otf2::reference<otf2::definition::marker>::undefined(), "", "",
-                    severity_type::none));
-                return undef;
+                static marker_impl undef(otf2::reference<otf2::definition::marker>::undefined(), "",
+                                         "", severity_type::none, 1);
+                return &undef;
             }
 
             const std::string& group() const

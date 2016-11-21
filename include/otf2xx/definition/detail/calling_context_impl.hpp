@@ -40,10 +40,11 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
+#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/owning_ptr.hpp>
+
 #include <otf2xx/definition/region.hpp>
 #include <otf2xx/definition/source_code_location.hpp>
-
-#include <memory>
 
 namespace otf2
 {
@@ -52,22 +53,24 @@ namespace definition
     namespace detail
     {
 
-        class calling_context_impl
+        class calling_context_impl : public impl_base<calling_context_impl>
         {
         public:
             calling_context_impl(reference<calling_context> ref,
                                  const otf2::definition::region& region,
                                  const otf2::definition::source_code_location& source_code_location,
-                                 std::shared_ptr<calling_context_impl> parent)
-            : ref_(ref), region_(region), source_code_location_(source_code_location),
-              parent_(parent)
+                                 calling_context_impl* parent, std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), region_(region),
+              source_code_location_(source_code_location), parent_(parent)
             {
             }
 
             calling_context_impl(reference<calling_context> ref,
                                  const otf2::definition::region& region,
-                                 const otf2::definition::source_code_location& source_code_location)
-            : ref_(ref), region_(region), source_code_location_(source_code_location), parent_()
+                                 const otf2::definition::source_code_location& source_code_location,
+                                 std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), region_(region),
+              source_code_location_(source_code_location), parent_(nullptr)
             {
             }
 
@@ -78,14 +81,13 @@ namespace definition
             calling_context_impl(calling_context_impl&&) = default;
             calling_context_impl& operator=(calling_context_impl&&) = default;
 
-            static std::shared_ptr<calling_context_impl> undefined()
+            static calling_context_impl* undefined()
             {
-                static std::shared_ptr<calling_context_impl> undef(
-                    std::make_shared<calling_context_impl>(
-                        otf2::reference<calling_context>::undefined(),
-                        otf2::definition::region::undefined(),
-                        otf2::definition::source_code_location::undefined()));
-                return undef;
+                static calling_context_impl undef(
+                    otf2::reference<calling_context>::undefined(),
+                    otf2::definition::region::undefined(),
+                    otf2::definition::source_code_location::undefined(), 1);
+                return &undef;
             }
 
             reference<calling_context> ref() const
@@ -105,24 +107,24 @@ namespace definition
 
             bool has_parent() const
             {
-                return bool(parent_);
+                return parent_.get() != nullptr;
             }
 
-            std::shared_ptr<calling_context_impl> parent() const
+            calling_context_impl* parent() const
             {
                 if (!has_parent())
                 {
                     make_exception("The calling context #", ref(), " hasn't got a parent.");
                 }
 
-                return parent_;
+                return parent_.get();
             }
 
         private:
             reference<calling_context> ref_;
             otf2::definition::region region_;
             otf2::definition::source_code_location source_code_location_;
-            std::shared_ptr<calling_context_impl> parent_;
+            owning_ptr<calling_context_impl> parent_;
         };
     }
 }

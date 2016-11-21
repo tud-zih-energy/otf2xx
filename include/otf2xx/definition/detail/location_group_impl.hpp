@@ -39,6 +39,8 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
+#include <otf2xx/definition/detail/impl_base.hpp>
+
 #include <otf2xx/definition/string.hpp>
 #include <otf2xx/definition/system_tree_node.hpp>
 
@@ -49,14 +51,16 @@ namespace definition
     namespace detail
     {
 
-        class location_group_impl
+        class location_group_impl : public impl_base<location_group_impl>
         {
         public:
             typedef otf2::common::location_group_type location_group_type;
 
             location_group_impl(reference<location_group> ref, const otf2::definition::string& name,
-                                location_group_type type, const otf2::definition::system_tree_node& stm)
-            : ref_(ref), name_(name), type_(type), stm_(stm)
+                                location_group_type type,
+                                const otf2::definition::system_tree_node& stm,
+                                std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), name_(name), type_(type), stm_(stm)
             {
             }
 
@@ -67,13 +71,12 @@ namespace definition
             location_group_impl(location_group_impl&&) = default;
             location_group_impl& operator=(location_group_impl&&) = default;
 
-            static std::shared_ptr<location_group_impl> undefined()
+            static location_group_impl* undefined()
             {
-                static std::shared_ptr<location_group_impl> undef(
-                    std::make_shared<location_group_impl>(
-                        reference<location_group>::undefined(), string::undefined(),
-                        location_group_type::unknown, system_tree_node::undefined()));
-                return undef;
+                static location_group_impl undef(reference<location_group>::undefined(),
+                                                 string::undefined(), location_group_type::unknown,
+                                                 system_tree_node::undefined(), 1);
+                return &undef;
             }
 
             reference<location_group> ref() const

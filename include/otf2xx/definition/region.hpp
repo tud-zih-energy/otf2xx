@@ -41,7 +41,7 @@
 
 #include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/base2.hpp>
+#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/region_impl.hpp>
 
 namespace otf2
@@ -52,9 +52,9 @@ namespace definition
     /**
      * \brief class for represening a region definition
      */
-    class region : public detail::base2<region>
+    class region : public detail::base<region>
     {
-        typedef detail::base2<region> base;
+        typedef detail::base<region> base;
         typedef otf2::traits::definition_impl_type<region>::type impl_type;
         using base::base;
 

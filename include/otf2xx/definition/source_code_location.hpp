@@ -61,7 +61,7 @@ namespace definition
     public:
         source_code_location(otf2::reference<source_code_location> ref, string file,
                              std::uint32_t line_number)
-        : base(std::make_shared<impl_type>(ref, file, line_number))
+        : base(new impl_type(ref, file, line_number))
         {
         }
 

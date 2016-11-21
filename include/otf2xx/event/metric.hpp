@@ -46,6 +46,9 @@
 
 #include <otf2xx/exception.hpp>
 
+#include <otf2xx/definition/detail/weak_ref.hpp>
+#include <otf2xx/writer/fwd.hpp>
+
 #include <cmath>
 #include <complex>
 #include <cstdint>
@@ -157,27 +160,29 @@ namespace event
         metric() = default;
 
         // construct with values
-        metric(otf2::chrono::time_point timestamp, otf2::definition::metric_class metric_c,
+        metric(otf2::chrono::time_point timestamp, const otf2::definition::metric_class& metric_c,
                std::vector<value_container> values)
         : base<metric>(timestamp), metric_class_(metric_c), metric_instance_(), values_(values)
         {
         }
 
         metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-               otf2::definition::metric_class metric_c, std::vector<value_container> values)
+               const otf2::definition::metric_class& metric_c, std::vector<value_container> values)
         : base<metric>(al, timestamp), metric_class_(metric_c), metric_instance_(), values_(values)
         {
         }
 
         // construct with values
-        metric(otf2::chrono::time_point timestamp, otf2::definition::metric_instance metric_c,
+        metric(otf2::chrono::time_point timestamp,
+               const otf2::definition::metric_instance& metric_c,
                std::vector<value_container> values)
         : base<metric>(timestamp), metric_class_(), metric_instance_(metric_c), values_(values)
         {
         }
 
         metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-               otf2::definition::metric_instance metric_c, std::vector<value_container> values)
+               const otf2::definition::metric_instance& metric_c,
+               std::vector<value_container> values)
         : base<metric>(al, timestamp), metric_class_(), metric_instance_(metric_c), values_(values)
         {
         }
@@ -199,15 +204,15 @@ namespace event
             return values_;
         }
 
-        const value_container& get_value_for(otf2::definition::metric_member member) const
+        const value_container& get_value_for(const otf2::definition::metric_member& member) const
         {
             std::size_t i = 0;
 
-            auto mc = metric_class_;
+            auto mc = metric_class_.lock();
 
-            if (metric_instance_.is_valid())
+            if (metric_instance_)
             {
-                mc = metric_instance_.metric_class();
+                mc = metric_instance_->metric_class();
             }
 
             for (; i < mc.size(); i++)
@@ -231,9 +236,11 @@ namespace event
             return metric_instance_;
         }
 
+        friend class otf2::writer::local;
+
     private:
-        otf2::definition::metric_class metric_class_;
-        otf2::definition::metric_instance metric_instance_;
+        otf2::definition::detail::weak_ref<otf2::definition::metric_class> metric_class_;
+        otf2::definition::detail::weak_ref<otf2::definition::metric_instance> metric_instance_;
         std::vector<value_container> values_;
     };
 }

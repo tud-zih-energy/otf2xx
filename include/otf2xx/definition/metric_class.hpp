@@ -70,7 +70,7 @@ namespace definition
 
         metric_class(reference<detail::metric_base> ref, metric_occurence occurence,
                      recorder_kind_type recorder_kind)
-        : base(std::make_shared<impl_type>(ref, occurence, recorder_kind))
+        : base(new impl_type(ref, occurence, recorder_kind))
         {
         }
 

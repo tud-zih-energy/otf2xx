@@ -66,7 +66,7 @@ namespace definition
 
         attribute(otf2::reference<attribute> ref, const otf2::definition::string& name,
                   const otf2::definition::string& description, attribute_type type)
-        : base(std::make_shared<impl_type>(ref, name, description, type))
+        : base(new impl_type(ref, name, description, type))
         {
         }
 

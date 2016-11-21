@@ -41,6 +41,9 @@
 
 #include <otf2xx/event/base.hpp>
 
+#include <otf2xx/definition/detail/weak_ref.hpp>
+#include <otf2xx/writer/fwd.hpp>
+
 namespace otf2
 {
 namespace event
@@ -112,7 +115,7 @@ namespace event
         }
 
     private:
-        void attach_data(uint32_t sender, otf2::definition::comm comm, uint32_t msg_tag,
+        void attach_data(uint32_t sender, const otf2::definition::comm& comm, uint32_t msg_tag,
                          uint64_t msg_length)
         {
             sender_ = sender;
@@ -124,12 +127,13 @@ namespace event
         }
 
         friend class buffer;
+        friend class otf2::writer::local;
 
         uint64_t request_id_;
         bool attached_data_ = false;
 
         uint32_t sender_;
-        otf2::definition::comm comm_;
+        otf2::definition::detail::weak_ref<otf2::definition::comm> comm_;
         uint32_t msg_tag_;
         uint64_t msg_length_;
     };

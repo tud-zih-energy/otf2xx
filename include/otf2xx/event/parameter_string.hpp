@@ -41,6 +41,9 @@
 
 #include <otf2xx/event/base.hpp>
 
+#include <otf2xx/definition/detail/weak_ref.hpp>
+#include <otf2xx/writer/fwd.hpp>
+
 namespace otf2
 {
 namespace event
@@ -49,14 +52,16 @@ namespace event
     class parameter_string : public base<parameter_string>
     {
     public:
-        parameter_string(otf2::chrono::time_point timestamp, otf2::definition::parameter parameter,
-                         otf2::definition::string value)
+        parameter_string(otf2::chrono::time_point timestamp,
+                         const otf2::definition::parameter& parameter,
+                         const otf2::definition::string& value)
         : base<parameter_string>(timestamp), parameter_(parameter), value_(value)
         {
         }
 
         parameter_string(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                         otf2::definition::parameter parameter, otf2::definition::string value)
+                         const otf2::definition::parameter& parameter,
+                         const otf2::definition::string& value)
         : base<parameter_string>(al, timestamp), parameter_(parameter), value_(value)
         {
         }
@@ -78,9 +83,11 @@ namespace event
             return value_;
         }
 
+        friend class otf2::writer::local;
+
     private:
-        otf2::definition::parameter parameter_;
-        otf2::definition::string value_;
+        otf2::definition::detail::weak_ref<otf2::definition::parameter> parameter_;
+        otf2::definition::detail::weak_ref<otf2::definition::string> value_;
     };
 }
 } // namespace otf2::event

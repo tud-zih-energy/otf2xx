@@ -45,6 +45,12 @@ namespace definition
 {
     namespace detail
     {
+        template <typename Def, typename Impl>
+        class base;
+
+        template <typename T>
+        class owning_ptr;
+
         template <typename Impl>
         class impl_base
         {
@@ -59,7 +65,7 @@ namespace definition
             impl_base(impl_base&&) = delete;
             impl_base& operator=(impl_base&&) = delete;
 
-        private:
+        protected:
             template <typename Definition, typename Impl2>
             friend class otf2::definition::detail::base2;
 
@@ -74,6 +80,11 @@ namespace definition
             {
                 return ref_count_.fetch_sub(1, std::memory_order_acq_rel);
             }
+
+            friend class owning_ptr<Impl>;
+
+            template <typename T, typename U>
+            friend class base;
 
         private:
             std::atomic<int64_t> ref_count_;

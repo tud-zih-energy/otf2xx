@@ -62,15 +62,17 @@ namespace definition
 
         metric_instance(reference<detail::metric_base> ref,
                         const otf2::definition::metric_class& metric_class,
-                        const otf2::definition::location& recorder, const otf2::definition::location& scope)
-        : base(std::make_shared<impl_type>(ref, metric_class, recorder, scope))
+                        const otf2::definition::location& recorder,
+                        const otf2::definition::location& scope)
+        : base(new impl_type(ref, metric_class, recorder, scope))
         {
         }
 
         metric_instance(reference<detail::metric_base> ref,
                         const otf2::definition::metric_class& metric_class,
-                        const otf2::definition::location& recorder, const otf2::definition::location_group& scope)
-        : base(std::make_shared<impl_type>(ref, metric_class, recorder, scope))
+                        const otf2::definition::location& recorder,
+                        const otf2::definition::location_group& scope)
+        : base(new impl_type(ref, metric_class, recorder, scope))
         {
         }
 
@@ -78,7 +80,7 @@ namespace definition
                         const otf2::definition::metric_class& metric_class,
                         const otf2::definition::location& recorder,
                         const otf2::definition::system_tree_node& scope)
-        : base(std::make_shared<impl_type>(ref, metric_class, recorder, scope))
+        : base(new impl_type(ref, metric_class, recorder, scope))
         {
         }
 
@@ -86,7 +88,7 @@ namespace definition
                         const otf2::definition::metric_class& metric_class,
                         const otf2::definition::location& recorder,
                         const otf2::definition::locations_group& scope)
-        : base(std::make_shared<impl_type>(ref, metric_class, recorder, scope))
+        : base(new impl_type(ref, metric_class, recorder, scope))
         {
         }
 

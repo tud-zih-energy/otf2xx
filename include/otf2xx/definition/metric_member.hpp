@@ -73,8 +73,8 @@ namespace definition
                       metric_mode mode, value_type_type value_type, value_base_type value_base,
                       value_exponent_type value_exponent,
                       const otf2::definition::string& value_unit)
-        : base(std::make_shared<impl_type>(ref, name, description, type, mode, value_type,
-                                           value_base, value_exponent, value_unit))
+        : base(new impl_type(ref, name, description, type, mode, value_type, value_base,
+                             value_exponent, value_unit))
         {
         }
 

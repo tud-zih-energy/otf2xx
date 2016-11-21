@@ -53,6 +53,10 @@ namespace definition
             using Impl = typename otf2::traits::definition_impl_type<Definition>::type;
 
         public:
+            weak_ref() : ptr_(nullptr)
+            {
+            }
+
             weak_ref(const Definition& def) : ptr_(def.get())
             {
             }
@@ -86,6 +90,11 @@ namespace definition
             const Impl& operator*() const
             {
                 return *ptr_;
+            }
+
+            operator bool() const
+            {
+                return ptr_ != nullptr;
             }
 
         private:

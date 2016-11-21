@@ -39,6 +39,8 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
+#include <otf2xx/definition/detail/impl_base.hpp>
+
 #include <otf2xx/definition/metric_member.hpp>
 #include <otf2xx/definition/string.hpp>
 
@@ -52,7 +54,7 @@ namespace definition
     namespace detail
     {
 
-        class metric_class_impl
+        class metric_class_impl : public impl_base<metric_class_impl>
         {
         public:
             typedef otf2::common::metric_occurence metric_occurence;
@@ -61,8 +63,9 @@ namespace definition
             typedef std::vector<otf2::definition::metric_member>::const_iterator iterator;
 
             metric_class_impl(reference<metric_base> ref, metric_occurence occurence,
-                              recorder_kind_type recorder_kind)
-            : ref_(ref), occurence_(occurence), recorder_kind_(recorder_kind)
+                              recorder_kind_type recorder_kind, std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), occurence_(occurence),
+              recorder_kind_(recorder_kind)
             {
             }
 
@@ -73,12 +76,12 @@ namespace definition
             metric_class_impl(metric_class_impl&&) = default;
             metric_class_impl& operator=(metric_class_impl&&) = default;
 
-            static std::shared_ptr<metric_class_impl> undefined()
+            static metric_class_impl* undefined()
             {
-                static std::shared_ptr<metric_class_impl> undef(std::make_shared<metric_class_impl>(
-                    otf2::reference<metric_class>::undefined(), metric_occurence::async,
-                    recorder_kind_type::unknown));
-                return undef;
+                static metric_class_impl undef(otf2::reference<metric_class>::undefined(),
+                                               metric_occurence::async, recorder_kind_type::unknown,
+                                               1);
+                return &undef;
             }
 
             otf2::reference<metric_base> ref() const

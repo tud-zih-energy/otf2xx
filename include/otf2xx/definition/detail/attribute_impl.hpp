@@ -39,9 +39,9 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/string.hpp>
+#include <otf2xx/definition/detail/impl_base.hpp>
 
-#include <memory>
+#include <otf2xx/definition/string.hpp>
 
 namespace otf2
 {
@@ -50,14 +50,16 @@ namespace definition
     namespace detail
     {
 
-        class attribute_impl
+        class attribute_impl : public impl_base<attribute_impl>
         {
         public:
             typedef otf2::common::type attribute_type;
 
             attribute_impl(otf2::reference<attribute> ref, const otf2::definition::string& name,
-                           const otf2::definition::string& description, attribute_type type)
-            : ref_(ref), name_(name), description_(description), type_(type)
+                           const otf2::definition::string& description, attribute_type type,
+                           std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), name_(name), description_(description),
+              type_(type)
             {
             }
 
@@ -88,12 +90,12 @@ namespace definition
                 return ref_;
             }
 
-            static std::shared_ptr<attribute_impl> undefined()
+            static attribute_impl* undefined()
             {
-                static std::shared_ptr<attribute_impl> undef(std::make_shared<attribute_impl>(
-                    otf2::reference<attribute>::undefined(), string::undefined(),
-                    string::undefined(), attribute_type::none));
-                return undef;
+                static attribute_impl undef(otf2::reference<attribute>::undefined(),
+                                            string::undefined(), string::undefined(),
+                                            attribute_type::none, 1);
+                return &undef;
             }
 
         private:

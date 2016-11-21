@@ -66,13 +66,13 @@ namespace definition
         location(otf2::reference<otf2::definition::location> ref,
                  const otf2::definition::string& name, const otf2::definition::location_group& lg,
                  location_type type, std::uint64_t events = 0)
-        : base(std::make_shared<impl_type>(ref, name, lg, type, events))
+        : base(new impl_type(ref, name, lg, type, events))
         {
         }
 
         location(const otf2::definition::location& other, std::uint64_t events)
-        : base(std::make_shared<impl_type>(other.ref(), other.name(), other.location_group(),
-                                           other.type(), events))
+        : base(new impl_type(other.ref(), other.name(), other.location_group(), other.type(),
+                             events))
         {
         }
 

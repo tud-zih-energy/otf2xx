@@ -67,14 +67,14 @@ namespace definition
                         const otf2::definition::region& region,
                         const otf2::definition::source_code_location& source_code_location,
                         const otf2::definition::calling_context& parent)
-        : base(std::make_shared<impl_type>(ref, region, source_code_location, parent.get()))
+        : base(new impl_type(ref, region, source_code_location, parent.get()))
         {
         }
 
         calling_context(otf2::reference<calling_context> ref,
                         const otf2::definition::region& region,
                         const otf2::definition::source_code_location& source_code_location)
-        : base(std::make_shared<impl_type>(ref, region, source_code_location))
+        : base(new impl_type(ref, region, source_code_location))
         {
         }
 

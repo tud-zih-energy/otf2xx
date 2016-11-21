@@ -63,13 +63,13 @@ namespace definition
         system_tree_node(reference<system_tree_node> ref, const otf2::definition::string& name,
                          const otf2::definition::string& class_name,
                          const otf2::definition::system_tree_node& parent)
-        : base(std::make_shared<impl_type>(ref, name, class_name, parent.get()))
+        : base(new impl_type(ref, name, class_name, parent.get()))
         {
         }
 
         system_tree_node(reference<system_tree_node> ref, const otf2::definition::string& name,
                          const otf2::definition::string& class_name)
-        : base(std::make_shared<impl_type>(ref, name, class_name))
+        : base(new impl_type(ref, name, class_name))
         {
         }
 

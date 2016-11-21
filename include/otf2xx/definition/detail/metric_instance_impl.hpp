@@ -39,6 +39,8 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
+#include <otf2xx/definition/detail/impl_base.hpp>
+
 #include <otf2xx/definition/group.hpp>
 #include <otf2xx/definition/location.hpp>
 #include <otf2xx/definition/location_group.hpp>
@@ -55,7 +57,7 @@ namespace definition
     namespace detail
     {
 
-        class metric_instance_impl
+        class metric_instance_impl : public impl_base<metric_instance_impl>
         {
         public:
             typedef otf2::common::metric_scope metric_scope;
@@ -64,36 +66,44 @@ namespace definition
             metric_instance_impl(reference<detail::metric_base> ref,
                                  const otf2::definition::metric_class& metric_class,
                                  const otf2::definition::location& recorder,
-                                 const otf2::definition::location& scope)
-            : ref_(ref), metric_class_(metric_class), recorder_(recorder), location_scope_(scope),
-              location_group_scope_(), system_tree_node_scope_(), group_scope_()
+                                 const otf2::definition::location& scope,
+                                 std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
+              location_scope_(scope), location_group_scope_(), system_tree_node_scope_(),
+              group_scope_()
             {
             }
 
             metric_instance_impl(reference<detail::metric_base> ref,
                                  const otf2::definition::metric_class& metric_class,
                                  const otf2::definition::location& recorder,
-                                 const otf2::definition::location_group& scope)
-            : ref_(ref), metric_class_(metric_class), recorder_(recorder), location_scope_(),
-              location_group_scope_(scope), system_tree_node_scope_(), group_scope_()
+                                 const otf2::definition::location_group& scope,
+                                 std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
+              location_scope_(), location_group_scope_(scope), system_tree_node_scope_(),
+              group_scope_()
             {
             }
 
             metric_instance_impl(reference<detail::metric_base> ref,
                                  const otf2::definition::metric_class& metric_class,
                                  const otf2::definition::location& recorder,
-                                 const otf2::definition::system_tree_node& scope)
-            : ref_(ref), metric_class_(metric_class), recorder_(recorder), location_scope_(),
-              location_group_scope_(), system_tree_node_scope_(scope), group_scope_()
+                                 const otf2::definition::system_tree_node& scope,
+                                 std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
+              location_scope_(), location_group_scope_(), system_tree_node_scope_(scope),
+              group_scope_()
             {
             }
 
             metric_instance_impl(reference<detail::metric_base> ref,
                                  const otf2::definition::metric_class& metric_class,
                                  const otf2::definition::location& recorder,
-                                 const otf2::definition::locations_group& scope)
-            : ref_(ref), metric_class_(metric_class), recorder_(recorder), location_scope_(),
-              location_group_scope_(), system_tree_node_scope_(), group_scope_(scope)
+                                 const otf2::definition::locations_group& scope,
+                                 std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
+              location_scope_(), location_group_scope_(), system_tree_node_scope_(),
+              group_scope_(scope)
             {
             }
 
@@ -104,15 +114,13 @@ namespace definition
             metric_instance_impl(metric_instance_impl&&) = default;
             metric_instance_impl& operator=(metric_instance_impl&&) = default;
 
-            static std::shared_ptr<metric_instance_impl> undefined()
+            static metric_instance_impl* undefined()
             {
-                static std::shared_ptr<metric_instance_impl> undef(
-                    std::make_shared<metric_instance_impl>(
-                        otf2::reference<metric_instance>::undefined(),
-                        otf2::definition::metric_class::undefined(),
-                        otf2::definition::location::undefined(),
-                        otf2::definition::location::undefined()));
-                return undef;
+                static metric_instance_impl undef(otf2::reference<metric_instance>::undefined(),
+                                                  otf2::definition::metric_class::undefined(),
+                                                  otf2::definition::location::undefined(),
+                                                  otf2::definition::location::undefined(), 1);
+                return &undef;
             }
 
             otf2::reference<metric_base> ref() const

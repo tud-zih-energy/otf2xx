@@ -66,25 +66,25 @@ namespace definition
     public:
         comm(reference<comm> ref, const otf2::definition::string& name,
              const otf2::definition::comm_group& group, const otf2::definition::comm& parent)
-        : base(std::make_shared<impl_type>(ref, name, group, parent.get()))
+        : base(new impl_type(ref, name, group, parent.get()))
         {
         }
 
         comm(reference<comm> ref, const otf2::definition::string& name,
              const otf2::definition::comm_group& group)
-        : base(std::make_shared<impl_type>(ref, name, group))
+        : base(new impl_type(ref, name, group))
         {
         }
 
         comm(reference<comm> ref, const otf2::definition::string& name,
              const otf2::definition::comm_self_group& group, comm parent)
-        : base(std::make_shared<impl_type>(ref, name, group, parent.get()))
+        : base(new impl_type(ref, name, group, parent.get()))
         {
         }
 
         comm(reference<comm> ref, const otf2::definition::string& name,
              const otf2::definition::comm_self_group& group)
-        : base(std::make_shared<impl_type>(ref, name, group))
+        : base(new impl_type(ref, name, group))
         {
         }
 

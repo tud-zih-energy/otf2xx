@@ -67,7 +67,7 @@ namespace definition
 
         location_group(reference<location_group> ref, const otf2::definition::string& name,
                        location_group_type type, const otf2::definition::system_tree_node& stm)
-        : base(std::make_shared<impl_type>(ref, name, type, stm))
+        : base(new impl_type(ref, name, type, stm))
         {
         }
 

@@ -39,6 +39,9 @@
 #include <otf2xx/definition/interrupt_generator.hpp>
 #include <otf2xx/event/base.hpp>
 
+#include <otf2xx/definition/detail/weak_ref.hpp>
+#include <otf2xx/writer/fwd.hpp>
+
 #include <otf2xx/chrono/chrono.hpp>
 
 namespace otf2
@@ -51,18 +54,18 @@ namespace event
     public:
         // construct with values
         calling_context_sample(otf2::chrono::time_point timestamp,
-                               otf2::definition::calling_context calling_context,
+                               const otf2::definition::calling_context& calling_context,
                                std::uint32_t unwind_distance,
-                               otf2::definition::interrupt_generator interrupt_generator)
+                               const otf2::definition::interrupt_generator& interrupt_generator)
         : base<calling_context_sample>(timestamp), calling_context_(calling_context),
           unwind_distance_(unwind_distance), interrupt_generator_(interrupt_generator)
         {
         }
 
         calling_context_sample(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                               otf2::definition::calling_context calling_context,
+                               const otf2::definition::calling_context& calling_context,
                                std::uint32_t unwind_distance,
-                               otf2::definition::interrupt_generator interrupt_generator)
+                               const otf2::definition::interrupt_generator& interrupt_generator)
         : base<calling_context_sample>(al, timestamp), calling_context_(calling_context),
           unwind_distance_(unwind_distance), interrupt_generator_(interrupt_generator)
         {
@@ -92,10 +95,13 @@ namespace event
             return interrupt_generator_;
         }
 
+        friend class otf2::writer::local;
+
     private:
-        otf2::definition::calling_context calling_context_;
+        otf2::definition::detail::weak_ref<otf2::definition::calling_context> calling_context_;
         std::uint32_t unwind_distance_;
-        otf2::definition::interrupt_generator interrupt_generator_;
+        otf2::definition::detail::weak_ref<otf2::definition::interrupt_generator>
+            interrupt_generator_;
     };
 }
 } // namespace otf2::event
