@@ -61,6 +61,13 @@ namespace definition
             {
             }
 
+            weak_ref& operator=(const Definition& def)
+            {
+                ptr_ = def.get();
+
+                return *this;
+            }
+
             weak_ref(const weak_ref&) = default;
             weak_ref& operator=(const weak_ref&) = default;
 
