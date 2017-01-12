@@ -133,7 +133,7 @@ namespace writer
 
             for (std::size_t i = 0; i < num_members; i++)
             {
-                type_ids[i] = static_cast<OTF2_Type>(data.values()[i].metric.value_type());
+                type_ids[i] = static_cast<OTF2_Type>(data.values()[i].metric->value_type());
                 values[i] = data.values()[i].value;
             }
 
