@@ -36,6 +36,8 @@
 #define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_BASE_HPP
 
 #include <otf2xx/definition/fwd.hpp>
+
+#include <otf2xx/definition/detail/weak_ref.hpp>
 #include <otf2xx/traits/traits.hpp>
 
 #include <cassert>

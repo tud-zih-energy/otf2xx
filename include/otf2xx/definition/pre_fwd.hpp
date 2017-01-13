@@ -78,6 +78,9 @@ namespace definition
         class property_impl;
 
         class marker_impl;
+
+        template <typename Definition>
+        class weak_ref;
     }
 
     class location;
@@ -130,6 +133,9 @@ namespace definition
     using calling_context_property = property<calling_context>;
 
     class marker;
+
+    template <typename Definition>
+    detail::weak_ref<Definition> make_weak_ref(const Definition&);
 }
 } // namespace otf2::definition
 

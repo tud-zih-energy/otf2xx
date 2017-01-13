@@ -84,6 +84,21 @@ namespace definition
                 return ptr_;
             }
 
+            Impl& get()
+            {
+                return *ptr_;
+            }
+
+            Impl* operator->()
+            {
+                return ptr_;
+            }
+
+            Impl& operator*()
+            {
+                return *ptr_;
+            }
+
             const Impl& get() const
             {
                 return *ptr_;
@@ -107,6 +122,12 @@ namespace definition
         private:
             Impl* ptr_;
         };
+    }
+
+    template <typename Definition>
+    detail::weak_ref<Definition> make_weak_ref(const Definition& def)
+    {
+        return { def };
     }
 }
 }
