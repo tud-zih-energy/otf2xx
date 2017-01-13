@@ -149,9 +149,11 @@ namespace reader
                 // assumes a valid trace file
                 if (reader->metric_classes().count(metric))
                 {
+                    const auto& mc = reader->metric_classes()[metric];
+
                     for (std::size_t i = 0; i < numberOfMetrics; i++)
                     {
-                        values[i].metric = reader->metric_classes()[metric][i];
+                        values[i].metric = mc[i];
                         values[i].value = metricValues[i];
                     }
 
@@ -161,15 +163,17 @@ namespace reader
                             attributeList,
                             otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
                                 time - reader->clock_properties().start_time().count())),
-                            reader->metric_classes()[metric], std::move(values)));
+                            mc, std::move(values)));
                 }
                 else
                 {
                     assert(reader->metric_instances().count(metric));
 
+                    const auto& mc = reader->metric_instances()[metric].metric_class();
+
                     for (std::size_t i = 0; i < numberOfMetrics; i++)
                     {
-                        values[i].metric = reader->metric_instances()[metric].metric_class()[i];
+                        values[i].metric = mc[i];
                         values[i].value = metricValues[i];
                     }
 

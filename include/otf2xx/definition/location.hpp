@@ -63,15 +63,16 @@ namespace definition
     public:
         typedef impl_type::location_type location_type;
 
-        location(otf2::reference<otf2::definition::location> ref, otf2::definition::string name,
-                 otf2::definition::location_group lg, location_type type, std::uint64_t events = 0)
-        : base(std::make_shared<impl_type>(ref, name, lg, type, events))
+        location(otf2::reference<otf2::definition::location> ref,
+                 const otf2::definition::string& name, const otf2::definition::location_group& lg,
+                 location_type type, std::uint64_t events = 0)
+        : base(new impl_type(ref, name, lg, type, events))
         {
         }
 
         location(const otf2::definition::location& other, std::uint64_t events)
-        : base(std::make_shared<impl_type>(other.ref(), other.name(), other.location_group(),
-                                           other.type(), events))
+        : base(new impl_type(other.ref(), other.name(), other.location_group(), other.type(),
+                             events))
         {
         }
 
@@ -83,7 +84,7 @@ namespace definition
          * \returns a \ref string definiton containing the name
          *
          */
-        otf2::definition::string name() const
+        const otf2::definition::string& name() const
         {
             assert(this->is_valid());
             return data_->name();
@@ -95,7 +96,7 @@ namespace definition
          * \returns a \ref location_group definiton
          *
          */
-        otf2::definition::location_group location_group() const
+        const otf2::definition::location_group& location_group() const
         {
             assert(this->is_valid());
             return data_->location_group();
@@ -146,7 +147,8 @@ namespace definition
         return s << "location #" << loc.ref() << " (\"" << loc.name() << "\")";
     }
 
-    inline bool operator==(otf2::definition::location lhs, otf2::definition::location rhs)
+    inline bool operator==(const otf2::definition::location& lhs,
+                           const otf2::definition::location& rhs)
     {
         return lhs.ref() == rhs.ref();
     }

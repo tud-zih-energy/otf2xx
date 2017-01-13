@@ -46,6 +46,9 @@ namespace definition
     {
         class group_base;
 
+        template <typename Impl>
+        class impl_base;
+
         class location_impl;
         class location_group_impl;
         class system_tree_node_impl;
@@ -75,6 +78,9 @@ namespace definition
         class property_impl;
 
         class marker_impl;
+
+        template <typename Definition>
+        class weak_ref;
     }
 
     class location;
@@ -127,6 +133,9 @@ namespace definition
     using calling_context_property = property<calling_context>;
 
     class marker;
+
+    template <typename Definition>
+    detail::weak_ref<Definition> make_weak_ref(const Definition&);
 }
 } // namespace otf2::definition
 

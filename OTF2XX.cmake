@@ -35,6 +35,14 @@ SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
+OPTION(OTF2XX_WITH_MPI "Whether OTF2xx should be build with MPI support or not. (Requires Boost.MPI)" OFF)
+
+if(OTF2XX_WITH_MPI)
+    message(STATUS "Building OTF2xx with MPI support.")
+    add_definitions(-DOTF2XX_HAS_MPI)
+    include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
 # find libOTF2
 find_package(OTF2 7.0.0 EXACT REQUIRED)
 include_directories(SYSTEM ${OTF2_INCLUDE_DIRS})

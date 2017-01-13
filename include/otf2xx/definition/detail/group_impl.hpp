@@ -39,6 +39,8 @@
 #include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
+#include <otf2xx/definition/detail/impl_base.hpp>
+
 #include <otf2xx/definition/string.hpp>
 
 #include <otf2xx/traits/definition.hpp>
@@ -62,12 +64,13 @@ namespace definition
 
         template <class MemberType,
                   otf2::common::group_type GroupType = otf2::common::group_type::unknown>
-        class group_impl
+        class group_impl : public impl_base<group_impl<MemberType, GroupType>>
         {
             static_assert(otf2::traits::is_definition<MemberType>::value,
                           "The MemberType has to be a otf2::definition.");
 
             typedef std::vector<MemberType> members_type;
+            typedef impl_base<group_impl<MemberType, GroupType>> base;
 
         public:
             typedef otf2::common::group_type group_type;
@@ -76,9 +79,11 @@ namespace definition
             typedef MemberType value_type;
 
         public:
-            group_impl(otf2::reference<detail::group_base> ref, string name, paradigm_type paradigm,
-                       group_flag_type group_flag)
-            : ref_(ref), name_(name), paradigm_(paradigm), group_flag_(group_flag)
+            group_impl(otf2::reference<detail::group_base> ref,
+                       const otf2::definition::string& name, paradigm_type paradigm,
+                       group_flag_type group_flag, std::int64_t retain_count = 0)
+            : base(retain_count), ref_(ref), name_(name), paradigm_(paradigm),
+              group_flag_(group_flag)
             {
             }
 
@@ -89,12 +94,12 @@ namespace definition
             group_impl(group_impl&&) = default;
             group_impl& operator=(group_impl&&) = default;
 
-            static std::shared_ptr<group_impl> undefined()
+            static group_impl* undefined()
             {
-                static std::shared_ptr<group_impl> undef(std::make_shared<group_impl>(
-                    otf2::reference<detail::group_base>::undefined(), string::undefined(),
-                    paradigm_type::unknown, group_flag_type::none));
-                return undef;
+                static group_impl undef(otf2::reference<detail::group_base>::undefined(),
+                                        string::undefined(), paradigm_type::unknown,
+                                        group_flag_type::none, 1);
+                return &undef;
             }
 
             otf2::reference<detail::group_base> ref() const
@@ -102,7 +107,7 @@ namespace definition
                 return ref_;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
@@ -139,19 +144,24 @@ namespace definition
                 return members_.size();
             }
 
-            value_type operator[](std::size_t i) const
+            const value_type& operator[](std::size_t i) const
             {
                 return members_[i];
             }
 
-            void add_member(value_type member)
+            void add_member(value_type&& member)
+            {
+                members_.emplace_back(std::forward(member));
+            }
+
+            void add_member(const value_type& member)
             {
                 members_.push_back(member);
             }
 
         private:
             otf2::reference<detail::group_base> ref_;
-            string name_;
+            otf2::definition::string name_;
             members_type members_;
             paradigm_type paradigm_;
             group_flag_type group_flag_;

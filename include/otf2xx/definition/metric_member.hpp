@@ -68,12 +68,13 @@ namespace definition
         typedef impl_type::value_base_type value_base_type;
         typedef impl_type::value_exponent_type value_exponent_type;
 
-        metric_member(reference<metric_member> ref, otf2::definition::string name,
-                      otf2::definition::string description, metric_type type, metric_mode mode,
-                      value_type_type value_type, value_base_type value_base,
-                      value_exponent_type value_exponent, otf2::definition::string value_unit)
-        : base(std::make_shared<impl_type>(ref, name, description, type, mode, value_type,
-                                           value_base, value_exponent, value_unit))
+        metric_member(reference<metric_member> ref, const otf2::definition::string& name,
+                      const otf2::definition::string& description, metric_type type,
+                      metric_mode mode, value_type_type value_type, value_base_type value_base,
+                      value_exponent_type value_exponent,
+                      const otf2::definition::string& value_unit)
+        : base(new impl_type(ref, name, description, type, mode, value_type, value_base,
+                             value_exponent, value_unit))
         {
         }
 
@@ -82,7 +83,7 @@ namespace definition
         /**
          * \brief returns the name of the metric member
          */
-        otf2::definition::string name() const
+        const otf2::definition::string& name() const
         {
             assert(this->is_valid());
             return data_->name();
@@ -91,7 +92,7 @@ namespace definition
         /**
          * \brief returns the description of the metric member
          */
-        otf2::definition::string description() const
+        const otf2::definition::string& description() const
         {
             assert(this->is_valid());
             return data_->name();
@@ -162,7 +163,7 @@ namespace definition
         /**
          * \brief returns the unit of the values without prefixes
          */
-        otf2::definition::string value_unit() const
+        const otf2::definition::string& value_unit() const
         {
             assert(this->is_valid());
             return data_->value_unit();

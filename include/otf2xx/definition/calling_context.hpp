@@ -63,16 +63,18 @@ namespace definition
         using base::base;
 
     public:
-        calling_context(otf2::reference<calling_context> ref, otf2::definition::region region,
-                        otf2::definition::source_code_location source_code_location,
-                        otf2::definition::calling_context parent)
-        : base(std::make_shared<impl_type>(ref, region, source_code_location, parent.get()))
+        calling_context(otf2::reference<calling_context> ref,
+                        const otf2::definition::region& region,
+                        const otf2::definition::source_code_location& source_code_location,
+                        const otf2::definition::calling_context& parent)
+        : base(new impl_type(ref, region, source_code_location, parent.get()))
         {
         }
 
-        calling_context(otf2::reference<calling_context> ref, otf2::definition::region region,
-                        otf2::definition::source_code_location source_code_location)
-        : base(std::make_shared<impl_type>(ref, region, source_code_location))
+        calling_context(otf2::reference<calling_context> ref,
+                        const otf2::definition::region& region,
+                        const otf2::definition::source_code_location& source_code_location)
+        : base(new impl_type(ref, region, source_code_location))
         {
         }
 
@@ -82,7 +84,7 @@ namespace definition
          * \brief returns the region
          * \returns otf2::definition::region
          */
-        otf2::definition::region region() const
+        const otf2::definition::region& region() const
         {
             assert(this->is_valid());
             return data_->region();
@@ -92,7 +94,7 @@ namespace definition
          * \brief returns the source_code_location
          * \returns otf2::definition::source_code_location
          */
-        otf2::definition::source_code_location source_code_location() const
+        const otf2::definition::source_code_location& source_code_location() const
         {
             assert(this->is_valid());
             return data_->source_code_location();

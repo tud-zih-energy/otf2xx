@@ -36,6 +36,8 @@
 #define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_BASE_HPP
 
 #include <otf2xx/definition/fwd.hpp>
+
+#include <otf2xx/definition/detail/weak_ref.hpp>
 #include <otf2xx/traits/traits.hpp>
 
 #include <cassert>
@@ -68,17 +70,74 @@ namespace definition
             typedef otf2::reference<typename otf2::traits::reference_param_type<Def>::type>
                 reference_type;
 
-            base(std::shared_ptr<Impl> data) : data_(data)
+            base() : data_(nullptr)
             {
             }
 
-            base() = default;
+            base(Impl* data) : data_(data)
+            {
+                if (data_ != nullptr)
+                {
+                    data_->retain();
+                }
+            }
 
-            base(const base& other) = default;
-            base(base&& other) = default;
+            base(const base& other) : data_(other.data_)
+            {
+                if (data_ != nullptr)
+                {
+                    data_->retain();
+                }
+            }
 
-            base& operator=(const base&) = default;
-            base& operator=(base&&) = default;
+            base& operator=(const base& other)
+            {
+                if (data_ != nullptr)
+                {
+                    if (data_->release() == 0)
+                    {
+                        delete data_;
+                    }
+                }
+
+                data_ = other.data_;
+
+                if (data_ != nullptr)
+                {
+                    data_->retain();
+                }
+
+                return *this;
+            }
+
+            base(base&& other) : data_(nullptr)
+            {
+                std::swap(data_, other.data_);
+            }
+
+            base& operator=(base&& other)
+            {
+                if (data_ != nullptr)
+                {
+                    if (data_->release() == 0)
+                    {
+                        delete data_;
+                    }
+                    data_ = nullptr;
+                }
+
+                std::swap(data_, other.data_);
+
+                return *this;
+            }
+
+            ~base()
+            {
+                if (data_ != nullptr && data_->release() == 0)
+                {
+                    delete data_;
+                }
+            }
 
         public:
             /**
@@ -101,7 +160,7 @@ namespace definition
              *
              * \return a definiton object
              */
-            static Def undefined()
+            static const Def& undefined()
             {
                 static Def undef(Impl::undefined());
                 return undef;
@@ -120,7 +179,7 @@ namespace definition
              */
             bool is_valid() const
             {
-                return bool(data_);
+                return data_ != nullptr;
             }
 
             /**
@@ -137,15 +196,28 @@ namespace definition
              * \warning { This method isn't part of the public interface of definition
              *          objects. You're disencouraged to relie on it. }
              *
-             * \return std::shared_ptr<Impl> to the referenced object
+             * \return Impl* to the referenced object
              */
-            std::shared_ptr<Impl> get() const
+            Impl* get() const
             {
                 return data_;
             }
 
+            /**
+             * \brief Returns the impl object
+             *
+             * \warning { This method isn't part of the public interface of definition
+             *          objects. You're disencouraged to relie on it. }
+             *
+             * \return const Impl& to the referenced object
+             */
+            const Impl& data() const
+            {
+                return *(data_);
+            }
+
         protected:
-            std::shared_ptr<Impl> data_;
+            Impl* data_;
         };
 
         template <typename Def, typename Impl>

@@ -41,6 +41,9 @@
 
 #include <otf2xx/event/base.hpp>
 
+#include <otf2xx/definition/detail/weak_ref.hpp>
+#include <otf2xx/writer/fwd.hpp>
+
 namespace otf2
 {
 namespace event
@@ -49,13 +52,13 @@ namespace event
     class thread_team_end : public base<thread_team_end>
     {
     public:
-        thread_team_end(otf2::chrono::time_point timestamp, otf2::definition::comm comm)
+        thread_team_end(otf2::chrono::time_point timestamp, const otf2::definition::comm& comm)
         : base<thread_team_end>(timestamp), comm_(comm)
         {
         }
 
         thread_team_end(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                        otf2::definition::comm comm)
+                        const otf2::definition::comm& comm)
         : base<thread_team_end>(al, timestamp), comm_(comm)
         {
         }
@@ -71,8 +74,10 @@ namespace event
             return comm_;
         }
 
+        friend class otf2::writer::local;
+
     private:
-        otf2::definition::comm comm_;
+        otf2::definition::detail::weak_ref<otf2::definition::comm> comm_;
     };
 }
 } // namespace otf2::event

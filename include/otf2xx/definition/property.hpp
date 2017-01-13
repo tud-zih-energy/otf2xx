@@ -68,7 +68,7 @@ namespace definition
         using value_type = typename impl_type::value_type;
 
         property(Definition def, string name, type_type type, value_type value)
-        : base(std::make_shared<impl_type>(def, name, type, value))
+        : base(new impl_type(def, name, type, value))
         {
         }
 
@@ -80,7 +80,7 @@ namespace definition
          * \returns a \ref string definiton containing the name
          *
          */
-        otf2::definition::string name() const
+        const otf2::definition::string& name() const
         {
             assert(this->is_valid());
             return this->data_->name();

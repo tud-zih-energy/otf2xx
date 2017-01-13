@@ -41,6 +41,9 @@
 
 #include <otf2xx/chrono/chrono.hpp>
 
+#include <otf2xx/definition/detail/weak_ref.hpp>
+#include <otf2xx/writer/fwd.hpp>
+
 namespace otf2
 {
 namespace event
@@ -50,15 +53,15 @@ namespace event
     {
     public:
         // construct with values
-        thread_end(otf2::chrono::time_point timestamp, otf2::definition::comm thread_contingent,
-                   std::uint64_t sequence_number)
+        thread_end(otf2::chrono::time_point timestamp,
+                   const otf2::definition::comm& thread_contingent, std::uint64_t sequence_number)
         : base<thread_end>(timestamp), thread_contingent_(thread_contingent),
           sequence_number_(sequence_number)
         {
         }
 
         thread_end(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                   otf2::definition::comm thread_contingent, std::uint64_t sequence_number)
+                   const otf2::definition::comm& thread_contingent, std::uint64_t sequence_number)
         : base<thread_end>(al, timestamp), thread_contingent_(thread_contingent),
           sequence_number_(sequence_number)
         {
@@ -81,8 +84,10 @@ namespace event
             return sequence_number_;
         }
 
+        friend class otf2::writer::local;
+
     private:
-        otf2::definition::comm thread_contingent_;
+        otf2::definition::detail::weak_ref<otf2::definition::comm> thread_contingent_;
         std::uint64_t sequence_number_;
     };
 }

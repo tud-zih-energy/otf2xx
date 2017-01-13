@@ -69,8 +69,7 @@ namespace definition
          * @param ref reference number
          * @param str string value
          */
-        string(otf2::reference<string> ref, const std::string& str)
-        : base(std::make_shared<impl_type>(ref, str))
+        string(otf2::reference<string> ref, const std::string& str) : base(new impl_type(ref, str))
         {
         }
 
@@ -102,7 +101,7 @@ namespace definition
     /**
      * @brief operator<< for easily printing out string definitions
      */
-    inline std::ostream& operator<<(std::ostream& s, otf2::definition::string str)
+    inline std::ostream& operator<<(std::ostream& s, const otf2::definition::string& str)
     {
         return s << str.str();
     }

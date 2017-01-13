@@ -32,65 +32,65 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_PARAMETER_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_PARAMETER_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IMPL_BASE_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IMPL_BASE_HPP
 
-#include <otf2xx/common.hpp>
-#include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
+#include <otf2xx/definition/fwd.hpp>
 
-#include <otf2xx/definition/string.hpp>
-
-#include <otf2xx/definition/detail/base.hpp>
-#include <otf2xx/definition/detail/parameter_impl.hpp>
+#include <atomic>
 
 namespace otf2
 {
 namespace definition
 {
-
-    /**
-     * \brief class for representing parameter definitions
-     */
-    class parameter : public detail::base<parameter>
+    namespace detail
     {
-        typedef detail::base<parameter> base;
-        typedef otf2::traits::definition_impl_type<parameter>::type impl_type;
-        using base::base;
+        template <typename Def, typename Impl>
+        class base;
 
-    public:
-        typedef impl_type::parameter_type parameter_type;
+        template <typename T>
+        class owning_ptr;
 
-        parameter(otf2::reference<parameter> ref, string name, parameter_type type)
-        : base(new impl_type(ref, name, type))
+        template <typename Impl>
+        class impl_base
         {
-        }
+        public:
+            impl_base(std::int64_t retain_count = 0) : ref_count_(retain_count)
+            {
+            }
 
-        parameter() = default;
+            impl_base(const impl_base&) = delete;
+            impl_base& operator=(const impl_base&) = delete;
 
-        /**
-         * \brief returns the name of the paramter definion as a string definition
-         *
-         * \returns a \ref string definiton containing the name
-         *
-         */
-        const otf2::definition::string& name() const
-        {
-            assert(this->is_valid());
-            return data_->name();
-        }
+            impl_base(impl_base&&) = delete;
+            impl_base& operator=(impl_base&&) = delete;
 
-        /**
-         * \brief returns the type of the parameter defintion
-         * \see otf2::common::parameter_type
-         */
-        parameter_type type() const
-        {
-            assert(this->is_valid());
-            return data_->type();
-        }
-    };
+        protected:
+            template <typename Definition, typename Impl2>
+            friend class otf2::definition::detail::base2;
+
+            Impl* retain()
+            {
+                ref_count_.fetch_add(1, std::memory_order_relaxed);
+
+                return static_cast<Impl*>(this);
+            }
+
+            int64_t release()
+            {
+                return ref_count_.fetch_sub(1, std::memory_order_acq_rel);
+            }
+
+            friend class owning_ptr<Impl>;
+
+            template <typename T, typename U>
+            friend class base;
+
+        private:
+            std::atomic<int64_t> ref_count_;
+        };
+    }
 }
-} // namespace otf2::definition
+}
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_PARAMETER_HPP
+#endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IMPL_BASE_HPP

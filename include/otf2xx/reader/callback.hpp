@@ -76,80 +76,80 @@ namespace reader
         // clang-format off
 
         // events
-        virtual void event(otf2::definition::location, const otf2::event::buffer_flush&) {}
-        virtual void event(otf2::definition::location, const otf2::event::enter&) {}
-        virtual void event(otf2::definition::location, const otf2::event::leave&) {}
-        virtual void event(otf2::definition::location, const otf2::event::measurement&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::buffer_flush&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::enter&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::leave&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::measurement&) {}
 
-        virtual void event(otf2::definition::location, const otf2::event::metric&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::metric&) {}
 
-        virtual void event(otf2::definition::location, const otf2::event::mpi_send&) {}
-        virtual void event(otf2::definition::location, const otf2::event::mpi_receive&) {}
-        virtual void event(otf2::definition::location, const otf2::event::mpi_isend_request&) {}
-        virtual void event(otf2::definition::location, const otf2::event::mpi_isend_complete&) {}
-        virtual void event(otf2::definition::location, const otf2::event::mpi_ireceive_complete&) {}
-        virtual void event(otf2::definition::location, const otf2::event::mpi_ireceive_request&) {}
-        virtual void event(otf2::definition::location, const otf2::event::mpi_request_test&) {}
-        virtual void event(otf2::definition::location, const otf2::event::mpi_request_cancelled&) {}
-        virtual void event(otf2::definition::location, const otf2::event::mpi_collective_begin&) {}
-        virtual void event(otf2::definition::location, const otf2::event::mpi_collective_end&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::mpi_send&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::mpi_receive&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::mpi_isend_request&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::mpi_isend_complete&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::mpi_ireceive_complete&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::mpi_ireceive_request&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::mpi_request_test&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::mpi_request_cancelled&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::mpi_collective_begin&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::mpi_collective_end&) {}
 
-        virtual void event(otf2::definition::location, const otf2::event::parameter_string&) {}
-        virtual void event(otf2::definition::location, const otf2::event::parameter_int&) {}
-        virtual void event(otf2::definition::location, const otf2::event::parameter_unsigned_int&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::parameter_string&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::parameter_int&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::parameter_unsigned_int&) {}
 
-        virtual void event(otf2::definition::location, const otf2::event::calling_context_sample&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::calling_context_sample&) {}
 
-        virtual void event(otf2::definition::location, const otf2::event::thread_fork&) {}
-        virtual void event(otf2::definition::location, const otf2::event::thread_join&) {}
-        virtual void event(otf2::definition::location, const otf2::event::thread_team_begin&) {}
-        virtual void event(otf2::definition::location, const otf2::event::thread_team_end&) {}
-        virtual void event(otf2::definition::location, const otf2::event::thread_acquire_lock&) {}
-        virtual void event(otf2::definition::location, const otf2::event::thread_release_lock&) {}
-        virtual void event(otf2::definition::location, const otf2::event::thread_task_create&) {}
-        virtual void event(otf2::definition::location, const otf2::event::thread_task_switch&) {}
-        virtual void event(otf2::definition::location, const otf2::event::thread_task_complete&) {}
-        virtual void event(otf2::definition::location, const otf2::event::thread_create&) {}
-        virtual void event(otf2::definition::location, const otf2::event::thread_begin&) {}
-        virtual void event(otf2::definition::location, const otf2::event::thread_wait&) {}
-        virtual void event(otf2::definition::location, const otf2::event::thread_end&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_fork&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_join&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_team_begin&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_team_end&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_acquire_lock&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_release_lock&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_task_create&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_task_switch&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_task_complete&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_create&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_begin&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_wait&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::thread_end&) {}
 
-        virtual void event(otf2::definition::location, const otf2::event::unknown&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::unknown&) {}
 
 
         // Global definitions
-        virtual void definition(otf2::definition::attribute) {}
-        virtual void definition(otf2::definition::comm) {}
+        virtual void definition(const otf2::definition::attribute&) {}
+        virtual void definition(const otf2::definition::comm&) {}
 
-        virtual void definition(otf2::definition::locations_group) {}
-        virtual void definition(otf2::definition::regions_group) {}
-        //virtual void definition(otf2::definition::metric_group&) {}
-        virtual void definition(otf2::definition::comm_locations_group) {}
-        virtual void definition(otf2::definition::comm_group) {}
-        virtual void definition(otf2::definition::comm_self_group) {}
+        virtual void definition(const otf2::definition::locations_group&) {}
+        virtual void definition(const otf2::definition::regions_group&) {}
+        //virtual void definition(const otf2::definition::metric_group&) {}
+        virtual void definition(const otf2::definition::comm_locations_group&) {}
+        virtual void definition(const otf2::definition::comm_group&) {}
+        virtual void definition(const otf2::definition::comm_self_group&) {}
 
-        virtual void definition(otf2::definition::location) {}
-        virtual void definition(otf2::definition::location_group) {}
-        virtual void definition(otf2::definition::parameter) {}
-        virtual void definition(otf2::definition::region) {}
-        virtual void definition(otf2::definition::string) {}
-        virtual void definition(otf2::definition::system_tree_node) {}
-        virtual void definition(otf2::definition::clock_properties) {}
+        virtual void definition(const otf2::definition::location&) {}
+        virtual void definition(const otf2::definition::location_group&) {}
+        virtual void definition(const otf2::definition::parameter&) {}
+        virtual void definition(const otf2::definition::region&) {}
+        virtual void definition(const otf2::definition::string&) {}
+        virtual void definition(const otf2::definition::system_tree_node&) {}
+        virtual void definition(const otf2::definition::clock_properties&) {}
 
-        virtual void definition(otf2::definition::source_code_location) {}
-        virtual void definition(otf2::definition::calling_context) {}
-        virtual void definition(otf2::definition::interrupt_generator) {}
+        virtual void definition(const otf2::definition::source_code_location&) {}
+        virtual void definition(const otf2::definition::calling_context&) {}
+        virtual void definition(const otf2::definition::interrupt_generator&) {}
 
-        virtual void definition(otf2::definition::metric_class) {}
-        virtual void definition(otf2::definition::metric_member) {}
-        virtual void definition(otf2::definition::metric_instance) {}
+        virtual void definition(const otf2::definition::metric_class&) {}
+        virtual void definition(const otf2::definition::metric_member&) {}
+        virtual void definition(const otf2::definition::metric_instance&) {}
 
-        virtual void definition(otf2::definition::location_property) {}
-        virtual void definition(otf2::definition::location_group_property) {}
-        virtual void definition(otf2::definition::system_tree_node_property) {}
-        virtual void definition(otf2::definition::calling_context_property) {}
+        virtual void definition(const otf2::definition::location_property&) {}
+        virtual void definition(const otf2::definition::location_group_property&) {}
+        virtual void definition(const otf2::definition::system_tree_node_property&) {}
+        virtual void definition(const otf2::definition::calling_context_property&) {}
 
-        virtual void definition(otf2::definition::unknown) {}
+        virtual void definition(const otf2::definition::unknown&) {}
 
         // clang-format on
 

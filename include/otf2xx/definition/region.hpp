@@ -63,12 +63,13 @@ namespace definition
         typedef typename impl_type::paradigm_type paradigm_type;
         typedef typename impl_type::flags_type flags_type;
 
-        region(otf2::reference<region> ref, otf2::definition::string name,
-               otf2::definition::string canonical_name, otf2::definition::string description,
-               role_type role, paradigm_type paradigm, flags_type flags,
-               otf2::definition::string source_file, uint32_t begin_line, uint32_t end_line)
-        : base(std::make_shared<impl_type>(ref, name, canonical_name, description, role, paradigm,
-                                           flags, source_file, begin_line, end_line))
+        region(otf2::reference<region> ref, const otf2::definition::string& name,
+               const otf2::definition::string& canonical_name,
+               const otf2::definition::string& description, role_type role, paradigm_type paradigm,
+               flags_type flags, const otf2::definition::string& source_file, uint32_t begin_line,
+               uint32_t end_line)
+        : base(new impl_type(ref, name, canonical_name, description, role, paradigm, flags,
+                             source_file, begin_line, end_line))
         {
         }
 
@@ -80,7 +81,7 @@ namespace definition
          * \returns a \ref string definiton containing the name
          *
          */
-        otf2::definition::string name() const
+        const otf2::definition::string& name() const
         {
             assert(this->is_valid());
             return data_->name();
@@ -91,7 +92,7 @@ namespace definition
          * e.g. demangled function name
          * \returns a \ref string definiton containing the canonical name
          */
-        otf2::definition::string canonical_name() const
+        const otf2::definition::string& canonical_name() const
         {
             assert(this->is_valid());
             return data_->canonical_name();
@@ -103,7 +104,7 @@ namespace definition
          * \returns a \ref string definiton containing the description
          *
          */
-        otf2::definition::string description() const
+        const otf2::definition::string& description() const
         {
             assert(this->is_valid());
             return data_->description();
@@ -145,7 +146,7 @@ namespace definition
          * \returns a \ref string definiton containing the file name
          *
          */
-        otf2::definition::string source_file() const
+        const otf2::definition::string& source_file() const
         {
             assert(this->is_valid());
             return data_->source_file();

@@ -40,9 +40,9 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/string.hpp>
+#include <otf2xx/definition/detail/impl_base.hpp>
 
-#include <memory>
+#include <otf2xx/definition/string.hpp>
 
 namespace otf2
 {
@@ -51,12 +51,13 @@ namespace definition
     namespace detail
     {
 
-        class source_code_location_impl
+        class source_code_location_impl : public impl_base<source_code_location_impl>
         {
         public:
             source_code_location_impl(reference<source_code_location> ref,
-                                      otf2::definition::string file, std::uint32_t line_number)
-            : ref_(ref), file_(file), line_number_(line_number)
+                                      const otf2::definition::string& file,
+                                      std::uint32_t line_number, std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), file_(file), line_number_(line_number)
             {
             }
 
@@ -67,13 +68,11 @@ namespace definition
             source_code_location_impl(source_code_location_impl&&) = default;
             source_code_location_impl& operator=(source_code_location_impl&&) = default;
 
-            static std::shared_ptr<source_code_location_impl> undefined()
+            static source_code_location_impl* undefined()
             {
-                static std::shared_ptr<source_code_location_impl> undef(
-                    std::make_shared<source_code_location_impl>(
-                        otf2::reference<source_code_location>::undefined(), string::undefined(),
-                        0));
-                return undef;
+                static source_code_location_impl undef(
+                    otf2::reference<source_code_location>::undefined(), string::undefined(), 0, 1);
+                return &undef;
             }
 
             reference<source_code_location> ref() const
@@ -81,7 +80,7 @@ namespace definition
                 return ref_;
             }
 
-            otf2::definition::string file() const
+            const otf2::definition::string& file() const
             {
                 return file_;
             }

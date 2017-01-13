@@ -39,6 +39,8 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
+#include <otf2xx/definition/detail/impl_base.hpp>
+
 #include <otf2xx/definition/string.hpp>
 
 #include <memory>
@@ -51,14 +53,17 @@ namespace definition
     {
 
         template <typename Definition>
-        class property_impl
+        class property_impl : public impl_base<property_impl<Definition>>
         {
+            using base = impl_base<property_impl<Definition>>;
+
         public:
             using type_type = otf2::common::type;
             using value_type = OTF2_AttributeValue;
 
-            property_impl(Definition def, string name, type_type type, value_type value)
-            : def_(def), name_(name), type_(type), value_(value)
+            property_impl(const Definition& def, const otf2::definition::string& name,
+                          type_type type, value_type value, std::int64_t retain_count = 0)
+            : base(retain_count), def_(def), name_(name), type_(type), value_(value)
             {
             }
 
@@ -66,17 +71,17 @@ namespace definition
             property_impl(const property_impl&) = delete;
             property_impl& operator=(const property_impl&) = delete;
 
-            property_impl(property_impl&&) = delete;
-            property_impl& operator=(property_impl&&) = delete;
+            property_impl(property_impl&&) = default;
+            property_impl& operator=(property_impl&&) = default;
 
-            static std::shared_ptr<property_impl> undefined()
+            static property_impl* undefined()
             {
-                static std::shared_ptr<property_impl> undef(std::make_shared<property_impl>(
-                    Definition::undefined(), string::undefined(), string::undefined()));
-                return undef;
+                static property_impl undef(Definition::undefined(), string::undefined(),
+                                           string::undefined(), 1);
+                return &undef;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
@@ -91,7 +96,7 @@ namespace definition
                 return value_;
             }
 
-            Definition def() const
+            const Definition& def() const
             {
                 return def_;
             }
@@ -103,7 +108,7 @@ namespace definition
 
         private:
             Definition def_;
-            string name_;
+            otf2::definition::string name_;
             type_type type_;
             value_type value_;
         };

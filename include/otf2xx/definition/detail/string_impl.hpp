@@ -37,7 +37,8 @@
 
 #include <otf2xx/reference.hpp>
 
-#include <memory>
+#include <otf2xx/definition/detail/impl_base.hpp>
+
 #include <string>
 
 namespace otf2
@@ -47,13 +48,13 @@ namespace definition
     namespace detail
     {
 
-        class string_impl
+        class string_impl : public impl_base<string_impl>
         {
         public:
-            string_impl(otf2::reference<string> ref, const std::string& str) : ref_(ref), str_(str)
+            string_impl(otf2::reference<string> ref, const std::string& str,
+                        std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), str_(str)
             {
-                //             std::cout << "Created String_impl @" << this << " text: '" << str <<
-                //             "' id: " << ref << std::endl;
             }
 
             // no implicit copy allowed, see duplicate()
@@ -63,11 +64,10 @@ namespace definition
             string_impl(string_impl&&) = default;
             string_impl& operator=(string_impl&&) = default;
 
-            static std::shared_ptr<string_impl> undefined()
+            static string_impl* undefined()
             {
-                static std::shared_ptr<string_impl> undef(std::make_shared<string_impl>(
-                    otf2::reference<string>::undefined(), std::string("")));
-                return undef;
+                static string_impl undef(otf2::reference<string>::undefined(), std::string(""), 1);
+                return &undef;
             }
 
             otf2::reference<string> ref() const
@@ -78,12 +78,6 @@ namespace definition
             const std::string& str() const
             {
                 return str_;
-            }
-
-            ~string_impl()
-            {
-                //             std::cout << "Deleted String_impl @" << this << " text: '" << str_ <<
-                //             "' id: " << ref_ << std::endl;
             }
 
         private:

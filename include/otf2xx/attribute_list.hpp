@@ -81,8 +81,8 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::attribute>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
-                        otf2::definition::attribute value)
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
+                        const otf2::definition::attribute& value)
         {
             check(OTF2_AttributeList_AddAttributeRef(list, attribute.ref(), value.ref()),
                   "Couldn't add value to attribute list.");
@@ -92,8 +92,8 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::comm>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
-                        otf2::definition::comm value)
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
+                        const otf2::definition::comm& value)
         {
             check(OTF2_AttributeList_AddCommRef(list, attribute.ref(), value.ref()),
                   "Couldn't add value to attribute list.");
@@ -103,7 +103,7 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::Double>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
                         double value)
         {
             check(OTF2_AttributeList_AddDouble(list, attribute.ref(), value),
@@ -114,7 +114,7 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::Float>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
                         float value)
         {
             check(OTF2_AttributeList_AddFloat(list, attribute.ref(), value),
@@ -127,8 +127,8 @@ namespace detail
     //    add_attribute<otf2::definition::attribute::attribute_type::group>
     //    {
     //        void operator()(OTF2_AttributeList* list,
-    //                        otf2::definition::attribute attribute,
-    //                        otf2::definition::group<T> value)
+    //                        const otf2::definition::attribute& attribute,
+    //                        const otf2::definition::group<T>& value)
     //        {
     //            check(OTF2_AttributeList_AddGroupRef(list, attribute.ref(),
     //                                                 value.ref()),
@@ -139,7 +139,7 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::int8>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
                         std::int8_t value)
         {
             check(OTF2_AttributeList_AddInt8(list, attribute.ref(), value),
@@ -150,7 +150,7 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::int16>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
                         std::int16_t value)
         {
             check(OTF2_AttributeList_AddInt16(list, attribute.ref(), value),
@@ -161,7 +161,7 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::int32>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
                         std::int32_t value)
         {
             check(OTF2_AttributeList_AddInt32(list, attribute.ref(), value),
@@ -172,7 +172,7 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::int64>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
                         std::int64_t value)
         {
             check(OTF2_AttributeList_AddInt64(list, attribute.ref(), value),
@@ -183,8 +183,8 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::location>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
-                        otf2::definition::location value)
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
+                        const otf2::definition::location& value)
         {
             check(OTF2_AttributeList_AddLocationRef(list, attribute.ref(), value.ref()),
                   "Couldn't add value to attribute list.");
@@ -194,8 +194,8 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::metric>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
-                        otf2::definition::metric_class value)
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
+                        const otf2::definition::metric_class& value)
         {
             check(OTF2_AttributeList_AddMetricRef(list, attribute.ref(), value.ref()),
                   "Couldn't add value to attribute list.");
@@ -207,8 +207,8 @@ namespace detail
     //    add_attribute<otf2::definition::attribute::attribute_type::metric>
     //    {
     //        void operator()(OTF2_AttributeList* list,
-    //                        otf2::definition::attribute attribute,
-    //                        otf2::definition::metric_instance value)
+    //                        const otf2::definition::attribute& attribute,
+    //                        const otf2::definition::metric_instance& value)
     //        {
     //            check(OTF2_AttributeList_AddMetricRef(list, attribute.ref(),
     //                                                  value.ref()),
@@ -219,8 +219,8 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::parameter>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
-                        otf2::definition::parameter value)
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
+                        const otf2::definition::parameter& value)
         {
             check(OTF2_AttributeList_AddParameterRef(list, attribute.ref(), value.ref()),
                   "Couldn't add value to attribute list.");
@@ -230,8 +230,8 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::region>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
-                        otf2::definition::region value)
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
+                        const otf2::definition::region& value)
         {
             check(OTF2_AttributeList_AddRegionRef(list, attribute.ref(), value.ref()),
                   "Couldn't add value to attribute list.");
@@ -241,8 +241,8 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::string>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
-                        otf2::definition::string value)
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
+                        const otf2::definition::string& value)
         {
             check(OTF2_AttributeList_AddStringRef(list, attribute.ref(), value.ref()),
                   "Couldn't add value to attribute list.");
@@ -252,7 +252,7 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::uint8>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
                         std::uint8_t value)
         {
             check(OTF2_AttributeList_AddUint8(list, attribute.ref(), value),
@@ -263,7 +263,7 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::uint16>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
                         std::uint16_t value)
         {
             check(OTF2_AttributeList_AddUint16(list, attribute.ref(), value),
@@ -274,7 +274,7 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::uint32>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
                         std::uint32_t value)
         {
             check(OTF2_AttributeList_AddUint32(list, attribute.ref(), value),
@@ -285,7 +285,7 @@ namespace detail
     template <>
     struct add_attribute<otf2::definition::attribute::attribute_type::uint64>
     {
-        void operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute,
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
                         std::uint64_t value)
         {
             check(OTF2_AttributeList_AddUint64(list, attribute.ref(), value),
@@ -304,7 +304,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::attribute>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -314,7 +314,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::comm>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -323,7 +323,7 @@ namespace detail
     template <>
     struct get_attribute<otf2::definition::attribute::attribute_type::Double>
     {
-        double operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute)
+        double operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute)
         {
             double res;
             check(OTF2_AttributeList_GetDouble(list, attribute.ref(), &res),
@@ -336,7 +336,7 @@ namespace detail
     template <>
     struct get_attribute<otf2::definition::attribute::attribute_type::Float>
     {
-        float operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute)
+        float operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute)
         {
             float res;
             check(OTF2_AttributeList_GetFloat(list, attribute.ref(), &res),
@@ -350,8 +350,8 @@ namespace detail
     //    get_attribute<otf2::definition::attribute::attribute_type::group>
     //    {
     //        void operator()(OTF2_AttributeList* list,
-    //                        otf2::definition::attribute attribute,
-    //                        otf2::definition::group<T> value)
+    //                        const otf2::definition::attribute& attribute,
+    //                        const otf2::definition::group<T>& value)
     //        {
     //            check(OTF2_AttributeList_AddGroupRef(list, attribute.ref(),
     //                                                 value.ref()),
@@ -362,7 +362,8 @@ namespace detail
     template <>
     struct get_attribute<otf2::definition::attribute::attribute_type::int8>
     {
-        std::int8_t operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute)
+        std::int8_t operator()(OTF2_AttributeList* list,
+                               const otf2::definition::attribute& attribute)
         {
             std::int8_t res;
             check(OTF2_AttributeList_GetInt8(list, attribute.ref(), &res),
@@ -374,7 +375,8 @@ namespace detail
     template <>
     struct get_attribute<otf2::definition::attribute::attribute_type::int16>
     {
-        std::int16_t operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute)
+        std::int16_t operator()(OTF2_AttributeList* list,
+                                const otf2::definition::attribute& attribute)
         {
             std::int16_t res;
             check(OTF2_AttributeList_GetInt16(list, attribute.ref(), &res),
@@ -386,7 +388,8 @@ namespace detail
     template <>
     struct get_attribute<otf2::definition::attribute::attribute_type::int32>
     {
-        std::int32_t operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute)
+        std::int32_t operator()(OTF2_AttributeList* list,
+                                const otf2::definition::attribute& attribute)
         {
             std::int32_t res;
             check(OTF2_AttributeList_GetInt32(list, attribute.ref(), &res),
@@ -398,7 +401,8 @@ namespace detail
     template <>
     struct get_attribute<otf2::definition::attribute::attribute_type::int64>
     {
-        std::int64_t operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute)
+        std::int64_t operator()(OTF2_AttributeList* list,
+                                const otf2::definition::attribute& attribute)
         {
             std::int64_t res;
             check(OTF2_AttributeList_GetInt64(list, attribute.ref(), &res),
@@ -411,7 +415,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::location>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -421,7 +425,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::metric>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -432,8 +436,8 @@ namespace detail
     //    get_attribute<otf2::definition::attribute::attribute_type::metric>
     //    {
     //        void operator()(OTF2_AttributeList* list,
-    //                        otf2::definition::attribute attribute,
-    //                        otf2::definition::metric_instance value)
+    //                        const otf2::definition::attribute& attribute,
+    //                        const otf2::definition::metric_instance& value)
     //        {
     //            check(OTF2_AttributeList_AddMetricRef(list, attribute.ref(),
     //                                                  value.ref()),
@@ -445,7 +449,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::parameter>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -455,7 +459,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::region>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -465,7 +469,7 @@ namespace detail
     struct get_attribute<otf2::definition::attribute::attribute_type::string>
     {
         template <bool Test = false>
-        void operator()(OTF2_AttributeList*, otf2::definition::attribute)
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
         {
             static_assert(Test, "Not implemented yet.");
         }
@@ -474,7 +478,8 @@ namespace detail
     template <>
     struct get_attribute<otf2::definition::attribute::attribute_type::uint8>
     {
-        std::uint8_t operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute)
+        std::uint8_t operator()(OTF2_AttributeList* list,
+                                const otf2::definition::attribute& attribute)
         {
             std::uint8_t res;
             check(OTF2_AttributeList_GetUint8(list, attribute.ref(), &res),
@@ -486,7 +491,8 @@ namespace detail
     template <>
     struct get_attribute<otf2::definition::attribute::attribute_type::uint16>
     {
-        std::uint16_t operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute)
+        std::uint16_t operator()(OTF2_AttributeList* list,
+                                 const otf2::definition::attribute& attribute)
         {
             std::uint16_t res;
             check(OTF2_AttributeList_GetUint16(list, attribute.ref(), &res),
@@ -498,7 +504,8 @@ namespace detail
     template <>
     struct get_attribute<otf2::definition::attribute::attribute_type::uint32>
     {
-        std::uint32_t operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute)
+        std::uint32_t operator()(OTF2_AttributeList* list,
+                                 const otf2::definition::attribute& attribute)
         {
             std::uint32_t res;
             check(OTF2_AttributeList_GetUint32(list, attribute.ref(), &res),
@@ -510,7 +517,8 @@ namespace detail
     template <>
     struct get_attribute<otf2::definition::attribute::attribute_type::uint64>
     {
-        std::uint64_t operator()(OTF2_AttributeList* list, otf2::definition::attribute attribute)
+        std::uint64_t operator()(OTF2_AttributeList* list,
+                                 const otf2::definition::attribute& attribute)
         {
             std::uint64_t res;
             check(OTF2_AttributeList_GetUint64(list, attribute.ref(), &res),
@@ -525,44 +533,64 @@ class attribute_list
 public:
     using attribute_type = otf2::definition::attribute::attribute_type;
 
-    attribute_list() : attribute_list_(nullptr)
+    attribute_list() : attribute_list(nullptr, false)
     {
     }
 
-    attribute_list(const attribute_list& other)
-    : attribute_list_(detail::OTF2_AttributeList_Clone(other.attribute_list_))
+    explicit attribute_list(OTF2_AttributeList* list, bool take_ownership = true)
+    : attribute_list_(list), owned_(take_ownership)
     {
     }
 
-    explicit attribute_list(OTF2_AttributeList* list) : attribute_list_(list)
+    attribute_list(const attribute_list&) = delete;
+    attribute_list& operator=(const attribute_list&) = delete;
+
+    attribute_list(attribute_list&& other)
+    : attribute_list_(other.attribute_list_), owned_(other.owned_)
     {
+        other.owned_ = false;
     }
 
-    attribute_list& operator=(attribute_list other)
+    attribute_list& operator=(attribute_list&& other)
     {
         std::swap(attribute_list_, other.attribute_list_);
+        std::swap(other.owned_, owned_);
 
         return *this;
     }
 
     template <attribute_type Type, typename T>
-    void add(otf2::definition::attribute attribute, T value)
+    void add(const otf2::definition::attribute& attribute, T value)
     {
         if (attribute_list_ == nullptr)
+        {
             allocate_list();
+        }
+        else if (!owned_)
+        {
+            attribute_list_ = detail::OTF2_AttributeList_Clone(attribute_list_);
+            owned_ = true;
+        }
 
         detail::add_attribute<Type>()(this->get(), attribute, value);
     }
 
+    bool has(const otf2::definition::attribute& attribute) const
+    {
+        return attribute_list_ != nullptr ?
+                   OTF2_AttributeList_TestAttributeByID(attribute_list_, attribute.ref().get()) :
+                   false;
+    }
+
     template <attribute_type Type>
-    auto get(otf2::definition::attribute attribute) const
+    auto get(const otf2::definition::attribute& attribute) const
     {
         return detail::get_attribute<Type>()(this->get(), attribute);
     }
 
     ~attribute_list()
     {
-        if (attribute_list_ != nullptr)
+        if (attribute_list_ != nullptr && owned_)
             OTF2_AttributeList_Delete(attribute_list_);
     }
 
@@ -578,6 +606,11 @@ public:
 
     attribute_list clone() const
     {
+        if (attribute_list_ == nullptr ||
+            OTF2_AttributeList_GetNumberOfElements(attribute_list_) == 0)
+        {
+            return attribute_list();
+        }
         return attribute_list(detail::OTF2_AttributeList_Clone(attribute_list_));
     }
 
@@ -589,11 +622,16 @@ private:
         attribute_list_ = OTF2_AttributeList_New();
 
         if (attribute_list_ == nullptr)
+        {
             make_exception("Couldn't create a new attribute list.");
+        }
+
+        owned_ = true;
     }
 
 private:
     OTF2_AttributeList* attribute_list_;
+    bool owned_;
 };
 }
 

@@ -46,6 +46,9 @@
 
 #include <otf2xx/exception.hpp>
 
+#include <otf2xx/definition/detail/weak_ref.hpp>
+#include <otf2xx/writer/fwd.hpp>
+
 #include <cmath>
 #include <complex>
 #include <cstdint>
@@ -65,21 +68,21 @@ namespace event
             T scale(T x) const
             {
                 int base = 2;
-                if (metric.value_base() ==
+                if (metric->value_base() ==
                     otf2::definition::metric_member::value_base_type::decimal)
                     base = 10;
-                return x * std::pow(base, metric.value_exponent());
+                return x * std::pow(base, metric->value_exponent());
             }
 
         public:
-            otf2::definition::metric_member metric;
+            otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric;
             OTF2_MetricValue value;
 
             double as_double() const
             {
                 typedef otf2::definition::metric_member::value_type_type value_type;
 
-                switch (metric.value_type())
+                switch (metric->value_type())
                 {
                 case value_type::Double:
                     return scale<double>(value.floating_point);
@@ -98,7 +101,7 @@ namespace event
             {
                 typedef otf2::definition::metric_member::value_type_type value_type;
 
-                switch (metric.value_type())
+                switch (metric->value_type())
                 {
                 case value_type::Double:
                     return scale<std::int64_t>(static_cast<std::int64_t>(value.floating_point));
@@ -117,7 +120,7 @@ namespace event
             {
                 typedef otf2::definition::metric_member::value_type_type value_type;
 
-                switch (metric.value_type())
+                switch (metric->value_type())
                 {
                 case value_type::Double:
                     return scale<std::uint64_t>(static_cast<std::uint64_t>(value.floating_point));
@@ -137,7 +140,7 @@ namespace event
             {
                 typedef otf2::definition::metric_member::value_type_type value_type;
 
-                switch (metric.value_type())
+                switch (metric->value_type())
                 {
                 case value_type::Double:
                     value.floating_point = static_cast<double>(x);
@@ -157,27 +160,30 @@ namespace event
         metric() = default;
 
         // construct with values
-        metric(otf2::chrono::time_point timestamp, otf2::definition::metric_class metric_c,
+        metric(otf2::chrono::time_point timestamp, const otf2::definition::metric_class& metric_c,
                std::vector<value_container> values)
         : base<metric>(timestamp), metric_class_(metric_c), metric_instance_(), values_(values)
         {
         }
 
         metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-               otf2::definition::metric_class metric_c, std::vector<value_container> values)
+               const otf2::definition::metric_class& metric_c,
+               const std::vector<value_container>& values)
         : base<metric>(al, timestamp), metric_class_(metric_c), metric_instance_(), values_(values)
         {
         }
 
         // construct with values
-        metric(otf2::chrono::time_point timestamp, otf2::definition::metric_instance metric_c,
-               std::vector<value_container> values)
+        metric(otf2::chrono::time_point timestamp,
+               const otf2::definition::metric_instance& metric_c,
+               const std::vector<value_container>& values)
         : base<metric>(timestamp), metric_class_(), metric_instance_(metric_c), values_(values)
         {
         }
 
         metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-               otf2::definition::metric_instance metric_c, std::vector<value_container> values)
+               const otf2::definition::metric_instance& metric_c,
+               const std::vector<value_container>& values)
         : base<metric>(al, timestamp), metric_class_(), metric_instance_(metric_c), values_(values)
         {
         }
@@ -199,15 +205,15 @@ namespace event
             return values_;
         }
 
-        const value_container& get_value_for(otf2::definition::metric_member member) const
+        const value_container& get_value_for(const otf2::definition::metric_member& member) const
         {
             std::size_t i = 0;
 
-            auto mc = metric_class_;
+            auto mc = metric_class_.lock();
 
-            if (metric_instance_.is_valid())
+            if (metric_instance_)
             {
-                mc = metric_instance_.metric_class();
+                mc = metric_instance_->metric_class();
             }
 
             for (; i < mc.size(); i++)
@@ -231,9 +237,11 @@ namespace event
             return metric_instance_;
         }
 
+        friend class otf2::writer::local;
+
     private:
-        otf2::definition::metric_class metric_class_;
-        otf2::definition::metric_instance metric_instance_;
+        otf2::definition::detail::weak_ref<otf2::definition::metric_class> metric_class_;
+        otf2::definition::detail::weak_ref<otf2::definition::metric_instance> metric_instance_;
         std::vector<value_container> values_;
     };
 }

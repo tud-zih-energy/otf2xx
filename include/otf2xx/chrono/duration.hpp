@@ -35,8 +35,6 @@
 #ifndef INCLUDE_OTF2XX_CHRONO_DURATION_HPP
 #define INCLUDE_OTF2XX_CHRONO_DURATION_HPP
 
-#include <boost/serialization/split_free.hpp>
-
 #include <chrono>
 #include <iostream>
 
@@ -185,7 +183,12 @@ namespace serialization
     inline void serialize(Archive& ar, otf2::chrono::duration& dur,
                           __attribute__((unused)) const unsigned int file_version)
     {
-        boost::serialization::split_free(ar, dur, file_version);
+        // god bless ADL rules (ღˇ◡ˇ)~♥
+        // This can't and won't be checked until a later instantiation phase.
+        // So even though split_free is neither declared nor defined, it should be fine until
+        // a user instantiated this template. In order to instantiate this template,
+        // a user first need to include boost::serialization. So I will be fine. Probably. Maybe?
+        split_free(ar, dur, file_version);
     }
 
 } // namespace serialization

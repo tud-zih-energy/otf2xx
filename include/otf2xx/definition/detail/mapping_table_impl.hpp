@@ -40,6 +40,8 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
+#include <otf2xx/definition/detail/impl_base.hpp>
+
 #include <otf2/OTF2_IdMap.h>
 
 #include <memory>
@@ -51,7 +53,7 @@ namespace definition
     namespace detail
     {
 
-        class mapping_table_impl
+        class mapping_table_impl : public impl_base<mapping_table_impl>
         {
             using id_map_repr_type = OTF2_IdMap;
 
@@ -60,8 +62,10 @@ namespace definition
             using id_map_type = OTF2_IdMap*;
 
             mapping_table_impl(mapping_type_type mapping_type,
-                               OTF2_IdMapMode mode = OTF2_ID_MAP_SPARSE, std::size_t size = 64)
-            : mapping_type_(mapping_type), id_map_(OTF2_IdMap_Create(mode, size))
+                               OTF2_IdMapMode mode = OTF2_ID_MAP_SPARSE, std::size_t size = 64,
+                               std::int64_t retain_count = 0)
+            : impl_base(retain_count), mapping_type_(mapping_type),
+              id_map_(OTF2_IdMap_Create(mode, size))
             {
                 if (!id_map_)
                 {
@@ -70,9 +74,10 @@ namespace definition
             }
 
             mapping_table_impl(mapping_type_type mapping_type, std::vector<uint64_t> mappings,
-                               bool optimize_size = false)
-            : mapping_type_(mapping_type), id_map_(OTF2_IdMap_CreateFromUint64Array(
-                                               mappings.size(), mappings.data(), optimize_size))
+                               bool optimize_size = false, std::int64_t retain_count = 0)
+            : impl_base(retain_count), mapping_type_(mapping_type),
+              id_map_(
+                  OTF2_IdMap_CreateFromUint64Array(mappings.size(), mappings.data(), optimize_size))
             {
                 if (!id_map_)
                 {
@@ -81,9 +86,10 @@ namespace definition
             }
 
             mapping_table_impl(mapping_type_type mapping_type, std::vector<uint32_t> mappings,
-                               bool optimize_size = false)
-            : mapping_type_(mapping_type), id_map_(OTF2_IdMap_CreateFromUint32Array(
-                                               mappings.size(), mappings.data(), optimize_size))
+                               bool optimize_size = false, std::int64_t retain_count = 0)
+            : impl_base(retain_count), mapping_type_(mapping_type),
+              id_map_(
+                  OTF2_IdMap_CreateFromUint32Array(mappings.size(), mappings.data(), optimize_size))
             {
                 if (!id_map_)
                 {
@@ -98,11 +104,10 @@ namespace definition
             mapping_table_impl(mapping_table_impl&&) = default;
             mapping_table_impl& operator=(mapping_table_impl&&) = default;
 
-            static std::shared_ptr<mapping_table_impl> undefined()
+            static mapping_table_impl* undefined()
             {
-                static std::shared_ptr<mapping_table_impl> undef(
-                    std::make_shared<mapping_table_impl>(mapping_type_type::max));
-                return undef;
+                static mapping_table_impl undef(mapping_type_type::max, OTF2_ID_MAP_SPARSE, 64, 1);
+                return &undef;
             }
 
             mapping_type_type mapping_type() const

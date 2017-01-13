@@ -42,6 +42,9 @@
 
 #include <otf2xx/event/base.hpp>
 
+#include <otf2xx/definition/detail/weak_ref.hpp>
+#include <otf2xx/writer/fwd.hpp>
+
 #include <otf2xx/common.hpp>
 
 namespace otf2
@@ -55,8 +58,8 @@ namespace event
         typedef otf2::common::collective_type collective_type;
 
         mpi_collective_end(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                           collective_type type, otf2::definition::comm comm, std::uint32_t root,
-                           std::uint64_t sent, std::uint64_t received)
+                           collective_type type, const otf2::definition::comm& comm,
+                           std::uint32_t root, std::uint64_t sent, std::uint64_t received)
         : base<mpi_collective_end>(al, timestamp), type_(type), comm_(comm), root_(root),
           sent_(sent), received_(received)
         {
@@ -93,9 +96,11 @@ namespace event
             return received_;
         }
 
+        friend class otf2::writer::local;
+
     private:
         collective_type type_;
-        otf2::definition::comm comm_;
+        otf2::definition::detail::weak_ref<otf2::definition::comm> comm_;
         std::uint32_t root_;
         std::uint64_t sent_;
         std::uint64_t received_;

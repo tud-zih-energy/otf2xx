@@ -64,26 +64,27 @@ namespace definition
         using base::base;
 
     public:
-        comm(reference<comm> ref, otf2::definition::string name, otf2::definition::comm_group group,
-             otf2::definition::comm parent)
-        : base(std::make_shared<impl_type>(ref, name, group, parent.get()))
+        comm(reference<comm> ref, const otf2::definition::string& name,
+             const otf2::definition::comm_group& group, const otf2::definition::comm& parent)
+        : base(new impl_type(ref, name, group, parent.get()))
         {
         }
 
-        comm(reference<comm> ref, otf2::definition::string name, otf2::definition::comm_group group)
-        : base(std::make_shared<impl_type>(ref, name, group))
+        comm(reference<comm> ref, const otf2::definition::string& name,
+             const otf2::definition::comm_group& group)
+        : base(new impl_type(ref, name, group))
         {
         }
 
-        comm(reference<comm> ref, otf2::definition::string name,
-             otf2::definition::comm_self_group group, comm parent)
-        : base(std::make_shared<impl_type>(ref, name, group, parent.get()))
+        comm(reference<comm> ref, const otf2::definition::string& name,
+             const otf2::definition::comm_self_group& group, comm parent)
+        : base(new impl_type(ref, name, group, parent.get()))
         {
         }
 
-        comm(reference<comm> ref, otf2::definition::string name,
-             otf2::definition::comm_self_group group)
-        : base(std::make_shared<impl_type>(ref, name, group))
+        comm(reference<comm> ref, const otf2::definition::string& name,
+             const otf2::definition::comm_self_group& group)
+        : base(new impl_type(ref, name, group))
         {
         }
 
@@ -95,7 +96,7 @@ namespace definition
          * \returns a string definiton containing the name
          *
          */
-        otf2::definition::string name() const
+        const otf2::definition::string& name() const
         {
             assert(this->is_valid());
             return data_->name();
@@ -108,7 +109,7 @@ namespace definition
          * \attention before call, check that there is a comm group
          * \throws otf::exception if thee is no comm group
          */
-        otf2::definition::comm_group group() const
+        const otf2::definition::comm_group& group() const
         {
             assert(this->is_valid());
             return data_->group();
@@ -121,7 +122,7 @@ namespace definition
          * \attention before call, check that there is a comm self group
          * \throws otf::exception if thee is no comm self group
          */
-        otf2::definition::comm_self_group self_group() const
+        const otf2::definition::comm_self_group& self_group() const
         {
             assert(this->is_valid());
             return data_->self_group();

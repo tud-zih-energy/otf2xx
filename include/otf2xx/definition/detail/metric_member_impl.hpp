@@ -39,10 +39,9 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/string.hpp>
+#include <otf2xx/definition/detail/impl_base.hpp>
 
-#include <boost/concept_check.hpp>
-#include <memory>
+#include <otf2xx/definition/string.hpp>
 
 namespace otf2
 {
@@ -51,7 +50,7 @@ namespace definition
     namespace detail
     {
 
-        class metric_member_impl
+        class metric_member_impl : public impl_base<metric_member_impl>
         {
         public:
             typedef otf2::common::metric_type metric_type;
@@ -60,14 +59,15 @@ namespace definition
             typedef otf2::common::base_type value_base_type;
             typedef std::int64_t value_exponent_type;
 
-            metric_member_impl(reference<metric_member> ref, otf2::definition::string name,
-                               otf2::definition::string description, metric_type type,
+            metric_member_impl(reference<metric_member> ref, const otf2::definition::string& name,
+                               const otf2::definition::string& description, metric_type type,
                                metric_mode mode, value_type_type value_type,
                                value_base_type value_base, value_exponent_type value_exponent,
-                               otf2::definition::string value_unit)
-            : ref_(ref), name_(name), description_(description), type_(type), mode_(mode),
-              value_type_(value_type), value_base_(value_base), value_exponent_(value_exponent),
-              value_unit_(value_unit)
+                               const otf2::definition::string& value_unit,
+                               std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), name_(name), description_(description),
+              type_(type), mode_(mode), value_type_(value_type), value_base_(value_base),
+              value_exponent_(value_exponent), value_unit_(value_unit)
             {
             }
 
@@ -78,16 +78,14 @@ namespace definition
             metric_member_impl(metric_member_impl&&) = default;
             metric_member_impl& operator=(metric_member_impl&&) = default;
 
-            static std::shared_ptr<metric_member_impl> undefined()
+            static metric_member_impl* undefined()
             {
-                static std::shared_ptr<metric_member_impl> undef(
-                    std::make_shared<metric_member_impl>(
-                        otf2::reference<metric_member>::undefined(),
-                        otf2::definition::string::undefined(),
-                        otf2::definition::string::undefined(), metric_type::other,
-                        metric_mode::absolute_last, value_type_type::none, value_base_type::binary,
-                        0, otf2::definition::string::undefined()));
-                return undef;
+                static metric_member_impl undef(
+                    otf2::reference<metric_member>::undefined(),
+                    otf2::definition::string::undefined(), otf2::definition::string::undefined(),
+                    metric_type::other, metric_mode::absolute_last, value_type_type::none,
+                    value_base_type::binary, 0, otf2::definition::string::undefined(), 1);
+                return &undef;
             }
 
             otf2::reference<metric_member> ref() const
@@ -95,12 +93,12 @@ namespace definition
                 return ref_;
             }
 
-            otf2::definition::string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
 
-            otf2::definition::string description() const
+            const otf2::definition::string& description() const
             {
                 return description_;
             }
@@ -130,7 +128,7 @@ namespace definition
                 return value_exponent_;
             }
 
-            otf2::definition::string value_unit() const
+            const otf2::definition::string& value_unit() const
             {
                 return value_unit_;
             }

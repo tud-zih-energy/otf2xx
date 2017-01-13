@@ -105,7 +105,7 @@ namespace definition
         self& operator=(self&&) = default;
 
     public:
-        value_type operator[](key_type key)
+        const value_type& operator[](key_type key) const
         {
             if (key == otf2::reference<Definition>::undefined())
                 return value_type::undefined();
@@ -114,7 +114,7 @@ namespace definition
         }
 
         template <typename... Args>
-        value_type emplace(key_type ref, Args... args)
+        const value_type& emplace(key_type ref, Args... args)
         {
             return data
                 .emplace(std::piecewise_construct, std::forward_as_tuple(ref),
@@ -122,7 +122,13 @@ namespace definition
                 .first->second;
         }
 
-        void add_definition(Definition def)
+        void add_definition(Definition&& def)
+        {
+            auto ref = def.ref();
+            data.emplace(ref, std::move(def));
+        }
+
+        void add_definition(const Definition& def)
         {
             data.emplace(def.ref(), def);
         }
@@ -181,22 +187,27 @@ namespace definition
         self& operator=(self&&) = default;
 
     public:
-        value_type operator[](key_type key)
+        const value_type& operator[](key_type key)
         {
             return data[key];
         }
 
         template <typename... Args>
-        value_type emplace(Args... args)
+        const value_type& emplace(Args... args)
         {
             data.emplace_back(args...);
 
             return data.back();
         }
 
-        void add_definition(otf2::definition::property<Definition> def)
+        void add_definition(const otf2::definition::property<Definition>& def)
         {
             data.push_back(def);
+        }
+
+        void add_definition(otf2::definition::property<Definition>&& def)
+        {
+            data.emplace_back(std::move(def));
         }
 
         std::size_t count(key_type key) const

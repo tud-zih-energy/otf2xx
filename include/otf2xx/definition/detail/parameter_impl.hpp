@@ -39,9 +39,9 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/string.hpp>
+#include <otf2xx/definition/detail/impl_base.hpp>
 
-#include <memory>
+#include <otf2xx/definition/string.hpp>
 
 namespace otf2
 {
@@ -50,40 +50,32 @@ namespace definition
     namespace detail
     {
 
-        class parameter_impl
+        class parameter_impl : public impl_base<parameter_impl>
         {
         public:
             typedef otf2::common::parameter_type parameter_type;
 
-            parameter_impl(otf2::reference<parameter> ref, string name, parameter_type type)
-            : ref_(ref), name_(name), type_(type)
+            parameter_impl(otf2::reference<parameter> ref, const otf2::definition::string& name,
+                           parameter_type type, std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), name_(name), type_(type)
             {
-                //             std::cout << "Created Paramter_impl @" << this << " name: '" << &name
-                //             << "' id: " << ref << std::endl;
-            }
-
-            ~parameter_impl()
-            {
-                //             std::cout << "Deleted Paramter_impl @" << this << " name: '" <<
-                //             &name_ << "' id: " << ref_ << std::endl;
             }
 
             // no implicit copy allowed, see duplicate()
             parameter_impl(const parameter_impl&) = delete;
             parameter_impl& operator=(const parameter_impl&) = delete;
 
-            parameter_impl(parameter_impl&&) = delete;
-            parameter_impl& operator=(parameter_impl&&) = delete;
+            parameter_impl(parameter_impl&&) = default;
+            parameter_impl& operator=(parameter_impl&&) = default;
 
-            static std::shared_ptr<parameter_impl> undefined()
+            static parameter_impl* undefined()
             {
-                static std::shared_ptr<parameter_impl> undef(
-                    std::make_shared<parameter_impl>(otf2::reference<parameter>::undefined(),
-                                                     string::undefined(), parameter_type::int64));
-                return undef;
+                static parameter_impl undef(otf2::reference<parameter>::undefined(),
+                                            string::undefined(), parameter_type::int64, 1);
+                return &undef;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
@@ -100,7 +92,7 @@ namespace definition
 
         private:
             otf2::reference<parameter> ref_;
-            string name_;
+            otf2::definition::string name_;
             parameter_type type_;
         };
     }

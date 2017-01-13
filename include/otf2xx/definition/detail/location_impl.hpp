@@ -39,6 +39,8 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
+#include <otf2xx/definition/detail/impl_base.hpp>
+
 #include <otf2xx/definition/location_group.hpp>
 #include <otf2xx/definition/string.hpp>
 
@@ -51,14 +53,15 @@ namespace definition
     namespace detail
     {
 
-        class location_impl
+        class location_impl : public impl_base<location_impl>
         {
         public:
             typedef otf2::common::location_type location_type;
 
-            location_impl(otf2::reference<location> ref, string name, location_group lg,
-                          location_type type, std::uint64_t events = 0)
-            : ref_(ref), name_(name), type_(type), lg_(lg), events_(events)
+            location_impl(otf2::reference<location> ref, const otf2::definition::string& name,
+                          const otf2::definition::location_group& lg, location_type type,
+                          std::uint64_t events = 0, std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), name_(name), type_(type), lg_(lg), events_(events)
             {
             }
 
@@ -69,20 +72,20 @@ namespace definition
             location_impl(location_impl&&) = default;
             location_impl& operator=(location_impl&&) = default;
 
-            static std::shared_ptr<location_impl> undefined()
+            static location_impl* undefined()
             {
-                static std::shared_ptr<location_impl> undef(std::make_shared<location_impl>(
+                static location_impl undef(
                     otf2::reference<location>::undefined(), string::undefined(),
-                    otf2::definition::location_group::undefined(), location_type::unknown, 0));
-                return undef;
+                    otf2::definition::location_group::undefined(), location_type::unknown, 0, 1);
+                return &undef;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
 
-            otf2::definition::location_group location_group() const
+            const otf2::definition::location_group& location_group() const
             {
                 return lg_;
             }
@@ -111,7 +114,7 @@ namespace definition
 
         private:
             otf2::reference<location> ref_;
-            string name_;
+            otf2::definition::string name_;
             location_type type_;
             otf2::definition::location_group lg_;
             std::uint64_t events_;

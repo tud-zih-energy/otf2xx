@@ -67,19 +67,19 @@ namespace definition
 
         mapping_table(mapping_type_type mapping_type, OTF2_IdMapMode mode = OTF2_ID_MAP_SPARSE,
                       std::size_t size = 64)
-        : base(std::make_shared<impl_type>(mapping_type, mode, size))
+        : base(new impl_type(mapping_type, mode, size))
         {
         }
 
         mapping_table(mapping_type_type mapping_type, std::vector<uint64_t> mappings,
                       bool optimize_size = false)
-        : base(std::make_shared<impl_type>(mapping_type, mappings, optimize_size))
+        : base(new impl_type(mapping_type, mappings, optimize_size))
         {
         }
 
         mapping_table(mapping_type_type mapping_type, std::vector<uint32_t> mappings,
                       bool optimize_size = false)
-        : base(std::make_shared<impl_type>(mapping_type, mappings, optimize_size))
+        : base(new impl_type(mapping_type, mappings, optimize_size))
         {
         }
 

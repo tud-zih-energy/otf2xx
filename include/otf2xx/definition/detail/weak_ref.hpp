@@ -32,16 +32,11 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_DETAIL_MARKER_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_MARKER_HPP
+#pragma once
 
-#include <otf2xx/common.hpp>
-#include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
+#include <otf2xx/traits/definition.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
-
-#include <string>
+#include <memory>
 
 namespace otf2
 {
@@ -49,62 +44,90 @@ namespace definition
 {
     namespace detail
     {
-
-        class marker_impl : public impl_base<marker_impl>
+        template <typename Definition>
+        class weak_ref
         {
+            static_assert(otf2::traits::is_definition<Definition>::value,
+                          "Definition must be an otf2xx definition.");
+
+            using Impl = typename otf2::traits::definition_impl_type<Definition>::type;
+
         public:
-            using severity_type = otf2::common::marker_severity_type;
-
-            marker_impl(otf2::reference<otf2::definition::marker> ref, const std::string& group,
-                        const std::string& category, severity_type severity,
-                        std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), group_(group), category_(category),
-              severity_(severity)
+            weak_ref() : ptr_(nullptr)
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            marker_impl(const marker_impl&) = delete;
-            marker_impl& operator=(const marker_impl&) = delete;
-
-            marker_impl(marker_impl&&) = default;
-            marker_impl& operator=(marker_impl&&) = default;
-
-            static marker_impl* undefined()
+            weak_ref(const Definition& def) : ptr_(def.get())
             {
-                static marker_impl undef(otf2::reference<otf2::definition::marker>::undefined(), "",
-                                         "", severity_type::none, 1);
-                return &undef;
             }
 
-            const std::string& group() const
+            weak_ref& operator=(const Definition& def)
             {
-                return group_;
+                ptr_ = def.get();
+
+                return *this;
             }
 
-            const std::string& category() const
+            weak_ref(const weak_ref&) = default;
+            weak_ref& operator=(const weak_ref&) = default;
+
+            weak_ref(weak_ref&&) = default;
+            weak_ref& operator=(weak_ref&&) = default;
+
+            operator Definition() const
             {
-                return category_;
+                return lock();
             }
 
-            severity_type severity() const
+            Definition lock() const
             {
-                return severity_;
+                return ptr_;
             }
 
-            otf2::reference<otf2::definition::marker> ref() const
+            Impl& get()
             {
-                return ref_;
+                return *ptr_;
+            }
+
+            Impl* operator->()
+            {
+                return ptr_;
+            }
+
+            Impl& operator*()
+            {
+                return *ptr_;
+            }
+
+            const Impl& get() const
+            {
+                return *ptr_;
+            }
+
+            const Impl* operator->() const
+            {
+                return ptr_;
+            }
+
+            const Impl& operator*() const
+            {
+                return *ptr_;
+            }
+
+            operator bool() const
+            {
+                return ptr_ != nullptr;
             }
 
         private:
-            otf2::reference<otf2::definition::marker> ref_;
-            std::string group_;
-            std::string category_;
-            severity_type severity_;
+            Impl* ptr_;
         };
     }
-}
-} // namespace otf2::definition::detail
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_MARKER_HPP
+    template <typename Definition>
+    detail::weak_ref<Definition> make_weak_ref(const Definition& def)
+    {
+        return { def };
+    }
+}
+}

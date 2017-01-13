@@ -65,11 +65,11 @@ namespace definition
         using base_type = impl_type::base_type;
         using interrupt_generator_mode_type = impl_type::interrupt_generator_mode_type;
 
-        interrupt_generator(otf2::reference<interrupt_generator> ref, otf2::definition::string name,
+        interrupt_generator(otf2::reference<interrupt_generator> ref,
+                            const otf2::definition::string& name,
                             interrupt_generator_mode_type interrupt_generator_mode,
                             base_type period_base, std::int64_t exponent, std::uint64_t period)
-        : base(std::make_shared<impl_type>(ref, name, interrupt_generator_mode, period_base,
-                                           exponent, period))
+        : base(new impl_type(ref, name, interrupt_generator_mode, period_base, exponent, period))
         {
         }
 
@@ -77,9 +77,9 @@ namespace definition
 
         /**
          * \brief returns the name
-         * \returns otf2::definition::string
-         */
-        otf2::definition::string name() const
+         * \returns const otf2::definition::string
+&         */
+        const otf2::definition::string& name() const
         {
             assert(this->is_valid());
             return data_->name();

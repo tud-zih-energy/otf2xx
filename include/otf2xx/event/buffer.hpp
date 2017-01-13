@@ -59,177 +59,188 @@ namespace event
             buffer_node(const buffer_node&) = delete;
             buffer_node& operator=(const buffer_node&) = delete;
 
-            buffer_node(otf2::definition::location loc, otf2::common::event_type type, void* event,
-                        bool completed = true)
+            buffer_node(const otf2::definition::location& loc, otf2::common::event_type type,
+                        void* event, bool completed = true)
             : location(loc), type(type), event(event), completed(completed)
             {
             }
 
         public:
-            buffer_node(otf2::definition::location loc, const otf2::event::buffer_flush& event)
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::buffer_flush& event)
             : buffer_node(loc, otf2::common::event_type::buffer_flush,
                           new otf2::event::buffer_flush(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::enter& event)
+            buffer_node(const otf2::definition::location& loc, const otf2::event::enter& event)
             : buffer_node(loc, otf2::common::event_type::enter, new otf2::event::enter(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::leave& event)
+            buffer_node(const otf2::definition::location& loc, const otf2::event::leave& event)
             : buffer_node(loc, otf2::common::event_type::leave, new otf2::event::leave(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::measurement& event)
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::measurement& event)
             : buffer_node(loc, otf2::common::event_type::measurement,
                           new otf2::event::measurement(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::metric& event)
+            buffer_node(const otf2::definition::location& loc, const otf2::event::metric& event)
             : buffer_node(loc, otf2::common::event_type::metric, new otf2::event::metric(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc,
+            buffer_node(const otf2::definition::location& loc,
                         const otf2::event::mpi_collective_begin& event)
             : buffer_node(loc, otf2::common::event_type::mpi_collective_begin,
                           new otf2::event::mpi_collective_begin(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc,
+            buffer_node(const otf2::definition::location& loc,
                         const otf2::event::mpi_collective_end& event)
             : buffer_node(loc, otf2::common::event_type::mpi_collective_end,
                           new otf2::event::mpi_collective_end(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::mpi_ireceive& event)
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::mpi_ireceive& event)
             : buffer_node(loc, otf2::common::event_type::mpi_ireceive,
                           new otf2::event::mpi_ireceive(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc,
+            buffer_node(const otf2::definition::location& loc,
                         const otf2::event::mpi_ireceive_request& event)
             : buffer_node(loc, otf2::common::event_type::mpi_ireceive_request,
                           new otf2::event::mpi_ireceive_request(event), false)
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::mpi_isend& event)
+            buffer_node(const otf2::definition::location& loc, const otf2::event::mpi_isend& event)
             : buffer_node(loc, otf2::common::event_type::mpi_isend,
                           new otf2::event::mpi_isend(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc,
+            buffer_node(const otf2::definition::location& loc,
                         const otf2::event::mpi_isend_complete& event)
             : buffer_node(loc, otf2::common::event_type::mpi_isend_complete,
                           new otf2::event::mpi_isend_complete(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::mpi_receive& event)
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::mpi_receive& event)
             : buffer_node(loc, otf2::common::event_type::mpi_receive,
                           new otf2::event::mpi_receive(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc,
+            buffer_node(const otf2::definition::location& loc,
                         const otf2::event::mpi_request_cancelled& event)
             : buffer_node(loc, otf2::common::event_type::mpi_request_cancelled,
                           new otf2::event::mpi_request_cancelled(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::mpi_request_test& event)
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::mpi_request_test& event)
             : buffer_node(loc, otf2::common::event_type::mpi_request_test,
                           new otf2::event::mpi_request_test(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::mpi_send& event)
+            buffer_node(const otf2::definition::location& loc, const otf2::event::mpi_send& event)
             : buffer_node(loc, otf2::common::event_type::mpi_send, new otf2::event::mpi_send(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::parameter_int& event)
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::parameter_int& event)
             : buffer_node(loc, otf2::common::event_type::parameter_int,
                           new otf2::event::parameter_int(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::parameter_string& event)
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::parameter_string& event)
             : buffer_node(loc, otf2::common::event_type::parameter_string,
                           new otf2::event::parameter_string(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc,
+            buffer_node(const otf2::definition::location& loc,
                         const otf2::event::parameter_unsigned_int& event)
             : buffer_node(loc, otf2::common::event_type::parameter_unsigned_int,
                           new otf2::event::parameter_unsigned_int(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc,
+            buffer_node(const otf2::definition::location& loc,
                         const otf2::event::thread_acquire_lock& event)
             : buffer_node(loc, otf2::common::event_type::thread_acquire_lock,
                           new otf2::event::thread_acquire_lock(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::thread_fork& event)
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::thread_fork& event)
             : buffer_node(loc, otf2::common::event_type::thread_fork,
                           new otf2::event::thread_fork(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::thread_join& event)
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::thread_join& event)
             : buffer_node(loc, otf2::common::event_type::thread_join,
                           new otf2::event::thread_join(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc,
+            buffer_node(const otf2::definition::location& loc,
                         const otf2::event::thread_release_lock& event)
             : buffer_node(loc, otf2::common::event_type::thread_release_lock,
                           new otf2::event::thread_release_lock(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc,
+            buffer_node(const otf2::definition::location& loc,
                         const otf2::event::thread_task_complete& event)
             : buffer_node(loc, otf2::common::event_type::thread_task_complete,
                           new otf2::event::thread_task_complete(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc,
+            buffer_node(const otf2::definition::location& loc,
                         const otf2::event::thread_task_create& event)
             : buffer_node(loc, otf2::common::event_type::thread_task_create,
                           new otf2::event::thread_task_create(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc,
+            buffer_node(const otf2::definition::location& loc,
                         const otf2::event::thread_task_switch& event)
             : buffer_node(loc, otf2::common::event_type::thread_task_switch,
                           new otf2::event::thread_task_switch(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::thread_team_begin& event)
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::thread_team_begin& event)
             : buffer_node(loc, otf2::common::event_type::thread_team_begin,
                           new otf2::event::thread_team_begin(event))
             {
             }
 
-            buffer_node(otf2::definition::location loc, const otf2::event::thread_team_end& event)
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::thread_team_end& event)
             : buffer_node(loc, otf2::common::event_type::thread_team_end,
                           new otf2::event::thread_team_end(event))
             {
@@ -547,146 +558,148 @@ namespace event
 
     public:
         // events
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::buffer_flush& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc, const otf2::event::enter& event) override
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::enter& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc, const otf2::event::leave& event) override
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::leave& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::measurement& event) override
         {
             add(loc, event);
         }
 
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::metric& event) override
         {
             add(loc, event);
         }
 
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::mpi_send& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::mpi_receive& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::mpi_isend& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::mpi_isend_complete& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::mpi_ireceive& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::mpi_ireceive_request& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::mpi_request_test& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::mpi_request_cancelled& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::mpi_collective_begin& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::mpi_collective_end& event) override
         {
             add(loc, event);
         }
 
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::parameter_string& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::parameter_int& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::parameter_unsigned_int& event) override
         {
             add(loc, event);
         }
 
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::thread_fork& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::thread_join& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::thread_team_begin& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::thread_team_end& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::thread_acquire_lock& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::thread_release_lock& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::thread_task_create& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::thread_task_switch& event) override
         {
             add(loc, event);
         }
-        virtual void event(otf2::definition::location loc,
+        virtual void event(const otf2::definition::location& loc,
                            const otf2::event::thread_task_complete& event) override
         {
             add(loc, event);
         }
 
         template <typename Event>
-        void add(otf2::definition::location loc, const Event& event)
+        void add(const otf2::definition::location& loc, const Event& event)
         {
             if (nodes_.size() > 0)
             {
@@ -698,12 +711,13 @@ namespace event
             }
         }
 
-        void add(otf2::definition::location loc, const otf2::event::mpi_ireceive_request& event)
+        void add(const otf2::definition::location& loc,
+                 const otf2::event::mpi_ireceive_request& event)
         {
             nodes_.emplace_back(loc, event);
         }
 
-        void add(otf2::definition::location loc, const otf2::event::mpi_ireceive& event)
+        void add(const otf2::definition::location& loc, const otf2::event::mpi_ireceive& event)
         {
             for (auto& node : nodes_)
             {
@@ -730,104 +744,104 @@ namespace event
 
     public:
         // Global definitions
-        virtual void definition(otf2::definition::attribute def) override
+        virtual void definition(const otf2::definition::attribute& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::comm def) override
+        virtual void definition(const otf2::definition::comm& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::locations_group def) override
+        virtual void definition(const otf2::definition::locations_group& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::regions_group def) override
+        virtual void definition(const otf2::definition::regions_group& def) override
         {
             callback_.definition(def);
         }
 
         // virtual void definition(otf2::definition::metric_group& def) override {}
 
-        virtual void definition(otf2::definition::comm_locations_group def) override
+        virtual void definition(const otf2::definition::comm_locations_group& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::comm_group def) override
+        virtual void definition(const otf2::definition::comm_group& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::comm_self_group def) override
+        virtual void definition(const otf2::definition::comm_self_group& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::location def) override
+        virtual void definition(const otf2::definition::location& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::location_group def) override
+        virtual void definition(const otf2::definition::location_group& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::parameter def) override
+        virtual void definition(const otf2::definition::parameter& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::region def) override
+        virtual void definition(const otf2::definition::region& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::string def) override
+        virtual void definition(const otf2::definition::string& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::system_tree_node def) override
+        virtual void definition(const otf2::definition::system_tree_node& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::clock_properties def) override
+        virtual void definition(const otf2::definition::clock_properties& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::metric_member def) override
+        virtual void definition(const otf2::definition::metric_member& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::metric_class def) override
+        virtual void definition(const otf2::definition::metric_class& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::metric_instance def) override
+        virtual void definition(const otf2::definition::metric_instance& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::system_tree_node_property def) override
+        virtual void definition(const otf2::definition::system_tree_node_property& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::location_group_property def) override
+        virtual void definition(const otf2::definition::location_group_property& def) override
         {
             callback_.definition(def);
         }
 
-        virtual void definition(otf2::definition::location_property def) override
+        virtual void definition(const otf2::definition::location_property& def) override
         {
             callback_.definition(def);
         }

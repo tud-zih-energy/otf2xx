@@ -40,9 +40,10 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/string.hpp>
+#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/owning_ptr.hpp>
 
-#include <memory>
+#include <otf2xx/definition/string.hpp>
 
 namespace otf2
 {
@@ -51,18 +52,24 @@ namespace definition
     namespace detail
     {
 
-        class system_tree_node_impl
+        class system_tree_node_impl : public impl_base<system_tree_node_impl>
         {
         public:
-            system_tree_node_impl(reference<system_tree_node> ref, string name, string class_name,
-                                  std::shared_ptr<system_tree_node_impl> parent)
-            : ref_(ref), name_(name), class_name_(class_name), parent_(parent)
+            system_tree_node_impl(reference<system_tree_node> ref,
+                                  const otf2::definition::string& name,
+                                  const otf2::definition::string& class_name,
+                                  system_tree_node_impl* parent, std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), name_(name), class_name_(class_name),
+              parent_(parent)
             {
             }
 
-            system_tree_node_impl(reference<system_tree_node> ref, string name,
-                                  const string& class_name)
-            : ref_(ref), name_(name), class_name_(class_name), parent_()
+            system_tree_node_impl(reference<system_tree_node> ref,
+                                  const otf2::definition::string& name,
+                                  const otf2::definition::string& class_name,
+                                  std::int64_t retain_count = 0)
+            : impl_base(retain_count), ref_(ref), name_(name), class_name_(class_name),
+              parent_(nullptr)
             {
             }
 
@@ -73,13 +80,11 @@ namespace definition
             system_tree_node_impl(system_tree_node_impl&&) = default;
             system_tree_node_impl& operator=(system_tree_node_impl&&) = default;
 
-            static std::shared_ptr<system_tree_node_impl> undefined()
+            static system_tree_node_impl* undefined()
             {
-                static std::shared_ptr<system_tree_node_impl> undef(
-                    std::make_shared<system_tree_node_impl>(
-                        otf2::reference<system_tree_node>::undefined(), string::undefined(),
-                        string::undefined()));
-                return undef;
+                static system_tree_node_impl undef(otf2::reference<system_tree_node>::undefined(),
+                                                   string::undefined(), string::undefined(), 1);
+                return &undef;
             }
 
             reference<system_tree_node> ref() const
@@ -87,22 +92,22 @@ namespace definition
                 return ref_;
             }
 
-            string name() const
+            const otf2::definition::string& name() const
             {
                 return name_;
             }
 
-            string class_name() const
+            const otf2::definition::string& class_name() const
             {
                 return class_name_;
             }
 
             bool has_parent() const
             {
-                return bool(parent_);
+                return parent_.get() != nullptr;
             }
 
-            std::shared_ptr<system_tree_node_impl> parent() const
+            system_tree_node_impl* parent() const
             {
                 if (!has_parent())
                 {
@@ -110,14 +115,14 @@ namespace definition
                                    "' hasn't got a parent.");
                 }
 
-                return parent_;
+                return parent_.get();
             }
 
         private:
             reference<system_tree_node> ref_;
-            string name_;
-            string class_name_;
-            std::shared_ptr<system_tree_node_impl> parent_;
+            otf2::definition::string name_;
+            otf2::definition::string class_name_;
+            owning_ptr<system_tree_node_impl> parent_;
         };
     }
 }

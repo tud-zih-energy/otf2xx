@@ -60,7 +60,7 @@ namespace definition
 
         marker(otf2::reference<otf2::definition::marker> ref, const std::string& group,
                const std::string& category, severity_type severity)
-        : base(std::make_shared<impl_type>(ref, group, category, severity))
+        : base(new impl_type(ref, group, category, severity))
         {
         }
 
