@@ -78,7 +78,9 @@ namespace definition
 
             int64_t release()
             {
-                return ref_count_.fetch_sub(1, std::memory_order_acq_rel);
+                // fetch_sub() returns the old value, preceeding the operation.
+                // Thus, we have to subtract one from the return value.
+                return ref_count_.fetch_sub(1, std::memory_order_acq_rel) - 1;
             }
 
             friend class owning_ptr<Impl>;
