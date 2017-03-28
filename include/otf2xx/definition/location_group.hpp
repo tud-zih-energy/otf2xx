@@ -85,6 +85,12 @@ namespace definition
             return data_->name();
         }
 
+        void name(otf2::definition::string new_name)
+        {
+            assert(this->is_valid());
+            data_->name() = new_name;
+        }
+
         /**
          * \brief returns the type of the location group defintion
          * \see otf2::common::location_group_type

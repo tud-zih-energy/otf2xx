@@ -89,6 +89,11 @@ namespace definition
                 return name_;
             }
 
+            otf2::definition::string& name()
+            {
+                return name_;
+            }
+
             location_group_type type() const
             {
                 return type_;
