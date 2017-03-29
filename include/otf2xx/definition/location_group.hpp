@@ -85,7 +85,7 @@ namespace definition
             return data_->name();
         }
 
-        void name(otf2::definition::string new_name)
+        void name(const otf2::definition::string& new_name)
         {
             assert(this->is_valid());
             data_->name() = new_name;
