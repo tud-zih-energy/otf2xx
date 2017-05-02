@@ -86,9 +86,19 @@ namespace definition
                 return it->second;
             }
 
+            const value_type* operator->() const
+            {
+                return &(it->second);
+            }
+
             bool operator!=(const iterator& other) const
             {
                 return it != other.it;
+            }
+
+            bool operator==(const iterator& other) const
+            {
+                return it == other.it;
             }
 
         private:
