@@ -82,6 +82,11 @@ namespace event
             return timestamp_;
         }
 
+        void timestamp(otf2::chrono::time_point ts)
+        {
+            timestamp_ = ts;
+        }
+
         template <otf2::attribute_list::attribute_type Type, typename T>
         Event& add_attribute(const otf2::definition::attribute& attribute, const T& value)
         {
