@@ -232,9 +232,21 @@ namespace event
             return metric_class_;
         }
 
+        void metric_class(const otf2::definition::metric_class& mc)
+        {
+            metric_instance_ = nullptr;
+            metric_class_ = mc;
+        }
+
         otf2::definition::metric_instance metric_instance() const
         {
             return metric_instance_;
+        }
+
+        void metric_instance(const otf2::definition::metric_instance& mi)
+        {
+            metric_class_ = nullptr;
+            metric_instance_ = mi;
         }
 
         friend class otf2::writer::local;
