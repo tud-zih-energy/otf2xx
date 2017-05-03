@@ -122,10 +122,8 @@ namespace definition
 
         otf2::common::metric_value_property property() const
         {
-            static const int property_mask = 15; // = 000...0001111
-
-            return static_cast<otf2::common::metric_value_property>(static_cast<int>(mode()) &
-                                                                    property_mask);
+            assert(this->is_valid());
+            return data_->property();
         }
 
         /**
