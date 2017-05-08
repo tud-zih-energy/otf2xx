@@ -41,6 +41,9 @@
 #include <otf2xx/event/marker.hpp>
 #include <otf2xx/exception.hpp>
 
+#include <algorithm>
+#include <limits>
+
 namespace otf2
 {
 namespace writer
@@ -398,6 +401,60 @@ private:
             store(def);
     }
 
+    void store(otf2::definition::container<otf2::definition::comm_locations_group> g1,
+               otf2::definition::container<otf2::definition::comm_self_group> g2,
+               otf2::definition::container<otf2::definition::comm_group> g3,
+               otf2::definition::container<otf2::definition::locations_group> g4,
+               otf2::definition::container<otf2::definition::regions_group> g5)
+    {
+        auto g1_it = g1.begin();
+        auto g2_it = g2.begin();
+        auto g3_it = g3.begin();
+        auto g4_it = g4.begin();
+        auto g5_it = g5.begin();
+
+        using common_ref_type = otf2::reference<otf2::definition::detail::group_base>::ref_type;
+        constexpr auto max_ref = std::numeric_limits<common_ref_type>::max();
+        while (1)
+        {
+            common_ref_type g1_ref = (g1_it != g1.end()) ? g1_it->ref().get() : max_ref;
+            common_ref_type g2_ref = (g2_it != g2.end()) ? g2_it->ref().get() : max_ref;
+            common_ref_type g3_ref = (g3_it != g3.end()) ? g3_it->ref().get() : max_ref;
+            common_ref_type g4_ref = (g4_it != g4.end()) ? g4_it->ref().get() : max_ref;
+            common_ref_type g5_ref = (g5_it != g5.end()) ? g5_it->ref().get() : max_ref;
+            auto min = std::min({ g1_ref, g2_ref, g3_ref, g4_ref, g5_ref });
+            if (min == max_ref)
+            {
+                break;
+            }
+            else if (g1_ref == min)
+            {
+                store(*g1_it);
+                ++g1_it;
+            }
+            else if (g2_ref == min)
+            {
+                store(*g2_it);
+                ++g2_it;
+            }
+            else if (g3_ref == min)
+            {
+                store(*g3_it);
+                ++g3_it;
+            }
+            else if (g4_ref == min)
+            {
+                store(*g4_it);
+                ++g4_it;
+            }
+            else if (g5_ref == min)
+            {
+                store(*g5_it);
+                ++g5_it;
+            }
+        }
+    }
+
     void store(otf2::definition::container<otf2::definition::metric_class>& classes,
                otf2::definition::container<otf2::definition::metric_instance> instances)
     {
@@ -622,11 +679,8 @@ public:
         store(location_properties_);
         store(regions_);
 
-        store(comm_locations_groups_);
-        store(comm_self_groups_);
-        store(comm_groups_);
-        store(locations_groups_);
-        store(regions_groups_);
+        store(comm_locations_groups_, comm_self_groups_, comm_groups_, locations_groups_,
+              regions_groups_);
         //             store(metric_groups);
 
         store(comms_);
