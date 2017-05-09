@@ -42,6 +42,7 @@
 
 #include <map>
 #include <vector>
+#include <cassert>
 
 namespace otf2
 {
@@ -66,28 +67,34 @@ namespace definition
         class iterator
         {
         public:
-            iterator(typename map_type::const_iterator it) : it(it)
+            iterator(typename map_type::const_iterator it, typename map_type::const_iterator end) : it(it), end(end)
             {
             }
 
             iterator& operator++()
             {
+                assert(it != end);
+
                 it++;
                 return *this;
             }
 
             iterator operator++(int) // postfix ++
             {
-                return iterator(it++);
+                return iterator(it++, end);
             }
 
             value_type operator*() const
             {
+                assert(it != end);
+
                 return it->second;
             }
 
             const value_type* operator->() const
             {
+                assert(it != end);
+
                 return &(it->second);
             }
 
@@ -101,8 +108,14 @@ namespace definition
                 return it == other.it;
             }
 
+            operator bool() const
+            {
+                return it != end;
+            }
+
         private:
             typename map_type::const_iterator it;
+            typename map_type::const_iterator end;
         };
 
     public:
@@ -156,12 +169,12 @@ namespace definition
     public:
         iterator begin() const
         {
-            return iterator(data.begin());
+            return iterator(data.begin(), data.end());
         }
 
         iterator end() const
         {
-            return iterator(data.end());
+            return iterator(data.end(), data.end());
         }
 
     private:

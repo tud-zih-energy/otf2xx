@@ -91,9 +91,9 @@ namespace definition
         comm() = default;
 
         /**
-         * \brief returns the name of the comm definion as a string definition
+         * \brief returns the name of the comm definition as a string definition
          *
-         * \returns a string definiton containing the name
+         * \returns a string definition containing the name
          *
          */
         const otf2::definition::string& name() const
