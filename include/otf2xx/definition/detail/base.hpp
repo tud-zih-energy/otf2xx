@@ -233,6 +233,12 @@ namespace definition
 
             return a.ref() == b.ref();
         }
+
+        template <typename Def, typename Impl>
+        inline bool operator!=(const base<Def, Impl>& a, const base<Def, Impl>& b)
+        {
+            return !(a == b);
+        }
     }
 }
 } // namespace otf2::definition::detail

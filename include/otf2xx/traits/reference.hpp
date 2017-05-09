@@ -76,7 +76,7 @@ namespace traits
 
     template <typename Def, otf2::common::group_type Type>
     struct reference_type<definition::group<Def, Type>>
-        : reference_type<definition::detail::group_base>
+    : reference_type<definition::detail::group_base>
     {
     };
 
@@ -127,13 +127,13 @@ namespace traits
 
     template <>
     struct reference_type<definition::metric_class>
-        : reference_type<definition::detail::metric_base>
+    : reference_type<definition::detail::metric_base>
     {
     };
 
     template <>
     struct reference_type<definition::metric_instance>
-        : reference_type<definition::detail::metric_base>
+    : reference_type<definition::detail::metric_base>
     {
     };
 
@@ -147,6 +147,11 @@ namespace traits
     {
     };
 
+    template <typename T, typename...>
+    struct reference_type_var : reference_type<T>
+    {
+    };
+
     template <typename T>
     struct reference_param_type : otf2::traits::identity<T>
     {
@@ -154,19 +159,19 @@ namespace traits
 
     template <typename T, otf2::common::group_type Type>
     struct reference_param_type<definition::group<T, Type>>
-        : otf2::traits::identity<definition::detail::group_base>
+    : otf2::traits::identity<definition::detail::group_base>
     {
     };
 
     template <>
     struct reference_param_type<definition::metric_class>
-        : otf2::traits::identity<definition::detail::metric_base>
+    : otf2::traits::identity<definition::detail::metric_base>
     {
     };
 
     template <>
     struct reference_param_type<definition::metric_instance>
-        : otf2::traits::identity<definition::detail::metric_base>
+    : otf2::traits::identity<definition::detail::metric_base>
     {
     };
 }
