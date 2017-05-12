@@ -411,14 +411,14 @@ namespace writer
             using common_ref_type = typename otf2::traits::reference_type_var<Definitions...>::type;
             constexpr auto max_ref = std::numeric_limits<common_ref_type>::max();
 
-            while (otf2::traits::reduce_tuple([](auto it) { return static_cast<bool>(it); },
+            while (otf2::traits::reduce_tuple([](auto& it) { return static_cast<bool>(it); },
                                               [](bool a, bool b) { return a || b; }, iters))
             {
                 otf2::traits::apply_to_tuple_min(
-                    [max_ref](auto it) {
+                    [max_ref](auto& it) {
                         return static_cast<bool>(it) ? it->ref().get() : max_ref;
                     },
-                    [this](auto it) {
+                    [this](auto& it) {
                         store(*it);
                         ++it;
                     },
