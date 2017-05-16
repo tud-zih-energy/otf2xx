@@ -67,7 +67,7 @@ namespace definition
         using type_type = typename impl_type::type_type;
         using value_type = typename impl_type::value_type;
 
-        property(Definition def, string name, type_type type, value_type value)
+        property(const Definition& def, string name, type_type type, value_type value)
         : base(new impl_type(def, name, type, value))
         {
         }
