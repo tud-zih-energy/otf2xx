@@ -72,6 +72,11 @@ namespace definition
         {
         }
 
+        property(const Definition& def, string name, const otf2::attribute_value& value)
+        : base(new impl_type(def, name, value))
+        {
+        }
+
         property() = default;
 
         /**
