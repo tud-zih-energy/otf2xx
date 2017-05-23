@@ -419,7 +419,7 @@ namespace writer
                         return static_cast<bool>(it) ? it->ref().get() : max_ref;
                     },
                     [this](auto& it) {
-                        store(*it);
+                        this->store(*it);
                         ++it;
                     },
                     iters);
