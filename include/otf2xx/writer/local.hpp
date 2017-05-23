@@ -400,7 +400,7 @@ namespace writer
         }
 
     public:
-        void write(otf2::definition::mapping_table def)
+        void write(const otf2::definition::mapping_table& def)
         {
             check(OTF2_DefWriter_WriteMappingTable(
                       def_wrt_, static_cast<OTF2_MappingType>(def.mapping_type()), def.id_map()),

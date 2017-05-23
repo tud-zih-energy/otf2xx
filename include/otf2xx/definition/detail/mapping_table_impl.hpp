@@ -59,7 +59,7 @@ namespace definition
 
         public:
             using mapping_type_type = otf2::common::mapping_type_type;
-            using id_map_type = OTF2_IdMap*;
+            using id_map_type = const OTF2_IdMap*;
 
             mapping_table_impl(mapping_type_type mapping_type,
                                OTF2_IdMapMode mode = OTF2_ID_MAP_SPARSE, std::size_t size = 64,
