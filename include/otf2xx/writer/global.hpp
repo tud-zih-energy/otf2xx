@@ -238,6 +238,9 @@ namespace writer
             case scope_type::group:
                 scope = data.group_scope().ref();
                 break;
+
+            default:
+                make_exception("Unsupported scope type given");
             }
 
             check(OTF2_GlobalDefWriter_WriteMetricInstance(
