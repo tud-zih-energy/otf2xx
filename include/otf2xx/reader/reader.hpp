@@ -181,6 +181,9 @@ namespace reader
             check(OTF2_GlobalDefReaderCallbacks_SetCallingContextPropertyCallback (global_def_callbacks, detail::definition::global::calling_context_property), "Couldn't set calling context property callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetInterruptGeneratorCallback (global_def_callbacks, detail::definition::global::interrupt_generator), "Couldn't set interrupt generator callback handler");
 
+            check(OTF2_GlobalDefReaderCallbacks_SetIoRegularFileCallback (global_def_callbacks, detail::definition::global::io_file), "Couldn't set io file callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetIoHandleCallback (global_def_callbacks, detail::definition::global::io_handle), "Couldn't set io handle callback handler");
+
             check(OTF2_GlobalDefReaderCallbacks_SetUnknownCallback(global_def_callbacks, detail::definition::global::unknown), "Couldn't set unknown callback handler");
 
             // clang-format on
@@ -525,6 +528,38 @@ namespace reader
             return interrupt_generators_;
         }
 
+        /**
+         * \brief returns all io files
+         *
+         * This function returns every io file definition, which was read until the call of 
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_file>& io_files()
+        {
+            return io_files_;
+        }
+
+        /**
+         * \brief returns all io handles
+         *
+         * This function returns every io handle definition, which was read until the call of 
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_handle>& io_handles()
+        {
+            return io_handles_;
+        }
+
     public:
         /**
          * \brief returns all groups of locations
@@ -783,6 +818,8 @@ namespace reader
         map_type<otf2::definition::source_code_location> source_code_locations_;
         map_type<otf2::definition::calling_context> calling_contexts_;
         map_type<otf2::definition::interrupt_generator> interrupt_generators_;
+        map_type<otf2::definition::io_handle> io_handles_;
+        map_type<otf2::definition::io_file> io_files_;
 
         map_type<otf2::definition::locations_group> locations_groups_;
         map_type<otf2::definition::regions_group> regions_groups_;

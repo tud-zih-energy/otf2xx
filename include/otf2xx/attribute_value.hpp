@@ -175,6 +175,17 @@ public:
         value_.interruptGeneratorRef = def.ref();
     }
 
+    attribute_value(const otf2::definition::io_file& def) : type_(type_type::io_file)
+    {
+        value_.ioFileRef = def.ref();
+    }
+
+    attribute_value(const otf2::definition::io_handle& def)
+    : type_(type_type::io_handle)
+    {
+        value_.ioHandleRef = def.ref();
+    }
+
 public:
     attribute_value& operator=(int8_t value)
     {
@@ -341,6 +352,22 @@ public:
     {
         type_ = type_type::interrupt_generator;
         value_.interruptGeneratorRef = def.ref();
+
+        return *this;
+    }
+
+    attribute_value& operator=(const otf2::definition::io_file& def)
+    {
+        type_ = type_type::io_file;
+        value_.ioFileRef = def.ref();
+
+        return *this;
+    }
+
+    attribute_value& operator=(const otf2::definition::io_handle& def)
+    {
+        type_ = type_type::io_handle;
+        value_.ioHandleRef = def.ref();
 
         return *this;
     }

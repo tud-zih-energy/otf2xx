@@ -174,6 +174,17 @@ namespace traits
     : otf2::traits::identity<definition::detail::metric_base>
     {
     };
+
+    template<>
+    struct reference_type<definition::io_file> : identity<std::uint32_t>
+    {
+    };
+
+    template<>
+    struct reference_type<definition::io_handle> : identity<std::uint32_t>
+    {
+    };
+
 }
 } // namespace otf2::traits
 

@@ -67,7 +67,9 @@ namespace common
         rma_win,
         source_code_location,
         calling_context,
-        interrupt_generator
+        interrupt_generator,
+        io_file,
+        io_handle
     };
 
     enum class system_tree_node_domain
@@ -176,7 +178,8 @@ namespace common
         task_untied,
         allocate,
         deallocate,
-        reallocate
+        reallocate,
+        file_io_metadata
     };
 
     enum class paradigm_type
@@ -404,6 +407,8 @@ namespace common
         source_code_location,
         calling_context,
         interrupt_generator,
+        io_file,
+        io_handle,
         max
     };
 

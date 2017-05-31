@@ -595,6 +595,39 @@ namespace reader
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
 
+                OTF2_CallbackCode io_file(void* userData, OTF2_IoFileRef self,
+                                         OTF2_StringRef file,
+                                         OTF2_SystemTreeNodeRef scope)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                    reader->io_files().add_definition(
+                            { self, reader->strings()[file],
+                              reader->system_tree_nodes()[scope] });
+
+                    reader->callback().definition(reader->io_files()[self]);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
+                OTF2_CallbackCode io_handle(void* userData, OTF2_IoHandleRef self,
+                                            OTF2_IoFileRef file,
+                                            OTF2_IoParadigmRef ioParadigm,
+                                            OTF2_IoHandleFlag ioHandleFlags,
+                                            OTF2_CommRef comm,
+                                            OTF2_IoHandleRef parent)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                    reader->io_handles().add_definition(
+                            { self, reader->io_files()[file],
+                              reader->comms()[comm] });
+
+                    reader->callback().definition(reader->io_handles()[self]);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
                 OTF2_CallbackCode unknown(void* userData)
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);

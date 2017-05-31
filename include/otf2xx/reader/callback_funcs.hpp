@@ -137,6 +137,9 @@ namespace reader
                 OTF2_CallbackCode calling_context_property (void *userData, OTF2_CallingContextRef callingContext, OTF2_StringRef name, OTF2_Type type, OTF2_AttributeValue value);
                 OTF2_CallbackCode interrupt_generator (void *userData, OTF2_InterruptGeneratorRef self, OTF2_StringRef name, OTF2_InterruptGeneratorMode interruptGeneratorMode, OTF2_Base base, int64_t exponent, uint64_t period);
 
+                OTF2_CallbackCode io_file (void *userData, OTF2_IoFileRef self, OTF2_StringRef file, OTF2_SystemTreeNodeRef scope);
+                OTF2_CallbackCode io_handle (void *userData, OTF2_IoHandleRef self, OTF2_IoFileRef file, OTF2_IoParadigmRef ioParadigm, OTF2_IoHandleFlag ioHandleFlags, OTF2_CommRef comm, OTF2_IoHandleRef parent);
+
                 OTF2_CallbackCode unknown  (void *userData);
 
                 // clang-format on

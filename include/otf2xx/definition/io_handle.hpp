@@ -32,39 +32,66 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_IO_HANDLE_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_IO_HANDLE_HPP
 
-#include <otf2xx/definition/container.hpp>
+#include <otf2xx/common.hpp>
+#include <otf2xx/fwd.hpp>
+#include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/attribute.hpp>
-#include <otf2xx/definition/clock_properties.hpp>
-#include <otf2xx/definition/comm.hpp>
-#include <otf2xx/definition/group.hpp>
-#include <otf2xx/definition/location.hpp>
-#include <otf2xx/definition/location_group.hpp>
-#include <otf2xx/definition/parameter.hpp>
-#include <otf2xx/definition/region.hpp>
 #include <otf2xx/definition/string.hpp>
-#include <otf2xx/definition/system_tree_node.hpp>
 
-#include <otf2xx/definition/calling_context.hpp>
-#include <otf2xx/definition/interrupt_generator.hpp>
-#include <otf2xx/definition/source_code_location.hpp>
+#include <otf2xx/definition/detail/base.hpp>
+#include <otf2xx/definition/detail/io_handle_impl.hpp>
 
-#include <otf2xx/definition/io_file.hpp>
-#include <otf2xx/definition/io_handle.hpp>
+namespace otf2
+{
+namespace definition
+{
 
-#include <otf2xx/definition/mapping_table.hpp>
+    class io_handle : public detail::base<io_handle>
+    {
+        typedef detail::base<io_handle> base;
+        typedef otf2::traits::definition_impl_type<io_handle>::type impl_type;
 
-#include <otf2xx/definition/metric_class.hpp>
-#include <otf2xx/definition/metric_instance.hpp>
-#include <otf2xx/definition/metric_member.hpp>
+        using base::base;
 
-#include <otf2xx/definition/unknown.hpp>
+    public:
 
-#include <otf2xx/definition/property.hpp>
+        //TODO ctors
+        io_handle(otf2::reference<otf2::definition::io_handle> ref,
+                  const otf2::definition::io_file& file,
+                  const otf2::definition::comm& comm)
+        : base(new impl_type(ref, file, comm))
+        {
+        }
 
-#include <otf2xx/definition/marker.hpp>
+        io_handle() = default;
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP
+        /**
+         * \brief returns the io_file of the io_handle definition
+         *
+         * \returns otf2::definition::io_file
+         */
+        const otf2::definition::io_file& file() const
+        {
+            assert(this->is_valid());
+            return data_->file();
+        }
+
+        /**
+         * \brief returns the comm of the io_handle definition
+         *
+         * \returns otf2::definition::comm
+         */
+        const otf2::definition::comm& comm() const
+        {
+            assert(this->is_valid());
+            return data_->comm();
+        }
+
+    };
+}
+}  // namespace otf2::definition
+
+#endif // INCLUDE_OTF2XX_DEFINITIONS_IO_HANDLE_HPP

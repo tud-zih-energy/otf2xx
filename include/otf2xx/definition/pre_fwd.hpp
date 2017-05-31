@@ -67,6 +67,9 @@ namespace definition
         class calling_context_impl;
         class interrupt_generator_impl;
 
+        class io_file_impl;
+        class io_handle_impl;
+
         class mapping_table_impl;
 
         class metric_base;
@@ -100,6 +103,9 @@ namespace definition
     class source_code_location;
     class calling_context;
     class interrupt_generator;
+
+    class io_file;
+    class io_handle;
 
     class mapping_table;
 

@@ -32,39 +32,69 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_IO_FILE_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_IO_FILE_HPP
 
-#include <otf2xx/definition/container.hpp>
+#include <otf2xx/common.hpp>
+#include <otf2xx/fwd.hpp>
+#include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/attribute.hpp>
-#include <otf2xx/definition/clock_properties.hpp>
-#include <otf2xx/definition/comm.hpp>
-#include <otf2xx/definition/group.hpp>
-#include <otf2xx/definition/location.hpp>
-#include <otf2xx/definition/location_group.hpp>
-#include <otf2xx/definition/parameter.hpp>
-#include <otf2xx/definition/region.hpp>
 #include <otf2xx/definition/string.hpp>
 #include <otf2xx/definition/system_tree_node.hpp>
 
-#include <otf2xx/definition/calling_context.hpp>
-#include <otf2xx/definition/interrupt_generator.hpp>
-#include <otf2xx/definition/source_code_location.hpp>
+#include <otf2xx/definition/detail/base.hpp>
+#include <otf2xx/definition/detail/io_file_impl.hpp>
 
-#include <otf2xx/definition/io_file.hpp>
-#include <otf2xx/definition/io_handle.hpp>
+namespace otf2
+{
+namespace definition
+{
+    class io_file : public detail::base<io_file>
+    {
+        typedef detail::base<io_file> base;
+        typedef otf2::traits::definition_impl_type<io_file>::type impl_type;
 
-#include <otf2xx/definition/mapping_table.hpp>
+        using base::base;
 
-#include <otf2xx/definition/metric_class.hpp>
-#include <otf2xx/definition/metric_instance.hpp>
-#include <otf2xx/definition/metric_member.hpp>
+    public:
 
-#include <otf2xx/definition/unknown.hpp>
+        //TODO: ctors!!!
+        io_file(otf2::reference<otf2::definition::io_file> ref,
+                const otf2::definition::string& name,
+                const otf2::definition::system_tree_node& stn)
+        : base(new impl_type(ref, name, stn))
+        {
+        }
 
-#include <otf2xx/definition/property.hpp>
+        io_file() = default;
 
-#include <otf2xx/definition/marker.hpp>
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP
+        /**
+         * \brief returns the name of the io_file definition as a string definition
+         *
+         * \returns a \ref string definition containing the name
+         *
+         */
+        const otf2::definition::string& name() const
+        {
+            assert(this->is_valid());
+            return data_->name();
+        }
+
+        /**
+         * \brief returns the scope of the io_file definition
+         *
+         * \returns otf2::definition::system_tree_node
+         */
+        const otf2::definition::system_tree_node& scope() const
+        {
+            assert(this->is_valid());
+            return data_->scope();
+        }
+
+    };
+
+}
+} // namespace otf2::definition
+
+#endif // INCLUDE_OTF2XX_DEFINITIONS_IO_FILE_HPP
