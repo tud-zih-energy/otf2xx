@@ -54,13 +54,15 @@ namespace definition
         class io_handle_impl : public impl_base<io_handle_impl>
         {
         public:
+            using io_handle_flags_type = otf2::common::io_handle_flags_type;
 
             //TODO ctors!!!!!
             io_handle_impl(otf2::reference<otf2::definition::io_handle> ref,
                            const otf2::definition::io_file& file,
+                           io_handle_flags_type handle_flag,
                            const otf2::definition::comm& comm,
                            int retain_count = 0)
-            : impl_base(retain_count), ref_(ref), file_(file), comm_(comm)
+            : impl_base(retain_count), ref_(ref), file_(file), io_handle_flag_(handle_flag), comm_(comm)
             {
             }
 
@@ -76,6 +78,7 @@ namespace definition
                 static io_handle_impl undef(
                     otf2::reference<io_handle>::undefined(),
                     otf2::definition::io_file::undefined(),
+                    io_handle_flags_type::none,
                     otf2::definition::comm::undefined());
 
                 return &undef;
@@ -91,6 +94,11 @@ namespace definition
                 return file_;
             }
 
+            io_handle_flags_type io_handle_flag() const
+            {
+                return io_handle_flag_;
+            }
+
             const otf2::definition::comm& comm() const
             {
                 return comm_;
@@ -99,6 +107,7 @@ namespace definition
         private:
             otf2::reference<io_handle> ref_;
             otf2::definition::io_file file_;
+            io_handle_flags_type io_handle_flag_;
             otf2::definition::comm comm_;
         };
     }

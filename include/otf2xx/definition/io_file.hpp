@@ -52,7 +52,7 @@ namespace definition
     class io_file : public detail::base<io_file>
     {
         typedef detail::base<io_file> base;
-        typedef otf2::traits::definition_impl_type<io_file>::type impl_type;
+        typedef typename otf2::traits::definition_impl_type<io_file>::type impl_type;
 
         using base::base;
 

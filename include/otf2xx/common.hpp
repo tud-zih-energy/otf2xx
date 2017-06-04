@@ -393,6 +393,13 @@ namespace common
         count
     };
 
+    enum class io_handle_flags
+    enum class io_handle_flags_type
+    {
+        none,
+        pre_created
+    };
+
     enum class mapping_type_type
     {
         string,

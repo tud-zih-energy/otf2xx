@@ -52,17 +52,18 @@ namespace definition
     class io_handle : public detail::base<io_handle>
     {
         typedef detail::base<io_handle> base;
-        typedef otf2::traits::definition_impl_type<io_handle>::type impl_type;
-
+        typedef typename otf2::traits::definition_impl_type<io_handle>::type impl_type;
         using base::base;
 
     public:
+        using io_handle_flags_type = impl_type::io_handle_flags_type;
 
         //TODO ctors
         io_handle(otf2::reference<otf2::definition::io_handle> ref,
                   const otf2::definition::io_file& file,
+                  io_handle_flags_type handle_flag,
                   const otf2::definition::comm& comm)
-        : base(new impl_type(ref, file, comm))
+        : base(new impl_type(ref, file, handle_flag, comm))
         {
         }
 
@@ -77,6 +78,17 @@ namespace definition
         {
             assert(this->is_valid());
             return data_->file();
+        }
+
+        /**
+         * \brief returns the io_handle_flag
+         *
+         * \returns otf2::common::io_handle_flags
+         */
+        io_handle_flags_type io_handle_flag() const
+        {
+            assert(this->is_valid());
+            return data_->io_handle_flag();
         }
 
         /**

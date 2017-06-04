@@ -621,6 +621,8 @@ namespace reader
 
                     reader->io_handles().add_definition(
                             { self, reader->io_files()[file],
+                              static_cast<
+                                  otf2::definition::io_handle::io_handle_flags_type>(ioHandleFlags),
                               reader->comms()[comm] });
 
                     reader->callback().definition(reader->io_handles()[self]);
