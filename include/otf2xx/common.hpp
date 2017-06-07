@@ -393,7 +393,74 @@ namespace common
         count
     };
 
-    enum class io_handle_flags
+    enum class io_paradigm_class
+    {
+        serial,
+        parallel
+    };
+
+    enum class io_access_mode_type
+    {
+        read_only,
+        write_only,
+        read_write,
+        execute_only,
+        search_only
+    };
+
+    enum class io_creation_flag_type
+    {
+        none,
+        create,
+        truncate,
+        directory,
+        exclusive,
+        no_controlling_terminal,
+        no_follow,
+        path,
+        temporary_file,
+        largefile,
+        no_seek,
+        unique
+    };
+
+    enum class io_status_flag_type
+    {
+        none,
+        close_on_exec,
+        append,
+        non_blocking,
+        async,
+        sync,
+        data_sync,
+        avoid_caching,
+        no_access_time,
+        delete_on_close
+    };
+
+    enum class io_seek_option_type
+    {
+        from_start,
+        from_current,
+        from_end,
+        data,
+        hole
+    };
+
+    enum class io_operation_mode_type
+    {
+        read,
+        write,
+        flush
+    };
+
+    enum class io_operation_flag_type
+    {
+        none,
+        non_blocking,
+        collective
+    };
+
     enum class io_handle_flags_type
     {
         none,
