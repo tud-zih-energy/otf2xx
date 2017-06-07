@@ -384,7 +384,9 @@ namespace common
         thread_task_create,
         thread_task_switch,
         thread_team_begin,
-        thread_team_end
+        thread_team_end,
+        io_operation_begin,
+        io_operation_complete
     };
 
     enum class interrupt_generator_mode_type

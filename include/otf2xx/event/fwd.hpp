@@ -107,6 +107,9 @@ namespace event
 
     class marker;
 
+    class io_operation_begin;
+    class io_operation_complete;
+
     class unknown;
 }
 } // namespace otf2::event
