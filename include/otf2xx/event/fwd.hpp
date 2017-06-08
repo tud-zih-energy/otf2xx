@@ -110,6 +110,7 @@ namespace event
     class io_create_handle;
     class io_destroy_handle;
     class io_duplicate_handle;
+    class io_seek;
     class io_operation_begin;
     class io_operation_complete;
 
