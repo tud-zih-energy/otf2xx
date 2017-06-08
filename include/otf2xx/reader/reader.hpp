@@ -254,6 +254,7 @@ namespace reader
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadBeginCallback(event_callbacks, detail::event::thread_begin), "Couldn't set thread_begin event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadWaitCallback(event_callbacks, detail::event::thread_wait), "Couldn't set thread_wait event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadEndCallback(event_callbacks, detail::event::thread_end), "Couldn't set thread_end event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoCreateHandleCallback(event_callbacks, detail::event::io_create_handle), "Couldn't set io_create_handle event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationBeginCallback(event_callbacks, detail::event::io_operation_begin), "Couldn't set io_operation_begin event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationCompleteCallback(event_callbacks, detail::event::io_operation_complete), "Couldn't set io_operation_complete event callback");
 

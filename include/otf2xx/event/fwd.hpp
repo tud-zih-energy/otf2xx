@@ -107,6 +107,7 @@ namespace event
 
     class marker;
 
+    class io_create_handle;
     class io_operation_begin;
     class io_operation_complete;
 

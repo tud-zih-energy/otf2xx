@@ -75,6 +75,7 @@
 
 #include <otf2xx/event/marker.hpp>
 
+#include <otf2xx/event/io_create_handle.hpp>
 #include <otf2xx/event/io_operation_begin.hpp>
 #include <otf2xx/event/io_operation_complete.hpp>
 
