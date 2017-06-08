@@ -32,88 +32,54 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_EVENT_FWD_HPP
-#define INCLUDE_OTF2XX_EVENT_FWD_HPP
+
+#ifndef INCLUDE_OTF2XX_EVENT_IO_DESTROY_HANDLE_HPP
+#define INCLUDE_OTF2XX_EVENT_IO_DESTROY_HANDLE_HPP
+
+#include <otf2xx/common.hpp>
+#include <otf2xx/event/base.hpp>
+
+#include <otf2xx/chrono/chrono.hpp>
+
+#include <otf2xx/definition/detail/weak_ref.hpp>
 
 namespace otf2
 {
 namespace event
 {
 
-    template <typename Event>
-    class base;
+    class io_destroy_handle : public base<io_destroy_handle>
+    {
+    public:
 
-    class buffer_flush;
-    class enter;
-    class leave;
-    class measurement;
+        io_destroy_handle(otf2::chrono::time_point timestamp,
+                          const otf2::definition::io_handle& handle)
+        : base<io_destroy_handle>(timestamp), handle_(handle)
+        {
+        }
 
-    class mpi_send;
-    class mpi_receive;
-    class mpi_isend;
-    class mpi_isend_complete;
-    class mpi_ireceive;
-    class mpi_ireceive_request;
-    class mpi_request_test;
-    class mpi_request_cancelled;
-    class mpi_collective_begin;
-    class mpi_collective_end;
+        io_destroy_handle(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+                          const otf2::definition::io_handle& handle)
+        : base<io_destroy_handle>(al, timestamp), handle_(handle)
+        {
+        }
 
-    typedef mpi_ireceive mpi_ireceive_complete;
-    typedef mpi_isend mpi_isend_request;
+        // copy constructor with new timestamp
+        io_destroy_handle(const otf2::event::io_destroy_handle& other, otf2::chrono::time_point timestamp)
+        : base<io_destroy_handle>(timestamp), handle_(other.handle())
+        {
+        }
 
-    class metric;
+        otf2::definition::io_handle handle() const
+        {
+            return handle_;
+        }
 
-    class parameter_string;
-    class parameter_int;
-    class parameter_unsigned_int;
+    private:
+        otf2::definition::detail::weak_ref<otf2::definition::io_handle> handle_;
+    };
 
-    class calling_context_sample;
-
-#ifdef OTF2XX_WITH_RMA
-    class rma_win_create;
-    class rma_win_destroy;
-    class rma_collective_begin;
-    class rma_collective_end;
-    class rma_group_sync;
-    class rma_request_lock;
-    class rma_acquire_lock;
-    class rma_try_lock;
-    class rma_release_lock;
-    class rma_sync;
-    class rma_wait_change;
-    class rma_put;
-    class rma_get;
-    class rma_atomic;
-    class rma_blocking_operation_complete;
-    class rma_non_blocking_operation_complete;
-    class rma_operation_test;
-    class rma_remote_operation_complete;
-#endif
-
-    class thread_fork;
-    class thread_join;
-    class thread_team_begin;
-    class thread_team_end;
-    class thread_acquire_lock;
-    class thread_release_lock;
-    class thread_task_create;
-    class thread_task_switch;
-    class thread_task_complete;
-    class thread_create;
-    class thread_begin;
-    class thread_wait;
-    class thread_end;
-
-    class marker;
-
-    class io_create_handle;
-    class io_destroy_handle;
-    class io_operation_begin;
-    class io_operation_complete;
-
-    class unknown;
 }
 } // namespace otf2::event
 
-#endif // INCLUDE_OTF2XX_EVENT_FWD_HPP
+#endif // INCLUDE_OTF2XX_EVENT_IO_DESTROY_HANDLE_HPP

@@ -100,6 +100,7 @@ namespace reader
             OTF2_CallbackCode thread_end  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_CommRef threadContingent, uint64_t sequenceNumber);
 
             OTF2_CallbackCode io_create_handle (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, OTF2_IoAccessMode mode, OTF2_IoCreationFlag creationFlags, OTF2_IoStatusFlag statusFlags);
+            OTF2_CallbackCode io_destroy_handle (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle);
             OTF2_CallbackCode io_operation_begin (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, OTF2_IoOperationMode mode, OTF2_IoOperationFlag operationFlags, uint64_t bytesRequest, uint64_t matching_id);
             OTF2_CallbackCode io_operation_complete (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, uint64_t bytesRequest, uint64_t matching_id);
 
