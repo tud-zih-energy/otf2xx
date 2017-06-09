@@ -261,6 +261,7 @@ namespace reader
             check(OTF2_GlobalEvtReaderCallbacks_SetIoSeekCallback(event_callbacks, detail::event::io_seek), "Couldn't set io_seek event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoChangeStatusFlagsCallback(event_callbacks, detail::event::io_change_status_flag), "Couldn't set io_change_status_flag event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoDeleteFileCallback(event_callbacks, detail::event::io_delete_file), "Couldn't set io_delete_file event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationTestCallback(event_callbacks, detail::event::io_operation_test), "Couldn't set io_operation_test event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationCompleteCallback(event_callbacks, detail::event::io_operation_complete), "Couldn't set io_operation_complete event callback");
 
             check(OTF2_GlobalEvtReaderCallbacks_SetUnknownCallback(event_callbacks, detail::event::unknown), "Couldn't set unknown event callback");

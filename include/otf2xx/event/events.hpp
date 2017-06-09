@@ -81,6 +81,7 @@
 #include <otf2xx/event/io_seek.hpp>
 #include <otf2xx/event/io_change_status_flag.hpp>
 #include <otf2xx/event/io_delete_file.hpp>
+#include <otf2xx/event/io_operation_test.hpp>
 #include <otf2xx/event/io_operation_begin.hpp>
 #include <otf2xx/event/io_operation_complete.hpp>
 
