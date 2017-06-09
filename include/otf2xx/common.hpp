@@ -385,8 +385,20 @@ namespace common
         thread_task_switch,
         thread_team_begin,
         thread_team_end,
+        io_acquire_lock,
+        io_change_status_flag,
+        io_create_handle,
+        io_delete_file,
+        io_destroy_handle,
+        io_duplicate_handle,
         io_operation_begin,
-        io_operation_complete
+        io_operation_cancelled,
+        io_operation_complete,
+        io_operation_issued,
+        io_operation_test,
+        io_release_lock,
+        io_seek,
+        io_try_lock
     };
 
     enum class lock_type
