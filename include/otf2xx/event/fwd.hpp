@@ -120,6 +120,7 @@ namespace event
     class io_operation_complete;
     class io_acquire_lock;
     class io_release_lock;
+    class io_try_lock;
 
     class unknown;
 }
