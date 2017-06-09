@@ -111,6 +111,7 @@ namespace reader
             OTF2_CallbackCode io_operation_cancelled (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, uint64_t matchingId);
             OTF2_CallbackCode io_operation_complete (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, uint64_t bytesRequest, uint64_t matching_id);
             OTF2_CallbackCode io_acquire_lock (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, OTF2_LockType lockType);
+            OTF2_CallbackCode io_release_lock (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, OTF2_LockType lockType);
 
             OTF2_CallbackCode unknown  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList);
 
