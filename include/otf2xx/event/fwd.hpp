@@ -118,6 +118,7 @@ namespace event
     class io_operation_issued;
     class io_operation_cancelled;
     class io_operation_complete;
+    class io_acquire_lock;
 
     class unknown;
 }

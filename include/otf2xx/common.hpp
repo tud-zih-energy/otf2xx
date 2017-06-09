@@ -389,6 +389,12 @@ namespace common
         io_operation_complete
     };
 
+    enum class lock_type
+    {
+        exclusive,
+        shared
+    };
+
     enum class interrupt_generator_mode_type
     {
         time,

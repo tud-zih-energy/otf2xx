@@ -86,6 +86,7 @@
 #include <otf2xx/event/io_operation_issued.hpp>
 #include <otf2xx/event/io_operation_cancelled.hpp>
 #include <otf2xx/event/io_operation_complete.hpp>
+#include <otf2xx/event/io_acquire_lock.hpp>
 
 #include <otf2xx/event/unknown.hpp>
 #endif // INCLUDE_OTF2XX_EVENT_EVENTS_HPP

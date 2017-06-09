@@ -265,6 +265,7 @@ namespace reader
             check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationIssuedCallback(event_callbacks, detail::event::io_operation_issued), "Couldn't set io_operation_issued event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationCancelledCallback(event_callbacks, detail::event::io_operation_cancelled), "Couldn't set io_operation_cancelled event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationCompleteCallback(event_callbacks, detail::event::io_operation_complete), "Couldn't set io_operation_complete event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoAcquireLockCallback(event_callbacks, detail::event::io_acquire_lock), "Couldn't set io_acquire_lock event callback");
 
             check(OTF2_GlobalEvtReaderCallbacks_SetUnknownCallback(event_callbacks, detail::event::unknown), "Couldn't set unknown event callback");
 
