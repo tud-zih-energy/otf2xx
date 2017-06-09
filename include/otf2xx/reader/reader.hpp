@@ -256,12 +256,13 @@ namespace reader
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadEndCallback(event_callbacks, detail::event::thread_end), "Couldn't set thread_end event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoCreateHandleCallback(event_callbacks, detail::event::io_create_handle), "Couldn't set io_create_handle event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoDestroyHandleCallback(event_callbacks, detail::event::io_destroy_handle), "Couldn't set io_destroy_handle event callback");
-            check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationBeginCallback(event_callbacks, detail::event::io_operation_begin), "Couldn't set io_operation_begin event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoDuplicateHandleCallback(event_callbacks, detail::event::io_duplicate_handle), "Couldn't set io_duplicate_handle event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoSeekCallback(event_callbacks, detail::event::io_seek), "Couldn't set io_seek event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoChangeStatusFlagsCallback(event_callbacks, detail::event::io_change_status_flag), "Couldn't set io_change_status_flag event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoDeleteFileCallback(event_callbacks, detail::event::io_delete_file), "Couldn't set io_delete_file event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationBeginCallback(event_callbacks, detail::event::io_operation_begin), "Couldn't set io_operation_begin event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationTestCallback(event_callbacks, detail::event::io_operation_test), "Couldn't set io_operation_test event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationIssuedCallback(event_callbacks, detail::event::io_operation_issued), "Couldn't set io_operation_issued event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationCompleteCallback(event_callbacks, detail::event::io_operation_complete), "Couldn't set io_operation_complete event callback");
 
             check(OTF2_GlobalEvtReaderCallbacks_SetUnknownCallback(event_callbacks, detail::event::unknown), "Couldn't set unknown event callback");
