@@ -123,6 +123,7 @@ namespace reader
         virtual void event(const otf2::definition::location&, const otf2::event::io_operation_begin&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::io_operation_test&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::io_operation_issued&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_operation_cancelled&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::io_operation_complete&) {}
 
         virtual void event(const otf2::definition::location&, const otf2::event::unknown&) {}

@@ -871,6 +871,24 @@ namespace reader
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
 
+            OTF2_CallbackCode io_operation_cancelled(OTF2_LocationRef locationID, OTF2_TimeStamp time,
+                                                     void* userData, OTF2_AttributeList* attributeList,
+                                                     OTF2_IoHandleRef handle, uint64_t matchingId)
+            {
+                otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                reader->callback().event(
+                        reader->locations()[locationID],
+                        otf2::event::io_operation_cancelled(
+                            attributeList,
+                            otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
+                                    time - reader->clock_properties().start_time().count())),
+                            reader->io_handles()[handle], matchingId
+                ));
+
+                return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+            }
+
             OTF2_CallbackCode io_operation_complete(OTF2_LocationRef locationId, OTF2_TimeStamp time,
                                                     void* userData, OTF2_AttributeList* attributeList,
                                                     OTF2_IoHandleRef handle, uint64_t bytesRequest,

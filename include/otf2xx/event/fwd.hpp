@@ -116,6 +116,7 @@ namespace event
     class io_operation_begin;
     class io_operation_test;
     class io_operation_issued;
+    class io_operation_cancelled;
     class io_operation_complete;
 
     class unknown;

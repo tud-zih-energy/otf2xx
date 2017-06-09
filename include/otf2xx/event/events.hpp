@@ -84,6 +84,7 @@
 #include <otf2xx/event/io_operation_begin.hpp>
 #include <otf2xx/event/io_operation_test.hpp>
 #include <otf2xx/event/io_operation_issued.hpp>
+#include <otf2xx/event/io_operation_cancelled.hpp>
 #include <otf2xx/event/io_operation_complete.hpp>
 
 #include <otf2xx/event/unknown.hpp>
