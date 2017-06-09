@@ -183,6 +183,7 @@ namespace reader
 
             check(OTF2_GlobalDefReaderCallbacks_SetIoRegularFileCallback (global_def_callbacks, detail::definition::global::io_file), "Couldn't set io file callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetIoHandleCallback (global_def_callbacks, detail::definition::global::io_handle), "Couldn't set io handle callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetIoParadigmCallback (global_def_callbacks, detail::definition::global::io_paradigm), "Couldn't set io paradigm callback handler");
 
             check(OTF2_GlobalDefReaderCallbacks_SetUnknownCallback(global_def_callbacks, detail::definition::global::unknown), "Couldn't set unknown callback handler");
 
@@ -574,6 +575,22 @@ namespace reader
             return io_handles_;
         }
 
+        /**
+         * \brief returns all io paradigms
+         *
+         * This function returns every io paradigm definition, which was read until the call of 
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_paradigm>& io_paradigms()
+        {
+            return io_paradigms_;
+        }
+
     public:
         /**
          * \brief returns all groups of locations
@@ -834,6 +851,7 @@ namespace reader
         map_type<otf2::definition::interrupt_generator> interrupt_generators_;
         map_type<otf2::definition::io_handle> io_handles_;
         map_type<otf2::definition::io_file> io_files_;
+        map_type<otf2::definition::io_paradigm> io_paradigms_;
 
         map_type<otf2::definition::locations_group> locations_groups_;
         map_type<otf2::definition::regions_group> regions_groups_;

@@ -185,6 +185,10 @@ namespace traits
     {
     };
 
+    template<>
+    struct reference_type<definition::io_paradigm> : identity<std::uint32_t>
+    {
+    };
 }
 } // namespace otf2::traits
 

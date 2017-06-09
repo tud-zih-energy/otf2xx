@@ -32,91 +32,78 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_IO_HANDLE_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_IO_HANDLE_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_IO_PARADIGM_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_IO_PARADIGM_HPP
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/string.hpp>
-#include <otf2xx/definition/io_paradigm.hpp>
 
 #include <otf2xx/definition/detail/base.hpp>
-#include <otf2xx/definition/detail/io_handle_impl.hpp>
+#include <otf2xx/definition/detail/io_paradigm_impl.hpp>
 
 namespace otf2
 {
 namespace definition
 {
 
-    class io_handle : public detail::base<io_handle>
+    class io_paradigm : public detail::base<io_paradigm>
     {
-        typedef detail::base<io_handle> base;
-        typedef typename otf2::traits::definition_impl_type<io_handle>::type impl_type;
+        typedef detail::base<io_paradigm> base;
+        typedef typename otf2::traits::definition_impl_type<io_paradigm>::type impl_type;
         using base::base;
 
     public:
-        using io_handle_flags_type = impl_type::io_handle_flags_type;
+        using paradigm_class_type = impl_type::paradigm_class_type;
+        using paradigm_flag_type = impl_type::paradigm_flag_type;
+        using paradigm_property_type = impl_type::paradigm_property_type;
 
-        //TODO ctors
-        io_handle(otf2::reference<otf2::definition::io_handle> ref,
-                  const otf2::definition::io_file& file,
-                  const otf2::definition::io_paradigm& paradigm,
-                  io_handle_flags_type handle_flag,
-                  const otf2::definition::comm& comm)
-        : base(new impl_type(ref, file, paradigm, handle_flag, comm))
+        // TODO: missing arguments
+        io_paradigm(otf2::reference<otf2::definition::io_paradigm> ref,
+                    const otf2::definition::string& identification,
+                    const otf2::definition::string& name,
+                    paradigm_class_type paradigmClass,
+                    paradigm_flag_type paradigmFlags,
+                    std::uint8_t numberOfProperties)
+        : base(new impl_type(ref, identification, name, paradigmClass, paradigmFlags, numberOfProperties))
         {
         }
 
-        io_handle() = default;
+        io_paradigm() = default;
 
-        /**
-         * \brief returns the io_file of the io_handle definition
-         *
-         * \returns otf2::definition::io_file
-         */
-        const otf2::definition::io_file& file() const
+        const otf2::definition::string& identification() const
         {
             assert(this->is_valid());
-            return data_->file();
+            return data_->identification();
         }
 
-        /**
-         * \brief returns the io_paradigm of the io_handle definition
-         *
-         * \returns otf2::definition::io_paradigm
-         */
-        const otf2::definition::io_paradigm& paradigm() const
+        const otf2::definition::string& name() const
         {
             assert(this->is_valid());
-            return data_->paradigm();
+            return data_->name();
         }
 
-        /**
-         * \brief returns the io_handle_flag
-         *
-         * \returns otf2::common::io_handle_flags
-         */
-        io_handle_flags_type io_handle_flag() const
+        paradigm_class_type paradigm_class() const
         {
             assert(this->is_valid());
-            return data_->io_handle_flag();
+            return data_->paradigm_class();
         }
 
-        /**
-         * \brief returns the comm of the io_handle definition
-         *
-         * \returns otf2::definition::comm
-         */
-        const otf2::definition::comm& comm() const
+        paradigm_flag_type paradigm_flags() const
         {
             assert(this->is_valid());
-            return data_->comm();
+            return data_->paradigm_flags();
         }
 
+        std::uint8_t num_properties() const
+        {
+            assert(this->is_valid());
+            return data_->num_properties();
+        }
     };
 }
-}  // namespace otf2::definition
+} // namespace otf2::definition
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_IO_HANDLE_HPP
+#endif // INCLUDE_OTF2XX_DEFINITIONS_IO_PARADIGM_HPP

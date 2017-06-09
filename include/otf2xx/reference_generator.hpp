@@ -193,6 +193,11 @@ public:
         io_handle_refs_.register_definition(std::move(def));
     }
 
+    void register_definition(otf2::definition::io_paradigm def)
+    {
+        io_paradigm_refs_.register_definition(std::move(def));
+    }
+
     void register_definition(otf2::definition::metric_member def)
     {
         metric_member_refs_.register_definition(std::move(def));
@@ -241,6 +246,7 @@ public:
         interrupt_generator_refs_;
     reference_generator<otf2::reference<otf2::definition::io_file>> io_file_refs_;
     reference_generator<otf2::reference<otf2::definition::io_handle>> io_handle_refs_;
+    reference_generator<otf2::reference<otf2::definition::io_paradigm>> io_paradigm_refs_;
     reference_generator<otf2::reference<otf2::definition::metric_member>> metric_member_refs_;
     reference_generator<otf2::reference<otf2::definition::detail::metric_base>> metric_refs_;
     reference_generator<otf2::reference<otf2::definition::marker>> marker_refs_;
@@ -350,6 +356,13 @@ namespace detail
     generate_ref<otf2::definition::io_handle>::operator()(trace_reference_generator& gen)
     {
         return gen.io_handle_refs_.next();
+    }
+
+    template<>
+    inline otf2::reference<otf2::traits::reference_param_type<otf2::definition::io_paradigm>::type>
+    generate_ref<otf2::definition::io_paradigm>::operator()(trace_reference_generator& gen)
+    {
+        return gen.io_paradigm_refs_.next();
     }
 
     template <>

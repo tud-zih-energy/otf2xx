@@ -413,10 +413,21 @@ namespace common
         count
     };
 
-    enum class io_paradigm_class
+    enum class io_paradigm_class_type
     {
         serial,
         parallel
+    };
+
+    enum class io_paradigm_flag_type
+    {
+        none,
+        os
+    };
+
+    enum class io_paradigm_property_type
+    {
+        version
     };
 
     enum class io_access_mode_type

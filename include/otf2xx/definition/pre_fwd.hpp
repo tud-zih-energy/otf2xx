@@ -69,6 +69,7 @@ namespace definition
 
         class io_file_impl;
         class io_handle_impl;
+        class io_paradigm_impl;
 
         class mapping_table_impl;
 
@@ -106,6 +107,7 @@ namespace definition
 
     class io_file;
     class io_handle;
+    class io_paradigm;
 
     class mapping_table;
 

@@ -621,11 +621,34 @@ namespace reader
 
                     reader->io_handles().add_definition(
                             { self, reader->io_files()[file],
+                              reader->io_paradigms()[ioParadigm],
                               static_cast<
                                   otf2::definition::io_handle::io_handle_flags_type>(ioHandleFlags),
                               reader->comms()[comm] });
 
                     reader->callback().definition(reader->io_handles()[self]);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
+                OTF2_CallbackCode io_paradigm(void *userData, OTF2_IoParadigmRef self,
+                                              OTF2_StringRef identification, OTF2_StringRef name,
+                                              OTF2_IoParadigmClass ioParadigmClass,
+                                              OTF2_IoParadigmFlag ioParadigmFlags,
+                                              uint8_t numberOfProperties,
+                                              const OTF2_IoParadigmProperty* properties,
+                                              const OTF2_Type* types,
+                                              const OTF2_AttributeValue* values)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                    reader->io_paradigms().add_definition(
+                            { self, reader->strings()[identification], reader->strings()[name],
+                              static_cast<otf2::definition::io_paradigm::paradigm_class_type>(ioParadigmClass),
+                              static_cast<otf2::definition::io_paradigm::paradigm_flag_type>(ioParadigmFlags),
+                              numberOfProperties });
+
+                    reader->callback().definition(reader->io_paradigms()[self]);
 
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }

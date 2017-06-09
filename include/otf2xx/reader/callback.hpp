@@ -157,6 +157,7 @@ namespace reader
 
         virtual void definition(const otf2::definition::io_file&) {}
         virtual void definition(const otf2::definition::io_handle&) {}
+        virtual void definition(const otf2::definition::io_paradigm&) {}
 
         virtual void definition(const otf2::definition::metric_class&) {}
         virtual void definition(const otf2::definition::metric_member&) {}

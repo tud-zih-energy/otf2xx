@@ -54,6 +54,7 @@
 
 #include <otf2xx/definition/io_file.hpp>
 #include <otf2xx/definition/io_handle.hpp>
+#include <otf2xx/definition/io_paradigm.hpp>
 
 #include <otf2xx/definition/mapping_table.hpp>
 

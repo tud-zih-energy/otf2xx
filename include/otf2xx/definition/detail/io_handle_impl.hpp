@@ -59,10 +59,11 @@ namespace definition
             //TODO ctors!!!!!
             io_handle_impl(otf2::reference<otf2::definition::io_handle> ref,
                            const otf2::definition::io_file& file,
+                           const otf2::definition::io_paradigm& paradigm,
                            io_handle_flags_type handle_flag,
                            const otf2::definition::comm& comm,
                            int retain_count = 0)
-            : impl_base(retain_count), ref_(ref), file_(file), io_handle_flag_(handle_flag), comm_(comm)
+            : impl_base(retain_count), ref_(ref), file_(file), paradigm_(paradigm), io_handle_flag_(handle_flag), comm_(comm)
             {
             }
 
@@ -78,6 +79,7 @@ namespace definition
                 static io_handle_impl undef(
                     otf2::reference<io_handle>::undefined(),
                     otf2::definition::io_file::undefined(),
+                    otf2::definition::io_paradigm::undefined(),
                     io_handle_flags_type::none,
                     otf2::definition::comm::undefined());
 
@@ -94,6 +96,11 @@ namespace definition
                 return file_;
             }
 
+            const otf2::definition::io_paradigm& paradigm() const
+            {
+                return paradigm_;
+            }
+
             io_handle_flags_type io_handle_flag() const
             {
                 return io_handle_flag_;
@@ -107,6 +114,7 @@ namespace definition
         private:
             otf2::reference<io_handle> ref_;
             otf2::definition::io_file file_;
+            otf2::definition::io_paradigm paradigm_;
             io_handle_flags_type io_handle_flag_;
             otf2::definition::comm comm_;
         };
