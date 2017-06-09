@@ -111,6 +111,7 @@ namespace event
     class io_destroy_handle;
     class io_duplicate_handle;
     class io_seek;
+    class io_change_status_flag;
     class io_operation_begin;
     class io_operation_complete;
 
