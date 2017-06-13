@@ -611,7 +611,7 @@ namespace reader
                 }
 
                 OTF2_CallbackCode io_handle(void* userData, OTF2_IoHandleRef self,
-                                            OTF2_IoFileRef file,
+                                            OTF2_StringRef name, OTF2_IoFileRef file,
                                             OTF2_IoParadigmRef ioParadigm,
                                             OTF2_IoHandleFlag ioHandleFlags,
                                             OTF2_CommRef comm,
@@ -619,12 +619,27 @@ namespace reader
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
 
-                    reader->io_handles().add_definition(
-                            { self, reader->io_files()[file],
-                              reader->io_paradigms()[ioParadigm],
-                              static_cast<
-                                  otf2::definition::io_handle::io_handle_flags_type>(ioHandleFlags),
-                              reader->comms()[comm] });
+                    if (parent != OTF2_UNDEFINED_IO_HANDLE)
+                    {
+                        reader->io_handles().add_definition(
+                                { self, reader->strings()[name],
+                                  reader->io_files()[file],
+                                  reader->io_paradigms()[ioParadigm],
+                                  static_cast<
+                                      otf2::definition::io_handle::io_handle_flags_type>(ioHandleFlags),
+                                  reader->comms()[comm],
+                                  reader->io_handles()[parent] });
+                    }
+                    else
+                    {
+                        reader->io_handles().add_definition(
+                                { self, reader->strings()[name],
+                                  reader->io_files()[file],
+                                  reader->io_paradigms()[ioParadigm],
+                                  static_cast<
+                                      otf2::definition::io_handle::io_handle_flags_type>(ioHandleFlags),
+                                  reader->comms()[comm] });
+                    }
 
                     reader->callback().definition(reader->io_handles()[self]);
 

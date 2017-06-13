@@ -59,17 +59,39 @@ namespace definition
     public:
         using io_handle_flags_type = impl_type::io_handle_flags_type;
 
-        //TODO ctors
         io_handle(otf2::reference<otf2::definition::io_handle> ref,
+                  const otf2::definition::string& name,
+                  const otf2::definition::io_file& file,
+                  const otf2::definition::io_paradigm& paradigm,
+                  io_handle_flags_type handle_flag,
+                  const otf2::definition::comm& comm,
+                  const otf2::definition::io_handle& parent)
+        : base(new impl_type(ref, name, file, paradigm, handle_flag, comm, parent.get()))
+        {
+        }
+
+        io_handle(otf2::reference<otf2::definition::io_handle> ref,
+                  const otf2::definition::string& name,
                   const otf2::definition::io_file& file,
                   const otf2::definition::io_paradigm& paradigm,
                   io_handle_flags_type handle_flag,
                   const otf2::definition::comm& comm)
-        : base(new impl_type(ref, file, paradigm, handle_flag, comm))
+        : base(new impl_type(ref, name, file, paradigm, handle_flag, comm))
         {
         }
 
         io_handle() = default;
+
+        /**
+         * \brief returns the name of the io_handle definition
+         *
+         * \returns otf2::definition::string
+         */
+        const otf2::definition::string& name() const
+        {
+            assert(this->is_valid());
+            return data_->name();
+        }
 
         /**
          * \brief returns the io_file of the io_handle definition
@@ -113,6 +135,26 @@ namespace definition
         {
             assert(this->is_valid());
             return data_->comm();
+        }
+
+        /**
+         * \brief returns whether the definition has got a parent or not
+         */
+        bool has_parent() const
+        {
+            assert(this->is_valid());
+            return data_->has_parent();
+        }
+
+        /**
+         * \brief returns the parent of the io_handle definition
+         * \returns otf2::definition::io_handle
+         * \throws if there is no parent
+         */
+        otf2::definition::io_handle parent() const
+        {
+            assert(this->is_valid());
+            return data_->parent();
         }
 
     };
