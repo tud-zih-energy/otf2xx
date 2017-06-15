@@ -180,6 +180,11 @@ public:
         value_.ioFileRef = def.ref();
     }
 
+    attribute_value(const otf2::definition::io_directory& def) : type_(type_type::io_file)
+    {
+        value_.ioFileRef = def.ref();
+    }
+
     attribute_value(const otf2::definition::io_handle& def)
     : type_(type_type::io_handle)
     {
@@ -357,6 +362,14 @@ public:
     }
 
     attribute_value& operator=(const otf2::definition::io_file& def)
+    {
+        type_ = type_type::io_file;
+        value_.ioFileRef = def.ref();
+
+        return *this;
+    }
+
+    attribute_value& operator=(const otf2::definition::io_directory& def)
     {
         type_ = type_type::io_file;
         value_.ioFileRef = def.ref();

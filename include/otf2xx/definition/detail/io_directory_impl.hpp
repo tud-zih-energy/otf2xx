@@ -32,8 +32,8 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_FILE_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_FILE_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_DIRECTORY_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_DIRECTORY_HPP
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
@@ -51,30 +51,32 @@ namespace definition
     namespace detail
     {
 
-        class io_file_impl : public impl_base<io_file_impl>
+        class io_directory_impl : public impl_base<io_directory_impl>
         {
         public:
 
-            io_file_impl(otf2::reference<io_file_base> ref,
-                         const otf2::definition::string& name,
-                         const otf2::definition::system_tree_node& scope,
-                         std::int64_t retain_count = 0)
+            io_directory_impl(otf2::reference<io_file_base> ref,
+                              const otf2::definition::string& name,
+                              const otf2::definition::system_tree_node& scope,
+                              std::int64_t retain_count = 0)
             : impl_base(retain_count), ref_(ref), name_(name), scope_(scope)
             {
             }
 
             // no implicit copy, see duplicate()
-            io_file_impl(const io_file_impl&) = delete;
-            io_file_impl& operator=(const io_file_impl&) = delete;
+            io_directory_impl(const io_directory_impl&) = delete;
+            io_directory_impl& operator=(const io_directory_impl&) = delete;
 
-            io_file_impl(io_file_impl&&) = default;
-            io_file_impl& operator=(io_file_impl&&) = default;
+            io_directory_impl(io_directory_impl&&) = default;
+            io_directory_impl& operator=(io_directory_impl&&) = default;
 
-            static io_file_impl* undefined()
+            static io_directory_impl* undefined()
             {
-                static io_file_impl undef(
-                    otf2::reference<io_file_base>::undefined(), string::undefined(),
-                    otf2::definition::system_tree_node::undefined(), 1);
+                static io_directory_impl undef(
+                            otf2::reference<io_file_base>::undefined(),
+                            otf2::definition::string::undefined(),
+                            otf2::definition::system_tree_node::undefined(), 1
+                        );
                 return &undef;
             }
 
@@ -102,4 +104,4 @@ namespace definition
 }
 } // namespace otf2::definition::detail
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_FILE_HPP
+#endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_DIRECTORY_HPP

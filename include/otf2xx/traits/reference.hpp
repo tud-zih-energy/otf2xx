@@ -142,6 +142,33 @@ namespace traits
     {
     };
 
+    template<>
+    struct reference_type<definition::detail::io_file_base> : identity<std::uint32_t>
+    {
+    };
+
+    template<>
+    struct reference_type<definition::io_file> 
+    : reference_type<definition::detail::io_file_base>
+    {
+    };
+
+    template<>
+    struct reference_type<definition::io_directory>
+    : reference_type<definition::detail::io_file_base>
+    {
+    };
+
+    template<>
+    struct reference_type<definition::io_handle> : identity<std::uint32_t>
+    {
+    };
+
+    template<>
+    struct reference_type<definition::io_paradigm> : identity<std::uint32_t>
+    {
+    };
+
     template <typename Definition>
     struct reference_type<definition::property<Definition>> : identity<std::uint32_t>
     {
@@ -176,19 +203,17 @@ namespace traits
     };
 
     template<>
-    struct reference_type<definition::io_file> : identity<std::uint32_t>
+    struct reference_param_type<definition::io_file>
+    : otf2::traits::identity<definition::detail::io_file_base>
     {
     };
 
     template<>
-    struct reference_type<definition::io_handle> : identity<std::uint32_t>
+    struct reference_param_type<definition::io_directory>
+    : otf2::traits::identity<definition::detail::io_file_base>
     {
     };
 
-    template<>
-    struct reference_type<definition::io_paradigm> : identity<std::uint32_t>
-    {
-    };
 }
 } // namespace otf2::traits
 

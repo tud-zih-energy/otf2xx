@@ -182,6 +182,7 @@ namespace reader
             check(OTF2_GlobalDefReaderCallbacks_SetInterruptGeneratorCallback (global_def_callbacks, detail::definition::global::interrupt_generator), "Couldn't set interrupt generator callback handler");
 
             check(OTF2_GlobalDefReaderCallbacks_SetIoRegularFileCallback (global_def_callbacks, detail::definition::global::io_file), "Couldn't set io file callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetIoDirectoryCallback (global_def_callbacks, detail::definition::global::io_directory), "Couldn't set io directory callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetIoHandleCallback (global_def_callbacks, detail::definition::global::io_handle), "Couldn't set io handle callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetIoParadigmCallback (global_def_callbacks, detail::definition::global::io_paradigm), "Couldn't set io paradigm callback handler");
 
@@ -546,7 +547,7 @@ namespace reader
         /**
          * \brief returns all io files
          *
-         * This function returns every io file definition, which was read until the call of 
+         * This function returns every io file definition, which was read until the call of
          *the function.
          * This means there could be missing some. On the other hand it is garantied, that any
          *referenced
@@ -560,9 +561,25 @@ namespace reader
         }
 
         /**
+         * \brief returns all io directories
+         *
+         * This function returns every io directory definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_directory>& io_directories()
+        {
+            return io_directories_;
+        }
+
+        /**
          * \brief returns all io handles
          *
-         * This function returns every io handle definition, which was read until the call of 
+         * This function returns every io handle definition, which was read until the call of
          *the function.
          * This means there could be missing some. On the other hand it is garantied, that any
          *referenced
@@ -578,7 +595,7 @@ namespace reader
         /**
          * \brief returns all io paradigms
          *
-         * This function returns every io paradigm definition, which was read until the call of 
+         * This function returns every io paradigm definition, which was read until the call of
          *the function.
          * This means there could be missing some. On the other hand it is garantied, that any
          *referenced
@@ -851,6 +868,7 @@ namespace reader
         map_type<otf2::definition::interrupt_generator> interrupt_generators_;
         map_type<otf2::definition::io_handle> io_handles_;
         map_type<otf2::definition::io_file> io_files_;
+        map_type<otf2::definition::io_directory> io_directories_;
         map_type<otf2::definition::io_paradigm> io_paradigms_;
 
         map_type<otf2::definition::locations_group> locations_groups_;

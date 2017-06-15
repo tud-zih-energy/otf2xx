@@ -32,41 +32,23 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_FILE_BASE_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_FILE_BASE_HPP
 
-#include <otf2xx/definition/container.hpp>
+namespace otf2
+{
+namespace definition
+{
+    namespace detail
+    {
+        /**
+         * \brief Dummy class to have io files and io directories in the same id space
+         */
+        class io_file_base
+        {
+        };
+    }
+}
+} // namespace otf2::definition::detail
 
-#include <otf2xx/definition/attribute.hpp>
-#include <otf2xx/definition/clock_properties.hpp>
-#include <otf2xx/definition/comm.hpp>
-#include <otf2xx/definition/group.hpp>
-#include <otf2xx/definition/location.hpp>
-#include <otf2xx/definition/location_group.hpp>
-#include <otf2xx/definition/parameter.hpp>
-#include <otf2xx/definition/region.hpp>
-#include <otf2xx/definition/string.hpp>
-#include <otf2xx/definition/system_tree_node.hpp>
-
-#include <otf2xx/definition/calling_context.hpp>
-#include <otf2xx/definition/interrupt_generator.hpp>
-#include <otf2xx/definition/source_code_location.hpp>
-
-#include <otf2xx/definition/io_file.hpp>
-#include <otf2xx/definition/io_directory.hpp>
-#include <otf2xx/definition/io_handle.hpp>
-#include <otf2xx/definition/io_paradigm.hpp>
-
-#include <otf2xx/definition/mapping_table.hpp>
-
-#include <otf2xx/definition/metric_class.hpp>
-#include <otf2xx/definition/metric_instance.hpp>
-#include <otf2xx/definition/metric_member.hpp>
-
-#include <otf2xx/definition/unknown.hpp>
-
-#include <otf2xx/definition/property.hpp>
-
-#include <otf2xx/definition/marker.hpp>
-
-#endif // INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP
+#endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_FILE_BASE_HPP

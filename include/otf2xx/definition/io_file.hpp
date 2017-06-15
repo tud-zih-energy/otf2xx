@@ -43,6 +43,7 @@
 #include <otf2xx/definition/system_tree_node.hpp>
 
 #include <otf2xx/definition/detail/base.hpp>
+#include <otf2xx/definition/detail/io_file_base.hpp>
 #include <otf2xx/definition/detail/io_file_impl.hpp>
 
 namespace otf2
@@ -58,8 +59,7 @@ namespace definition
 
     public:
 
-        //TODO: ctors!!!
-        io_file(otf2::reference<otf2::definition::io_file> ref,
+        io_file(otf2::reference<detail::io_file_base> ref,
                 const otf2::definition::string& name,
                 const otf2::definition::system_tree_node& stn)
         : base(new impl_type(ref, name, stn))

@@ -145,6 +145,11 @@ namespace traits
     };
 
     template<>
+    struct is_definition<otf2::definition::io_directory> : std::true_type
+    {
+    };
+
+    template<>
     struct is_definition<otf2::definition::io_handle> : std::true_type
     {
     };
@@ -268,6 +273,12 @@ namespace traits
     template<>
     struct definition_impl_type<otf2::definition::io_file>
         : otf2::traits::identity<otf2::definition::detail::io_file_impl>
+    {
+    };
+
+    template<>
+    struct definition_impl_type<otf2::definition::io_directory>
+        : otf2::traits::identity<otf2::definition::detail::io_directory_impl>
     {
     };
 
