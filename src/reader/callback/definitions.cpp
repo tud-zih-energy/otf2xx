@@ -683,6 +683,23 @@ namespace reader
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
 
+                OTF2_CallbackCode io_file_property(void* userData, OTF2_IoFileRef ioFile,
+                                                   OTF2_StringRef name, OTF2_Type type,
+                                                   OTF2_AttributeValue value)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                    auto self = reader->io_file_properties().emplace(
+                                    reader->io_files()[ioFile], reader->strings()[name],
+                                    static_cast<otf2::definition::io_file_property::type_type>(type),
+                                    static_cast<otf2::definition::io_file_property::value_type>(value)
+                                );
+
+                    reader->callback().definition(std::move(self));
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
                 OTF2_CallbackCode unknown(void* userData)
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);

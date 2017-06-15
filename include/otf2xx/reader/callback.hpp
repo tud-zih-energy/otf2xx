@@ -168,6 +168,7 @@ namespace reader
         virtual void definition(const otf2::definition::location_group_property&) {}
         virtual void definition(const otf2::definition::system_tree_node_property&) {}
         virtual void definition(const otf2::definition::calling_context_property&) {}
+        virtual void definition(const otf2::definition::io_file_property&) {}
 
         virtual void definition(const otf2::definition::unknown&) {}
 

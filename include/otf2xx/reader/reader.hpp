@@ -185,6 +185,7 @@ namespace reader
             check(OTF2_GlobalDefReaderCallbacks_SetIoDirectoryCallback (global_def_callbacks, detail::definition::global::io_directory), "Couldn't set io directory callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetIoHandleCallback (global_def_callbacks, detail::definition::global::io_handle), "Couldn't set io handle callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetIoParadigmCallback (global_def_callbacks, detail::definition::global::io_paradigm), "Couldn't set io paradigm callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetIoFilePropertyCallback (global_def_callbacks, detail::definition::global::io_file_property), "Couldn't set io file properties callback handler");
 
             check(OTF2_GlobalDefReaderCallbacks_SetUnknownCallback(global_def_callbacks, detail::definition::global::unknown), "Couldn't set unknown callback handler");
 
@@ -804,6 +805,22 @@ namespace reader
             return calling_context_properties_;
         }
 
+        /**
+         * \brief returns all io file properties
+         *
+         * This function returns every io file property definition, which was read until the call
+         *of the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_file_property>& io_file_properties()
+        {
+            return io_file_properties_;
+        }
+
     public:
         /**
          * \brief returns the ticks per second
@@ -886,6 +903,7 @@ namespace reader
         map_type<otf2::definition::location_group_property> location_group_properties_;
         map_type<otf2::definition::system_tree_node_property> system_tree_node_properties_;
         map_type<otf2::definition::calling_context_property> calling_context_properties_;
+        map_type<otf2::definition::io_file_property> io_file_properties_;
 
         std::unique_ptr<otf2::definition::clock_properties> clock_properties_;
 
