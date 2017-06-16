@@ -641,7 +641,7 @@ namespace reader
                                   reader->io_files()[file],
                                   reader->io_paradigms()[ioParadigm],
                                   static_cast<
-                                      otf2::definition::io_handle::io_handle_flags_type>(ioHandleFlags),
+                                      otf2::definition::io_handle::io_handle_flag_type>(ioHandleFlags),
                                   reader->comms()[comm],
                                   reader->io_handles()[parent] });
                     }
@@ -652,7 +652,7 @@ namespace reader
                                   reader->io_files()[file],
                                   reader->io_paradigms()[ioParadigm],
                                   static_cast<
-                                      otf2::definition::io_handle::io_handle_flags_type>(ioHandleFlags),
+                                      otf2::definition::io_handle::io_handle_flag_type>(ioHandleFlags),
                                   reader->comms()[comm] });
                     }
 

@@ -441,32 +441,32 @@ namespace common
 
     enum class io_creation_flag_type
     {
-        none,
-        create,
-        truncate,
-        directory,
-        exclusive,
-        no_controlling_terminal,
-        no_follow,
-        path,
-        temporary_file,
-        largefile,
-        no_seek,
-        unique
+        none = 0,
+        create = 1 << 0,
+        truncate = 1 << 1,
+        directory= 1 << 2,
+        exclusive = 1 << 3,
+        no_controlling_terminal = 1 << 4,
+        no_follow = 1 << 5,
+        path = 1 << 6,
+        temporary_file = 1 << 7,
+        largefile = 1 << 8,
+        no_seek = 1 << 9,
+        unique = 1 << 10
     };
 
     enum class io_status_flag_type
     {
-        none,
-        close_on_exec,
-        append,
-        non_blocking,
-        async,
-        sync,
-        data_sync,
-        avoid_caching,
-        no_access_time,
-        delete_on_close
+        none = 0,
+        close_on_exec = 1 << 0,
+        append = 1 << 1,
+        non_blocking = 1 << 2,
+        async = 1 << 3,
+        sync = 1 << 4,
+        data_sync = 1 << 5,
+        avoid_caching = 1 << 6,
+        no_access_time = 1 << 7,
+        delete_on_close = 1 << 8
     };
 
     enum class io_seek_option_type
@@ -492,10 +492,11 @@ namespace common
         collective
     };
 
-    enum class io_handle_flags_type
+    enum class io_handle_flag_type
     {
         none,
-        pre_created
+        pre_created,
+        all_proxy
     };
 
     enum class mapping_type_type

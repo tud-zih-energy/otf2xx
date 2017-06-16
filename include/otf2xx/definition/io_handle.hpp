@@ -57,13 +57,13 @@ namespace definition
         using base::base;
 
     public:
-        using io_handle_flags_type = impl_type::io_handle_flags_type;
+        using io_handle_flag_type = impl_type::io_handle_flag_type;
 
         io_handle(otf2::reference<otf2::definition::io_handle> ref,
                   const otf2::definition::string& name,
                   const otf2::definition::io_file& file,
                   const otf2::definition::io_paradigm& paradigm,
-                  io_handle_flags_type handle_flag,
+                  io_handle_flag_type handle_flag,
                   const otf2::definition::comm& comm,
                   const otf2::definition::io_handle& parent)
         : base(new impl_type(ref, name, file, paradigm, handle_flag, comm, parent.get()))
@@ -74,7 +74,7 @@ namespace definition
                   const otf2::definition::string& name,
                   const otf2::definition::io_file& file,
                   const otf2::definition::io_paradigm& paradigm,
-                  io_handle_flags_type handle_flag,
+                  io_handle_flag_type handle_flag,
                   const otf2::definition::comm& comm)
         : base(new impl_type(ref, name, file, paradigm, handle_flag, comm))
         {
@@ -118,9 +118,9 @@ namespace definition
         /**
          * \brief returns the io_handle_flag
          *
-         * \returns otf2::common::io_handle_flags
+         * \returns otf2::common::io_handle_flag
          */
-        io_handle_flags_type io_handle_flag() const
+        io_handle_flag_type io_handle_flag() const
         {
             assert(this->is_valid());
             return data_->io_handle_flag();

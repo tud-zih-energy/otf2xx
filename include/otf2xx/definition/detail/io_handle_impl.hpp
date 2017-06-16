@@ -58,13 +58,13 @@ namespace definition
         class io_handle_impl : public impl_base<io_handle_impl>
         {
         public:
-            using io_handle_flags_type = otf2::common::io_handle_flags_type;
+            using io_handle_flag_type = otf2::common::io_handle_flag_type;
 
             io_handle_impl(otf2::reference<otf2::definition::io_handle> ref,
                            const otf2::definition::string& name,
                            const otf2::definition::io_file& file,
                            const otf2::definition::io_paradigm& paradigm,
-                           io_handle_flags_type handle_flag,
+                           io_handle_flag_type handle_flag,
                            const otf2::definition::comm& comm,
                            io_handle_impl* parent,
                            int retain_count = 0)
@@ -77,7 +77,7 @@ namespace definition
                            const otf2::definition::string& name,
                            const otf2::definition::io_file& file,
                            const otf2::definition::io_paradigm& paradigm,
-                           io_handle_flags_type handle_flag,
+                           io_handle_flag_type handle_flag,
                            const otf2::definition::comm& comm,
                            int retain_count = 0)
             : impl_base(retain_count), ref_(ref), name_(name), file_(file), paradigm_(paradigm),
@@ -99,7 +99,7 @@ namespace definition
                     otf2::definition::string::undefined(),
                     otf2::definition::io_file::undefined(),
                     otf2::definition::io_paradigm::undefined(),
-                    io_handle_flags_type::none,
+                    io_handle_flag_type::none,
                     otf2::definition::comm::undefined());
 
                 return &undef;
@@ -125,7 +125,7 @@ namespace definition
                 return paradigm_;
             }
 
-            io_handle_flags_type io_handle_flag() const
+            io_handle_flag_type io_handle_flag() const
             {
                 return io_handle_flag_;
             }
@@ -156,7 +156,7 @@ namespace definition
             otf2::definition::string name_;
             otf2::definition::io_file file_;
             otf2::definition::io_paradigm paradigm_;
-            io_handle_flags_type io_handle_flag_;
+            io_handle_flag_type io_handle_flag_;
             otf2::definition::comm comm_;
             owning_ptr<io_handle_impl> parent_;
         };

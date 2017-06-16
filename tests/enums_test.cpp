@@ -77,6 +77,8 @@ int main()
     assert(static_cast<int>(type::source_code_location) == OTF2_TYPE_SOURCE_CODE_LOCATION);
     assert(static_cast<int>(type::calling_context) == OTF2_TYPE_CALLING_CONTEXT);
     assert(static_cast<int>(type::interrupt_generator) == OTF2_TYPE_INTERRUPT_GENERATOR);
+    assert(static_cast<int>(type::io_file) == OTF2_TYPE_IO_FILE);
+    assert(static_cast<int>(type::io_handle) == OTF2_TYPE_IO_HANDLE);
 
     assert(static_cast<int>(group_type::unknown) == OTF2_GROUP_TYPE_UNKNOWN);
     assert(static_cast<int>(group_type::locations) == OTF2_GROUP_TYPE_LOCATIONS);
@@ -142,6 +144,7 @@ int main()
     assert(static_cast<int>(role_type::allocate) == OTF2_REGION_ROLE_ALLOCATE);
     assert(static_cast<int>(role_type::deallocate) == OTF2_REGION_ROLE_DEALLOCATE);
     assert(static_cast<int>(role_type::reallocate) == OTF2_REGION_ROLE_REALLOCATE);
+    assert(static_cast<int>(role_type::file_io_metadata) == OTF2_REGION_ROLE_FILE_IO_METADATA);
 
     assert(static_cast<int>(paradigm_type::unknown) == OTF2_PARADIGM_UNKNOWN);
     assert(static_cast<int>(paradigm_type::user) == OTF2_PARADIGM_USER);
@@ -262,8 +265,60 @@ int main()
     assert(static_cast<int>(interrupt_generator_mode_type::count) ==
            OTF2_INTERRUPT_GENERATOR_MODE_COUNT);
 
-    assert(static_cast<int>(mapping_type_type::string) == OTF2_MAPPING_STRING);
+    assert(static_cast<int>(io_paradigm_class_type::serial) == OTF2_IO_PARADIGM_CLASS_SERIAL);
+    assert(static_cast<int>(io_paradigm_class_type::parallel) == OTF2_IO_PARADIGM_CLASS_PARALLEL);
 
+    assert(static_cast<int>(io_paradigm_flag_type::none) == OTF2_IO_PARADIGM_FLAG_NONE);
+    assert(static_cast<int>(io_paradigm_flag_type::os) == OTF2_IO_PARADIGM_FLAG_OS);
+
+    assert(static_cast<int>(io_access_mode_type::read_only) == OTF2_IO_ACCESS_MODE_READ_ONLY);
+    assert(static_cast<int>(io_access_mode_type::write_only) == OTF2_IO_ACCESS_MODE_WRITE_ONLY);
+    assert(static_cast<int>(io_access_mode_type::read_write) == OTF2_IO_ACCESS_MODE_READ_WRITE);
+    assert(static_cast<int>(io_access_mode_type::execute_only) == OTF2_IO_ACCESS_MODE_EXECUTE_ONLY);
+    assert(static_cast<int>(io_access_mode_type::search_only) == OTF2_IO_ACCESS_MODE_SEARCH_ONLY);
+
+    assert(static_cast<int>(io_creation_flag_type::none) == OTF2_IO_CREATION_FLAG_NONE);
+    assert(static_cast<int>(io_creation_flag_type::create) == OTF2_IO_CREATION_FLAG_CREATE);
+    assert(static_cast<int>(io_creation_flag_type::truncate) == OTF2_IO_CREATION_FLAG_TRUNCATE);
+    assert(static_cast<int>(io_creation_flag_type::directory) == OTF2_IO_CREATION_FLAG_DIRECTORY);
+    assert(static_cast<int>(io_creation_flag_type::exclusive) == OTF2_IO_CREATION_FLAG_EXCLUSIVE);
+    assert(static_cast<int>(io_creation_flag_type::no_controlling_terminal) == OTF2_IO_CREATION_FLAG_NO_CONTROLLING_TERMINAL);
+    assert(static_cast<int>(io_creation_flag_type::no_follow) == OTF2_IO_CREATION_FLAG_NO_FOLLOW);
+    assert(static_cast<int>(io_creation_flag_type::path) == OTF2_IO_CREATION_FLAG_PATH);
+    assert(static_cast<int>(io_creation_flag_type::temporary_file) == OTF2_IO_CREATION_FLAG_TEMPORARY_FILE);
+    assert(static_cast<int>(io_creation_flag_type::largefile) == OTF2_IO_CREATION_FLAG_LARGEFILE);
+    assert(static_cast<int>(io_creation_flag_type::no_seek) == OTF2_IO_CREATION_FLAG_NO_SEEK);
+    assert(static_cast<int>(io_creation_flag_type::unique) == OTF2_IO_CREATION_FLAG_UNIQUE);
+
+    assert(static_cast<int>(io_status_flag_type::none) == OTF2_IO_STATUS_FLAG_NONE);
+    assert(static_cast<int>(io_status_flag_type::close_on_exec) == OTF2_IO_STATUS_FLAG_CLOSE_ON_EXEC);
+    assert(static_cast<int>(io_status_flag_type::append) == OTF2_IO_STATUS_FLAG_APPEND);
+    assert(static_cast<int>(io_status_flag_type::non_blocking) == OTF2_IO_STATUS_FLAG_NON_BLOCKING);
+    assert(static_cast<int>(io_status_flag_type::async) == OTF2_IO_STATUS_FLAG_ASYNC);
+    assert(static_cast<int>(io_status_flag_type::data_sync) == OTF2_IO_STATUS_FLAG_DATA_SYNC);
+    assert(static_cast<int>(io_status_flag_type::avoid_caching) == OTF2_IO_STATUS_FLAG_AVOID_CACHING);
+    assert(static_cast<int>(io_status_flag_type::no_access_time) == OTF2_IO_STATUS_FLAG_NO_ACCESS_TIME);
+    assert(static_cast<int>(io_status_flag_type::delete_on_close) == OTF2_IO_STATUS_FLAG_DELETE_ON_CLOSE);
+
+    assert(static_cast<int>(io_seek_option_type::from_start) == OTF2_IO_SEEK_FROM_START);
+    assert(static_cast<int>(io_seek_option_type::from_current) == OTF2_IO_SEEK_FROM_CURRENT);
+    assert(static_cast<int>(io_seek_option_type::from_end) == OTF2_IO_SEEK_FROM_END);
+    assert(static_cast<int>(io_seek_option_type::data) == OTF2_IO_SEEK_DATA);
+    assert(static_cast<int>(io_seek_option_type::hole) == OTF2_IO_SEEK_HOLE);
+
+    assert(static_cast<int>(io_operation_mode_type::read) == OTF2_IO_OPERATION_MODE_READ);
+    assert(static_cast<int>(io_operation_mode_type::write) == OTF2_IO_OPERATION_MODE_WRITE);
+    assert(static_cast<int>(io_operation_mode_type::flush) == OTF2_IO_OPERATION_MODE_FLUSH);
+
+    assert(static_cast<int>(io_operation_flag_type::none) == OTF2_IO_OPERATION_FLAG_NONE);
+    assert(static_cast<int>(io_operation_flag_type::non_blocking) == OTF2_IO_OPERATION_FLAG_NON_BLOCKING);
+    assert(static_cast<int>(io_operation_flag_type::collective) == OTF2_IO_OPERATION_FLAG_COLLECTIVE);
+
+    assert(static_cast<int>(io_handle_flag_type::none) == OTF2_IO_HANDLE_FLAG_NONE);
+    assert(static_cast<int>(io_handle_flag_type::pre_created) == OTF2_IO_HANDLE_FLAG_PRE_CREATED);
+    assert(static_cast<int>(io_handle_flag_type::all_proxy) == OTF2_IO_HANDLE_FLAG_ALL_PROXY);
+
+    assert(static_cast<int>(mapping_type_type::string) == OTF2_MAPPING_STRING);
     assert(static_cast<int>(mapping_type_type::attribute) == OTF2_MAPPING_ATTRIBUTE);
     assert(static_cast<int>(mapping_type_type::location) == OTF2_MAPPING_LOCATION);
     assert(static_cast<int>(mapping_type_type::region) == OTF2_MAPPING_REGION);
@@ -277,6 +332,8 @@ int main()
     assert(static_cast<int>(mapping_type_type::calling_context) == OTF2_MAPPING_CALLING_CONTEXT);
     assert(static_cast<int>(mapping_type_type::interrupt_generator) ==
            OTF2_MAPPING_INTERRUPT_GENERATOR);
+    assert(static_cast<int>(mapping_type_type::io_file) == OTF2_MAPPING_IO_FILE);
+    assert(static_cast<int>(mapping_type_type::io_handle) == OTF2_MAPPING_IO_HANDLE);
     assert(static_cast<int>(mapping_type_type::max) == OTF2_MAPPING_MAX);
 
     assert(static_cast<int>(marker_severity_type::none) == OTF2_SEVERITY_NONE);
