@@ -700,6 +700,23 @@ namespace reader
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
 
+                OTF2_CallbackCode io_pre_created_handle_state(void *userData, OTF2_IoHandleRef ioHandle,
+                                                              OTF2_IoAccessMode mode,
+                                                              OTF2_IoStatusFlag statusFlags)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                    auto self = reader->io_pre_created_handle_states().emplace(
+                                ioHandle,
+                                static_cast<otf2::definition::io_pre_created_handle_state::access_mode_type>(mode),
+                                static_cast<otf2::definition::io_pre_created_handle_state::status_flag_type>(statusFlags)
+                            );
+
+                    reader->callback().definition(std::move(self));
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
                 OTF2_CallbackCode unknown(void* userData)
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);

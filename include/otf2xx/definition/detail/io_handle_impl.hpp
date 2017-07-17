@@ -60,7 +60,7 @@ namespace definition
         public:
             using io_handle_flag_type = otf2::common::io_handle_flag_type;
 
-            io_handle_impl(otf2::reference<otf2::definition::io_handle> ref,
+            io_handle_impl(otf2::reference<io_handle_base> ref,
                            const otf2::definition::string& name,
                            const otf2::definition::io_file& file,
                            const otf2::definition::io_paradigm& paradigm,
@@ -73,7 +73,7 @@ namespace definition
             {
             }
 
-            io_handle_impl(otf2::reference<otf2::definition::io_handle> ref,
+            io_handle_impl(otf2::reference<io_handle_base> ref,
                            const otf2::definition::string& name,
                            const otf2::definition::io_file& file,
                            const otf2::definition::io_paradigm& paradigm,
@@ -95,7 +95,7 @@ namespace definition
             static io_handle_impl* undefined()
             {
                 static io_handle_impl undef(
-                    otf2::reference<io_handle>::undefined(),
+                    otf2::reference<io_handle_base>::undefined(),
                     otf2::definition::string::undefined(),
                     otf2::definition::io_file::undefined(),
                     otf2::definition::io_paradigm::undefined(),
@@ -105,7 +105,7 @@ namespace definition
                 return &undef;
             }
 
-            otf2::reference<io_handle> ref() const
+            otf2::reference<io_handle_base> ref() const
             {
                 return ref_;
             }
@@ -152,7 +152,7 @@ namespace definition
             }
 
         private:
-            otf2::reference<io_handle> ref_;
+            otf2::reference<io_handle_base> ref_;
             otf2::definition::string name_;
             otf2::definition::io_file file_;
             otf2::definition::io_paradigm paradigm_;

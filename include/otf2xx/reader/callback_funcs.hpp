@@ -157,6 +157,7 @@ namespace reader
                 OTF2_CallbackCode io_handle (void *userData, OTF2_IoHandleRef self, OTF2_StringRef name, OTF2_IoFileRef file, OTF2_IoParadigmRef ioParadigm, OTF2_IoHandleFlag ioHandleFlags, OTF2_CommRef comm, OTF2_IoHandleRef parent);
                 OTF2_CallbackCode io_paradigm (void *userData, OTF2_IoParadigmRef self, OTF2_StringRef identification, OTF2_StringRef name, OTF2_IoParadigmClass ioParadigmClass, OTF2_IoParadigmFlag ioParadigmFlags, uint8_t numberOfProperties, const OTF2_IoParadigmProperty* properties, const OTF2_Type* types, const OTF2_AttributeValue* values);
                 OTF2_CallbackCode io_file_property (void *userData, OTF2_IoFileRef ioFile, OTF2_StringRef name, OTF2_Type type, OTF2_AttributeValue value);
+                OTF2_CallbackCode io_pre_created_handle_state (void *userData, OTF2_IoHandleRef ioHandle, OTF2_IoAccessMode mode, OTF2_IoStatusFlag statusFlags);
 
                 OTF2_CallbackCode unknown  (void *userData);
 

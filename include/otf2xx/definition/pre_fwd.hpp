@@ -68,10 +68,12 @@ namespace definition
         class interrupt_generator_impl;
 
         class io_file_base;
+        class io_handle_base;
         class io_file_impl;
         class io_directory_impl;
         class io_handle_impl;
         class io_paradigm_impl;
+        class io_pre_created_handle_state_impl;
 
         class mapping_table_impl;
 
@@ -111,6 +113,7 @@ namespace definition
     class io_directory;
     class io_handle;
     class io_paradigm;
+    class io_pre_created_handle_state;
 
     class mapping_table;
 

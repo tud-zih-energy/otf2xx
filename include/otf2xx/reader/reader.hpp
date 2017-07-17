@@ -186,6 +186,7 @@ namespace reader
             check(OTF2_GlobalDefReaderCallbacks_SetIoHandleCallback (global_def_callbacks, detail::definition::global::io_handle), "Couldn't set io handle callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetIoParadigmCallback (global_def_callbacks, detail::definition::global::io_paradigm), "Couldn't set io paradigm callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetIoFilePropertyCallback (global_def_callbacks, detail::definition::global::io_file_property), "Couldn't set io file properties callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetIoPreCreatedHandleStateCallback (global_def_callbacks, detail::definition::global::io_pre_created_handle_state), "Couldn't set io pre created handle state callback handler");
 
             check(OTF2_GlobalDefReaderCallbacks_SetUnknownCallback(global_def_callbacks, detail::definition::global::unknown), "Couldn't set unknown callback handler");
 
@@ -609,6 +610,22 @@ namespace reader
             return io_paradigms_;
         }
 
+        /**
+         * \brief returns all io pre created handle states
+         *
+         * This function returns every io pre created handle state definition, which was read until the call
+         *of the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_pre_created_handle_state>& io_pre_created_handle_states()
+        {
+            return io_pre_created_handle_states_;
+        }
+
     public:
         /**
          * \brief returns all groups of locations
@@ -887,6 +904,7 @@ namespace reader
         map_type<otf2::definition::io_file> io_files_;
         map_type<otf2::definition::io_directory> io_directories_;
         map_type<otf2::definition::io_paradigm> io_paradigms_;
+        map_type<otf2::definition::io_pre_created_handle_state> io_pre_created_handle_states_;
 
         map_type<otf2::definition::locations_group> locations_groups_;
         map_type<otf2::definition::regions_group> regions_groups_;

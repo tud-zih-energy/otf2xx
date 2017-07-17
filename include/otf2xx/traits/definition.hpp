@@ -159,6 +159,11 @@ namespace traits
     {
     };
 
+    template<>
+    struct is_definition<otf2::definition::io_pre_created_handle_state> : std::true_type
+    {
+    };
+
     template <typename T>
     struct definition_impl_type;
 
@@ -291,6 +296,12 @@ namespace traits
     template<>
     struct definition_impl_type<otf2::definition::io_paradigm>
         : otf2::traits::identity<otf2::definition::detail::io_paradigm_impl>
+    {
+    };
+
+    template<>
+    struct definition_impl_type<otf2::definition::io_pre_created_handle_state>
+        : otf2::traits::identity<otf2::definition::detail::io_pre_created_handle_state_impl>
     {
     };
 

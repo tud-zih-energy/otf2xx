@@ -43,6 +43,7 @@
 #include <otf2xx/definition/io_paradigm.hpp>
 
 #include <otf2xx/definition/detail/base.hpp>
+#include <otf2xx/definition/detail/io_handle_base.hpp>
 #include <otf2xx/definition/detail/io_handle_impl.hpp>
 
 namespace otf2
@@ -59,7 +60,7 @@ namespace definition
     public:
         using io_handle_flag_type = impl_type::io_handle_flag_type;
 
-        io_handle(otf2::reference<otf2::definition::io_handle> ref,
+        io_handle(otf2::reference<detail::io_handle_base> ref,
                   const otf2::definition::string& name,
                   const otf2::definition::io_file& file,
                   const otf2::definition::io_paradigm& paradigm,
@@ -70,7 +71,7 @@ namespace definition
         {
         }
 
-        io_handle(otf2::reference<otf2::definition::io_handle> ref,
+        io_handle(otf2::reference<detail::io_handle_base> ref,
                   const otf2::definition::string& name,
                   const otf2::definition::io_file& file,
                   const otf2::definition::io_paradigm& paradigm,

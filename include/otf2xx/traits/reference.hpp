@@ -160,7 +160,19 @@ namespace traits
     };
 
     template<>
-    struct reference_type<definition::io_handle> : identity<std::uint32_t>
+    struct reference_type<definition::detail::io_handle_base> : identity<std::uint32_t>
+    {
+    };
+
+    template<>
+    struct reference_type<definition::io_handle>
+    : reference_type<definition::detail::io_handle_base>
+    {
+    };
+
+    template<>
+    struct reference_type<definition::io_pre_created_handle_state>
+    : reference_type<definition::detail::io_handle_base>
     {
     };
 
@@ -214,6 +226,17 @@ namespace traits
     {
     };
 
+    template<>
+    struct reference_param_type<definition::io_handle>
+    : otf2::traits::identity<definition::detail::io_handle_base>
+    {
+    };
+
+    template<>
+    struct reference_param_type<definition::io_pre_created_handle_state>
+    : otf2::traits::identity<definition::detail::io_handle_base>
+    {
+    };
 }
 } // namespace otf2::traits
 
