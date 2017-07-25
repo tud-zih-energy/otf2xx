@@ -44,7 +44,7 @@ if(OTF2XX_WITH_MPI)
 endif()
 
 # find libOTF2
-find_package(OTF2 7.0.0 EXACT REQUIRED)
+find_package(OTF2 8.0.1 EXACT REQUIRED)
 include_directories(SYSTEM ${OTF2_INCLUDE_DIRS})
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
