@@ -29,12 +29,12 @@ matrix:
             - cmake-data
           sources: *sources
     - os: linux
-      env: CXX="clang++-5.0" CC="clang-5.0"
+      env: CXX="clang++" CC="clang"
       compiler: clang
       addons:
         apt:
           packages:
-            - clang-5.0
+            - clang
             - g++-5
             - cmake
             - cmake-data
