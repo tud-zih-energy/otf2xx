@@ -1,0 +1,69 @@
+language: generic
+
+sudo: required
+dist: trusty
+
+matrix:
+  include:
+    - os: linux
+      env: CXX="g++-7" CC="gcc-7"
+      compiler: gcc
+      addons:
+        apt:
+          packages:
+            - gcc-7
+            - g++-7
+            - cmake
+            - cmake-data
+          sources: &sources
+            - ubuntu-toolchain-r-test
+    - os: linux
+      env: CXX="g++-6" CC="gcc-6"
+      compiler: gcc
+      addons:
+        apt:
+          packages:
+            - gcc-6
+            - g++-6
+            - cmake
+            - cmake-data
+          sources: *sources
+    - os: linux
+      env: CXX="clang++-5.0" CC="clang-5.0"
+      compiler: clang
+      addons:
+        apt:
+          packages:
+            - clang-5.0
+            - g++-5
+            - cmake
+            - cmake-data
+          sources:
+            - llvm-toolchain-trusty
+            - ubuntu-toolchain-r-test
+    - os: linux
+      env: CXX="clang++-4.0" CC="clang-4.0"
+      compiler: clang
+      addons:
+        apt:
+          packages:
+            - clang-4.0
+            - g++-5
+            - cmake
+            - cmake-data
+          sources:
+            - llvm-toolchain-trusty-4.0
+            - ubuntu-toolchain-r-test
+before_script:
+  - wget http://www.vi-hps.org/upload/packages/otf2/otf2-2.0.tar.gz
+  - tar -xf otf2-2.0.tar.gz
+  - cd otf2-2.0
+  - ./configure --prefix=/usr/local
+  - make
+  - sudo make install
+  - cd ..
+  - cmake --version
+  - cmake .
+script:
+  - make
+  - ctest -V .
