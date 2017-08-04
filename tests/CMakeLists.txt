@@ -31,3 +31,10 @@
 
 add_executable(enums_test enums_test.cpp)
 add_test(enums_test enums_test)
+
+add_executable(writer_test writer_test.cpp)
+target_link_libraries(writer_test PRIVATE ${OTF2_LIBRARIES})
+
+add_test(writer_test writer_test)
+add_test(NAME writer_test_cleanup COMMAND cmake -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace)
+set_properties(TEST writer_test PROPERTIES DEPENDS writer_test_cleanup)
