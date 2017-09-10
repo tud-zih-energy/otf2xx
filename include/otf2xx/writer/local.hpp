@@ -399,6 +399,152 @@ namespace writer
             location_.event_written();
         }
 
+        void write(const otf2::event::io_create_handle& data)
+        {
+            check(OTF2_EvtWriter_IoCreateHandle(evt_wrt_, data.attribute_list().get(),
+                                                convert(data.timestamp()),
+                                                data.handle().ref(),
+                                                static_cast<OTF2_IoAccessMode>(data.access_mode()),
+                                                static_cast<OTF2_IoCreationFlag>(data.creation_flags()),
+                                                static_cast<OTF2_IoStatusFlag>(data.status_flags())),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_destroy_handle& data)
+        {
+            check(OTF2_EvtWriter_IoDestroyHandle(evt_wrt_, data.attribute_list().get(),
+                                                convert(data.timestamp()),
+                                                data.handle().ref()),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_duplicate_handle& data)
+        {
+            check(OTF2_EvtWriter_IoDuplicateHandle(evt_wrt_, data.attribute_list().get(),
+                                                  convert(data.timestamp()),
+                                                  data.old_handle().ref(),
+                                                  data.new_handle().ref(),
+                                                  static_cast<OTF2_IoStatusFlag>(data.status_flags())),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_seek& data)
+        {
+            check(OTF2_EvtWriter_IoSeek(evt_wrt_, data.attribute_list().get(),
+                                        convert(data.timestamp()),
+                                        data.handle().ref(),
+                                        data.offset_request(),
+                                        static_cast<OTF2_IoSeekOption>(data.seek_option()),
+                                        data.offset_result()),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_change_status_flag& data)
+        {
+            check(OTF2_EvtWriter_IoChangeStatusFlags(evt_wrt_, data.attribute_list().get(),
+                                                    convert(data.timestamp()),
+                                                    data.handle().ref(),
+                                                    static_cast<OTF2_IoStatusFlag>(data.status_flags())),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_delete_file& data)
+        {
+            check(OTF2_EvtWriter_IoDeleteFile(evt_wrt_, data.attribute_list().get(),
+                                              convert(data.timestamp()),
+                                              data.paradigm().ref(),
+                                              data.file().ref()),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_operation_begin& data)
+        {
+            check(OTF2_EvtWriter_IoOperationBegin(evt_wrt_, data.attribute_list().get(),
+                                                 convert(data.timestamp()),
+                                                 data.handle().ref(),
+                                                 static_cast<OTF2_IoOperationMode>(data.operation_mode()),
+                                                 static_cast<OTF2_IoOperationFlag>(data.operation_flag()),
+                                                 data.bytes_request(), data.matching_id()),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_operation_test& data)
+        {
+            check(OTF2_EvtWriter_IoOperationTest(evt_wrt_, data.attribute_list().get(),
+                                                convert(data.timestamp()),
+                                                data.handle().ref(), data.matching_id()),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_operation_issued& data)
+        {
+            check(OTF2_EvtWriter_IoOperationIssued(evt_wrt_, data.attribute_list().get(),
+                                                  convert(data.timestamp()),
+                                                  data.handle().ref(),
+                                                  data.matching_id()),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_operation_complete& data)
+        {
+            check(OTF2_EvtWriter_IoOperationComplete(evt_wrt_, data.attribute_list().get(),
+                                                    convert(data.timestamp()),
+                                                    data.handle().ref(),
+                                                    data.bytes_request(),
+                                                    data.matching_id()),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_operation_cancelled& data)
+        {
+            check(OTF2_EvtWriter_IoOperationCancelled(evt_wrt_, data.attribute_list().get(),
+                                                     convert(data.timestamp()),
+                                                     data.handle().ref(),
+                                                     data.matching_id()),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_acquire_lock& data)
+        {
+            check(OTF2_EvtWriter_IoAcquireLock(evt_wrt_, data.attribute_list().get(),
+                                              convert(data.timestamp()),
+                                              data.handle().ref(),
+                                              static_cast<OTF2_LockType>(data.lock_type())),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_release_lock& data)
+        {
+            check(OTF2_EvtWriter_IoReleaseLock(evt_wrt_, data.attribute_list().get(),
+                                              convert(data.timestamp()),
+                                              data.handle().ref(),
+                                              static_cast<OTF2_LockType>(data.lock_type())),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::io_try_lock& data)
+        {
+            check(OTF2_EvtWriter_IoTryLock(evt_wrt_, data.attribute_list().get(),
+                                          convert(data.timestamp()),
+                                          data.handle().ref(),
+                                          static_cast<OTF2_LockType>(data.lock_type())),
+                    "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
     public:
         void write(const otf2::definition::mapping_table& def)
         {
