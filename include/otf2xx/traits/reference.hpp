@@ -142,41 +142,27 @@ namespace traits
     {
     };
 
-    template<>
-    struct reference_type<definition::detail::io_file_base> : identity<std::uint32_t>
+    template <>
+    struct reference_type<definition::io_file> : identity<std::uint32_t>
     {
     };
 
-    template<>
-    struct reference_type<definition::io_file> 
-    : reference_type<definition::detail::io_file_base>
+    template <>
+    struct reference_type<definition::io_regular_file> : reference_type<definition::io_file>
     {
     };
 
-    template<>
-    struct reference_type<definition::io_directory>
-    : reference_type<definition::detail::io_file_base>
+    template <>
+    struct reference_type<definition::io_directory> : reference_type<definition::io_file>
     {
     };
 
-    template<>
-    struct reference_type<definition::detail::io_handle_base> : identity<std::uint32_t>
+    template <>
+    struct reference_type<definition::io_handle> : identity<std::uint32_t>
     {
     };
 
-    template<>
-    struct reference_type<definition::io_handle>
-    : reference_type<definition::detail::io_handle_base>
-    {
-    };
-
-    template<>
-    struct reference_type<definition::io_pre_created_handle_state>
-    : reference_type<definition::detail::io_handle_base>
-    {
-    };
-
-    template<>
+    template <>
     struct reference_type<definition::io_paradigm> : identity<std::uint32_t>
     {
     };
@@ -214,27 +200,14 @@ namespace traits
     {
     };
 
-    template<>
-    struct reference_param_type<definition::io_file>
-    : otf2::traits::identity<definition::detail::io_file_base>
+    template <typename T>
+    struct reference_param_type<definition::property<T>> : otf2::traits::identity<T>
     {
     };
 
-    template<>
-    struct reference_param_type<definition::io_directory>
-    : otf2::traits::identity<definition::detail::io_file_base>
-    {
-    };
-
-    template<>
-    struct reference_param_type<definition::io_handle>
-    : otf2::traits::identity<definition::detail::io_handle_base>
-    {
-    };
-
-    template<>
+    template <>
     struct reference_param_type<definition::io_pre_created_handle_state>
-    : otf2::traits::identity<definition::detail::io_handle_base>
+    : otf2::traits::identity<definition::io_handle>
     {
     };
 }

@@ -404,66 +404,62 @@ namespace writer
             if (data.has_parent())
             {
                 check(OTF2_GlobalDefWriter_WriteIoHandle(
-                            wrt, data.ref(), data.name().ref(), data.file().ref(),
-                            data.paradigm().ref(),
-                            static_cast<OTF2_IoHandleFlag>(data.io_handle_flag()),
-                            data.comm().ref(), data.parent().ref()),
-                        "Couldn't write to global definitions writer");
+                          wrt, data.ref(), data.name().ref(), data.file().ref(),
+                          data.paradigm().ref(),
+                          static_cast<OTF2_IoHandleFlag>(data.io_handle_flag()), data.comm().ref(),
+                          data.parent().ref()),
+                      "Couldn't write to global definitions writer");
             }
             else
             {
                 check(OTF2_GlobalDefWriter_WriteIoHandle(
-                            wrt, data.ref(), data.name().ref(), data.file().ref(),
-                            data.paradigm().ref(),
-                            static_cast<OTF2_IoHandleFlag>(data.io_handle_flag()),
-                            data.comm().ref(),
-                            otf2::reference<otf2::definition::io_handle>::undefined()),
-                        "Couldn't write to global definitions writer");
+                          wrt, data.ref(), data.name().ref(), data.file().ref(),
+                          data.paradigm().ref(),
+                          static_cast<OTF2_IoHandleFlag>(data.io_handle_flag()), data.comm().ref(),
+                          otf2::reference<otf2::definition::io_handle>::undefined()),
+                      "Couldn't write to global definitions writer");
             }
         }
 
         void store(const otf2::definition::io_paradigm& data)
         {
             check(OTF2_GlobalDefWriter_WriteIoParadigm(
-                        wrt, data.ref(), data.identification().ref(),
-                        data.name().ref(),
-                        static_cast<OTF2_IoParadigmClass>(data.paradigm_class()),
-                        static_cast<OTF2_IoParadigmFlag>(data.paradigm_flags()),
-                        data.num_properties(),
-                        NULL, NULL, NULL),  //TODO: we doesn't have these arguments.
-                    "Couldn't write to global definition writer");
+                      wrt, data.ref(), data.identification().ref(), data.name().ref(),
+                      static_cast<OTF2_IoParadigmClass>(data.paradigm_class()),
+                      static_cast<OTF2_IoParadigmFlag>(data.paradigm_flags()),
+                      data.num_properties(), NULL, NULL,
+                      NULL), // TODO: we doesn't have these arguments.
+                  "Couldn't write to global definition writer");
         }
 
-        void store(const otf2::definition::io_file& data)
+        void store(const otf2::definition::io_regular_file& data)
         {
-            check(OTF2_GlobalDefWriter_WriteIoRegularFile(
-                      wrt, data.ref(), data.name().ref(), data.scope().ref()),
-                    "Couldn't write to global definitions writer");
+            check(OTF2_GlobalDefWriter_WriteIoRegularFile(wrt, data.ref(), data.name().ref(),
+                                                          data.scope().ref()),
+                  "Couldn't write to global definitions writer");
         }
 
         void store(const otf2::definition::io_directory& data)
         {
-            check(OTF2_GlobalDefWriter_WriteIoDirectory(
-                        wrt, data.ref(), data.name().ref(), data.scope().ref()),
-                    "Couldn't write to global definitions writer");
+            check(OTF2_GlobalDefWriter_WriteIoDirectory(wrt, data.ref(), data.name().ref(),
+                                                        data.scope().ref()),
+                  "Couldn't write to global definitions writer");
         }
 
         void store(const otf2::definition::io_pre_created_handle_state& data)
         {
             check(OTF2_GlobalDefWriter_WriteIoPreCreatedHandleState(
-                        wrt, data.ref(),
-                        static_cast<OTF2_IoAccessMode>(data.access_mode()),
-                        static_cast<OTF2_IoStatusFlag>(data.status_flags())),
-                    "Couldn't write to global definitions writer");
+                      wrt, data.handle().ref(), static_cast<OTF2_IoAccessMode>(data.access_mode()),
+                      static_cast<OTF2_IoStatusFlag>(data.status_flags())),
+                  "Couldn't write to global definitions writer");
         }
 
         void store(const otf2::definition::io_file_property& data)
         {
             check(OTF2_GlobalDefWriter_WriteIoFileProperty(
-                        wrt, data.def().ref(), data.name().ref(),
-                        static_cast<OTF2_Type>(data.type()),
-                        static_cast<OTF2_AttributeValue>(data.value())),
-                    "Couldn't write to global definitions writer");
+                      wrt, data.def().ref(), data.name().ref(), static_cast<OTF2_Type>(data.type()),
+                      static_cast<OTF2_AttributeValue>(data.value())),
+                  "Couldn't write to global definitions writer");
         }
 
         template <typename Definiton>
@@ -661,9 +657,9 @@ namespace writer
             io_handles_.add_definition(std::move(data));
         }
 
-        void write(otf2::definition::io_file data)
+        void write(otf2::definition::io_regular_file data)
         {
-            io_files_.add_definition(std::move(data));
+            io_regular_files_.add_definition(std::move(data));
         }
 
         void write(otf2::definition::io_directory data)
@@ -701,7 +697,7 @@ namespace writer
         }
 
     public:
-        ~global() //TODO
+        ~global()
         {
             // call real writes in correct order
             store(clock_properties_);
@@ -732,6 +728,11 @@ namespace writer
 
             store(metric_members_);
             store(metric_classes_, metric_instances_);
+
+            store(io_paradigms_);
+            store(io_handles_);
+            store(io_pre_created_handles_);
+            store(io_directories_, io_regular_files_);
 
             store(markers_);
         }
@@ -777,10 +778,11 @@ namespace writer
         otf2::definition::container<otf2::definition::marker> markers_;
 
         otf2::definition::container<otf2::definition::io_handle> io_handles_;
-        otf2::definition::container<otf2::definition::io_file> io_files_;
+        otf2::definition::container<otf2::definition::io_regular_file> io_regular_files_;
         otf2::definition::container<otf2::definition::io_directory> io_directories_;
         otf2::definition::container<otf2::definition::io_paradigm> io_paradigms_;
-        otf2::definition::container<otf2::definition::io_pre_created_handle_state> io_pre_created_handles_;
+        otf2::definition::container<otf2::definition::io_pre_created_handle_state>
+            io_pre_created_handles_;
         otf2::definition::container<otf2::definition::io_file_property> io_file_properties_;
 
         otf2::definition::clock_properties clock_properties_;

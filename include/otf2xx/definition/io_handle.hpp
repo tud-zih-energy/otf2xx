@@ -39,11 +39,10 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/string.hpp>
 #include <otf2xx/definition/io_paradigm.hpp>
+#include <otf2xx/definition/string.hpp>
 
 #include <otf2xx/definition/detail/base.hpp>
-#include <otf2xx/definition/detail/io_handle_base.hpp>
 #include <otf2xx/definition/detail/io_handle_impl.hpp>
 
 namespace otf2
@@ -60,22 +59,17 @@ namespace definition
     public:
         using io_handle_flag_type = impl_type::io_handle_flag_type;
 
-        io_handle(otf2::reference<detail::io_handle_base> ref,
-                  const otf2::definition::string& name,
+        io_handle(otf2::reference<io_handle> ref, const otf2::definition::string& name,
                   const otf2::definition::io_file& file,
-                  const otf2::definition::io_paradigm& paradigm,
-                  io_handle_flag_type handle_flag,
-                  const otf2::definition::comm& comm,
-                  const otf2::definition::io_handle& parent)
+                  const otf2::definition::io_paradigm& paradigm, io_handle_flag_type handle_flag,
+                  const otf2::definition::comm& comm, const otf2::definition::io_handle& parent)
         : base(new impl_type(ref, name, file, paradigm, handle_flag, comm, parent.get()))
         {
         }
 
-        io_handle(otf2::reference<detail::io_handle_base> ref,
-                  const otf2::definition::string& name,
+        io_handle(otf2::reference<io_handle> ref, const otf2::definition::string& name,
                   const otf2::definition::io_file& file,
-                  const otf2::definition::io_paradigm& paradigm,
-                  io_handle_flag_type handle_flag,
+                  const otf2::definition::io_paradigm& paradigm, io_handle_flag_type handle_flag,
                   const otf2::definition::comm& comm)
         : base(new impl_type(ref, name, file, paradigm, handle_flag, comm))
         {
@@ -157,9 +151,8 @@ namespace definition
             assert(this->is_valid());
             return data_->parent();
         }
-
     };
 }
-}  // namespace otf2::definition
+} // namespace otf2::definition
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_IO_HANDLE_HPP

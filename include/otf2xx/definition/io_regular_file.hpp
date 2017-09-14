@@ -32,24 +32,27 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_HANDLE_BASE_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_HANDLE_BASE_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_IO_REGULAR_FILE_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_IO_REGULAR_FILE_HPP
+
+#include <otf2xx/definition/io_file.hpp>
 
 namespace otf2
 {
 namespace definition
 {
-    namespace detail
+    class io_regular_file : public io_file
     {
-        /**
-         * \brief Dummy class to have io handles and io handle pre created
-         * states in same id space
-         */
-        class io_handle_base
-        {
-        };
-    }
-}
-} // namespace otf2::definition::detail
+    public:
+        using io_file::io_file;
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_HANDLE_BASE_HPP
+        static const io_regular_file& undefined()
+        {
+            static io_regular_file undef(io_file::undefined());
+            return undef;
+        }
+    };
+}
+} // namespace otf2::definition
+
+#endif // INCLUDE_OTF2XX_DEFINITIONS_IO_REGULAR_FILE_HPP

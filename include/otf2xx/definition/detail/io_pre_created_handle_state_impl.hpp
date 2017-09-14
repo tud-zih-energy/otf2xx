@@ -56,43 +56,35 @@ namespace definition
             using io_access_mode_type = otf2::common::io_access_mode_type;
             using io_status_flag_type = otf2::common::io_status_flag_type;
 
-            io_pre_created_handle_state_impl(otf2::reference<io_handle_base> ref,
-            //io_pre_created_handle_state_impl(const otf2::definition::io_handle& handle,
-                                             io_access_mode_type mode,
-                                             io_status_flag_type flags,
+            io_pre_created_handle_state_impl(const otf2::definition::io_handle& handle,
+                                             io_access_mode_type mode, io_status_flag_type flags,
                                              int retain_count = 0)
-            //: impl_base(retain_count), handle_(handle), access_mode_(mode), status_flags_(flags)
-            : impl_base(retain_count), ref_(ref), access_mode_(mode), status_flags_(flags)
+            : impl_base(retain_count), handle_(handle), access_mode_(mode), status_flags_(flags)
             {
             }
 
             // no implicit copy, see duplicate()
             io_pre_created_handle_state_impl(const io_pre_created_handle_state_impl&) = delete;
-            io_pre_created_handle_state_impl& operator=(const io_pre_created_handle_state_impl&) = delete;
+            io_pre_created_handle_state_impl&
+            operator=(const io_pre_created_handle_state_impl&) = delete;
 
             io_pre_created_handle_state_impl(io_pre_created_handle_state_impl&&) = default;
-            io_pre_created_handle_state_impl& operator=(io_pre_created_handle_state_impl&&) = default;
+            io_pre_created_handle_state_impl&
+            operator=(io_pre_created_handle_state_impl&&) = default;
 
             static io_pre_created_handle_state_impl* undefined()
             {
                 static io_pre_created_handle_state_impl undef(
-                        otf2::reference<io_handle_base>::undefined(),
-                        //otf2::definition::io_handle::undefined(),
-                        io_access_mode_type::read_only,
-                        io_status_flag_type::none);
+                    otf2::definition::io_handle::undefined(), io_access_mode_type::read_only,
+                    io_status_flag_type::none);
 
                 return &undef;
             }
 
-            otf2::reference<io_handle_base> ref() const
+            const otf2::definition::io_handle& handle() const
             {
-                return ref_;
+                return handle_;
             }
-
-            //const otf2::definition::io_handle& handle() const
-            //{
-                //return handle_;
-            //}
 
             io_access_mode_type access_mode() const
             {
@@ -105,8 +97,7 @@ namespace definition
             }
 
         private:
-            otf2::reference<io_handle_base> ref_;
-            //otf2::definition::io_handle handle_;
+            otf2::definition::io_handle handle_;
             io_access_mode_type access_mode_;
             io_status_flag_type status_flags_;
         };

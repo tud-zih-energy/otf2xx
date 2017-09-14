@@ -115,7 +115,7 @@ namespace definition
          * \brief returns the referenced definition record
          *
          */
-        Definition def() const
+        const Definition& def() const
         {
             assert(this->is_valid());
             return this->data_->def();

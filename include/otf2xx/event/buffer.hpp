@@ -78,6 +78,102 @@ namespace event
             {
             }
 
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_acquire_lock& event)
+            : buffer_node(loc, otf2::common::event_type::io_acquire_lock,
+                          new otf2::event::io_acquire_lock(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_change_status_flag& event)
+            : buffer_node(loc, otf2::common::event_type::io_change_status_flag,
+                          new otf2::event::io_change_status_flag(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_create_handle& event)
+            : buffer_node(loc, otf2::common::event_type::io_create_handle,
+                          new otf2::event::io_create_handle(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_delete_file& event)
+            : buffer_node(loc, otf2::common::event_type::io_delete_file,
+                          new otf2::event::io_delete_file(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_destroy_handle& event)
+            : buffer_node(loc, otf2::common::event_type::io_destroy_handle,
+                          new otf2::event::io_destroy_handle(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_duplicate_handle& event)
+            : buffer_node(loc, otf2::common::event_type::io_duplicate_handle,
+                          new otf2::event::io_duplicate_handle(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_operation_begin& event)
+            : buffer_node(loc, otf2::common::event_type::io_operation_begin,
+                          new otf2::event::io_operation_begin(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_operation_cancelled& event)
+            : buffer_node(loc, otf2::common::event_type::io_operation_cancelled,
+                          new otf2::event::io_operation_cancelled(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_operation_complete& event)
+            : buffer_node(loc, otf2::common::event_type::io_operation_complete,
+                          new otf2::event::io_operation_complete(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_operation_issued& event)
+            : buffer_node(loc, otf2::common::event_type::io_operation_issued,
+                          new otf2::event::io_operation_issued(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_operation_test& event)
+            : buffer_node(loc, otf2::common::event_type::io_operation_test,
+                          new otf2::event::io_operation_test(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_release_lock& event)
+            : buffer_node(loc, otf2::common::event_type::io_release_lock,
+                          new otf2::event::io_release_lock(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc, const otf2::event::io_seek& event)
+            : buffer_node(loc, otf2::common::event_type::io_seek, new otf2::event::io_seek(event))
+            {
+            }
+
+            buffer_node(const otf2::definition::location& loc,
+                        const otf2::event::io_try_lock& event)
+            : buffer_node(loc, otf2::common::event_type::io_try_lock,
+                          new otf2::event::io_try_lock(event))
+            {
+            }
+
             buffer_node(const otf2::definition::location& loc, const otf2::event::leave& event)
             : buffer_node(loc, otf2::common::event_type::leave, new otf2::event::leave(event))
             {
@@ -264,6 +360,62 @@ namespace event
                     delete static_cast<otf2::event::enter*>(event);
                     break;
 
+                case otf2::common::event_type::io_acquire_lock:
+                    delete static_cast<otf2::event::io_acquire_lock*>(event);
+                    break;
+
+                case otf2::common::event_type::io_change_status_flag:
+                    delete static_cast<otf2::event::io_change_status_flag*>(event);
+                    break;
+
+                case otf2::common::event_type::io_create_handle:
+                    delete static_cast<otf2::event::io_create_handle*>(event);
+                    break;
+
+                case otf2::common::event_type::io_delete_file:
+                    delete static_cast<otf2::event::io_delete_file*>(event);
+                    break;
+
+                case otf2::common::event_type::io_destroy_handle:
+                    delete static_cast<otf2::event::io_destroy_handle*>(event);
+                    break;
+
+                case otf2::common::event_type::io_duplicate_handle:
+                    delete static_cast<otf2::event::io_duplicate_handle*>(event);
+                    break;
+
+                case otf2::common::event_type::io_operation_begin:
+                    delete static_cast<otf2::event::io_operation_begin*>(event);
+                    break;
+
+                case otf2::common::event_type::io_operation_cancelled:
+                    delete static_cast<otf2::event::io_operation_cancelled*>(event);
+                    break;
+
+                case otf2::common::event_type::io_operation_complete:
+                    delete static_cast<otf2::event::io_operation_complete*>(event);
+                    break;
+
+                case otf2::common::event_type::io_operation_issued:
+                    delete static_cast<otf2::event::io_operation_issued*>(event);
+                    break;
+
+                case otf2::common::event_type::io_operation_test:
+                    delete static_cast<otf2::event::io_operation_test*>(event);
+                    break;
+
+                case otf2::common::event_type::io_release_lock:
+                    delete static_cast<otf2::event::io_release_lock*>(event);
+                    break;
+
+                case otf2::common::event_type::io_seek:
+                    delete static_cast<otf2::event::io_seek*>(event);
+                    break;
+
+                case otf2::common::event_type::io_try_lock:
+                    delete static_cast<otf2::event::io_try_lock*>(event);
+                    break;
+
                 case otf2::common::event_type::leave:
                     delete static_cast<otf2::event::leave*>(event);
                     break;
@@ -404,6 +556,12 @@ namespace event
                 case otf2::common::event_type::enter:
                     callback_.event(nodes_.front().location,
                                     *static_cast<otf2::event::enter*>(nodes_.front().event));
+                    break;
+
+                case otf2::common::event_type::io_acquire_lock:
+                    callback_.event(
+                        nodes_.front().location,
+                        *static_cast<otf2::event::io_acquire_lock*>(nodes_.front().event));
                     break;
 
                 case otf2::common::event_type::leave:
@@ -568,11 +726,97 @@ namespace event
         {
             add(loc, event);
         }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_acquire_lock& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_change_status_flag& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_create_handle& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_delete_file& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_destroy_handle& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_duplicate_handle& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_operation_begin& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_operation_cancelled& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_operation_complete& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_operation_issued& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_operation_test& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_release_lock& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_seek& event) override
+        {
+            add(loc, event);
+        }
+
+        virtual void event(const otf2::definition::location& loc,
+                           const otf2::event::io_try_lock& event) override
+        {
+            add(loc, event);
+        }
+
         virtual void event(const otf2::definition::location& loc,
                            const otf2::event::leave& event) override
         {
             add(loc, event);
         }
+
         virtual void event(const otf2::definition::location& loc,
                            const otf2::event::measurement& event) override
         {
@@ -842,6 +1086,36 @@ namespace event
         }
 
         virtual void definition(const otf2::definition::location_property& def) override
+        {
+            callback_.definition(def);
+        }
+
+        virtual void definition(const otf2::definition::io_regular_file& def) override
+        {
+            callback_.definition(def);
+        }
+
+        virtual void definition(const otf2::definition::io_directory& def) override
+        {
+            callback_.definition(def);
+        }
+
+        virtual void definition(const otf2::definition::io_paradigm& def) override
+        {
+            callback_.definition(def);
+        }
+
+        virtual void definition(const otf2::definition::io_handle& def) override
+        {
+            callback_.definition(def);
+        }
+
+        virtual void definition(const otf2::definition::io_file_property& def) override
+        {
+            callback_.definition(def);
+        }
+
+        virtual void definition(const otf2::definition::io_pre_created_handle_state& def) override
         {
             callback_.definition(def);
         }

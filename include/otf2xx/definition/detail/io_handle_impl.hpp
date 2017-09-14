@@ -44,9 +44,9 @@
 #include <otf2xx/definition/detail/impl_base.hpp>
 #include <otf2xx/definition/detail/owning_ptr.hpp>
 
-#include <otf2xx/definition/string.hpp>
-#include <otf2xx/definition/io_file.hpp>
 #include <otf2xx/definition/comm.hpp>
+#include <otf2xx/definition/io_file.hpp>
+#include <otf2xx/definition/string.hpp>
 
 namespace otf2
 {
@@ -60,25 +60,20 @@ namespace definition
         public:
             using io_handle_flag_type = otf2::common::io_handle_flag_type;
 
-            io_handle_impl(otf2::reference<io_handle_base> ref,
-                           const otf2::definition::string& name,
+            io_handle_impl(otf2::reference<io_handle> ref, const otf2::definition::string& name,
                            const otf2::definition::io_file& file,
                            const otf2::definition::io_paradigm& paradigm,
-                           io_handle_flag_type handle_flag,
-                           const otf2::definition::comm& comm,
-                           io_handle_impl* parent,
-                           int retain_count = 0)
+                           io_handle_flag_type handle_flag, const otf2::definition::comm& comm,
+                           io_handle_impl* parent, int retain_count = 0)
             : impl_base(retain_count), ref_(ref), name_(name), file_(file), paradigm_(paradigm),
               io_handle_flag_(handle_flag), comm_(comm), parent_(parent)
             {
             }
 
-            io_handle_impl(otf2::reference<io_handle_base> ref,
-                           const otf2::definition::string& name,
+            io_handle_impl(otf2::reference<io_handle> ref, const otf2::definition::string& name,
                            const otf2::definition::io_file& file,
                            const otf2::definition::io_paradigm& paradigm,
-                           io_handle_flag_type handle_flag,
-                           const otf2::definition::comm& comm,
+                           io_handle_flag_type handle_flag, const otf2::definition::comm& comm,
                            int retain_count = 0)
             : impl_base(retain_count), ref_(ref), name_(name), file_(file), paradigm_(paradigm),
               io_handle_flag_(handle_flag), comm_(comm), parent_(nullptr)
@@ -95,17 +90,15 @@ namespace definition
             static io_handle_impl* undefined()
             {
                 static io_handle_impl undef(
-                    otf2::reference<io_handle_base>::undefined(),
-                    otf2::definition::string::undefined(),
+                    otf2::reference<io_handle>::undefined(), otf2::definition::string::undefined(),
                     otf2::definition::io_file::undefined(),
-                    otf2::definition::io_paradigm::undefined(),
-                    io_handle_flag_type::none,
+                    otf2::definition::io_paradigm::undefined(), io_handle_flag_type::none,
                     otf2::definition::comm::undefined());
 
                 return &undef;
             }
 
-            otf2::reference<io_handle_base> ref() const
+            otf2::reference<io_handle> ref() const
             {
                 return ref_;
             }
@@ -144,15 +137,14 @@ namespace definition
             {
                 if (!has_parent())
                 {
-                    make_exception("The io handle '", name().str(),
-                                   "' hasn't got a parent.");
+                    make_exception("The io handle '", name().str(), "' hasn't got a parent.");
                 }
 
                 return parent_.get();
             }
 
         private:
-            otf2::reference<io_handle_base> ref_;
+            otf2::reference<io_handle> ref_;
             otf2::definition::string name_;
             otf2::definition::io_file file_;
             otf2::definition::io_paradigm paradigm_;

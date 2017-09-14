@@ -54,9 +54,7 @@ namespace definition
         class io_file_impl : public impl_base<io_file_impl>
         {
         public:
-
-            io_file_impl(otf2::reference<io_file_base> ref,
-                         const otf2::definition::string& name,
+            io_file_impl(otf2::reference<io_file> ref, const otf2::definition::string& name,
                          const otf2::definition::system_tree_node& scope,
                          std::int64_t retain_count = 0)
             : impl_base(retain_count), ref_(ref), name_(name), scope_(scope)
@@ -72,13 +70,13 @@ namespace definition
 
             static io_file_impl* undefined()
             {
-                static io_file_impl undef(
-                    otf2::reference<io_file_base>::undefined(), string::undefined(),
-                    otf2::definition::system_tree_node::undefined(), 1);
+                static io_file_impl undef(otf2::reference<io_file>::undefined(),
+                                          string::undefined(),
+                                          otf2::definition::system_tree_node::undefined(), 1);
                 return &undef;
             }
 
-            otf2::reference<io_file_base> ref() const
+            otf2::reference<io_file> ref() const
             {
                 return ref_;
             }
@@ -94,7 +92,7 @@ namespace definition
             }
 
         private:
-            otf2::reference<io_file_base> ref_;
+            otf2::reference<io_file> ref_;
             otf2::definition::string name_;
             otf2::definition::system_tree_node scope_;
         };

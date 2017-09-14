@@ -42,7 +42,6 @@
 #include <otf2xx/definition/io_handle.hpp>
 
 #include <otf2xx/definition/detail/base.hpp>
-#include <otf2xx/definition/detail/io_handle_base.hpp>
 #include <otf2xx/definition/detail/io_pre_created_handle_state_impl.hpp>
 
 namespace otf2
@@ -52,29 +51,27 @@ namespace definition
     class io_pre_created_handle_state : public detail::base<io_pre_created_handle_state>
     {
         typedef detail::base<io_pre_created_handle_state> base;
-        typedef typename otf2::traits::definition_impl_type<io_pre_created_handle_state>::type impl_type;
+        typedef typename otf2::traits::definition_impl_type<io_pre_created_handle_state>::type
+            impl_type;
         using base::base;
 
     public:
         using access_mode_type = impl_type::io_access_mode_type;
         using status_flag_type = impl_type::io_status_flag_type;
 
-        io_pre_created_handle_state(otf2::reference<detail::io_handle_base> ref,
-        //io_pre_created_handle_state(const otf2::definition::io_handle& handle,
-                                    access_mode_type mode,
-                                    status_flag_type flags)
-        //: base(new impl_type(handle, mode, flags))
-        : base(new impl_type(ref, mode, flags))
+        io_pre_created_handle_state(const otf2::definition::io_handle& handle,
+                                    access_mode_type mode, status_flag_type flags)
+        : base(new impl_type(handle, mode, flags))
         {
         }
 
         io_pre_created_handle_state() = default;
 
-        //const otf2::definition::io_handle& handle() const
-        //{
-            //assert(this->is_valid());
-            //return data_->handle();
-        //}
+        const otf2::definition::io_handle& handle() const
+        {
+            assert(this->is_valid());
+            return data_->handle();
+        }
 
         access_mode_type access_mode() const
         {

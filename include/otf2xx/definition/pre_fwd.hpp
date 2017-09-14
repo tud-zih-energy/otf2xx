@@ -110,6 +110,7 @@ namespace definition
     class interrupt_generator;
 
     class io_file;
+    class io_regular_file;
     class io_directory;
     class io_handle;
     class io_paradigm;
@@ -145,7 +146,7 @@ namespace definition
     using location_group_property = property<location_group>;
     using system_tree_node_property = property<system_tree_node>;
     using calling_context_property = property<calling_context>;
-    using io_file_property = property<io_file>;
+    using io_file_property = property<io_regular_file>;
 
     class marker;
 
