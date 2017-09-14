@@ -46,6 +46,10 @@ namespace definition
     public:
         using io_file::io_file;
 
+        io_directory(const io_file& def) : io_file(def)
+        {
+        }
+
         static const io_directory& undefined()
         {
             static io_directory undef(io_file::undefined());
