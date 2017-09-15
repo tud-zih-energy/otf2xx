@@ -189,7 +189,7 @@ namespace definition
     /**
      * Specialization for supplement definition, as they don't have a reference
      */
-    template <typename SupplementDefinition, typename RefereeAccess>
+    template <typename SupplementDefinition>
     class supplement_container
     {
     public:
@@ -203,9 +203,6 @@ namespace definition
 
         typedef supplement_container self;
         typedef typename map_type::const_iterator iterator;
-        // typedef typename
-        // otf2::reference<otf2::traits::reference_param_type<SupplementDefinition>>
-        //     key_type;
 
     public:
         supplement_container(const self&) = default;
@@ -217,20 +214,6 @@ namespace definition
         self& operator=(self&&) = default;
 
     public:
-        // const value_type& operator[](key_type key)
-        // {
-        //     auto fit = std::find_if(data.begin(), data.end(), [key](const value_type& v) {
-        //         return RefereeAccess()(v).ref() == key;
-        //     });
-        //
-        //     if (fit == data.end())
-        //     {
-        //         throw std::out_of_range("Couldn't find requested definition");
-        //     }
-        //
-        //     return *fit;
-        // }
-
         template <typename... Args>
         const value_type& emplace(Args... args)
         {
@@ -273,38 +256,15 @@ namespace definition
         map_type data;
     };
 
-    namespace detail
-    {
-        template <typename Definition>
-        struct PropertyAccessor
-        {
-            const Definition& operator()(const otf2::definition::property<Definition>& p)
-            {
-                return p.def();
-            }
-        };
-
-        struct IoHandleAccessor
-        {
-            const otf2::definition::io_handle&
-            operator()(const otf2::definition::io_pre_created_handle_state& p)
-            {
-                return p.handle();
-            }
-        };
-    }
-
     template <>
     class container<otf2::definition::io_pre_created_handle_state>
-    : public supplement_container<otf2::definition::io_pre_created_handle_state,
-                                  detail::IoHandleAccessor>
+    : public supplement_container<otf2::definition::io_pre_created_handle_state>
     {
     };
 
     template <typename Definition>
     class container<otf2::definition::property<Definition>>
-    : public supplement_container<otf2::definition::property<Definition>,
-                                  detail::PropertyAccessor<Definition>>
+    : public supplement_container<otf2::definition::property<Definition>>
     {
     public:
         static_assert(otf2::traits::is_definition<Definition>::value,
