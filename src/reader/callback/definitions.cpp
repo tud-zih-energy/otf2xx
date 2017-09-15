@@ -682,7 +682,7 @@ namespace reader
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
 
                     const auto& self = reader->io_file_properties().emplace(
-                        reader->io_regular_files()[ioFile], reader->strings()[name],
+                        reader->io_files()[ioFile], reader->strings()[name],
                         static_cast<otf2::definition::io_file_property::type_type>(type),
                         static_cast<otf2::definition::io_file_property::value_type>(value));
 

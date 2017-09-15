@@ -144,7 +144,7 @@ namespace definition
     using location_group_property = property<location_group>;
     using system_tree_node_property = property<system_tree_node>;
     using calling_context_property = property<calling_context>;
-    using io_file_property = property<io_regular_file>;
+    using io_file_property = property<io_file>;
 
     class marker;
 
