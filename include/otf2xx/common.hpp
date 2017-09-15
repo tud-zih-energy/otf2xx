@@ -35,6 +35,8 @@
 #ifndef INCLUDE_OTF2XX_COMMON_HPP
 #define INCLUDE_OTF2XX_COMMON_HPP
 
+#include <cstdint>
+
 namespace otf2
 {
 namespace common
@@ -43,7 +45,7 @@ namespace common
     /**
      * an enum for representing possible types within events and definitions
      */
-    enum class type
+    enum class type : std::uint8_t
     {
         none,
         uint8,
@@ -72,7 +74,7 @@ namespace common
         io_handle
     };
 
-    enum class system_tree_node_domain
+    enum class system_tree_node_domain : std::uint8_t
     {
         machine,
         shared_memory,
@@ -87,7 +89,7 @@ namespace common
     /**
      * an enum for representing the contants of a group definition
      */
-    enum class group_type
+    enum class group_type : std::uint8_t
     {
         /** a unknown type */
         unknown,
@@ -114,7 +116,7 @@ namespace common
     /**
      * an enum for representing the type of a location
      */
-    enum class location_type
+    enum class location_type : std::uint8_t
     {
         /** unknown */
         unknown,
@@ -126,20 +128,20 @@ namespace common
         metric
     };
 
-    enum class parameter_type
+    enum class parameter_type : std::uint8_t
     {
         string,
         int64,
         uint64
     };
 
-    enum class location_group_type
+    enum class location_group_type : std::uint8_t
     {
         unknown,
         process
     };
 
-    enum class role_type
+    enum class role_type : std::uint8_t
     {
         unknown,
         function,
@@ -209,7 +211,7 @@ namespace common
         none
     };
 
-    enum class paradigm_class_type
+    enum class paradigm_class_type : std::uint8_t
     {
         process,
         thread_fork_join,
@@ -217,7 +219,7 @@ namespace common
         accelerator
     };
 
-    enum class paradigm_property_type
+    enum class paradigm_property_type : std::uint8_t
     {
         comm_name_template,
         rma_win_name_template,
@@ -231,7 +233,7 @@ namespace common
         phase
     };
 
-    enum class collective_type
+    enum class collective_type : std::uint8_t
     {
         barrier,
         broadcast,
@@ -258,7 +260,7 @@ namespace common
         destroy_handle_and_deallocate
     };
 
-    enum class metric_type
+    enum class metric_type : std::uint8_t
     {
         other,
         papi,
@@ -266,7 +268,7 @@ namespace common
         user
     };
 
-    enum class metric_timing
+    enum class metric_timing : std::uint8_t
     {
         start = 0,
         point = 1 << 4,
@@ -277,7 +279,7 @@ namespace common
     /**
      * metric occurence
      */
-    enum class metric_occurence
+    enum class metric_occurence : std::uint8_t
     {
         /** Metric occurs at every region enter and leave. */
         strict,
@@ -293,7 +295,7 @@ namespace common
      *
      * Specifies the scope the values of a metric class are valid for
      */
-    enum class metric_scope
+    enum class metric_scope : std::uint8_t
     {
         /** for a location*/
         location,
@@ -305,20 +307,20 @@ namespace common
         group
     };
 
-    enum class metric_value_property
+    enum class metric_value_property : std::uint8_t
     {
         accumulated = 0,
         absolute = 1,
         relative = 2
     };
 
-    enum class base_type
+    enum class base_type : std::uint8_t
     {
         binary,
         decimal
     };
 
-    enum class metric_mode;
+    enum class metric_mode : std::uint8_t;
 
     template <metric_timing timing, metric_value_property property>
     class both
@@ -327,7 +329,7 @@ namespace common
         static const int value = static_cast<int>(timing) | static_cast<int>(property);
     };
 
-    enum class metric_mode
+    enum class metric_mode : std::uint8_t
     {
         accumulated_start = both<metric_timing::start, metric_value_property::accumulated>::value,
         accumulated_point = both<metric_timing::point, metric_value_property::accumulated>::value,
@@ -407,13 +409,13 @@ namespace common
         shared
     };
 
-    enum class interrupt_generator_mode_type
+    enum class interrupt_generator_mode_type : std::uint8_t
     {
         time,
         count
     };
 
-    enum class io_paradigm_class_type
+    enum class io_paradigm_class_type : std::uint8_t
     {
         serial,
         parallel
@@ -425,12 +427,12 @@ namespace common
         os
     };
 
-    enum class io_paradigm_property_type
+    enum class io_paradigm_property_type : std::uint8_t
     {
         version
     };
 
-    enum class io_access_mode_type
+    enum class io_access_mode_type : std::uint8_t
     {
         read_only,
         write_only,
@@ -444,7 +446,7 @@ namespace common
         none = 0,
         create = 1 << 0,
         truncate = 1 << 1,
-        directory= 1 << 2,
+        directory = 1 << 2,
         exclusive = 1 << 3,
         no_controlling_terminal = 1 << 4,
         no_follow = 1 << 5,
@@ -469,7 +471,7 @@ namespace common
         delete_on_close = 1 << 8
     };
 
-    enum class io_seek_option_type
+    enum class io_seek_option_type : std::uint8_t
     {
         from_start,
         from_current,
@@ -478,7 +480,7 @@ namespace common
         hole
     };
 
-    enum class io_operation_mode_type
+    enum class io_operation_mode_type : std::uint8_t
     {
         read,
         write,
@@ -499,7 +501,7 @@ namespace common
         all_proxy
     };
 
-    enum class mapping_type_type
+    enum class mapping_type_type : std::uint8_t
     {
         string,
         attribute,
@@ -518,7 +520,7 @@ namespace common
         max
     };
 
-    enum class marker_severity_type
+    enum class marker_severity_type : std::uint8_t
     {
         none,
         low,
@@ -526,7 +528,7 @@ namespace common
         high
     };
 
-    enum class marker_scope_type
+    enum class marker_scope_type : std::uint8_t
     {
         global,
         location,
