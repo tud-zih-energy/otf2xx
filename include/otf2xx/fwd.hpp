@@ -48,6 +48,8 @@ class trace_reference_generator;
 
 class attribute_list;
 
+class attribute_value;
+
 } // namespace otf2
 
 #include <otf2xx/definition/fwd.hpp>

@@ -423,12 +423,25 @@ namespace writer
 
         void store(const otf2::definition::io_paradigm& data)
         {
+            std::vector<OTF2_Type> types;
+            std::vector<OTF2_AttributeValue> values;
+
+            types.reserve(data.size());
+            values.reserve(data.size());
+
+            for (const auto& av : data.values())
+            {
+                types.push_back(static_cast<OTF2_Type>(av.type()));
+                values.push_back(av.value());
+            }
+
             check(OTF2_GlobalDefWriter_WriteIoParadigm(
                       wrt, data.ref(), data.identification().ref(), data.name().ref(),
                       static_cast<OTF2_IoParadigmClass>(data.paradigm_class()),
                       static_cast<OTF2_IoParadigmFlag>(data.paradigm_flags()),
-                      data.num_properties(), NULL, NULL,
-                      NULL), // TODO: we doesn't have these arguments.
+                      static_cast<uint8_t>(data.size()),
+                      reinterpret_cast<const OTF2_IoParadigmProperty*>(data.properties().data()),
+                      types.data(), values.data()),
                   "Couldn't write to global definition writer");
         }
 

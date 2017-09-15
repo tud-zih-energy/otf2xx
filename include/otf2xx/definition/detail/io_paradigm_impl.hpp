@@ -43,6 +43,8 @@
 
 #include <otf2xx/definition/string.hpp>
 
+#include <vector>
+
 namespace otf2
 {
 namespace definition
@@ -57,16 +59,16 @@ namespace definition
             using paradigm_flag_type = otf2::common::io_paradigm_flag_type;
             using paradigm_property_type = otf2::common::io_paradigm_property_type;
 
-            io_paradigm_impl(otf2::reference<io_paradigm> ref, 
+            io_paradigm_impl(otf2::reference<io_paradigm> ref,
                              const otf2::definition::string& identification,
                              const otf2::definition::string& name,
-                             paradigm_class_type paradigmClass,
-                             paradigm_flag_type paradigmFlags,
-                             std::uint8_t numberOfProperties,
+                             paradigm_class_type paradigmClass, paradigm_flag_type paradigmFlags,
+                             const std::vector<paradigm_property_type>& properties,
+                             const std::vector<otf2::attribute_value>& values,
                              std::int64_t retain_count = 0)
             : impl_base(retain_count), ref_(ref), identification_(identification), name_(name),
               paradigm_class_(paradigmClass), paradigm_flags_(paradigmFlags),
-              number_of_properties_(numberOfProperties)
+              properties_(properties), values_(values)
             {
             }
 
@@ -79,9 +81,9 @@ namespace definition
 
             static io_paradigm_impl* undefined()
             {
-                static io_paradigm_impl undef(reference<io_paradigm>::undefined(), string::undefined(),
-                                              string::undefined(), paradigm_class_type::serial,
-                                              paradigm_flag_type::none, 0);
+                static io_paradigm_impl undef(
+                    reference<io_paradigm>::undefined(), string::undefined(), string::undefined(),
+                    paradigm_class_type::serial, paradigm_flag_type::none, {}, {}, 1);
                 return &undef;
             }
 
@@ -110,9 +112,19 @@ namespace definition
                 return paradigm_flags_;
             }
 
-            std::uint8_t num_properties() const
+            std::size_t size() const
             {
-                return number_of_properties_;
+                return values_.size();
+            }
+
+            const std::vector<paradigm_property_type>& properties() const
+            {
+                return properties_;
+            }
+
+            const std::vector<otf2::attribute_value>& values() const
+            {
+                return values_;
             }
 
         private:
@@ -121,7 +133,8 @@ namespace definition
             otf2::definition::string name_;
             paradigm_class_type paradigm_class_;
             paradigm_flag_type paradigm_flags_;
-            std::uint8_t number_of_properties_;
+            std::vector<otf2::common::io_paradigm_property_type> properties_;
+            std::vector<otf2::attribute_value> values_;
         };
     }
 }

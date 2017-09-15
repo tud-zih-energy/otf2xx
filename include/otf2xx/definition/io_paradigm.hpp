@@ -63,11 +63,12 @@ namespace definition
         // TODO: missing arguments
         io_paradigm(otf2::reference<otf2::definition::io_paradigm> ref,
                     const otf2::definition::string& identification,
-                    const otf2::definition::string& name,
-                    paradigm_class_type paradigmClass,
+                    const otf2::definition::string& name, paradigm_class_type paradigmClass,
                     paradigm_flag_type paradigmFlags,
-                    std::uint8_t numberOfProperties)
-        : base(new impl_type(ref, identification, name, paradigmClass, paradigmFlags, numberOfProperties))
+                    const std::vector<paradigm_property_type>& properties,
+                    const std::vector<otf2::attribute_value>& values)
+        : base(new impl_type(ref, identification, name, paradigmClass, paradigmFlags, properties,
+                             values))
         {
         }
 
@@ -97,10 +98,22 @@ namespace definition
             return data_->paradigm_flags();
         }
 
-        std::uint8_t num_properties() const
+        std::size_t size() const
         {
             assert(this->is_valid());
-            return data_->num_properties();
+            return data_->size();
+        }
+
+        const std::vector<paradigm_property_type>& properties() const
+        {
+            assert(this->is_valid());
+            return data_->properties();
+        }
+
+        const std::vector<otf2::attribute_value>& values() const
+        {
+            assert(this->is_valid());
+            return data_->values();
         }
     };
 }

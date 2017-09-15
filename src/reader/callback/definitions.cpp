@@ -46,6 +46,7 @@
 #include <otf2/OTF2_GeneralDefinitions.h>
 
 #include <memory>
+#include <vector>
 
 namespace otf2
 {
@@ -662,13 +663,23 @@ namespace reader
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
 
+                    std::vector<otf2::common::io_paradigm_property_type> props;
+                    std::vector<otf2::attribute_value> vals;
+
+                    for (uint8_t i = 0; i < numberOfProperties; ++i)
+                    {
+                        props.push_back(
+                            static_cast<otf2::common::io_paradigm_property_type>(properties[i]));
+                        vals.emplace_back(static_cast<otf2::common::type>(types[i]), values[i]);
+                    }
+
                     reader->io_paradigms().add_definition(
                         { self, reader->strings()[identification], reader->strings()[name],
                           static_cast<otf2::definition::io_paradigm::paradigm_class_type>(
                               ioParadigmClass),
                           static_cast<otf2::definition::io_paradigm::paradigm_flag_type>(
                               ioParadigmFlags),
-                          numberOfProperties });
+                          props, vals });
 
                     reader->callback().definition(reader->io_paradigms()[self]);
 
