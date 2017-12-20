@@ -238,6 +238,9 @@ namespace writer
             case scope_type::group:
                 scope = data.group_scope().ref();
                 break;
+
+            default:
+                make_exception("Unsupported scope type given");
             }
 
             check(OTF2_GlobalDefWriter_WriteMetricInstance(
@@ -419,7 +422,7 @@ namespace writer
                         return static_cast<bool>(it) ? it->ref().get() : max_ref;
                     },
                     [this](auto& it) {
-                        store(*it);
+                        this->store(*it);
                         ++it;
                     },
                     iters);

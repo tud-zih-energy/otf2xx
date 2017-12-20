@@ -38,6 +38,7 @@
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
+#include <otf2xx/attribute_value.hpp>
 
 #include <otf2xx/definition/detail/impl_base.hpp>
 
@@ -63,7 +64,13 @@ namespace definition
 
             property_impl(const Definition& def, const otf2::definition::string& name,
                           type_type type, value_type value, std::int64_t retain_count = 0)
-            : base(retain_count), def_(def), name_(name), type_(type), value_(value)
+            : base(retain_count), def_(def), name_(name), value_(type, value)
+            {
+            }
+
+            property_impl(const Definition& def, const otf2::definition::string& name,
+                          const otf2::attribute_value& value, std::int64_t retain_count = 0)
+                    : base(retain_count), def_(def), name_(name), value_(value)
             {
             }
 
@@ -77,7 +84,7 @@ namespace definition
             static property_impl* undefined()
             {
                 static property_impl undef(Definition::undefined(), string::undefined(),
-                                           string::undefined(), 1);
+                                           otf2::attribute_value());
                 return &undef;
             }
 
@@ -88,12 +95,12 @@ namespace definition
 
             type_type type() const
             {
-                return type_;
+                return value_.type();
             }
 
             value_type value() const
             {
-                return value_;
+                return value_.value();
             }
 
             const Definition& def() const
@@ -109,8 +116,7 @@ namespace definition
         private:
             Definition def_;
             otf2::definition::string name_;
-            type_type type_;
-            value_type value_;
+            otf2::attribute_value value_;
         };
     }
 }

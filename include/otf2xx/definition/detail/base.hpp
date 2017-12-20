@@ -216,6 +216,11 @@ namespace definition
                 return *(data_);
             }
 
+            weak_ref<Def> get_weak_ref() const
+            {
+                return { *this };
+            }
+
         protected:
             Impl* data_;
         };

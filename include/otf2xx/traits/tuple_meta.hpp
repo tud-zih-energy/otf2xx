@@ -65,7 +65,7 @@ namespace traits
     {
         return reduce_tuple_helper<Access, Reduce, std::tuple<TupleArgs...>,
                                    std::tuple_size<std::tuple<TupleArgs...>>::value - 1>()(a, r, t);
-    };
+    }
 
     template <typename Access, typename F, typename Tuple, unsigned N, unsigned Min>
     struct apply_to_tuple_min_helper
