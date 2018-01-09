@@ -29,19 +29,6 @@ matrix:
             - cmake-data
           sources: *sources
     - os: linux
-      env: CXX="clang++" CC="clang"
-      compiler: clang
-      addons:
-        apt:
-          packages:
-            - clang
-            - g++-5
-            - cmake
-            - cmake-data
-          sources:
-            - llvm-toolchain-trusty
-            - ubuntu-toolchain-r-test
-    - os: linux
       env: CXX="clang++-4.0" CC="clang-4.0"
       compiler: clang
       addons:
@@ -54,6 +41,20 @@ matrix:
           sources:
             - llvm-toolchain-trusty-4.0
             - ubuntu-toolchain-r-test
+    - os: linux
+      env: CXX="clang++-5.0" CC="clang-5.0"
+      compiler: clang
+      addons:
+        apt:
+          packages:
+            - clang-5.0
+            - g++-5
+            - cmake
+            - cmake-data
+          sources:
+            - llvm-toolchain-trusty-5.0
+            - ubuntu-toolchain-r-test
+            - george-edison55-precise-backports
     - os: osx
       osx_image: xcode7.3
     - os: osx
