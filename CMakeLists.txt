@@ -31,12 +31,142 @@
 
 project(otf2xx)
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
-include(OTF2XX.cmake)
+set(otf2xx_VERSION 1.0)
 
-include(CTest)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake;${CMAKE_MODULE_PATH}")
+find_package(OTF2 8.0.1 EXACT REQUIRED)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
+set(OTF2XX_CHRONO_DURATION_TYPE picoseconds CACHE STRING "The used underlying type for otf2::chrono::duration.")
+set_property(CACHE OTF2XX_CHRONO_DURATION_TYPE PROPERTY STRINGS "nanoseconds" "picoseconds")
+if(${OTF2XX_CHRONO_DURATION_TYPE} STREQUAL "nanoseconds" OR ${OTF2XX_CHRONO_DURATION_TYPE} STREQUAL "picoseconds")
+    message(STATUS "OTF2xx uses '${OTF2XX_CHRONO_DURATION_TYPE}' as chrono duration type.")
+else()
+    message(SEND_ERROR "OTF2XX_CHRONO_DURATION_TYPE must be either nanoseconds or picoseconds")
+endif()
 
-add_subdirectory(tests)
+option(OTF2XX_WITH_MPI "Whether OTF2xx should be build with MPI support or not. (Requires Boost.MPI)" OFF)
+
+option(OTF2XX_BUILD_STATIC "Whether OTF2xx should be build static or not." ON)
+
+add_library(otf2xx-core INTERFACE)
+target_include_directories(otf2xx-core
+    INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
+target_include_directories(otf2xx-core SYSTEM
+    INTERFACE
+        ${OTF2_INCLUDE_DIRS}
+)
+target_link_libraries(otf2xx-core
+    INTERFACE
+        ${OTF2_LIBRARIES}
+)
+target_compile_features(otf2xx-core
+    INTERFACE
+        cxx_auto_type
+        cxx_constexpr
+        cxx_decltype
+        cxx_decltype_auto
+        cxx_defaulted_functions
+        cxx_defaulted_move_initializers
+        cxx_delegating_constructors
+        cxx_deleted_functions
+        cxx_explicit_conversions
+        cxx_generalized_initializers
+        cxx_generic_lambdas
+        cxx_inheriting_constructors
+        cxx_lambdas
+        cxx_lambda_init_captures
+        cxx_noexcept
+        cxx_nullptr
+        cxx_override
+        cxx_range_for
+        cxx_return_type_deduction
+        cxx_rvalue_references
+        cxx_trailing_return_types
+        cxx_user_literals
+        cxx_variadic_templates
+        cxx_template_template_parameters
+)
+target_compile_definitions(otf2xx-core
+    INTERFACE
+        OTF2XX_CHRONO_DURATION_TYPE=${OTF2XX_CHRONO_DURATION_TYPE}
+)
+
+if(OTF2XX_WITH_MPI)
+    message(STATUS "Building OTF2xx with MPI support.")
+    target_compile_definitions(otf2xx-core
+        INTERFACE
+            OTF2XX_HAS_MPI
+    )
+    target_link_libraries(otf2xx-core INTERFACE Boost::mpi)
+endif()
+
+set(READER_SRCS src/reader/callback/definitions.cpp src/reader/callback/events.cpp)
+if(OTF2XX_BUILD_STATIC)
+    add_library(otf2xx-reader STATIC ${READER_SRCS})
+else()
+    add_library(otf2xx-reader SHARED ${READER_SRCS})
+endif()
+target_link_libraries(otf2xx-reader
+    PUBLIC
+        otf2xx::Core)
+
+add_library(otf2xx-writer INTERFACE)
+target_link_libraries(otf2xx-writer
+    INTERFACE
+        otf2xx::Core
+)
+
+add_library(otf2xx-all INTERFACE)
+target_link_libraries(otf2xx-all
+    INTERFACE
+        otf2xx::Core
+        otf2xx::Reader
+        otf2xx::Writer
+)
+
+add_library(otf2xx::otf2xx ALIAS otf2xx-all)
+add_library(otf2xx::Core ALIAS otf2xx-core)
+add_library(otf2xx::Reader ALIAS otf2xx-reader)
+add_library(otf2xx::Writer ALIAS otf2xx-writer)
+
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    target_compile_options(otf2xx-core
+        INTERFACE
+            -Wall -Wextra -pedantic
+    )
+
+    install(DIRECTORY
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/otf2xx
+        DESTINATION include
+    )
+    install(TARGETS otf2xx-core otf2xx-all otf2xx-reader otf2xx-writer EXPORT otf2xxTargets
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include
+    )
+    install(EXPORT otf2xxTargets
+        FILE otf2xxTargets.cmake
+        NAMESPACE otf2xx::
+        DESTINATION lib/cmake/otf2xx
+    )
+
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_File("otf2xxConfigVersion.cmake"
+        VERSION ${otf2xx_VERSION}
+        COMPATIBILITY SameMajorVersion
+    )
+    install(FILES "otf2xxConfig.cmake" "${CMAKE_CURRENT_BINARY_DIR}/otf2xxConfigVersion.cmake"
+        DESTINATION lib/cmake/otf2xx
+    )
+
+    include(CTest)
+    add_subdirectory(tests)
+else()
+    set_target_properties(nitro-env nitro-jiffy PROPERTIES EXCLUDE_FROM_ALL TRUE)
+endif()

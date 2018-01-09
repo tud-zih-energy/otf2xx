@@ -81,9 +81,10 @@ namespace chrono
     typedef std::chrono::hours hours;
 
     /**
-     * \brief otf2::chrono::duration defaults to picoseconds
+     * \brief otf2::chrono::duration defaults to nanoseconds or picoseconds
+     * This can be configured using the build system.
      */
-    typedef nanoseconds duration;
+    typedef OTF2XX_CHRONO_DURATION_TYPE duration;
 
     /**
      * \brief convert between durations
@@ -105,8 +106,8 @@ namespace chrono
     {
         return std::chrono::duration_cast<ToDuration>(dtn);
     }
-}
-} // namespace otf2::chrono
+} // namespace chrono
+} // namespace otf2
 
 namespace std
 {
@@ -149,8 +150,8 @@ namespace chrono
     {
         return s << dur.count() << "h";
     }
-}
-} // namespace std::chrono
+} // namespace chrono
+} // namespace std
 
 // make it posible to serialize otf2::chrono::time_point
 namespace boost

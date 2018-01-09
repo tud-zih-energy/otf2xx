@@ -89,11 +89,10 @@ namespace chrono
             // WARNING: Be careful, when changing clock::period::den.
             // You will have to think about every calculations twice, as there
             // might be narrowing and rounding anywhere.
-            // We also assumed here, thatwe have picoseconds resolution and the
+            // We also assumed here, that we have nanoseconds or picoseconds resolution and the
             // input resolution is about nanoseconds or a few hundred
             // picoseconds.
             // These assumptions have to be double checked!
-            static_assert(clock::period::den == 1e9, "Assumed, that we calculate in nanoseconds");
 
             double factor = static_cast<double>(clock::period::den) / ticks_per_second;
 
@@ -132,7 +131,7 @@ namespace chrono
         return otf2::chrono::time_point(
             std::chrono::duration_cast<otf2::chrono::clock::duration>(tp.time_since_epoch()));
     }
-}
-} // namespace otf2::chrono
+} // namespace chrono
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_CHRONO_CONVERT_HPP

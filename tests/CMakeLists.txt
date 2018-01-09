@@ -30,10 +30,11 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 add_executable(enums_test enums_test.cpp)
+target_link_libraries(enums_test PRIVATE otf2xx::Core)
 add_test(enums_test enums_test)
 
 add_executable(writer_test writer_test.cpp)
-target_link_libraries(writer_test PRIVATE ${OTF2_LIBRARIES})
+target_link_libraries(writer_test PRIVATE otf2xx::Writer)
 
 add_test(writer_test writer_test)
 add_test(NAME writer_test_cleanup COMMAND cmake -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace)
