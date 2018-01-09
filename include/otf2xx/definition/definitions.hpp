@@ -52,6 +52,12 @@
 #include <otf2xx/definition/interrupt_generator.hpp>
 #include <otf2xx/definition/source_code_location.hpp>
 
+#include <otf2xx/definition/io_directory.hpp>
+#include <otf2xx/definition/io_handle.hpp>
+#include <otf2xx/definition/io_paradigm.hpp>
+#include <otf2xx/definition/io_pre_created_handle_state.hpp>
+#include <otf2xx/definition/io_regular_file.hpp>
+
 #include <otf2xx/definition/mapping_table.hpp>
 
 #include <otf2xx/definition/metric_class.hpp>

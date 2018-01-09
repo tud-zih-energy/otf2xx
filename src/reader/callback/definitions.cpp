@@ -46,6 +46,7 @@
 #include <otf2/OTF2_GeneralDefinitions.h>
 
 #include <memory>
+#include <vector>
 
 namespace otf2
 {
@@ -469,15 +470,13 @@ namespace reader
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
 
-                    std::size_t self = reader->system_tree_node_properties().size();
+                    const auto& def = reader->system_tree_node_properties().emplace(
+                        reader->system_tree_nodes()[systemTreeNode], reader->strings()[name],
+                        static_cast<otf2::definition::system_tree_node_property::type_type>(type),
+                        static_cast<otf2::definition::system_tree_node_property::value_type>(
+                            value));
 
-                    reader->system_tree_node_properties().add_definition(
-                        { reader->system_tree_nodes()[systemTreeNode], reader->strings()[name],
-                          static_cast<otf2::definition::system_tree_node_property::type_type>(type),
-                          static_cast<otf2::definition::system_tree_node_property::value_type>(
-                              value) });
-
-                    reader->callback().definition(reader->system_tree_node_properties()[self]);
+                    reader->callback().definition(def);
 
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
@@ -488,14 +487,12 @@ namespace reader
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
 
-                    std::size_t self = reader->location_properties().size();
+                    const auto& def = reader->location_properties().emplace(
+                        reader->locations()[location], reader->strings()[name],
+                        static_cast<otf2::definition::location_property::type_type>(type),
+                        static_cast<otf2::definition::location_property::value_type>(value));
 
-                    reader->location_properties().add_definition(
-                        { reader->locations()[location], reader->strings()[name],
-                          static_cast<otf2::definition::location_property::type_type>(type),
-                          static_cast<otf2::definition::location_property::value_type>(value) });
-
-                    reader->callback().definition(reader->location_properties()[self]);
+                    reader->callback().definition(def);
 
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
@@ -507,12 +504,12 @@ namespace reader
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
 
-                    auto self = reader->location_group_properties().emplace(
+                    const auto& def = reader->location_group_properties().emplace(
                         reader->location_groups()[locationGroup], reader->strings()[name],
                         static_cast<otf2::definition::location_group_property::type_type>(type),
                         static_cast<otf2::definition::location_group_property::value_type>(value));
 
-                    reader->callback().definition(std::move(self));
+                    reader->callback().definition(def);
 
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
@@ -523,8 +520,8 @@ namespace reader
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
 
-                    reader->source_code_locations().add_definition(
-                        { self, reader->strings()[file], lineNumber });
+                    reader->source_code_locations().emplace(self, reader->strings()[file],
+                                                            lineNumber);
 
                     reader->callback().definition(reader->source_code_locations()[self]);
 
@@ -564,12 +561,12 @@ namespace reader
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
 
-                    auto self = reader->calling_context_properties().emplace(
+                    const auto& self = reader->calling_context_properties().emplace(
                         reader->calling_contexts()[callingContext], reader->strings()[name],
                         static_cast<otf2::definition::calling_context_property::type_type>(type),
                         static_cast<otf2::definition::calling_context_property::value_type>(value));
 
-                    reader->callback().definition(std::move(self));
+                    reader->callback().definition(self);
 
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
@@ -591,6 +588,136 @@ namespace reader
                           exponent, period });
 
                     reader->callback().definition(reader->interrupt_generators()[self]);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
+                OTF2_CallbackCode io_regular_file(void* userData, OTF2_IoFileRef self,
+                                                  OTF2_StringRef file, OTF2_SystemTreeNodeRef scope)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                    const auto& def = reader->io_regular_files().emplace(
+                        self, reader->strings()[file], reader->system_tree_nodes()[scope]);
+
+                    reader->io_files().add_definition(def);
+
+                    reader->callback().definition(def);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
+                OTF2_CallbackCode io_directory(void* userData, OTF2_IoFileRef self,
+                                               OTF2_StringRef file, OTF2_SystemTreeNodeRef scope)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                    const auto& def = reader->io_directories().emplace(
+                        self, reader->strings()[file], reader->system_tree_nodes()[scope]);
+
+                    reader->io_files().add_definition(def);
+
+                    reader->callback().definition(def);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
+                OTF2_CallbackCode io_handle(void* userData, OTF2_IoHandleRef self,
+                                            OTF2_StringRef name, OTF2_IoFileRef file,
+                                            OTF2_IoParadigmRef ioParadigm,
+                                            OTF2_IoHandleFlag ioHandleFlags, OTF2_CommRef comm,
+                                            OTF2_IoHandleRef parent)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                    if (parent != OTF2_UNDEFINED_IO_HANDLE)
+                    {
+                        reader->io_handles().add_definition(
+                            { self, reader->strings()[name], reader->io_files()[file],
+                              reader->io_paradigms()[ioParadigm],
+                              static_cast<otf2::definition::io_handle::io_handle_flag_type>(
+                                  ioHandleFlags),
+                              reader->comms()[comm], reader->io_handles()[parent] });
+                    }
+                    else
+                    {
+                        reader->io_handles().add_definition(
+                            { self, reader->strings()[name], reader->io_files()[file],
+                              reader->io_paradigms()[ioParadigm],
+                              static_cast<otf2::definition::io_handle::io_handle_flag_type>(
+                                  ioHandleFlags),
+                              reader->comms()[comm] });
+                    }
+
+                    reader->callback().definition(reader->io_handles()[self]);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
+                OTF2_CallbackCode
+                io_paradigm(void* userData, OTF2_IoParadigmRef self, OTF2_StringRef identification,
+                            OTF2_StringRef name, OTF2_IoParadigmClass ioParadigmClass,
+                            OTF2_IoParadigmFlag ioParadigmFlags, uint8_t numberOfProperties,
+                            const OTF2_IoParadigmProperty* properties, const OTF2_Type* types,
+                            const OTF2_AttributeValue* values)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                    std::vector<otf2::common::io_paradigm_property_type> props;
+                    std::vector<otf2::attribute_value> vals;
+
+                    for (uint8_t i = 0; i < numberOfProperties; ++i)
+                    {
+                        props.push_back(
+                            static_cast<otf2::common::io_paradigm_property_type>(properties[i]));
+                        vals.emplace_back(static_cast<otf2::common::type>(types[i]), values[i]);
+                    }
+
+                    reader->io_paradigms().add_definition(
+                        { self, reader->strings()[identification], reader->strings()[name],
+                          static_cast<otf2::definition::io_paradigm::paradigm_class_type>(
+                              ioParadigmClass),
+                          static_cast<otf2::definition::io_paradigm::paradigm_flag_type>(
+                              ioParadigmFlags),
+                          props, vals });
+
+                    reader->callback().definition(reader->io_paradigms()[self]);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
+                OTF2_CallbackCode io_file_property(void* userData, OTF2_IoFileRef ioFile,
+                                                   OTF2_StringRef name, OTF2_Type type,
+                                                   OTF2_AttributeValue value)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                    const auto& self = reader->io_file_properties().emplace(
+                        reader->io_files()[ioFile], reader->strings()[name],
+                        static_cast<otf2::definition::io_file_property::type_type>(type),
+                        static_cast<otf2::definition::io_file_property::value_type>(value));
+
+                    reader->callback().definition(self);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
+                OTF2_CallbackCode io_pre_created_handle_state(void* userData,
+                                                              OTF2_IoHandleRef ioHandle,
+                                                              OTF2_IoAccessMode mode,
+                                                              OTF2_IoStatusFlag statusFlags)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                    const auto& self = reader->io_pre_created_handle_states().emplace(
+                        reader->io_handles()[ioHandle],
+                        static_cast<
+                            otf2::definition::io_pre_created_handle_state::access_mode_type>(mode),
+                        static_cast<
+                            otf2::definition::io_pre_created_handle_state::status_flag_type>(
+                            statusFlags));
+
+                    reader->callback().definition(self);
 
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }

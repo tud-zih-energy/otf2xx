@@ -32,30 +32,31 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_FWD_HPP
-#define INCLUDE_OTF2XX_FWD_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_IO_DIRECTORY_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_IO_DIRECTORY_HPP
+
+#include <otf2xx/definition/io_file.hpp>
 
 namespace otf2
 {
+namespace definition
+{
+    class io_directory : public io_file
+    {
+    public:
+        using io_file::io_file;
 
-template <typename T>
-class reference;
+        io_directory(const io_file& def) : io_file(def)
+        {
+        }
 
-template <typename Definition>
-class reference_generator;
+        static const io_directory& undefined()
+        {
+            static io_directory undef(io_file::undefined());
+            return undef;
+        }
+    };
+}
+} // namespace otf2::definition
 
-class trace_reference_generator;
-
-class attribute_list;
-
-class attribute_value;
-
-} // namespace otf2
-
-#include <otf2xx/definition/fwd.hpp>
-#include <otf2xx/event/fwd.hpp>
-
-#include <otf2xx/reader/fwd.hpp>
-#include <otf2xx/writer/fwd.hpp>
-
-#endif // INCLUDE_OTF2XX_FWD_HPP
+#endif // INCLUDE_OTF2XX_DEFINITIONS_IO_DIRECTORY_HPP

@@ -32,30 +32,63 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_FWD_HPP
-#define INCLUDE_OTF2XX_FWD_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_IO_FILE_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_IO_FILE_HPP
+
+#include <otf2xx/common.hpp>
+#include <otf2xx/fwd.hpp>
+#include <otf2xx/reference.hpp>
+
+#include <otf2xx/definition/string.hpp>
+#include <otf2xx/definition/system_tree_node.hpp>
+
+#include <otf2xx/definition/detail/base.hpp>
+#include <otf2xx/definition/detail/io_file_impl.hpp>
 
 namespace otf2
 {
+namespace definition
+{
+    class io_file : public detail::base<io_file>
+    {
+        typedef detail::base<io_file> base;
+        typedef typename otf2::traits::definition_impl_type<io_file>::type impl_type;
 
-template <typename T>
-class reference;
+        using base::base;
 
-template <typename Definition>
-class reference_generator;
+    public:
+        io_file(otf2::reference<io_file> ref, const otf2::definition::string& name,
+                const otf2::definition::system_tree_node& stn)
+        : base(new impl_type(ref, name, stn))
+        {
+        }
 
-class trace_reference_generator;
+        io_file() = default;
 
-class attribute_list;
+        /**
+         * \brief returns the name of the io_file definition as a string definition
+         *
+         * \returns a \ref string definition containing the name
+         *
+         */
+        const otf2::definition::string& name() const
+        {
+            assert(this->is_valid());
+            return data_->name();
+        }
 
-class attribute_value;
+        /**
+         * \brief returns the scope of the io_file definition
+         *
+         * \returns otf2::definition::system_tree_node
+         */
+        const otf2::definition::system_tree_node& scope() const
+        {
+            assert(this->is_valid());
+            return data_->scope();
+        }
+    };
+}
+} // namespace otf2::definition
 
-} // namespace otf2
-
-#include <otf2xx/definition/fwd.hpp>
-#include <otf2xx/event/fwd.hpp>
-
-#include <otf2xx/reader/fwd.hpp>
-#include <otf2xx/writer/fwd.hpp>
-
-#endif // INCLUDE_OTF2XX_FWD_HPP
+#endif // INCLUDE_OTF2XX_DEFINITIONS_IO_FILE_HPP

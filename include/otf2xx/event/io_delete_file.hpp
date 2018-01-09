@@ -32,30 +32,61 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_FWD_HPP
-#define INCLUDE_OTF2XX_FWD_HPP
+
+#ifndef INCLUDE_OTF2XX_EVENT_IO_DELETE_FILE_HPP
+#define INCLUDE_OTF2XX_EVENT_IO_DELETE_FILE_HPP
+
+#include <otf2xx/common.hpp>
+#include <otf2xx/event/base.hpp>
+
+#include <otf2xx/chrono/chrono.hpp>
+
+#include <otf2xx/definition/detail/weak_ref.hpp>
 
 namespace otf2
 {
+namespace event
+{
 
-template <typename T>
-class reference;
+    class io_delete_file : public base<io_delete_file>
+    {
+    public:
 
-template <typename Definition>
-class reference_generator;
+        io_delete_file(otf2::chrono::time_point timestamp,
+                       const otf2::definition::io_paradigm& ioParadigm,
+                       const otf2::definition::io_file& file)
+        : base<io_delete_file>(timestamp), paradigm_(ioParadigm), file_(file)
+        {
+        }
 
-class trace_reference_generator;
+        io_delete_file(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+                       const otf2::definition::io_paradigm& ioParadigm,
+                       const otf2::definition::io_file& file)
+        : base<io_delete_file>(al, timestamp), paradigm_(ioParadigm), file_(file)
+        {
+        }
 
-class attribute_list;
+        // copy constructor with new timestamp
+        io_delete_file(const otf2::event::io_delete_file& other, otf2::chrono::time_point timestamp)
+        : base<io_delete_file>(timestamp), paradigm_(other.paradigm()), file_(other.file())
+        {
+        }
 
-class attribute_value;
+        otf2::definition::io_paradigm paradigm() const
+        {
+            return paradigm_;
+        }
 
-} // namespace otf2
+        otf2::definition::io_file file() const
+        {
+            return file_;
+        }
 
-#include <otf2xx/definition/fwd.hpp>
-#include <otf2xx/event/fwd.hpp>
+    private:
+        otf2::definition::detail::weak_ref<otf2::definition::io_paradigm> paradigm_;
+        otf2::definition::detail::weak_ref<otf2::definition::io_file> file_;
+    };
+}
+} // namespace otf2::event
 
-#include <otf2xx/reader/fwd.hpp>
-#include <otf2xx/writer/fwd.hpp>
-
-#endif // INCLUDE_OTF2XX_FWD_HPP
+#endif // INCLUDE_OTF2XX_EVENT_IO_DELETE_FILE_HPP

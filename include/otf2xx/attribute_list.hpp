@@ -292,6 +292,28 @@ namespace detail
                   "Couldn't add value to attribute list.");
         }
     };
+
+    template <>
+    struct add_attribute<otf2::definition::attribute::attribute_type::io_file>
+    {
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
+                        const otf2::definition::io_file& value)
+        {
+            check(OTF2_AttributeList_AddIoFileRef(list, attribute.ref(), value.ref()),
+                  "Couldn't add value to attribute list.");
+        }
+    };
+
+    template <>
+    struct add_attribute<otf2::definition::attribute::attribute_type::io_handle>
+    {
+        void operator()(OTF2_AttributeList* list, const otf2::definition::attribute& attribute,
+                        const otf2::definition::io_handle& value)
+        {
+            check(OTF2_AttributeList_AddIoHandleRef(list, attribute.ref(), value.ref()),
+                  "Couldn't add value to attribute list.");
+        }
+    };
 }
 namespace detail
 {
@@ -524,6 +546,26 @@ namespace detail
             check(OTF2_AttributeList_GetUint64(list, attribute.ref(), &res),
                   "Couldn't get value from attribute list.");
             return res;
+        }
+    };
+
+    template <>
+    struct get_attribute<otf2::definition::attribute::attribute_type::io_file>
+    {
+        template <bool Test = false>
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
+        {
+            static_assert(Test, "Not implemented yet.");
+        }
+    };
+
+    template <>
+    struct get_attribute<otf2::definition::attribute::attribute_type::io_handle>
+    {
+        template <bool Test = false>
+        void operator()(OTF2_AttributeList*, const otf2::definition::attribute&)
+        {
+            static_assert(Test, "Not implemented yet.");
         }
     };
 }

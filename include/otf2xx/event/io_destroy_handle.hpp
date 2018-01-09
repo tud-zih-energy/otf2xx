@@ -32,30 +32,54 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_FWD_HPP
-#define INCLUDE_OTF2XX_FWD_HPP
+
+#ifndef INCLUDE_OTF2XX_EVENT_IO_DESTROY_HANDLE_HPP
+#define INCLUDE_OTF2XX_EVENT_IO_DESTROY_HANDLE_HPP
+
+#include <otf2xx/common.hpp>
+#include <otf2xx/event/base.hpp>
+
+#include <otf2xx/chrono/chrono.hpp>
+
+#include <otf2xx/definition/detail/weak_ref.hpp>
 
 namespace otf2
 {
+namespace event
+{
 
-template <typename T>
-class reference;
+    class io_destroy_handle : public base<io_destroy_handle>
+    {
+    public:
 
-template <typename Definition>
-class reference_generator;
+        io_destroy_handle(otf2::chrono::time_point timestamp,
+                          const otf2::definition::io_handle& handle)
+        : base<io_destroy_handle>(timestamp), handle_(handle)
+        {
+        }
 
-class trace_reference_generator;
+        io_destroy_handle(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+                          const otf2::definition::io_handle& handle)
+        : base<io_destroy_handle>(al, timestamp), handle_(handle)
+        {
+        }
 
-class attribute_list;
+        // copy constructor with new timestamp
+        io_destroy_handle(const otf2::event::io_destroy_handle& other, otf2::chrono::time_point timestamp)
+        : base<io_destroy_handle>(timestamp), handle_(other.handle())
+        {
+        }
 
-class attribute_value;
+        otf2::definition::io_handle handle() const
+        {
+            return handle_;
+        }
 
-} // namespace otf2
+    private:
+        otf2::definition::detail::weak_ref<otf2::definition::io_handle> handle_;
+    };
 
-#include <otf2xx/definition/fwd.hpp>
-#include <otf2xx/event/fwd.hpp>
+}
+} // namespace otf2::event
 
-#include <otf2xx/reader/fwd.hpp>
-#include <otf2xx/writer/fwd.hpp>
-
-#endif // INCLUDE_OTF2XX_FWD_HPP
+#endif // INCLUDE_OTF2XX_EVENT_IO_DESTROY_HANDLE_HPP

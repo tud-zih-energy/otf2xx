@@ -44,7 +44,7 @@ std::chrono::high_resolution_clock::time_point get_time(void)
         std::chrono::high_resolution_clock::duration(count++));
 }
 
-int main(int argc, char** argv)
+int main()
 {
     otf2::writer::archive ar("otf2xx_writer_trace", "traces");
 

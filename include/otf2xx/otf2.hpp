@@ -72,6 +72,8 @@
  \li \ref otf2::definition::region
  \li \ref otf2::definition::string
  \li \ref otf2::definition::system_tree_node
+ \li \ref otf2::definition::io_file
+ \li \ref otf2::definition::io_handle
 
  For convenience there is a container class similar to a std::map:
 

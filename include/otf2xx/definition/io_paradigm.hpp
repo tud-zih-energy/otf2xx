@@ -32,8 +32,8 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_PROPERTY_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_PROPERTY_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_IO_PARADIGM_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_IO_PARADIGM_HPP
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
@@ -42,86 +42,81 @@
 #include <otf2xx/definition/string.hpp>
 
 #include <otf2xx/definition/detail/base.hpp>
-#include <otf2xx/definition/detail/property_impl.hpp>
+#include <otf2xx/definition/detail/io_paradigm_impl.hpp>
 
 namespace otf2
 {
 namespace definition
 {
 
-    /**
-     * \brief class for representing property definitions
-     */
-    template <class Definition>
-    class property : public detail::base<property<Definition>>
+    class io_paradigm : public detail::base<io_paradigm>
     {
-        typedef typename detail::base<property<Definition>> base;
-        typedef typename otf2::traits::definition_impl_type<property<Definition>>::type impl_type;
-
+        typedef detail::base<io_paradigm> base;
+        typedef typename otf2::traits::definition_impl_type<io_paradigm>::type impl_type;
         using base::base;
 
-        static_assert(otf2::traits::is_definition<Definition>::value,
-                      "The Definition has to be a otf2::definition.");
-
     public:
-        using type_type = typename impl_type::type_type;
-        using value_type = typename impl_type::value_type;
+        using paradigm_class_type = impl_type::paradigm_class_type;
+        using paradigm_flag_type = impl_type::paradigm_flag_type;
+        using paradigm_property_type = impl_type::paradigm_property_type;
 
-        property(const Definition& def, string name, type_type type, value_type value)
-        : base(new impl_type(def, name, type, value))
+        // TODO: missing arguments
+        io_paradigm(otf2::reference<otf2::definition::io_paradigm> ref,
+                    const otf2::definition::string& identification,
+                    const otf2::definition::string& name, paradigm_class_type paradigmClass,
+                    paradigm_flag_type paradigmFlags,
+                    const std::vector<paradigm_property_type>& properties,
+                    const std::vector<otf2::attribute_value>& values)
+        : base(new impl_type(ref, identification, name, paradigmClass, paradigmFlags, properties,
+                             values))
         {
         }
 
-        property(const Definition& def, string name, const otf2::attribute_value& value)
-        : base(new impl_type(def, name, value))
+        io_paradigm() = default;
+
+        const otf2::definition::string& identification() const
         {
+            assert(this->is_valid());
+            return data_->identification();
         }
 
-        property() = default;
-
-        /**
-         * \brief returns the name of the property
-         *
-         * \returns a \ref string definiton containing the name
-         *
-         */
         const otf2::definition::string& name() const
         {
             assert(this->is_valid());
-            return this->data_->name();
+            return data_->name();
         }
 
-        /**
-         * \brief returns the type of the property
-         *
-         */
-        type_type type() const
+        paradigm_class_type paradigm_class() const
         {
             assert(this->is_valid());
-            return this->data_->type();
+            return data_->paradigm_class();
         }
 
-        /**
-         * \brief returns the value of the property
-         *
-         */
-        value_type value() const
+        paradigm_flag_type paradigm_flags() const
         {
             assert(this->is_valid());
-            return this->data_->value();
+            return data_->paradigm_flags();
         }
 
-        /**
-         * \brief returns the referenced definition record
-         *
-         */
-        const Definition& def() const
+        std::size_t size() const
         {
             assert(this->is_valid());
-            return this->data_->def();
+            return data_->size();
+        }
+
+        const std::vector<paradigm_property_type>& properties() const
+        {
+            assert(this->is_valid());
+            return data_->properties();
+        }
+
+        const std::vector<otf2::attribute_value>& values() const
+        {
+            assert(this->is_valid());
+            return data_->values();
         }
     };
 }
 } // namespace otf2::definition
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_PROPERTY_HPP
+#endif // INCLUDE_OTF2XX_DEFINITIONS_IO_PARADIGM_HPP

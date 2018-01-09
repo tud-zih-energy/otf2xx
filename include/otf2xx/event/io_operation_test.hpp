@@ -32,30 +32,60 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_FWD_HPP
-#define INCLUDE_OTF2XX_FWD_HPP
+#ifndef INCLUDE_OTF2XX_EVENT_IO_OPERATION_TEST_HPP
+#define INCLUDE_OTF2XX_EVENT_IO_OPERATION_TEST_HPP
+
+#include <otf2xx/common.hpp>
+#include <otf2xx/event/base.hpp>
+
+#include <otf2xx/chrono/chrono.hpp>
+
+#include <otf2xx/definition/detail/weak_ref.hpp>
 
 namespace otf2
 {
+namespace event
+{
 
-template <typename T>
-class reference;
+    class io_operation_test : public base<io_operation_test>
+    {
+    public:
 
-template <typename Definition>
-class reference_generator;
+        io_operation_test(otf2::chrono::time_point timestamp,
+                          const otf2::definition::io_handle& handle,
+                          std::uint64_t matchingId)
+        : base<io_operation_test>(timestamp), handle_(handle), matching_id_(matchingId)
+        {
+        }
 
-class trace_reference_generator;
+        io_operation_test(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+                          const otf2::definition::io_handle& handle,
+                          std::uint64_t matchingId)
+        : base<io_operation_test>(al, timestamp), handle_(handle), matching_id_(matchingId)
+        {
+        }
 
-class attribute_list;
+        // copy constructor with new timestamp
+        io_operation_test(const otf2::event::io_operation_test& other, otf2::chrono::time_point timestamp)
+        : base<io_operation_test>(timestamp), handle_(other.handle()), matching_id_(other.matching_id())
+        {
+        }
 
-class attribute_value;
+        otf2::definition::io_handle handle() const
+        {
+            return handle_;
+        }
 
-} // namespace otf2
+        std::uint64_t matching_id() const
+        {
+            return matching_id_;
+        }
 
-#include <otf2xx/definition/fwd.hpp>
-#include <otf2xx/event/fwd.hpp>
+    private:
+        otf2::definition::detail::weak_ref<otf2::definition::io_handle> handle_;
+        std::uint64_t matching_id_;
+    };
+}
+} // namespace otf2::event
 
-#include <otf2xx/reader/fwd.hpp>
-#include <otf2xx/writer/fwd.hpp>
-
-#endif // INCLUDE_OTF2XX_FWD_HPP
+#endif // INCLUDE_OTF2XX_EVENT_IO_OPERATION_TEST_HPP

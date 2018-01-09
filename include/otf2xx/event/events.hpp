@@ -75,5 +75,20 @@
 
 #include <otf2xx/event/marker.hpp>
 
+#include <otf2xx/event/io_create_handle.hpp>
+#include <otf2xx/event/io_destroy_handle.hpp>
+#include <otf2xx/event/io_duplicate_handle.hpp>
+#include <otf2xx/event/io_seek.hpp>
+#include <otf2xx/event/io_change_status_flag.hpp>
+#include <otf2xx/event/io_delete_file.hpp>
+#include <otf2xx/event/io_operation_begin.hpp>
+#include <otf2xx/event/io_operation_test.hpp>
+#include <otf2xx/event/io_operation_issued.hpp>
+#include <otf2xx/event/io_operation_cancelled.hpp>
+#include <otf2xx/event/io_operation_complete.hpp>
+#include <otf2xx/event/io_acquire_lock.hpp>
+#include <otf2xx/event/io_release_lock.hpp>
+#include <otf2xx/event/io_try_lock.hpp>
+
 #include <otf2xx/event/unknown.hpp>
 #endif // INCLUDE_OTF2XX_EVENT_EVENTS_HPP

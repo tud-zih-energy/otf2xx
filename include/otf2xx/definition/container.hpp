@@ -38,11 +38,15 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
+#include <otf2xx/definition/io_pre_created_handle_state.hpp>
+
 #include <otf2xx/traits/definition.hpp>
 
-#include <map>
-#include <vector>
+#include <algorithm>
 #include <cassert>
+#include <map>
+#include <stdexcept>
+#include <vector>
 
 namespace otf2
 {
@@ -67,7 +71,8 @@ namespace definition
         class iterator
         {
         public:
-            iterator(typename map_type::const_iterator it, typename map_type::const_iterator end) : it(it), end(end)
+            iterator(typename map_type::const_iterator it, typename map_type::const_iterator end)
+            : it(it), end(end)
             {
             }
 
@@ -182,39 +187,33 @@ namespace definition
     };
 
     /**
-     * Specialization for property definition, as they don't have a reference
+     * Specialization for supplement definition, as they don't have a reference
      */
-    template <typename Definition>
-    class container<otf2::definition::property<Definition>>
+    template <typename SupplementDefinition>
+    class supplement_container
     {
     public:
-        static_assert(otf2::traits::is_definition<Definition>::value,
-                      "The type Definition has to be an otf2::definition");
+        static_assert(otf2::traits::is_definition<SupplementDefinition>::value,
+                      "The type SupplementDefinition has to be an otf2::definition");
 
-        typedef typename otf2::definition::property<Definition> value_type;
+        typedef SupplementDefinition value_type;
 
     private:
         typedef std::vector<value_type> map_type;
 
-        typedef container self;
+        typedef supplement_container self;
         typedef typename map_type::const_iterator iterator;
-        typedef std::size_t key_type;
 
     public:
-        container(const self&) = default;
+        supplement_container(const self&) = default;
         self& operator=(const self&) = default;
 
-        container() = default;
+        supplement_container() = default;
 
-        container(self&&) = default;
+        supplement_container(self&&) = default;
         self& operator=(self&&) = default;
 
     public:
-        const value_type& operator[](key_type key)
-        {
-            return data[key];
-        }
-
         template <typename... Args>
         const value_type& emplace(Args... args)
         {
@@ -223,19 +222,18 @@ namespace definition
             return data.back();
         }
 
-        void add_definition(const otf2::definition::property<Definition>& def)
+        const value_type& add_definition(const value_type& def)
         {
             data.push_back(def);
+
+            return data.back();
         }
 
-        void add_definition(otf2::definition::property<Definition>&& def)
+        const value_type& add_definition(value_type&& def)
         {
             data.emplace_back(std::move(def));
-        }
 
-        std::size_t count(key_type key) const
-        {
-            return data.count(key);
+            return data.back();
         }
 
         std::size_t size() const
@@ -256,6 +254,21 @@ namespace definition
 
     private:
         map_type data;
+    };
+
+    template <>
+    class container<otf2::definition::io_pre_created_handle_state>
+    : public supplement_container<otf2::definition::io_pre_created_handle_state>
+    {
+    };
+
+    template <typename Definition>
+    class container<otf2::definition::property<Definition>>
+    : public supplement_container<otf2::definition::property<Definition>>
+    {
+    public:
+        static_assert(otf2::traits::is_definition<Definition>::value,
+                      "The type Definition has to be an otf2::definition");
     };
 }
 } // namespace otf2::definition

@@ -114,6 +114,21 @@ namespace reader
         virtual void event(const otf2::definition::location&, const otf2::event::thread_wait&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::thread_end&) {}
 
+        virtual void event(const otf2::definition::location&, const otf2::event::io_create_handle&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_destroy_handle&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_duplicate_handle&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_seek&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_change_status_flag&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_delete_file&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_operation_begin&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_operation_test&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_operation_issued&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_operation_cancelled&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_operation_complete&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_acquire_lock&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_release_lock&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::io_try_lock&) {}
+
         virtual void event(const otf2::definition::location&, const otf2::event::unknown&) {}
 
 
@@ -140,6 +155,12 @@ namespace reader
         virtual void definition(const otf2::definition::calling_context&) {}
         virtual void definition(const otf2::definition::interrupt_generator&) {}
 
+        virtual void definition(const otf2::definition::io_regular_file&) {}
+        virtual void definition(const otf2::definition::io_directory&) {}
+        virtual void definition(const otf2::definition::io_handle&) {}
+        virtual void definition(const otf2::definition::io_paradigm&) {}
+        virtual void definition(const otf2::definition::io_pre_created_handle_state&) {}
+
         virtual void definition(const otf2::definition::metric_class&) {}
         virtual void definition(const otf2::definition::metric_member&) {}
         virtual void definition(const otf2::definition::metric_instance&) {}
@@ -148,6 +169,7 @@ namespace reader
         virtual void definition(const otf2::definition::location_group_property&) {}
         virtual void definition(const otf2::definition::system_tree_node_property&) {}
         virtual void definition(const otf2::definition::calling_context_property&) {}
+        virtual void definition(const otf2::definition::io_file_property&) {}
 
         virtual void definition(const otf2::definition::unknown&) {}
 

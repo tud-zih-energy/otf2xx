@@ -181,6 +181,13 @@ namespace reader
             check(OTF2_GlobalDefReaderCallbacks_SetCallingContextPropertyCallback (global_def_callbacks, detail::definition::global::calling_context_property), "Couldn't set calling context property callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetInterruptGeneratorCallback (global_def_callbacks, detail::definition::global::interrupt_generator), "Couldn't set interrupt generator callback handler");
 
+            check(OTF2_GlobalDefReaderCallbacks_SetIoRegularFileCallback (global_def_callbacks, detail::definition::global::io_regular_file), "Couldn't set io file callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetIoDirectoryCallback (global_def_callbacks, detail::definition::global::io_directory), "Couldn't set io directory callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetIoHandleCallback (global_def_callbacks, detail::definition::global::io_handle), "Couldn't set io handle callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetIoParadigmCallback (global_def_callbacks, detail::definition::global::io_paradigm), "Couldn't set io paradigm callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetIoFilePropertyCallback (global_def_callbacks, detail::definition::global::io_file_property), "Couldn't set io file properties callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetIoPreCreatedHandleStateCallback (global_def_callbacks, detail::definition::global::io_pre_created_handle_state), "Couldn't set io pre created handle state callback handler");
+
             check(OTF2_GlobalDefReaderCallbacks_SetUnknownCallback(global_def_callbacks, detail::definition::global::unknown), "Couldn't set unknown callback handler");
 
             // clang-format on
@@ -251,6 +258,20 @@ namespace reader
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadBeginCallback(event_callbacks, detail::event::thread_begin), "Couldn't set thread_begin event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadWaitCallback(event_callbacks, detail::event::thread_wait), "Couldn't set thread_wait event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadEndCallback(event_callbacks, detail::event::thread_end), "Couldn't set thread_end event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoCreateHandleCallback(event_callbacks, detail::event::io_create_handle), "Couldn't set io_create_handle event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoDestroyHandleCallback(event_callbacks, detail::event::io_destroy_handle), "Couldn't set io_destroy_handle event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoDuplicateHandleCallback(event_callbacks, detail::event::io_duplicate_handle), "Couldn't set io_duplicate_handle event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoSeekCallback(event_callbacks, detail::event::io_seek), "Couldn't set io_seek event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoChangeStatusFlagsCallback(event_callbacks, detail::event::io_change_status_flag), "Couldn't set io_change_status_flag event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoDeleteFileCallback(event_callbacks, detail::event::io_delete_file), "Couldn't set io_delete_file event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationBeginCallback(event_callbacks, detail::event::io_operation_begin), "Couldn't set io_operation_begin event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationTestCallback(event_callbacks, detail::event::io_operation_test), "Couldn't set io_operation_test event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationIssuedCallback(event_callbacks, detail::event::io_operation_issued), "Couldn't set io_operation_issued event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationCancelledCallback(event_callbacks, detail::event::io_operation_cancelled), "Couldn't set io_operation_cancelled event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoOperationCompleteCallback(event_callbacks, detail::event::io_operation_complete), "Couldn't set io_operation_complete event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoAcquireLockCallback(event_callbacks, detail::event::io_acquire_lock), "Couldn't set io_acquire_lock event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoReleaseLockCallback(event_callbacks, detail::event::io_release_lock), "Couldn't set io_release_lock event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetIoTryLockCallback(event_callbacks, detail::event::io_try_lock), "Couldn't set io_try_lock event callback");
 
             check(OTF2_GlobalEvtReaderCallbacks_SetUnknownCallback(event_callbacks, detail::event::unknown), "Couldn't set unknown event callback");
 
@@ -525,6 +546,101 @@ namespace reader
             return interrupt_generators_;
         }
 
+        /**
+         * \brief returns all io files, which could be either io regular files or io directories
+         *
+         * This function returns every io file definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_file>& io_files()
+        {
+            return io_files_;
+        }
+
+        /**
+         * \brief returns all io regular files
+         *
+         * This function returns every io regular file definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_regular_file>& io_regular_files()
+        {
+            return io_regular_files_;
+        }
+
+        /**
+         * \brief returns all io directories
+         *
+         * This function returns every io directory definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_directory>& io_directories()
+        {
+            return io_directories_;
+        }
+
+        /**
+         * \brief returns all io handles
+         *
+         * This function returns every io handle definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_handle>& io_handles()
+        {
+            return io_handles_;
+        }
+
+        /**
+         * \brief returns all io paradigms
+         *
+         * This function returns every io paradigm definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_paradigm>& io_paradigms()
+        {
+            return io_paradigms_;
+        }
+
+        /**
+         * \brief returns all io pre created handle states
+         *
+         * This function returns every io pre created handle state definition, which was read until
+         *the call of the function. This means there could be missing some. On the other hand it is
+         *garantied, that any referenced definition is already there. So you are safe, when using a
+         *returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_pre_created_handle_state>& io_pre_created_handle_states()
+        {
+            return io_pre_created_handle_states_;
+        }
+
     public:
         /**
          * \brief returns all groups of locations
@@ -721,6 +837,22 @@ namespace reader
             return calling_context_properties_;
         }
 
+        /**
+         * \brief returns all io file properties
+         *
+         * This function returns every io file property definition, which was read until the call
+         *of the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        map_type<otf2::definition::io_file_property>& io_file_properties()
+        {
+            return io_file_properties_;
+        }
+
     public:
         /**
          * \brief returns the ticks per second
@@ -783,6 +915,12 @@ namespace reader
         map_type<otf2::definition::source_code_location> source_code_locations_;
         map_type<otf2::definition::calling_context> calling_contexts_;
         map_type<otf2::definition::interrupt_generator> interrupt_generators_;
+        map_type<otf2::definition::io_handle> io_handles_;
+        map_type<otf2::definition::io_file> io_files_;
+        map_type<otf2::definition::io_regular_file> io_regular_files_;
+        map_type<otf2::definition::io_directory> io_directories_;
+        map_type<otf2::definition::io_paradigm> io_paradigms_;
+        map_type<otf2::definition::io_pre_created_handle_state> io_pre_created_handle_states_;
 
         map_type<otf2::definition::locations_group> locations_groups_;
         map_type<otf2::definition::regions_group> regions_groups_;
@@ -799,6 +937,7 @@ namespace reader
         map_type<otf2::definition::location_group_property> location_group_properties_;
         map_type<otf2::definition::system_tree_node_property> system_tree_node_properties_;
         map_type<otf2::definition::calling_context_property> calling_context_properties_;
+        map_type<otf2::definition::io_file_property> io_file_properties_;
 
         std::unique_ptr<otf2::definition::clock_properties> clock_properties_;
 

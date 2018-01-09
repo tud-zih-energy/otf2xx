@@ -32,30 +32,60 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_FWD_HPP
-#define INCLUDE_OTF2XX_FWD_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_IO_PRE_CREATED_HANDLE_STATE_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_IO_PRE_CREATED_HANDLE_STATE_HPP
+
+#include <otf2xx/common.hpp>
+#include <otf2xx/fwd.hpp>
+#include <otf2xx/reference.hpp>
+
+#include <otf2xx/definition/io_handle.hpp>
+
+#include <otf2xx/definition/detail/base.hpp>
+#include <otf2xx/definition/detail/io_pre_created_handle_state_impl.hpp>
 
 namespace otf2
 {
+namespace definition
+{
+    class io_pre_created_handle_state : public detail::base<io_pre_created_handle_state>
+    {
+        typedef detail::base<io_pre_created_handle_state> base;
+        typedef typename otf2::traits::definition_impl_type<io_pre_created_handle_state>::type
+            impl_type;
+        using base::base;
 
-template <typename T>
-class reference;
+    public:
+        using access_mode_type = impl_type::io_access_mode_type;
+        using status_flag_type = impl_type::io_status_flag_type;
 
-template <typename Definition>
-class reference_generator;
+        io_pre_created_handle_state(const otf2::definition::io_handle& handle,
+                                    access_mode_type mode, status_flag_type flags)
+        : base(new impl_type(handle, mode, flags))
+        {
+        }
 
-class trace_reference_generator;
+        io_pre_created_handle_state() = default;
 
-class attribute_list;
+        const otf2::definition::io_handle& handle() const
+        {
+            assert(this->is_valid());
+            return data_->handle();
+        }
 
-class attribute_value;
+        access_mode_type access_mode() const
+        {
+            assert(this->is_valid());
+            return data_->access_mode();
+        }
 
-} // namespace otf2
+        status_flag_type status_flags() const
+        {
+            assert(this->is_valid());
+            return data_->status_flags();
+        }
+    };
+}
+} // namespace otf2::definition
 
-#include <otf2xx/definition/fwd.hpp>
-#include <otf2xx/event/fwd.hpp>
-
-#include <otf2xx/reader/fwd.hpp>
-#include <otf2xx/writer/fwd.hpp>
-
-#endif // INCLUDE_OTF2XX_FWD_HPP
+#endif // INCLUDE_OTF2XX_DEFINITIONS_IO_PRE_CREATED_HANDLE_STATE_HPP

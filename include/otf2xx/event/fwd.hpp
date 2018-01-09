@@ -107,6 +107,21 @@ namespace event
 
     class marker;
 
+    class io_create_handle;
+    class io_destroy_handle;
+    class io_duplicate_handle;
+    class io_seek;
+    class io_change_status_flag;
+    class io_delete_file;
+    class io_operation_begin;
+    class io_operation_test;
+    class io_operation_issued;
+    class io_operation_cancelled;
+    class io_operation_complete;
+    class io_acquire_lock;
+    class io_release_lock;
+    class io_try_lock;
+
     class unknown;
 }
 } // namespace otf2::event

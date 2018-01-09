@@ -99,6 +99,21 @@ namespace reader
             OTF2_CallbackCode thread_wait  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_CommRef threadContingent, uint64_t sequenceNumber);
             OTF2_CallbackCode thread_end  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_CommRef threadContingent, uint64_t sequenceNumber);
 
+            OTF2_CallbackCode io_create_handle (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, OTF2_IoAccessMode mode, OTF2_IoCreationFlag creationFlags, OTF2_IoStatusFlag statusFlags);
+            OTF2_CallbackCode io_destroy_handle (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle);
+            OTF2_CallbackCode io_duplicate_handle (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef oldHandle, OTF2_IoHandleRef newHandle, OTF2_IoStatusFlag statusFlags);
+            OTF2_CallbackCode io_seek (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, int64_t offsetRequest, OTF2_IoSeekOption whence, uint64_t offsetResult);
+            OTF2_CallbackCode io_change_status_flag (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, OTF2_IoStatusFlag statusFlags);
+            OTF2_CallbackCode io_delete_file (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoParadigmRef ioParadigm, OTF2_IoFileRef file);
+            OTF2_CallbackCode io_operation_begin (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, OTF2_IoOperationMode mode, OTF2_IoOperationFlag operationFlags, uint64_t bytesRequest, uint64_t matching_id);
+            OTF2_CallbackCode io_operation_test (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, uint64_t matchingId);
+            OTF2_CallbackCode io_operation_issued (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, uint64_t matchingId);
+            OTF2_CallbackCode io_operation_cancelled (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, uint64_t matchingId);
+            OTF2_CallbackCode io_operation_complete (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, uint64_t bytesRequest, uint64_t matching_id);
+            OTF2_CallbackCode io_acquire_lock (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, OTF2_LockType lockType);
+            OTF2_CallbackCode io_release_lock (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, OTF2_LockType lockType);
+            OTF2_CallbackCode io_try_lock (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, OTF2_LockType lockType);
+
             OTF2_CallbackCode unknown  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList);
 
             // clang-format on
@@ -136,6 +151,13 @@ namespace reader
                 OTF2_CallbackCode calling_context (void *userData, OTF2_CallingContextRef self, OTF2_RegionRef region, OTF2_SourceCodeLocationRef sourceCodeLocation, OTF2_CallingContextRef parent);
                 OTF2_CallbackCode calling_context_property (void *userData, OTF2_CallingContextRef callingContext, OTF2_StringRef name, OTF2_Type type, OTF2_AttributeValue value);
                 OTF2_CallbackCode interrupt_generator (void *userData, OTF2_InterruptGeneratorRef self, OTF2_StringRef name, OTF2_InterruptGeneratorMode interruptGeneratorMode, OTF2_Base base, int64_t exponent, uint64_t period);
+
+                OTF2_CallbackCode io_regular_file (void *userData, OTF2_IoFileRef self, OTF2_StringRef file, OTF2_SystemTreeNodeRef scope);
+                OTF2_CallbackCode io_directory (void *userData, OTF2_IoFileRef self, OTF2_StringRef file, OTF2_SystemTreeNodeRef scope);
+                OTF2_CallbackCode io_handle (void *userData, OTF2_IoHandleRef self, OTF2_StringRef name, OTF2_IoFileRef file, OTF2_IoParadigmRef ioParadigm, OTF2_IoHandleFlag ioHandleFlags, OTF2_CommRef comm, OTF2_IoHandleRef parent);
+                OTF2_CallbackCode io_paradigm (void *userData, OTF2_IoParadigmRef self, OTF2_StringRef identification, OTF2_StringRef name, OTF2_IoParadigmClass ioParadigmClass, OTF2_IoParadigmFlag ioParadigmFlags, uint8_t numberOfProperties, const OTF2_IoParadigmProperty* properties, const OTF2_Type* types, const OTF2_AttributeValue* values);
+                OTF2_CallbackCode io_file_property (void *userData, OTF2_IoFileRef ioFile, OTF2_StringRef name, OTF2_Type type, OTF2_AttributeValue value);
+                OTF2_CallbackCode io_pre_created_handle_state (void *userData, OTF2_IoHandleRef ioHandle, OTF2_IoAccessMode mode, OTF2_IoStatusFlag statusFlags);
 
                 OTF2_CallbackCode unknown  (void *userData);
 

@@ -67,6 +67,12 @@ namespace definition
         class calling_context_impl;
         class interrupt_generator_impl;
 
+        class io_file_impl;
+        class io_directory_impl;
+        class io_handle_impl;
+        class io_paradigm_impl;
+        class io_pre_created_handle_state_impl;
+
         class mapping_table_impl;
 
         class metric_base;
@@ -101,6 +107,13 @@ namespace definition
     class calling_context;
     class interrupt_generator;
 
+    class io_file;
+    class io_regular_file;
+    class io_directory;
+    class io_handle;
+    class io_paradigm;
+    class io_pre_created_handle_state;
+
     class mapping_table;
 
     class unknown;
@@ -131,6 +144,7 @@ namespace definition
     using location_group_property = property<location_group>;
     using system_tree_node_property = property<system_tree_node>;
     using calling_context_property = property<calling_context>;
+    using io_file_property = property<io_file>;
 
     class marker;
 

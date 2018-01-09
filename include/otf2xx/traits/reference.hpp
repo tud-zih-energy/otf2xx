@@ -142,6 +142,31 @@ namespace traits
     {
     };
 
+    template <>
+    struct reference_type<definition::io_file> : identity<std::uint32_t>
+    {
+    };
+
+    template <>
+    struct reference_type<definition::io_regular_file> : reference_type<definition::io_file>
+    {
+    };
+
+    template <>
+    struct reference_type<definition::io_directory> : reference_type<definition::io_file>
+    {
+    };
+
+    template <>
+    struct reference_type<definition::io_handle> : identity<std::uint32_t>
+    {
+    };
+
+    template <>
+    struct reference_type<definition::io_paradigm> : identity<std::uint32_t>
+    {
+    };
+
     template <typename Definition>
     struct reference_type<definition::property<Definition>> : identity<std::uint32_t>
     {
@@ -172,6 +197,17 @@ namespace traits
     template <>
     struct reference_param_type<definition::metric_instance>
     : otf2::traits::identity<definition::detail::metric_base>
+    {
+    };
+
+    template <typename T>
+    struct reference_param_type<definition::property<T>> : otf2::traits::identity<T>
+    {
+    };
+
+    template <>
+    struct reference_param_type<definition::io_pre_created_handle_state>
+    : otf2::traits::identity<definition::io_handle>
     {
     };
 }
