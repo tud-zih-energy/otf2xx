@@ -283,6 +283,18 @@ namespace writer
             location_.event_written();
         }
 
+        void write_enter(otf2::chrono::time_point timestamp, OTF2_RegionRef ref)
+        {
+            check(OTF2_EvtWriter_Enter(evt_wrt_, nullptr, convert(timestamp), ref),
+                  "Couldn't write event to local event writer.");
+        }
+
+        void write_leave(otf2::chrono::time_point timestamp, OTF2_RegionRef ref)
+        {
+            check(OTF2_EvtWriter_Leave(evt_wrt_, nullptr, convert(timestamp), ref),
+                  "Couldn't write event to local event writer.");
+        }
+
     public:
         void write(const otf2::event::thread_acquire_lock& data)
         {

@@ -93,7 +93,7 @@ namespace chrono
             // input resolution is about nanoseconds or a few hundred
             // picoseconds.
             // These assumptions have to be double checked!
-            static_assert(clock::period::den == 1e12, "Assumed, that we calculate in picoseconds");
+            static_assert(clock::period::den == 1e9, "Assumed, that we calculate in nanoseconds");
 
             double factor = static_cast<double>(clock::period::den) / ticks_per_second;
 
