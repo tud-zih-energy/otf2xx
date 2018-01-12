@@ -48,8 +48,9 @@ ELSE()
         IF(${_ARG} MATCHES "^-l")
             STRING(REGEX REPLACE "^-l" "" _ARG "${_ARG}")
             STRING(STRIP "${_ARG}" _ARG)
+            # NO_DEFAULT_PATH - We have to "filter" -lm, as g++ links it anyways. And then stuff explodes
             FIND_LIBRARY(_OTF2_LIB_FROM_ARG NAMES ${_ARG}
-                HINTS ${OTF2_LINK_DIRS}
+                HINTS ${OTF2_LINK_DIRS} NO_DEFAULT_PATH
             )
             IF(_OTF2_LIB_FROM_ARG)
                 SET(OTF2_LIBRARIES ${OTF2_LIBRARIES} ${_OTF2_LIB_FROM_ARG})
