@@ -36,7 +36,12 @@ cmake_minimum_required(VERSION 3.5)
 set(otf2xx_VERSION 1.0)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake;${CMAKE_MODULE_PATH}")
-find_package(OTF2 8.0.1 EXACT REQUIRED)
+find_package(OTF2 8.0.1 EXACT)
+
+if (NOT OTF2_Found)
+    message(FATAL_ERROR "Please download and install OTF2 2.1.\n"
+    "Available from: http://www.vi-hps.org/upload/packages/otf2/otf2-2.1.tar.gz")
+endif()
 
 if(NOT OTF2XX_CHRONO_DURATION_TYPE)
     set(OTF2XX_CHRONO_DURATION_TYPE "picoseconds")
