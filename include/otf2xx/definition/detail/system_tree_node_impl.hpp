@@ -97,6 +97,11 @@ namespace definition
                 return name_;
             }
 
+            otf2::definition::string& name()
+            {
+                return name_;
+            }
+
             const otf2::definition::string& class_name() const
             {
                 return class_name_;
