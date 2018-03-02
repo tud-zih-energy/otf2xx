@@ -88,6 +88,18 @@ namespace definition
         }
 
         /**
+         * \brief sets the name of the system tree node definition
+         *
+         * \param newname a string definition containing the new name for this node
+         *
+         */
+        void name(const otf2::definition::string& newname)
+        {
+            assert(this->is_valid());
+            data_->name() = newname;
+        }
+
+        /**
          * \brief returns the class name of the system tree node definion as a string definition
          *
          * \returns a string definiton containing the class name
