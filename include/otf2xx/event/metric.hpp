@@ -155,13 +155,21 @@ namespace event
                     make_exception("Unexpected type given in metric member");
                 }
             }
+
+            template <typename T>
+            value_container& operator=(T x)
+            {
+                set(x);
+
+                return *this;
+            }
         };
 
         metric() = default;
 
         // construct with values
         metric(otf2::chrono::time_point timestamp, const otf2::definition::metric_class& metric_c,
-               std::vector<value_container> values)
+               const std::vector<value_container>& values)
         : base<metric>(timestamp), metric_class_(metric_c), metric_instance_(), values_(values)
         {
         }
@@ -256,7 +264,7 @@ namespace event
         otf2::definition::detail::weak_ref<otf2::definition::metric_instance> metric_instance_;
         std::vector<value_container> values_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_ENTER_HPP
