@@ -108,7 +108,7 @@ namespace definition
          * \param a string definition containing the new name
          *
          */
-        void name(const otf2::definition::string& name) const
+        void name(const otf2::definition::string& name)
         {
             assert(this->is_valid());
             data_->name() = name;
