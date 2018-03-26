@@ -101,6 +101,18 @@ namespace definition
         }
 
         /**
+         * \brief sets the name of the group definition
+         *
+         * \param a string definition containing the new name
+         *
+         */
+        void name(const otf2::definition::string& name)
+        {
+            assert(this->is_valid());
+            this->data_->name() = name;
+        }
+
+        /**
          * \brief returns the type of the group definion
          *
          * \see otf2::common::group_type

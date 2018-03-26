@@ -107,7 +107,7 @@ namespace definition
                 return ref_;
             }
 
-            const otf2::definition::string& name() const
+            otf2::definition::string& name()
             {
                 return name_;
             }
