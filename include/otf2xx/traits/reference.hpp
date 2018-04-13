@@ -200,6 +200,18 @@ namespace traits
     {
     };
 
+    template <>
+    struct reference_param_type<definition::io_directory>
+    : otf2::traits::identity<definition::io_file>
+    {
+    };
+
+    template <>
+    struct reference_param_type<definition::io_regular_file>
+    : otf2::traits::identity<definition::io_file>
+    {
+    };
+
     template <typename T>
     struct reference_param_type<definition::property<T>> : otf2::traits::identity<T>
     {
@@ -210,7 +222,7 @@ namespace traits
     : otf2::traits::identity<definition::io_handle>
     {
     };
-}
-} // namespace otf2::traits
+} // namespace traits
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_TRAITS_REFERENCE_HPP
