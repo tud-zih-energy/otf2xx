@@ -71,6 +71,14 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(OTF2
 
 if(OTF2_FOUND)
     message(STATUS "OTF2 interface version: ${OTF2_VERSION}")
+
+    add_library(otf2::otf2 UNKNOWN IMPORTED GLOBAL)
+    set_target_properties(otf2::otf2 PROPERTIES
+        IMPORTED_LINK_INTERFACE_LANGUAGES "C"
+        IMPORTED_LOCATION "${OTF2_LIBRARIES}"
+        INTERFACE_INCLUDE_DIRECTORIES "${OTF2_INCLUDE_DIRS}"
+    )
+
 else()
     unset(OTF2_PRINT)
     unset(OTF2_LINK_DIRS)
