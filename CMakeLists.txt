@@ -117,7 +117,7 @@ if(OTF2XX_WITH_MPI)
         INTERFACE
             OTF2XX_HAS_MPI
     )
-    target_link_libraries(otf2xx-core INTERFACE Boost::mpi)
+    target_link_libraries(otf2xx-core INTERFACE Boost::mpi MPI::MPI_CXX)
 endif()
 
 set(READER_SRCS src/reader/callback/definitions.cpp src/reader/callback/events.cpp)
