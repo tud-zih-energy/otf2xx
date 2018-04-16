@@ -96,6 +96,9 @@ namespace writer
 
             set_flush_callbacks();
             OTF2_Archive_SetSerialCollectiveCallbacks(ar);
+
+            check(OTF2_Archive_OpenDefFiles(ar), "Couldn't open definition files");
+            check(OTF2_Archive_OpenEvtFiles(ar), "Couldn't open event files");
         }
 
         ~archive()
@@ -430,7 +433,8 @@ namespace writer
             auto it = local_writers_.find(loc.ref());
             if (it == local_writers_.end())
             {
-                auto res = local_writers_.emplace(loc.ref(), local(ar, loc));
+                auto res = local_writers_.emplace(
+                    std::piecewise_construct, std::make_tuple(loc.ref()), std::make_tuple(ar, loc));
                 it = res.first;
             }
 

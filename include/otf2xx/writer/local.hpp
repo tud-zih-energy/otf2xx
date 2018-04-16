@@ -53,8 +53,9 @@ namespace writer
     {
     public:
         local(OTF2_Archive* ar, const otf2::definition::location& location)
-        : location_(location), ar_(ar), evt_wrt_(OTF2_Archive_GetEvtWriter(ar, location.ref())),
-          def_wrt_(OTF2_Archive_GetDefWriter(ar, location.ref()))
+        : location_(location), ar_(ar), def_wrt_(OTF2_Archive_GetDefWriter(ar, location.ref())),
+          evt_wrt_(OTF2_Archive_GetEvtWriter(ar, location.ref()))
+
         {
             if (evt_wrt_ == nullptr)
             {
@@ -69,13 +70,44 @@ namespace writer
         local(const local&) = delete;
         local& operator=(const local&) = delete;
 
-        local(local&&) = default;
-        local& operator=(local&&) = default;
+        local(local&& other)
+        : location_(std::move(other.location_)), ar_(nullptr), def_wrt_(nullptr), evt_wrt_(nullptr)
+        {
+            using std::swap;
+
+            swap(ar_, other.ar_);
+            swap(def_wrt_, other.def_wrt_);
+            swap(evt_wrt_, other.evt_wrt_);
+        }
+
+        local& operator=(local&& other)
+        {
+            using std::swap;
+
+            location_ = std::move(other.location_);
+
+            swap(ar_, other.ar_);
+            swap(def_wrt_, other.def_wrt_);
+            swap(evt_wrt_, other.evt_wrt_);
+
+            return *this;
+        }
 
         ~local()
         {
-            check(OTF2_Archive_CloseDefWriter(ar_, def_wrt_), "Couldn't close definition writer");
-            check(OTF2_Archive_CloseEvtWriter(ar_, evt_wrt_), "Couldn't close event writer");
+            if (ar_ != nullptr)
+            {
+                if (def_wrt_ != nullptr)
+                {
+                    check(OTF2_Archive_CloseDefWriter(ar_, def_wrt_),
+                          "Couldn't close definition writer");
+                }
+                if (evt_wrt_ != nullptr)
+                {
+                    check(OTF2_Archive_CloseEvtWriter(ar_, evt_wrt_),
+                          "Couldn't close event writer");
+                }
+            }
         }
 
     public:
@@ -577,8 +609,8 @@ namespace writer
     private:
         otf2::definition::location location_;
         OTF2_Archive* ar_;
-        OTF2_EvtWriter* evt_wrt_;
         OTF2_DefWriter* def_wrt_;
+        OTF2_EvtWriter* evt_wrt_;
 
         std::vector<OTF2_Type> type_ids_;
         std::vector<OTF2_MetricValue> values_;
