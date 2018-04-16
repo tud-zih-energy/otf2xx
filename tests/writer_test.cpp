@@ -81,7 +81,7 @@ int main()
     ar << otf2::definition::clock_properties(otf2::chrono::ticks(1e9), otf2::chrono::ticks(0),
                                              otf2::chrono::ticks(19));
 
-    auto arl = ar(location);
+    auto& arl = ar(location);
 
     for (int i = 0; i < 10; ++i)
         arl << otf2::event::enter(otf2::chrono::convert_time_point(get_time()), region);

@@ -76,6 +76,9 @@ namespace writer
 
             set_flush_callbacks();
             set_collective_callbacks();
+
+            OTF2_Archive_OpenDefFiles(ar);
+            OTF2_Archive_OpenEvtFiles(ar);
         }
 #endif
         archive(const std::string& path, const std::string& name,
@@ -99,6 +102,8 @@ namespace writer
         {
             // close all local writer
             local_writers_.clear();
+            OTF2_Archive_CloseEvtFiles(ar);
+            OTF2_Archive_CloseDefFiles(ar);
 
             // close global writer
             global_writer_.reset(0);
@@ -425,10 +430,7 @@ namespace writer
             auto it = local_writers_.find(loc.ref());
             if (it == local_writers_.end())
             {
-                auto evt = OTF2_Archive_GetEvtWriter(ar, loc.ref());
-                auto def = OTF2_Archive_GetDefWriter(ar, loc.ref());
-
-                auto res = local_writers_.emplace(loc.ref(), local(evt, def, loc));
+                auto res = local_writers_.emplace(loc.ref(), local(ar, loc));
                 it = res.first;
             }
 
@@ -510,7 +512,7 @@ namespace writer
                 .count();
         }
     } // namespace detail
-}
+} // namespace writer
 } // namespace otf2
 
 #ifdef OTF2XX_HAS_MPI
