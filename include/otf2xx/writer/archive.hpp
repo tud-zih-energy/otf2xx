@@ -77,8 +77,8 @@ namespace writer
             set_flush_callbacks();
             set_collective_callbacks();
 
-            OTF2_Archive_OpenDefFiles(ar);
-            OTF2_Archive_OpenEvtFiles(ar);
+            check(OTF2_Archive_OpenDefFiles(ar), "Couldn't open definition files");
+            check(OTF2_Archive_OpenEvtFiles(ar), "Couldn't open event files");
         }
 #endif
         archive(const std::string& path, const std::string& name,
@@ -102,8 +102,8 @@ namespace writer
         {
             // close all local writer
             local_writers_.clear();
-            OTF2_Archive_CloseEvtFiles(ar);
-            OTF2_Archive_CloseDefFiles(ar);
+            check(OTF2_Archive_CloseEvtFiles(ar), "Couldn't close event files");
+            check(OTF2_Archive_CloseDefFiles(ar), "Couldn't close definition files");
 
             // close global writer
             global_writer_.reset(0);

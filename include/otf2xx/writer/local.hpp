@@ -74,8 +74,8 @@ namespace writer
 
         ~local()
         {
-            check(OTF2_Archive_CloseDefWriter(ar_, def_wrt_));
-            check(OTF2_Archive_CloseEvtWriter(ar_, evt_wrt_));
+            check(OTF2_Archive_CloseDefWriter(ar_, def_wrt_), "Couldn't close definition writer");
+            check(OTF2_Archive_CloseEvtWriter(ar_, evt_wrt_), "Couldn't close event writer");
         }
 
     public:
