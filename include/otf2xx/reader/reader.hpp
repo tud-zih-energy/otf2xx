@@ -371,6 +371,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all attributes in a const context
+         *
+         * This function returns every attribute definition, which was read until the call of the
+         *function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::attribute>& attributes() const
+        {
+            return attributes_;
+        }
+
+        /**
          * \brief returns all comms
          *
          * This function returns every comm definition, which was read until the call of the
@@ -385,6 +401,23 @@ namespace reader
         {
             return comms_;
         }
+
+        /**
+         * \brief returns all comms in a const context
+         *
+         * This function returns every comm definition, which was read until the call of the
+         *function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::comm>& comms() const
+        {
+            return comms_;
+        }
+
 
         /**
          * \brief returns all locations
@@ -435,6 +468,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all location_groups in a const context
+         *
+         * This function returns every location group definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::location_group>& location_groups() const
+        {
+            return location_groups_;
+        }
+
+        /**
          * \brief returns all parameters
          *
          * This function returns every parameter definition, which was read until the call of the
@@ -446,6 +495,22 @@ namespace reader
          * \returns a otf2::definition::container which contains all definitions
          */
         map_type<otf2::definition::parameter>& parameters()
+        {
+            return parameters_;
+        }
+
+        /**
+         * \brief returns all parameters in a const context
+         *
+         * This function returns every parameter definition, which was read until the call of the
+         *function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::parameter>& parameters() const
         {
             return parameters_;
         }
@@ -467,6 +532,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all regions in a const context
+         *
+         * This function returns every regions definition, which was read until the call of the
+         *function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::region>& regions() const
+        {
+            return regions_;
+        }
+
+        /**
          * \brief returns all strings
          *
          * This function returns every string definition, which was read until the call of the
@@ -478,6 +559,22 @@ namespace reader
          * \returns a otf2::definition::container which contains all definitions
          */
         map_type<otf2::definition::string>& strings()
+        {
+            return strings_;
+        }
+
+        /**
+         * \brief returns all strings in a const context
+         *
+         * This function returns every string definition, which was read until the call of the
+         *function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::string>& strings() const
         {
             return strings_;
         }
@@ -499,6 +596,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all system tree nodes in a const context
+         *
+         * This function returns every system tree node definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::system_tree_node>& system_tree_nodes() const
+        {
+            return system_tree_nodes_;
+        }
+
+        /**
          * \brief returns all source code locations
          *
          * This function returns every system tree node definition, which was read until the call of
@@ -510,6 +623,22 @@ namespace reader
          * \returns a otf2::definition::container which contains all definitions
          */
         map_type<otf2::definition::source_code_location>& source_code_locations()
+        {
+            return source_code_locations_;
+        }
+
+        /**
+         * \brief returns all source code locations in a const context
+         *
+         * This function returns every system tree node definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::source_code_location>& source_code_locations() const
         {
             return source_code_locations_;
         }
@@ -531,6 +660,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all calling contexts in a const context
+         *
+         * This function returns every system tree node definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::calling_context>& calling_contexts() const
+        {
+            return calling_contexts_;
+        }
+
+        /**
          * \brief returns all interrupt generators
          *
          * This function returns every system tree node definition, which was read until the call of
@@ -542,6 +687,22 @@ namespace reader
          * \returns a otf2::definition::container which contains all definitions
          */
         map_type<otf2::definition::interrupt_generator>& interrupt_generators()
+        {
+            return interrupt_generators_;
+        }
+
+        /**
+         * \brief returns all interrupt generators in const context
+         *
+         * This function returns every system tree node definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::interrupt_generator>& interrupt_generators() const
         {
             return interrupt_generators_;
         }
@@ -563,6 +724,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all io files, which could be either io regular files or io directories in a const context
+         *
+         * This function returns every io file definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::io_file>& io_files() const
+        {
+            return io_files_;
+        }
+
+        /**
          * \brief returns all io regular files
          *
          * This function returns every io regular file definition, which was read until the call of
@@ -574,6 +751,22 @@ namespace reader
          * \returns a otf2::definition::container which contains all definitions
          */
         map_type<otf2::definition::io_regular_file>& io_regular_files()
+        {
+            return io_regular_files_;
+        }
+
+        /**
+         * \brief returns all io regular files in a const context
+         *
+         * This function returns every io regular file definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::io_regular_file>& io_regular_files() const
         {
             return io_regular_files_;
         }
@@ -595,6 +788,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all io directories in a const context
+         *
+         * This function returns every io directory definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::io_directory>& io_directories() const
+        {
+            return io_directories_;
+        }
+
+        /**
          * \brief returns all io handles
          *
          * This function returns every io handle definition, which was read until the call of
@@ -606,6 +815,22 @@ namespace reader
          * \returns a otf2::definition::container which contains all definitions
          */
         map_type<otf2::definition::io_handle>& io_handles()
+        {
+            return io_handles_;
+        }
+
+        /**
+         * \brief returns all io handles in a const context
+         *
+         * This function returns every io handle definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::io_handle>& io_handles() const
         {
             return io_handles_;
         }
@@ -627,6 +852,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all io paradigms in a const context
+         *
+         * This function returns every io paradigm definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::io_paradigm>& io_paradigms() const
+        {
+            return io_paradigms_;
+        }
+
+        /**
          * \brief returns all io pre created handle states
          *
          * This function returns every io pre created handle state definition, which was read until
@@ -637,6 +878,21 @@ namespace reader
          * \returns a otf2::definition::container which contains all definitions
          */
         map_type<otf2::definition::io_pre_created_handle_state>& io_pre_created_handle_states()
+        {
+            return io_pre_created_handle_states_;
+        }
+
+        /**
+         * \brief returns all io pre created handle states in a const context
+         *
+         * This function returns every io pre created handle state definition, which was read until
+         *the call of the function. This means there could be missing some. On the other hand it is
+         *garantied, that any referenced definition is already there. So you are safe, when using a
+         *returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::io_pre_created_handle_state>& io_pre_created_handle_states() const
         {
             return io_pre_created_handle_states_;
         }
@@ -659,6 +915,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all groups of locations in a const context
+         *
+         * This function returns every group definition, which was read until the call of the
+         *function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::locations_group>& locations_groups() const
+        {
+            return locations_groups_;
+        }
+
+        /**
          * \brief returns all groups of regions
          *
          * This function returns every attribute definition, which was read until the call of the
@@ -670,6 +942,22 @@ namespace reader
          * \returns a otf2::definition::container which contains all definitions
          */
         map_type<otf2::definition::regions_group>& regions_groups()
+        {
+            return regions_groups_;
+        }
+
+        /**
+         * \brief returns all groups of regions in a const context
+         *
+         * This function returns every attribute definition, which was read until the call of the
+         *function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::regions_group>& regions_groups() const
         {
             return regions_groups_;
         }
@@ -693,6 +981,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all group of comm locations in a const context
+         *
+         * This function returns every group definition, which was read until the call of the
+         *function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::comm_locations_group>& comm_locations_groups() const
+        {
+            return comm_locations_groups_;
+        }
+
+        /**
          * \brief returns all group of comms
          *
          * This function returns every group definition, which was read until the call of the
@@ -705,6 +1009,23 @@ namespace reader
          */
 
         map_type<otf2::definition::comm_group>& comm_groups()
+        {
+            return comm_groups_;
+        }
+
+        /**
+         * \brief returns all group of comms in a const context
+         *
+         * This function returns every group definition, which was read until the call of the
+         *function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+
+        const map_type<otf2::definition::comm_group>& comm_groups() const
         {
             return comm_groups_;
         }
@@ -726,6 +1047,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all group of comm selfs in a const context
+         *
+         * This function returns every group definition, which was read until the call of the
+         *function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::comm_self_group>& comm_self_groups() const
+        {
+            return comm_self_groups_;
+        }
+
+        /**
          * \brief returns all metric members
          *
          * This function returns every metric member definition, which was read until the call of
@@ -737,6 +1074,22 @@ namespace reader
          * \returns a otf2::definition::container which contains all definitions
          */
         map_type<otf2::definition::metric_member>& metric_members()
+        {
+            return metric_members_;
+        }
+
+        /**
+         * \brief returns all metric members in a const context
+         *
+         * This function returns every metric member definition, which was read until the call of
+         *the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::metric_member>& metric_members() const
         {
             return metric_members_;
         }
@@ -758,6 +1111,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all metric classes in a const context
+         *
+         * This function returns every group definition, which was read until the call of the
+         *function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::metric_class>& metric_classes() const
+        {
+            return metric_classes_;
+        }
+
+        /**
          * \brief returns all metric instances
          *
          * This function returns every group definition, which was read until the call of the
@@ -769,6 +1138,22 @@ namespace reader
          * \returns a otf2::definition::container which contains all definitions
          */
         map_type<otf2::definition::metric_instance>& metric_instances()
+        {
+            return metric_instances_;
+        }
+
+        /**
+         * \brief returns all metric instances in a const context
+         *
+         * This function returns every group definition, which was read until the call of the
+         *function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::metric_instance>& metric_instances() const
         {
             return metric_instances_;
         }
@@ -790,6 +1175,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all location properties in a const context
+         *
+         * This function returns every location property definition, which was read until the call
+         *of the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::location_property>& location_properties() const
+        {
+            return location_properties_;
+        }
+
+        /**
          * \brief returns all location group properties
          *
          * This function returns every location property definition, which was read until the call
@@ -801,6 +1202,22 @@ namespace reader
          * \returns a otf2::definition::container which contains all definitions
          */
         map_type<otf2::definition::location_group_property>& location_group_properties()
+        {
+            return location_group_properties_;
+        }
+
+        /**
+         * \brief returns all location group properties in a const context
+         *
+         * This function returns every location property definition, which was read until the call
+         *of the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::location_group_property>& location_group_properties() const
         {
             return location_group_properties_;
         }
@@ -822,6 +1239,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all system tree node properties in a const context
+         *
+         * This function returns every location property definition, which was read until the call
+         *of the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::system_tree_node_property>& system_tree_node_properties() const
+        {
+            return system_tree_node_properties_;
+        }
+
+        /**
          * \brief returns all calling context properties
          *
          * This function returns every location property definition, which was read until the call
@@ -838,6 +1271,22 @@ namespace reader
         }
 
         /**
+         * \brief returns all calling context properties in a const context
+         *
+         * This function returns every location property definition, which was read until the call
+         *of the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::calling_context_property>& calling_context_properties() const
+        {
+            return calling_context_properties_;
+        }
+
+        /**
          * \brief returns all io file properties
          *
          * This function returns every io file property definition, which was read until the call
@@ -849,6 +1298,22 @@ namespace reader
          * \returns a otf2::definition::container which contains all definitions
          */
         map_type<otf2::definition::io_file_property>& io_file_properties()
+        {
+            return io_file_properties_;
+        }
+
+        /**
+         * \brief returns all io file properties in a const context
+         *
+         * This function returns every io file property definition, which was read until the call
+         *of the function.
+         * This means there could be missing some. On the other hand it is garantied, that any
+         *referenced
+         * definition is already there. So you are safe, when using a returned definition.
+         *
+         * \returns a otf2::definition::container which contains all definitions
+         */
+        const map_type<otf2::definition::io_file_property>& io_file_properties() const
         {
             return io_file_properties_;
         }
