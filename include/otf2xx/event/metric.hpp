@@ -235,6 +235,11 @@ namespace event
             return values_[i];
         }
 
+        bool has_metric_class() const
+        {
+            return static_cast<bool>(metric_class_);
+        }
+
         otf2::definition::metric_class metric_class() const
         {
             return metric_class_;
@@ -244,6 +249,11 @@ namespace event
         {
             metric_instance_ = nullptr;
             metric_class_ = mc;
+        }
+
+        bool has_metric_instance() const
+        {
+            return static_cast<bool>(metric_instance_);
         }
 
         otf2::definition::metric_instance metric_instance() const
