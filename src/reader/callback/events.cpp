@@ -129,8 +129,7 @@ namespace reader
             OTF2_CallbackCode metric(OTF2_LocationRef locationID, OTF2_TimeStamp time,
                                      void* userData, OTF2_AttributeList* attributeList,
                                      OTF2_MetricRef metric, uint8_t numberOfMetrics,
-                                     __attribute__((unused)) const OTF2_Type* typeIDs,
-                                     const OTF2_MetricValue* metricValues)
+                                     const OTF2_Type* typeIDs, const OTF2_MetricValue* metricValues)
             {
                 // typeID parameter is ignored, as it's redundant with metric_member
 
@@ -142,48 +141,35 @@ namespace reader
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
 
-                typedef otf2::event::metric::value_container value_container;
+                otf2::chrono::time_point timestamp =
+                    otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
+                        time - reader->clock_properties().start_time().count()));
 
-                std::vector<value_container> values(numberOfMetrics);
+                otf2::event::metric::metric_values metric_values{ typeIDs, metricValues,
+                                                                  numberOfMetrics };
 
                 // assumes a valid trace file
                 if (reader->metric_classes().count(metric))
                 {
-                    const auto& mc = reader->metric_classes()[metric];
+                    // create metric_event that references a metric_class
+                    const otf2::definition::metric_class& metric_class =
+                        reader->metric_classes()[metric];
 
-                    for (std::size_t i = 0; i < numberOfMetrics; i++)
-                    {
-                        values[i].metric = mc[i];
-                        values[i].value = metricValues[i];
-                    }
+                    otf2::event::metric metric_event{ attributeList, timestamp, metric_class,
+                                                      std::move(metric_values) };
 
-                    reader->callback().event(
-                        reader->locations()[locationID],
-                        otf2::event::metric(
-                            attributeList,
-                            otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                                time - reader->clock_properties().start_time().count())),
-                            mc, std::move(values)));
+                    reader->callback().event(reader->locations()[locationID], metric_event);
                 }
                 else
                 {
-                    assert(reader->metric_instances().count(metric));
+                    // create metric_event that references a metric_instance
+                    const otf2::definition::metric_instance& metric_instance =
+                        reader->metric_instances()[metric];
 
-                    const auto& mc = reader->metric_instances()[metric].metric_class();
+                    otf2::event::metric metric_event{ attributeList, timestamp, metric_instance,
+                                                      std::move(metric_values) };
 
-                    for (std::size_t i = 0; i < numberOfMetrics; i++)
-                    {
-                        values[i].metric = mc[i];
-                        values[i].value = metricValues[i];
-                    }
-
-                    reader->callback().event(
-                        reader->locations()[locationID],
-                        otf2::event::metric(
-                            attributeList,
-                            otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                                time - reader->clock_properties().start_time().count())),
-                            reader->metric_instances()[metric], std::move(values)));
+                    reader->callback().event(reader->locations()[locationID], metric_event);
                 }
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);

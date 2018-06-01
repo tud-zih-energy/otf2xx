@@ -164,7 +164,7 @@ namespace writer
         {
             otf2::reference<otf2::definition::detail::metric_base>::ref_type metric;
 
-            if (data.metric_instance_)
+            if (data.has_metric_instance())
             {
                 metric = data.metric_instance_->ref();
             }
@@ -174,19 +174,12 @@ namespace writer
             }
 
             std::size_t num_members = data.values().size();
-
-            type_ids_.resize(num_members);
-            values_.resize(num_members);
-
-            for (std::size_t i = 0; i < num_members; i++)
-            {
-                type_ids_[i] = static_cast<OTF2_Type>(data.values()[i].metric->value_type());
-                values_[i] = data.values()[i].value;
-            }
+            const auto& type_ids = data.values().type_ids();
+            const auto& metric_values = data.values().values();
 
             check(OTF2_EvtWriter_Metric(evt_wrt_, data.attribute_list().get(),
                                         convert(data.timestamp()), metric, num_members,
-                                        type_ids_.data(), values_.data()),
+                                        type_ids.data(), metric_values.data()),
                   "Couldn't write event to local event writer.");
             location_.event_written();
         }
@@ -611,9 +604,6 @@ namespace writer
         OTF2_Archive* ar_;
         OTF2_DefWriter* def_wrt_;
         OTF2_EvtWriter* evt_wrt_;
-
-        std::vector<OTF2_Type> type_ids_;
-        std::vector<OTF2_MetricValue> values_;
     };
 
     template <typename Record>
