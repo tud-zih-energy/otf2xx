@@ -131,8 +131,6 @@ namespace reader
                                      OTF2_MetricRef metric, uint8_t numberOfMetrics,
                                      const OTF2_Type* typeIDs, const OTF2_MetricValue* metricValues)
             {
-                // typeID parameter is ignored, as it's redundant with metric_member
-
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
 
                 // WORKAROUND for broken Score-P traces
@@ -145,8 +143,10 @@ namespace reader
                     otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
                         time - reader->clock_properties().start_time().count()));
 
-                otf2::event::metric::metric_values metric_values{ typeIDs, metricValues,
-                                                                  numberOfMetrics };
+                otf2::event::metric::metric_values metric_values{
+                    std::vector<OTF2_Type>{ typeIDs, typeIDs + numberOfMetrics },
+                    std::vector<OTF2_MetricValue>{ metricValues, metricValues + numberOfMetrics }
+                };
 
                 // assumes a valid trace file
                 if (reader->metric_classes().count(metric))

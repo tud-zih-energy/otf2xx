@@ -178,15 +178,19 @@ namespace event
             template <typename Definition>
             using weak_ref = otf2::definition::detail::weak_ref<Definition>;
 
-            metric_values(const OTF2_Type* type_ids, const OTF2_MetricValue* values,
-                          std::size_t num_events)
-            : type_ids_(type_ids, type_ids + num_events), values_(values, values + num_events)
+            metric_values(std::vector<OTF2_Type>&& type_ids,
+                          std::vector<OTF2_MetricValue>&& metric_values)
+            : type_ids_(std::move(type_ids)), values_(std::move(metric_values))
             {
+                if (type_ids_.size() != values_.size())
+                {
+                    make_exception(
+                        "attempting to construct metric_values from data of different sizes");
+                }
             }
 
             std::size_t size() const
             {
-                assert(type_ids_.size() == values_.size());
                 return type_ids_.size();
             }
 
@@ -241,6 +245,13 @@ namespace event
         metric(const otf2::event::metric& other, otf2::chrono::time_point timestamp)
         : base<metric>(other, timestamp), metric_class_(other.metric_class()),
           metric_instance_(other.metric_instance()), values_(other.values())
+        {
+        }
+
+        /// construct without referencing a metric class or a metric instance
+        metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp, metric_values&& values)
+        : base<metric>(al, timestamp), metric_class_(), metric_instance_(),
+          values_(std::move(values))
         {
         }
 
