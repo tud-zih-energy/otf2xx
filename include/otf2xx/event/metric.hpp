@@ -281,10 +281,7 @@ namespace event
             return static_cast<bool>(metric_class_);
         }
 
-        template <typename Definition>
-        using weak_ref = otf2::definition::detail::weak_ref<Definition>;
-
-        weak_ref<otf2::definition::metric_class> metric_class() const
+        otf2::definition::metric_class metric_class() const
         {
             return metric_class_;
         }
@@ -300,7 +297,7 @@ namespace event
             return static_cast<bool>(metric_instance_);
         }
 
-        weak_ref<otf2::definition::metric_instance> metric_instance() const
+        otf2::definition::metric_instance metric_instance() const
         {
             return metric_instance_;
         }
@@ -311,19 +308,15 @@ namespace event
             metric_instance_ = mi;
         }
 
-        weak_ref<otf2::definition::metric_class> resolve_metric_class() const
+        otf2::definition::metric_class resolve_metric_class() const
         {
-            assert(((void)"Malformed metric event: does reference neither metric class nor metric "
-                          "instance!",
-                    has_metric_class() || has_metric_instance()));
-
-            if (has_metric_class())
+            if (has_metric_instance())
             {
-                return metric_class_;
+                return metric_instance_->metric_class();
             }
             else
             {
-                return metric_instance_->metric_class();
+                return metric_class_;
             }
         }
 
