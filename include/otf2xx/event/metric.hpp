@@ -385,6 +385,8 @@ namespace event
             // if the event was constructed without a reference to a metric
             // class or metric instance.
 
+            assert(metric_class.is_valid());
+
             // Look up the index of a member inside of metric class and use it to
             // construct a value_proxy from the right OTF2_Type and OTF2_MetricValue.
             std::size_t index = 0;
