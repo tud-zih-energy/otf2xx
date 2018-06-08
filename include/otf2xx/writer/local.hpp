@@ -160,25 +160,25 @@ namespace writer
             location_.event_written();
         }
 
-        void write(const otf2::event::metric& data)
+        void write(const otf2::event::metric& metric)
         {
-            otf2::reference<otf2::definition::detail::metric_base>::ref_type metric;
+            otf2::reference<otf2::definition::detail::metric_base>::ref_type ref;
 
-            if (data.has_metric_instance())
+            if (metric.has_metric_instance())
             {
-                metric = data.metric_instance_->ref();
+                ref = metric.metric_instance_->ref();
             }
             else
             {
-                metric = data.metric_class_->ref();
+                ref = metric.metric_class_->ref();
             }
 
-            std::size_t num_members = data.values().size();
-            const auto& type_ids = data.values().type_ids();
-            const auto& metric_values = data.values().values();
+            std::size_t num_members = metric.values().size();
+            const auto& type_ids = metric.values().type_ids();
+            const auto& metric_values = metric.values().values();
 
-            check(OTF2_EvtWriter_Metric(evt_wrt_, data.attribute_list().get(),
-                                        convert(data.timestamp()), metric, num_members,
+            check(OTF2_EvtWriter_Metric(evt_wrt_, metric.attribute_list().get(),
+                                        convert(metric.timestamp()), ref, num_members,
                                         type_ids.data(), metric_values.data()),
                   "Couldn't write event to local event writer.");
             location_.event_written();

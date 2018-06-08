@@ -59,44 +59,35 @@ namespace otf2
 namespace event
 {
 
-    class metric : public base<metric>
+    namespace detail
     {
-    public:
-        class value_container
+        /**
+         * \brief A proxy class that allows type safe access to a metric value
+         *
+         * For performance reasons, the types and values of an event's metric
+         * values are stored in separate locations. This proxy class allows to
+         * set and retrieve a value with the correct type.
+         */
+        class typed_value_proxy
         {
-            template <typename T>
-            T scale(T x) const
-            {
-                int base = 2;
-                if (metric->value_base() ==
-                    otf2::definition::metric_member::value_base_type::decimal)
-                    base = 10;
-                return x * std::pow(base, metric->value_exponent());
-            }
+        private:
+            using value_type = otf2::common::type;
 
         public:
-            value_container(
-                otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric,
-                OTF2_MetricValue value)
-            : metric(metric), value(value)
+            typed_value_proxy(OTF2_Type& type, OTF2_MetricValue& value) : type_(type), value_(value)
             {
             }
-
-            otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric;
-            OTF2_MetricValue value;
 
             double as_double() const
             {
-                typedef otf2::definition::metric_member::value_type_type value_type;
-
-                switch (metric->value_type())
+                switch (type())
                 {
                 case value_type::Double:
-                    return scale<double>(value.floating_point);
+                    return static_cast<double>(value_.floating_point);
                 case value_type::int64:
-                    return scale<double>(static_cast<double>(value.signed_int));
+                    return static_cast<double>(value_.signed_int);
                 case value_type::uint64:
-                    return scale<double>(static_cast<double>(value.unsigned_int));
+                    return static_cast<double>(value_.unsigned_int);
                 default:
                     make_exception("Unexpected type given in metric member");
                 }
@@ -106,16 +97,14 @@ namespace event
 
             std::int64_t as_int64() const
             {
-                typedef otf2::definition::metric_member::value_type_type value_type;
-
-                switch (metric->value_type())
+                switch (type())
                 {
                 case value_type::Double:
-                    return scale<std::int64_t>(static_cast<std::int64_t>(value.floating_point));
+                    return static_cast<std::int64_t>(value_.floating_point);
                 case value_type::int64:
-                    return scale<std::int64_t>(value.signed_int);
+                    return static_cast<std::int64_t>(value_.signed_int);
                 case value_type::uint64:
-                    return scale<std::int64_t>(static_cast<std::int64_t>(value.unsigned_int));
+                    return static_cast<std::int64_t>(value_.unsigned_int);
                 default:
                     make_exception("Unexpected type given in metric member");
                 }
@@ -125,16 +114,14 @@ namespace event
 
             std::uint64_t as_uint64() const
             {
-                typedef otf2::definition::metric_member::value_type_type value_type;
-
-                switch (metric->value_type())
+                switch (type())
                 {
                 case value_type::Double:
-                    return scale<std::uint64_t>(static_cast<std::uint64_t>(value.floating_point));
+                    return static_cast<std::uint64_t>(value_.floating_point);
                 case value_type::int64:
-                    return scale<std::uint64_t>(static_cast<std::uint64_t>(value.signed_int));
+                    return static_cast<std::uint64_t>(value_.signed_int);
                 case value_type::uint64:
-                    return scale<std::uint64_t>(value.unsigned_int);
+                    return static_cast<std::uint64_t>(value_.unsigned_int);
                 default:
                     make_exception("Unexpected type given in metric member");
                 }
@@ -143,20 +130,18 @@ namespace event
             }
 
             template <typename T>
-            void set(T x)
+            std::enable_if_t<std::is_arithmetic<T>::value> value(T x)
             {
-                typedef otf2::definition::metric_member::value_type_type value_type;
-
-                switch (metric->value_type())
+                switch (type())
                 {
                 case value_type::Double:
-                    value.floating_point = static_cast<double>(x);
+                    value_.floating_point = static_cast<double>(x);
                     break;
                 case value_type::int64:
-                    value.signed_int = static_cast<std::int64_t>(x);
+                    value_.signed_int = static_cast<std::int64_t>(x);
                     break;
                 case value_type::uint64:
-                    value.unsigned_int = static_cast<std::uint64_t>(x);
+                    value_.unsigned_int = static_cast<std::uint64_t>(x);
                     break;
                 default:
                     make_exception("Unexpected type given in metric member");
@@ -164,12 +149,124 @@ namespace event
             }
 
             template <typename T>
-            value_container& operator=(T x)
+            typed_value_proxy operator=(T x)
             {
-                set(x);
+                value(x);
+                return { *this };
+            }
 
+            otf2::common::type type() const
+            {
+                return static_cast<otf2::common::type>(type_);
+            }
+
+            void type(otf2::common::type type_id)
+            {
+                type_ = static_cast<OTF2_Type>(type_id);
+            }
+
+            void type(OTF2_Type type_id)
+            {
+                type_ = type_id;
+            }
+
+        private:
+            OTF2_Type& type_;
+            OTF2_MetricValue& value_;
+        };
+
+    } // namespace detail
+
+    class metric : public base<metric>
+    {
+    public:
+        /**
+         * \brief A proxy class allowing type safe, correctly scaled access to a
+         *        metric value
+         */
+        class value_proxy
+        {
+            template <typename T>
+            T scale(T x) const
+            {
+                using value_base_type = otf2::definition::metric_member::value_base_type;
+
+                int base;
+                switch (metric_->value_base())
+                {
+                case value_base_type::binary:
+                    base = 2;
+                    break;
+                case value_base_type::decimal:
+                    base = 10;
+                    break;
+                }
+                return x * std::pow(base, metric_->value_exponent());
+            }
+
+        public:
+            value_proxy(OTF2_Type& type, OTF2_MetricValue& value,
+                        otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric)
+            : value_(type, value), metric_(metric)
+            {
+            }
+
+            value_proxy(const detail::typed_value_proxy& value,
+                        otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric)
+            : value_(value), metric_(metric)
+            {
+            }
+
+            value_proxy(detail::typed_value_proxy&& value,
+                        otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric)
+            : value_(std::move(value)), metric_(metric)
+            {
+            }
+
+            double as_double() const
+            {
+                return scale<double>(value_.as_double());
+            }
+
+            std::int64_t as_int64() const
+            {
+                return scale<std::int64_t>(value_.as_int64());
+            }
+
+            std::uint64_t as_uint64() const
+            {
+                return scale<std::uint64_t>(value_.as_uint64());
+            }
+
+            template <typename T>
+            void set(T x)
+            {
+                value_.value(x);
+            }
+
+            template <typename T>
+            value_proxy& operator=(T x)
+            {
+                value_ = x;
                 return *this;
             }
+
+            otf2::common::type type() const
+            {
+                assert(value_.type() == metric_->value_type());
+
+                return value_.type();
+            }
+
+            // void type(otf2::common::type type_id)
+            // {
+            //     value_.type(type_id);
+            //     metric_->value_type(type_id);
+            // }
+
+        private:
+            detail::typed_value_proxy value_;
+            otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric_;
         };
 
         class metric_values
@@ -202,6 +299,21 @@ namespace event
             const std::vector<OTF2_MetricValue>& values() const
             {
                 return values_;
+            }
+
+            detail::typed_value_proxy at(std::size_t index)
+            {
+                if (index >= size())
+                {
+                    throw std::out_of_range("Out of bounds access in metric_values");
+                }
+
+                return { type_ids_[index], values_[index] };
+            }
+
+            detail::typed_value_proxy operator[](std::size_t index)
+            {
+                return { type_ids_[index], values_[index] };
             }
 
         private:
@@ -265,20 +377,22 @@ namespace event
             return values_;
         }
 
-        value_container get_value_for(const otf2::definition::metric_member& member) const
+        value_proxy get_value_for(const otf2::definition::metric_member& member)
         {
             const otf2::definition::metric_class& metric_class = this->resolve_metric_class();
 
-            // Look up index of member inside of metric class, use this index to
-            // construct a value container from the right OT2_MetricValue.
+            // TODO: maybe check if metric_class is undefined? This might happen
+            // if the event was constructed without a reference to a metric
+            // class or metric instance.
+
+            // Look up the index of a member inside of metric class and use it to
+            // construct a value_proxy from the right OTF2_Type and OTF2_MetricValue.
             std::size_t index = 0;
             for (const auto& class_member : metric_class)
             {
                 if (class_member == member)
                 {
-                    OTF2_MetricValue metric_value = values_.values()[index];
-
-                    return value_container{ member, metric_value };
+                    return value_proxy{ values_[index], member };
                 }
 
                 index++;

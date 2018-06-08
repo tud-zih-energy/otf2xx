@@ -148,30 +148,23 @@ namespace reader
                     std::vector<OTF2_MetricValue>{ metricValues, metricValues + numberOfMetrics }
                 };
 
+                otf2::event::metric metric_event{ attributeList, timestamp,
+                                                  std::move(metric_values) };
+
                 // assumes a valid trace file
-                if (reader->metric_classes().count(metric))
+                auto it = reader->metric_classes().find(metric);
+                if (it != reader->metric_classes().end())
                 {
                     // create metric_event that references a metric_class
-                    const otf2::definition::metric_class& metric_class =
-                        reader->metric_classes()[metric];
-
-                    otf2::event::metric metric_event{ attributeList, timestamp, metric_class,
-                                                      std::move(metric_values) };
-
-                    reader->callback().event(reader->locations()[locationID], metric_event);
+                    metric_event.metric_class(*it);
                 }
                 else
                 {
                     // create metric_event that references a metric_instance
-                    const otf2::definition::metric_instance& metric_instance =
-                        reader->metric_instances()[metric];
-
-                    otf2::event::metric metric_event{ attributeList, timestamp, metric_instance,
-                                                      std::move(metric_values) };
-
-                    reader->callback().event(reader->locations()[locationID], metric_event);
+                    metric_event.metric_instance(reader->metric_instances()[metric]);
                 }
 
+                reader->callback().event(reader->locations()[locationID], metric_event);
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
 
