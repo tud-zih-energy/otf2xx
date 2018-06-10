@@ -389,18 +389,15 @@ namespace event
 
             // Look up the index of a member inside of metric class and use it to
             // construct a value_proxy from the right OTF2_Type and OTF2_MetricValue.
-            std::size_t index = 0;
-            for (const auto& class_member : metric_class)
-            {
-                if (class_member == member)
-                {
-                    return value_proxy{ values_[index], member };
-                }
 
-                index++;
+            auto it = std::find(metric_class.begin(), metric_class.end(), member);
+            if (it == metric_class.end())
+            {
+                throw std::out_of_range("Failed to look up metric_member inside metric_class");
             }
 
-            throw std::out_of_range("Failed to look up metric_member inside metric_class");
+            auto index = std::distance(metric_class.begin(), it);
+            return value_proxy{ values_[index], member };
         }
 
         bool has_metric_class() const
