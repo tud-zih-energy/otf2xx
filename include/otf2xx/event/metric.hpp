@@ -286,6 +286,15 @@ namespace event
                 }
             }
 
+            metric_values(const otf2::definition::metric_class& metric_class)
+            : type_ids_(metric_class.size()), values_(metric_class.size())
+            {
+                for (std::size_t i = 0; i < metric_class.size(); ++i)
+                {
+                    type_ids_[i] = static_cast<OTF2_Type>(metric_class[i].value_type());
+                }
+            }
+
             std::size_t size() const
             {
                 return type_ids_.size();
@@ -350,6 +359,19 @@ namespace event
                const otf2::definition::metric_instance& metric_c, metric_values&& values)
         : base<metric>(al, timestamp), metric_class_(), metric_instance_(metric_c),
           values_(std::move(values))
+        {
+        }
+
+        // construct without values, but reserve memory for them
+        metric(otf2::chrono::time_point timestamp, const otf2::definition::metric_class& metric_c)
+        : base<metric>(timestamp), metric_class_(metric_c), metric_instance_(), values_(metric_c)
+        {
+        }
+
+        metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+               const otf2::definition::metric_class& metric_c)
+        : base<metric>(al, timestamp), metric_class_(metric_c), metric_instance_(),
+          values_(metric_c)
         {
         }
 
