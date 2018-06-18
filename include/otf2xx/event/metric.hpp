@@ -288,9 +288,6 @@ namespace event
         class metric_values
         {
         public:
-            template <typename Definition>
-            using weak_ref = otf2::definition::detail::weak_ref<Definition>;
-
             metric_values(std::vector<OTF2_Type>&& type_ids,
                           std::vector<OTF2_MetricValue>&& metric_values)
             : type_ids_(std::move(type_ids)), values_(std::move(metric_values))
@@ -420,24 +417,24 @@ namespace event
 
         value_proxy get_value_for(const otf2::definition::metric_member& member)
         {
-            const otf2::definition::metric_class& metric_class = this->resolve_metric_class();
+            auto metric_class = this->resolve_metric_class_ref();
 
             // TODO: maybe check if metric_class is undefined? This might happen
             // if the event was constructed without a reference to a metric
             // class or metric instance.
 
-            assert(metric_class.is_valid());
+            assert(metric_class->is_valid());
 
             // Look up the index of a member inside of metric class and use it to
             // construct a value_proxy from the right OTF2_Type and OTF2_MetricValue.
 
-            auto it = std::find(metric_class.begin(), metric_class.end(), member);
-            if (it == metric_class.end())
+            auto it = std::find(metric_class->begin(), metric_class->end(), member);
+            if (it == metric_class->end())
             {
                 throw std::out_of_range("Failed to look up metric_member inside metric_class");
             }
 
-            auto index = std::distance(metric_class.begin(), it);
+            auto index = std::distance(metric_class->begin(), it);
             return value_proxy{ values_[index], member };
         }
 
@@ -475,9 +472,20 @@ namespace event
 
         otf2::definition::metric_class resolve_metric_class() const
         {
+            return otf2::definition::metric_class{ resolve_metric_class_ref() };
+        }
+
+        friend class otf2::writer::local;
+
+    private:
+        template <typename Definition>
+        using weak_ref = otf2::definition::detail::weak_ref<Definition>;
+
+        weak_ref<otf2::definition::metric_class> resolve_metric_class_ref() const
+        {
             if (has_metric_instance())
             {
-                return metric_instance_->metric_class();
+                return otf2::definition::make_weak_ref(metric_instance_->metric_class());
             }
             else
             {
@@ -485,11 +493,9 @@ namespace event
             }
         }
 
-        friend class otf2::writer::local;
-
     private:
-        otf2::definition::detail::weak_ref<otf2::definition::metric_class> metric_class_;
-        otf2::definition::detail::weak_ref<otf2::definition::metric_instance> metric_instance_;
+        weak_ref<otf2::definition::metric_class> metric_class_;
+        weak_ref<otf2::definition::metric_instance> metric_instance_;
         metric_values values_;
     };
 } // namespace event
