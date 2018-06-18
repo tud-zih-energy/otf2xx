@@ -333,6 +333,11 @@ namespace event
                 return { type_ids_[index], values_[index] };
             }
 
+            detail::const_typed_value_proxy operator[](std::size_t index) const
+            {
+                return { type_ids_[index], values_[index] };
+            }
+
             detail::typed_value_proxy operator[](std::size_t index)
             {
                 return { type_ids_[index], values_[index] };
@@ -413,6 +418,24 @@ namespace event
         const metric_values& raw_values() const
         {
             return values_;
+        }
+
+        value_proxy get_value_at(std::size_t index)
+        {
+            auto metric_class = resolve_metric_class_ref();
+
+            assert(metric_class->is_valid());
+
+            return value_proxy(values_[index], (*metric_class)[index]);
+        }
+
+        const_value_proxy get_value_at(std::size_t index) const
+        {
+            auto metric_class = resolve_metric_class_ref();
+
+            assert(metric_class->is_valid());
+
+            return const_value_proxy(values_[index], (*metric_class)[index]);
         }
 
         value_proxy get_value_for(const otf2::definition::metric_member& member)
