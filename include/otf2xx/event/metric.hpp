@@ -333,14 +333,97 @@ namespace event
                 return { type_ids_[index], values_[index] };
             }
 
-            detail::const_typed_value_proxy operator[](std::size_t index) const
+            detail::const_typed_value_proxy at(std::size_t index) const
             {
+                if (index >= size())
+                {
+                    throw std::out_of_range("Out of bounds access in metric_values");
+                }
+
                 return { type_ids_[index], values_[index] };
             }
 
             detail::typed_value_proxy operator[](std::size_t index)
             {
                 return { type_ids_[index], values_[index] };
+            }
+
+            detail::const_typed_value_proxy operator[](std::size_t index) const
+            {
+                return { type_ids_[index], values_[index] };
+            }
+
+            template <bool IsMutable>
+            class base_iterator
+            {
+            public:
+                using value_type = detail::base_typed_value_proxy<IsMutable>;
+
+                using type_type = typename value_type::type_type;
+                using metric_value_type = typename value_type::metric_value_type;
+
+            private:
+                friend metric_values;
+
+                base_iterator(type_type* type_id, metric_value_type* value)
+                : type_ptr_(type_id), value_ptr_(value)
+                {
+                }
+
+            public:
+                bool operator==(const base_iterator& rhs) const
+                {
+                    return type_ptr_ == rhs.type_ptr_ && value_ptr_ == rhs.value_ptr_;
+                }
+
+                bool operator!=(const base_iterator& rhs) const
+                {
+                    return !(*this == rhs);
+                }
+
+                value_type operator*()
+                {
+                    return { *type_ptr_, *value_ptr_ };
+                }
+
+                base_iterator& operator++()
+                {
+                    ++type_ptr_;
+                    ++value_ptr_;
+                    return *this;
+                }
+
+                base_iterator operator++(int)
+                {
+                    return { type_ptr_++, value_ptr_++ };
+                }
+
+            private:
+                type_type* type_ptr_;
+                metric_value_type* value_ptr_;
+            };
+
+            using iterator = base_iterator<true>;
+            using const_iterator = base_iterator<false>;
+
+            const_iterator begin() const
+            {
+                return const_iterator{ type_ids_.data(), values_.data() };
+            }
+
+            iterator begin()
+            {
+                return iterator{ type_ids_.data(), values_.data() };
+            }
+
+            const_iterator end() const
+            {
+                return const_iterator{ type_ids_.data() + size(), values_.data() + size() };
+            }
+
+            iterator end()
+            {
+                return iterator{ type_ids_.data() + size(), values_.data() + size() };
             }
 
         private:
