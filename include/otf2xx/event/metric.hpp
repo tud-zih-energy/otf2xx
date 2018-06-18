@@ -68,13 +68,19 @@ namespace event
          * values are stored in separate locations. This proxy class allows to
          * set and retrieve a value with the correct type.
          */
-        class typed_value_proxy
+        template <bool IsMutable>
+        class base_typed_value_proxy
         {
-        private:
-            using value_type = otf2::common::type;
+        public:
+            using type_type =
+                typename std::conditional<IsMutable, OTF2_Type, const OTF2_Type>::type;
+
+            using metric_value_type = typename std::conditional<IsMutable, OTF2_MetricValue,
+                                                                const OTF2_MetricValue>::type;
 
         public:
-            typed_value_proxy(OTF2_Type& type, OTF2_MetricValue& value) : type_(type), value_(value)
+            base_typed_value_proxy(type_type& type, metric_value_type& value)
+            : type_(type), value_(value)
             {
             }
 
@@ -82,11 +88,11 @@ namespace event
             {
                 switch (type())
                 {
-                case value_type::Double:
+                case otf2::common::type::Double:
                     return static_cast<double>(value_.floating_point);
-                case value_type::int64:
+                case otf2::common::type::int64:
                     return static_cast<double>(value_.signed_int);
-                case value_type::uint64:
+                case otf2::common::type::uint64:
                     return static_cast<double>(value_.unsigned_int);
                 default:
                     make_exception("Unexpected type given in metric member");
@@ -99,11 +105,11 @@ namespace event
             {
                 switch (type())
                 {
-                case value_type::Double:
+                case otf2::common::type::Double:
                     return static_cast<std::int64_t>(value_.floating_point);
-                case value_type::int64:
+                case otf2::common::type::int64:
                     return static_cast<std::int64_t>(value_.signed_int);
-                case value_type::uint64:
+                case otf2::common::type::uint64:
                     return static_cast<std::int64_t>(value_.unsigned_int);
                 default:
                     make_exception("Unexpected type given in metric member");
@@ -116,11 +122,11 @@ namespace event
             {
                 switch (type())
                 {
-                case value_type::Double:
+                case otf2::common::type::Double:
                     return static_cast<std::uint64_t>(value_.floating_point);
-                case value_type::int64:
+                case otf2::common::type::int64:
                     return static_cast<std::uint64_t>(value_.signed_int);
-                case value_type::uint64:
+                case otf2::common::type::uint64:
                     return static_cast<std::uint64_t>(value_.unsigned_int);
                 default:
                     make_exception("Unexpected type given in metric member");
@@ -129,18 +135,18 @@ namespace event
                 return 0;
             }
 
-            template <typename T>
-            std::enable_if_t<std::is_arithmetic<T>::value> value(T x)
+            template <typename T, bool Mutable = IsMutable>
+            std::enable_if_t<Mutable && std::is_arithmetic<T>::value> value(T x)
             {
                 switch (type())
                 {
-                case value_type::Double:
+                case otf2::common::type::Double:
                     value_.floating_point = static_cast<double>(x);
                     break;
-                case value_type::int64:
+                case otf2::common::type::int64:
                     value_.signed_int = static_cast<std::int64_t>(x);
                     break;
-                case value_type::uint64:
+                case otf2::common::type::uint64:
                     value_.unsigned_int = static_cast<std::uint64_t>(x);
                     break;
                 default:
@@ -149,7 +155,7 @@ namespace event
             }
 
             template <typename T>
-            typed_value_proxy operator=(T x)
+            base_typed_value_proxy operator=(T x)
             {
                 value(x);
                 return { *this };
@@ -160,21 +166,25 @@ namespace event
                 return static_cast<otf2::common::type>(type_);
             }
 
-            void type(otf2::common::type type_id)
+            template <bool Mutable = IsMutable>
+            std::enable_if_t<Mutable> type(otf2::common::type type_id)
             {
                 type_ = static_cast<OTF2_Type>(type_id);
             }
 
-            void type(OTF2_Type type_id)
+            template <bool Mutable = IsMutable>
+            std::enable_if_t<Mutable> type(OTF2_Type type_id)
             {
                 type_ = type_id;
             }
 
         private:
-            OTF2_Type& type_;
-            OTF2_MetricValue& value_;
+            type_type& type_;
+            metric_value_type& value_;
         };
 
+        using typed_value_proxy = base_typed_value_proxy<true>;
+        using const_typed_value_proxy = base_typed_value_proxy<false>;
     } // namespace detail
 
     class metric : public base<metric>
@@ -184,7 +194,8 @@ namespace event
          * \brief A proxy class allowing type safe, correctly scaled access to a
          *        metric value
          */
-        class value_proxy
+        template <bool IsMutable>
+        class base_value_proxy
         {
             template <typename T>
             T scale(T x) const
@@ -205,20 +216,31 @@ namespace event
             }
 
         public:
-            value_proxy(OTF2_Type& type, OTF2_MetricValue& value,
-                        otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric)
+            using typed_value_proxy = detail::base_typed_value_proxy<IsMutable>;
+
+            // This is OTF2_Type, or const OTF2_Type if IsMutable == true
+            using type_type = typename typed_value_proxy::type_type;
+
+            // ... and the same thing for OTF2_MetricValue
+            using metric_value_type = typename typed_value_proxy::metric_value_type;
+
+            base_value_proxy(
+                type_type& type, metric_value_type& value,
+                otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric)
             : value_(type, value), metric_(metric)
             {
             }
 
-            value_proxy(const detail::typed_value_proxy& value,
-                        otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric)
+            base_value_proxy(
+                const typed_value_proxy& value,
+                otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric)
             : value_(value), metric_(metric)
             {
             }
 
-            value_proxy(detail::typed_value_proxy&& value,
-                        otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric)
+            base_value_proxy(
+                typed_value_proxy&& value,
+                otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric)
             : value_(std::move(value)), metric_(metric)
             {
             }
@@ -238,14 +260,14 @@ namespace event
                 return scale<std::uint64_t>(value_.as_uint64());
             }
 
-            template <typename T>
-            void set(T x)
+            template <typename T, bool Mutable = IsMutable>
+            std::enable_if_t<Mutable> set(T x)
             {
                 value_.value(x);
             }
 
-            template <typename T>
-            value_proxy& operator=(T x)
+            template <typename T, bool Mutable = IsMutable>
+            std::enable_if_t<Mutable, base_value_proxy&> operator=(T x)
             {
                 value_ = x;
                 return *this;
@@ -258,14 +280,8 @@ namespace event
                 return value_.type();
             }
 
-            // void type(otf2::common::type type_id)
-            // {
-            //     value_.type(type_id);
-            //     metric_->value_type(type_id);
-            // }
-
         private:
-            detail::typed_value_proxy value_;
+            typed_value_proxy value_;
             otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric_;
         };
 
@@ -329,6 +345,9 @@ namespace event
             std::vector<OTF2_Type> type_ids_;
             std::vector<OTF2_MetricValue> values_;
         };
+
+        using value_proxy = base_value_proxy<true>;
+        using const_value_proxy = base_value_proxy<false>;
 
         metric() = default;
 
