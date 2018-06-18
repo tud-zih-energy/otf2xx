@@ -378,7 +378,7 @@ namespace event
         // copy constructor with new timestamp
         metric(const otf2::event::metric& other, otf2::chrono::time_point timestamp)
         : base<metric>(other, timestamp), metric_class_(other.metric_class()),
-          metric_instance_(other.metric_instance()), values_(other.values())
+          metric_instance_(other.metric_instance()), values_(other.raw_values())
         {
         }
 
@@ -389,12 +389,12 @@ namespace event
         {
         }
 
-        metric_values& values()
+        metric_values& raw_values()
         {
             return values_;
         }
 
-        const metric_values& values() const
+        const metric_values& raw_values() const
         {
             return values_;
         }

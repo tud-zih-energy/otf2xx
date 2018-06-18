@@ -173,9 +173,9 @@ namespace writer
                 ref = metric.metric_class_->ref();
             }
 
-            std::size_t num_members = metric.values().size();
-            const auto& type_ids = metric.values().type_ids();
-            const auto& metric_values = metric.values().values();
+            std::size_t num_members = metric.raw_values().size();
+            const auto& type_ids = metric.raw_values().type_ids();
+            const auto& metric_values = metric.raw_values().values();
 
             check(OTF2_EvtWriter_Metric(evt_wrt_, metric.attribute_list().get(),
                                         convert(metric.timestamp()), ref, num_members,
