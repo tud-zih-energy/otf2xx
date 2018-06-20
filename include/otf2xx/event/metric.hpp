@@ -507,7 +507,7 @@ namespace event
         {
             auto metric_class = resolve_metric_class_ref();
 
-            assert(metric_class->is_valid());
+            assert(static_cast<bool>(metric_class));
 
             return value_proxy(values_[index], (*metric_class)[index]);
         }
@@ -516,7 +516,7 @@ namespace event
         {
             auto metric_class = resolve_metric_class_ref();
 
-            assert(metric_class->is_valid());
+            assert(static_cast<bool>(metric_class));
 
             return const_value_proxy(values_[index], (*metric_class)[index]);
         }
@@ -529,7 +529,7 @@ namespace event
             // if the event was constructed without a reference to a metric
             // class or metric instance.
 
-            assert(metric_class->is_valid());
+            assert(static_cast<bool>(metric_class));
 
             // Look up the index of a member inside of metric class and use it to
             // construct a value_proxy from the right OTF2_Type and OTF2_MetricValue.
