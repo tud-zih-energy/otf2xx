@@ -505,7 +505,7 @@ namespace event
 
         value_proxy get_value_at(std::size_t index)
         {
-            auto metric_class = resolve_metric_class_ref();
+            auto metric_class = resolve_weak_ref_to_metric_class();
 
             assert(static_cast<bool>(metric_class));
 
@@ -514,7 +514,7 @@ namespace event
 
         const_value_proxy get_value_at(std::size_t index) const
         {
-            auto metric_class = resolve_metric_class_ref();
+            auto metric_class = resolve_weak_ref_to_metric_class();
 
             assert(static_cast<bool>(metric_class));
 
@@ -523,7 +523,7 @@ namespace event
 
         value_proxy get_value_for(const otf2::definition::metric_member& member)
         {
-            auto metric_class = this->resolve_metric_class_ref();
+            auto metric_class = resolve_weak_ref_to_metric_class();
 
             // TODO: maybe check if metric_class is undefined? This might happen
             // if the event was constructed without a reference to a metric
@@ -578,7 +578,7 @@ namespace event
 
         otf2::definition::metric_class resolve_metric_class() const
         {
-            return otf2::definition::metric_class{ resolve_metric_class_ref() };
+            return otf2::definition::metric_class{ resolve_weak_ref_to_metric_class() };
         }
 
         friend class otf2::writer::local;
@@ -587,7 +587,7 @@ namespace event
         template <typename Definition>
         using weak_ref = otf2::definition::detail::weak_ref<Definition>;
 
-        weak_ref<otf2::definition::metric_class> resolve_metric_class_ref() const
+        weak_ref<otf2::definition::metric_class> resolve_weak_ref_to_metric_class() const
         {
             if (has_metric_instance())
             {
