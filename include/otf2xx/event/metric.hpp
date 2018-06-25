@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2018, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,9 @@
 #ifndef INCLUDE_OTF2XX_EVENT_METRIC_HPP
 #define INCLUDE_OTF2XX_EVENT_METRIC_HPP
 
+#include <otf2xx/event/detail/metric_values.hpp>
+#include <otf2xx/event/detail/value_proxy.hpp>
+
 #include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/definition/metric_member.hpp>
 
@@ -42,197 +45,130 @@
 
 #include <otf2xx/chrono/chrono.hpp>
 
-#include <otf2/OTF2_Events.h>
-
 #include <otf2xx/exception.hpp>
 
 #include <otf2xx/definition/detail/weak_ref.hpp>
 #include <otf2xx/writer/fwd.hpp>
 
-#include <cmath>
-#include <complex>
-#include <cstdint>
-#include <vector>
-
 namespace otf2
 {
 namespace event
 {
-
     class metric : public base<metric>
     {
     public:
-        class value_container
-        {
-            template <typename T>
-            T scale(T x) const
-            {
-                int base = 2;
-                if (metric->value_base() ==
-                    otf2::definition::metric_member::value_base_type::decimal)
-                    base = 10;
-                return x * std::pow(base, metric->value_exponent());
-            }
-
-        public:
-            otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric;
-            OTF2_MetricValue value;
-
-            double as_double() const
-            {
-                typedef otf2::definition::metric_member::value_type_type value_type;
-
-                switch (metric->value_type())
-                {
-                case value_type::Double:
-                    return scale<double>(value.floating_point);
-                case value_type::int64:
-                    return scale<double>(static_cast<double>(value.signed_int));
-                case value_type::uint64:
-                    return scale<double>(static_cast<double>(value.unsigned_int));
-                default:
-                    make_exception("Unexpected type given in metric member");
-                }
-
-                return 0;
-            }
-
-            std::int64_t as_int64() const
-            {
-                typedef otf2::definition::metric_member::value_type_type value_type;
-
-                switch (metric->value_type())
-                {
-                case value_type::Double:
-                    return scale<std::int64_t>(static_cast<std::int64_t>(value.floating_point));
-                case value_type::int64:
-                    return scale<std::int64_t>(value.signed_int);
-                case value_type::uint64:
-                    return scale<std::int64_t>(static_cast<std::int64_t>(value.unsigned_int));
-                default:
-                    make_exception("Unexpected type given in metric member");
-                }
-
-                return 0;
-            }
-
-            std::uint64_t as_uint64() const
-            {
-                typedef otf2::definition::metric_member::value_type_type value_type;
-
-                switch (metric->value_type())
-                {
-                case value_type::Double:
-                    return scale<std::uint64_t>(static_cast<std::uint64_t>(value.floating_point));
-                case value_type::int64:
-                    return scale<std::uint64_t>(static_cast<std::uint64_t>(value.signed_int));
-                case value_type::uint64:
-                    return scale<std::uint64_t>(value.unsigned_int);
-                default:
-                    make_exception("Unexpected type given in metric member");
-                }
-
-                return 0;
-            }
-
-            template <typename T>
-            void set(T x)
-            {
-                typedef otf2::definition::metric_member::value_type_type value_type;
-
-                switch (metric->value_type())
-                {
-                case value_type::Double:
-                    value.floating_point = static_cast<double>(x);
-                    break;
-                case value_type::int64:
-                    value.signed_int = static_cast<std::int64_t>(x);
-                    break;
-                case value_type::uint64:
-                    value.unsigned_int = static_cast<std::uint64_t>(x);
-                    break;
-                default:
-                    make_exception("Unexpected type given in metric member");
-                }
-            }
-
-            template <typename T>
-            value_container& operator=(T x)
-            {
-                set(x);
-
-                return *this;
-            }
-        };
+        using values = detail::metric_values;
+        using value_proxy = detail::value_proxy;
+        using const_value_proxy = detail::const_value_proxy;
 
         metric() = default;
 
         // construct with values
         metric(otf2::chrono::time_point timestamp, const otf2::definition::metric_class& metric_c,
-               const std::vector<value_container>& values)
-        : base<metric>(timestamp), metric_class_(metric_c), metric_instance_(), values_(values)
+               values&& values)
+        : base<metric>(timestamp), metric_class_(metric_c), metric_instance_(),
+          values_(std::move(values))
         {
         }
 
         metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-               const otf2::definition::metric_class& metric_c,
-               const std::vector<value_container>& values)
-        : base<metric>(al, timestamp), metric_class_(metric_c), metric_instance_(), values_(values)
+               const otf2::definition::metric_class& metric_c, values&& values)
+        : base<metric>(al, timestamp), metric_class_(metric_c), metric_instance_(),
+          values_(std::move(values))
         {
         }
 
         // construct with values
         metric(otf2::chrono::time_point timestamp,
-               const otf2::definition::metric_instance& metric_c,
-               const std::vector<value_container>& values)
-        : base<metric>(timestamp), metric_class_(), metric_instance_(metric_c), values_(values)
+               const otf2::definition::metric_instance& metric_c, values&& values)
+        : base<metric>(timestamp), metric_class_(), metric_instance_(metric_c),
+          values_(std::move(values))
         {
         }
 
         metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-               const otf2::definition::metric_instance& metric_c,
-               const std::vector<value_container>& values)
-        : base<metric>(al, timestamp), metric_class_(), metric_instance_(metric_c), values_(values)
+               const otf2::definition::metric_instance& metric_c, values&& values)
+        : base<metric>(al, timestamp), metric_class_(), metric_instance_(metric_c),
+          values_(std::move(values))
+        {
+        }
+
+        // construct without values, but reserve memory for them
+        metric(otf2::chrono::time_point timestamp, const otf2::definition::metric_class& metric_c)
+        : base<metric>(timestamp), metric_class_(metric_c), metric_instance_(), values_(metric_c)
+        {
+        }
+
+        metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+               const otf2::definition::metric_class& metric_c)
+        : base<metric>(al, timestamp), metric_class_(metric_c), metric_instance_(),
+          values_(metric_c)
         {
         }
 
         // copy constructor with new timestamp
         metric(const otf2::event::metric& other, otf2::chrono::time_point timestamp)
         : base<metric>(other, timestamp), metric_class_(other.metric_class()),
-          metric_instance_(other.metric_instance()), values_(other.values())
+          metric_instance_(other.metric_instance()), values_(other.raw_values())
         {
         }
 
-        std::vector<value_container>& values()
+        /// construct without referencing a metric class or a metric instance
+        metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp, values&& values)
+        : base<metric>(al, timestamp), metric_class_(), metric_instance_(),
+          values_(std::move(values))
+        {
+        }
+
+        values& raw_values()
         {
             return values_;
         }
 
-        const std::vector<value_container>& values() const
+        const values& raw_values() const
         {
             return values_;
         }
 
-        const value_container& get_value_for(const otf2::definition::metric_member& member) const
+        value_proxy get_value_at(std::size_t index)
         {
-            std::size_t i = 0;
+            auto metric_class = resolve_weak_ref_to_metric_class();
 
-            auto mc = metric_class_.lock();
+            assert(static_cast<bool>(metric_class));
 
-            if (metric_instance_)
+            return value_proxy(values_[index], (*metric_class)[index]);
+        }
+
+        const_value_proxy get_value_at(std::size_t index) const
+        {
+            auto metric_class = resolve_weak_ref_to_metric_class();
+
+            assert(static_cast<bool>(metric_class));
+
+            return const_value_proxy(values_[index], (*metric_class)[index]);
+        }
+
+        value_proxy get_value_for(const otf2::definition::metric_member& member)
+        {
+            auto metric_class = resolve_weak_ref_to_metric_class();
+
+            // TODO: maybe check if metric_class is undefined? This might happen
+            // if the event was constructed without a reference to a metric
+            // class or metric instance.
+
+            assert(static_cast<bool>(metric_class));
+
+            // Look up the index of a member inside of metric class and use it to
+            // construct a value_proxy from the right OTF2_Type and OTF2_MetricValue.
+
+            auto it = std::find(metric_class->begin(), metric_class->end(), member);
+            if (it == metric_class->end())
             {
-                mc = metric_instance_->metric_class();
+                throw std::out_of_range("Failed to look up metric_member inside metric_class");
             }
 
-            for (; i < mc.size(); i++)
-            {
-                if (mc[i] == member)
-                    break;
-            }
-
-            assert(i < mc.size());
-
-            return values_[i];
+            auto index = std::distance(metric_class->begin(), it);
+            return value_proxy{ values_[index], member };
         }
 
         bool has_metric_class() const
@@ -267,12 +203,33 @@ namespace event
             metric_instance_ = mi;
         }
 
+        otf2::definition::metric_class resolve_metric_class() const
+        {
+            return otf2::definition::metric_class{ resolve_weak_ref_to_metric_class() };
+        }
+
         friend class otf2::writer::local;
 
     private:
-        otf2::definition::detail::weak_ref<otf2::definition::metric_class> metric_class_;
-        otf2::definition::detail::weak_ref<otf2::definition::metric_instance> metric_instance_;
-        std::vector<value_container> values_;
+        template <typename Definition>
+        using weak_ref = otf2::definition::detail::weak_ref<Definition>;
+
+        weak_ref<otf2::definition::metric_class> resolve_weak_ref_to_metric_class() const
+        {
+            if (has_metric_instance())
+            {
+                return otf2::definition::make_weak_ref(metric_instance_->metric_class());
+            }
+            else
+            {
+                return metric_class_;
+            }
+        }
+
+    private:
+        weak_ref<otf2::definition::metric_class> metric_class_;
+        weak_ref<otf2::definition::metric_instance> metric_instance_;
+        values values_;
     };
 } // namespace event
 } // namespace otf2

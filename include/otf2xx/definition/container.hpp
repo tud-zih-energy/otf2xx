@@ -171,6 +171,11 @@ namespace definition
             return data.size();
         }
 
+        iterator find(key_type key) const
+        {
+            return iterator(data.find(key), data.end());
+        }
+
     public:
         iterator begin() const
         {
@@ -270,7 +275,7 @@ namespace definition
         static_assert(otf2::traits::is_definition<Definition>::value,
                       "The type Definition has to be an otf2::definition");
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_CONTAINER_HPP

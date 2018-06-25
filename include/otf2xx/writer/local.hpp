@@ -160,33 +160,26 @@ namespace writer
             location_.event_written();
         }
 
-        void write(const otf2::event::metric& data)
+        void write(const otf2::event::metric& metric)
         {
-            otf2::reference<otf2::definition::detail::metric_base>::ref_type metric;
+            otf2::reference<otf2::definition::detail::metric_base>::ref_type ref;
 
-            if (data.metric_instance_)
+            if (metric.has_metric_instance())
             {
-                metric = data.metric_instance_->ref();
+                ref = metric.metric_instance_->ref();
             }
             else
             {
-                metric = data.metric_class_->ref();
+                ref = metric.metric_class_->ref();
             }
 
-            std::size_t num_members = data.values().size();
+            std::size_t num_members = metric.raw_values().size();
+            const auto& type_ids = metric.raw_values().type_ids();
+            const auto& metric_values = metric.raw_values().values();
 
-            type_ids_.resize(num_members);
-            values_.resize(num_members);
-
-            for (std::size_t i = 0; i < num_members; i++)
-            {
-                type_ids_[i] = static_cast<OTF2_Type>(data.values()[i].metric->value_type());
-                values_[i] = data.values()[i].value;
-            }
-
-            check(OTF2_EvtWriter_Metric(evt_wrt_, data.attribute_list().get(),
-                                        convert(data.timestamp()), metric, num_members,
-                                        type_ids_.data(), values_.data()),
+            check(OTF2_EvtWriter_Metric(evt_wrt_, metric.attribute_list().get(),
+                                        convert(metric.timestamp()), ref, num_members,
+                                        type_ids.data(), metric_values.data()),
                   "Couldn't write event to local event writer.");
             location_.event_written();
         }
@@ -613,9 +606,6 @@ namespace writer
         OTF2_Archive* ar_;
         OTF2_DefWriter* def_wrt_;
         OTF2_EvtWriter* evt_wrt_;
-
-        std::vector<OTF2_Type> type_ids_;
-        std::vector<OTF2_MetricValue> values_;
     };
 
     template <typename Record>
