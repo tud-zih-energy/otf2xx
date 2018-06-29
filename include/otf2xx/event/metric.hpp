@@ -99,10 +99,24 @@ namespace event
         {
         }
 
+        metric(otf2::chrono::time_point timestamp,
+               const otf2::definition::metric_instance& metric_i)
+        : base<metric>(timestamp), metric_class_(), metric_instance_(metric_i),
+          values_(metric_i.metric_class())
+        {
+        }
+
         metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
                const otf2::definition::metric_class& metric_c)
         : base<metric>(al, timestamp), metric_class_(metric_c), metric_instance_(),
           values_(metric_c)
+        {
+        }
+
+        metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+               const otf2::definition::metric_instance& metric_i)
+        : base<metric>(al, timestamp), metric_class_(), metric_instance_(metric_i),
+          values_(metric_i.metric_class())
         {
         }
 
