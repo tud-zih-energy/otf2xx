@@ -71,13 +71,9 @@ target_include_directories(otf2xx-core
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
-target_include_directories(otf2xx-core SYSTEM
-    INTERFACE
-        ${OTF2_INCLUDE_DIRS}
-)
 target_link_libraries(otf2xx-core
     INTERFACE
-        ${OTF2_LIBRARIES}
+        otf2::otf2
 )
 target_compile_features(otf2xx-core
     INTERFACE
