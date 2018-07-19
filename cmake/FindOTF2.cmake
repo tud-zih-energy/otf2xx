@@ -77,6 +77,8 @@ if(OTF2_FOUND)
         IMPORTED_LINK_INTERFACE_LANGUAGES "C"
         IMPORTED_LOCATION "${OTF2_LIBRARIES}"
         INTERFACE_INCLUDE_DIRECTORIES "${OTF2_INCLUDE_DIRS}"
+        # Note for MacOS: libm is a symlink to libSystem, so there is no harm to link it anyways, but it isn't required
+        INTERFACE_LINK_LIBRARIES "m"
     )
 
 else()
