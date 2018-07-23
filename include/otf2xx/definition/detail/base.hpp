@@ -92,6 +92,11 @@ namespace definition
 
             base& operator=(const base& other)
             {
+                if (other.data_ == data_)
+                {
+                    return *this;
+                }
+
                 if (data_ != nullptr)
                 {
                     if (data_->release() == 0)
@@ -239,8 +244,8 @@ namespace definition
         {
             return !(a == b);
         }
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_BASE_HPP
