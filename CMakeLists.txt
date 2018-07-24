@@ -29,13 +29,11 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-project(otf2xx)
-
 cmake_minimum_required(VERSION 3.8)
 
-set(otf2xx_VERSION 1.0)
+project(otf2xx VERSION 1.0.0)
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake;${CMAKE_MODULE_PATH}")
+list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_CURRENT_LIST_DIR}/cmake)
 find_package(OTF2 8.0.1 EXACT)
 
 if (NOT OTF2_FOUND)
@@ -43,27 +41,23 @@ if (NOT OTF2_FOUND)
     "Available from: http://www.vi-hps.org/upload/packages/otf2/otf2-2.1.tar.gz")
 endif()
 
-if(NOT OTF2XX_CHRONO_DURATION_TYPE)
-    set(OTF2XX_CHRONO_DURATION_TYPE "picoseconds")
-endif()
-
-set(OTF2XX_CHRONO_DURATION_TYPE ${OTF2XX_CHRONO_DURATION_TYPE} CACHE STRING "The used underlying type for otf2::chrono::duration.")
-set_property(CACHE OTF2XX_CHRONO_DURATION_TYPE PROPERTY STRINGS "nanoseconds" "picoseconds")
-if(${OTF2XX_CHRONO_DURATION_TYPE} STREQUAL "nanoseconds" OR ${OTF2XX_CHRONO_DURATION_TYPE} STREQUAL "picoseconds")
+set(OTF2XX_CHRONO_DURATION_TYPE "picoseconds" CACHE STRING "The used underlying type for otf2::chrono::duration.")
+set(otf2xx_allowed_duration_types "nanoseconds" "picoseconds")
+set_property(CACHE OTF2XX_CHRONO_DURATION_TYPE PROPERTY STRINGS ${otf2xx_allowed_duration_types})
+if(OTF2XX_CHRONO_DURATION_TYPE IN_LIST otf2xx_allowed_duration_types)
     message(STATUS "OTF2xx uses '${OTF2XX_CHRONO_DURATION_TYPE}' as chrono duration type.")
 else()
-    message(SEND_ERROR "OTF2XX_CHRONO_DURATION_TYPE must be either nanoseconds or picoseconds")
+    message(SEND_ERROR "OTF2XX_CHRONO_DURATION_TYPE must be one of ${otf2xx_allowed_duration_types}")
 endif()
 
-if(NOT OTF2XX_WITH_MPI)
-    set(OTF2XX_WITH_MPI OFF)
+option(OTF2XX_WITH_MPI "Whether OTF2xx should be build with MPI support or not. (Requires Boost.MPI)" OFF)
+option(OTF2XX_USE_STATIC_LIBS "Whether OTF2xx should be build static or not." ON)
+# Set CMake variable which determines default library type
+if(OTF2XX_USE_STATIC_LIBS)
+    set(BUILD_SHARED_LIBS OFF)
+else()
+    set(BUILD_SHARED_LIBS ON)
 endif()
-option(OTF2XX_WITH_MPI "Whether OTF2xx should be build with MPI support or not. (Requires Boost.MPI)" ${OTF2XX_WITH_MPI})
-
-if(NOT OTF2XX_USE_STATIC_LIBS)
-    set(OTF2XX_USE_STATIC_LIBS ON)
-endif()
-option(OTF2XX_USE_STATIC_LIBS "Whether OTF2xx should be build static or not." ${OTF2XX_USE_STATIC_LIBS})
 
 add_library(otf2xx-core INTERFACE)
 target_include_directories(otf2xx-core
@@ -90,12 +84,7 @@ if(OTF2XX_WITH_MPI)
     target_link_libraries(otf2xx-core INTERFACE Boost::mpi MPI::MPI_CXX)
 endif()
 
-set(READER_SRCS src/reader/callback/definitions.cpp src/reader/callback/events.cpp)
-if(OTF2XX_USE_STATIC_LIBS)
-    add_library(otf2xx-reader STATIC ${READER_SRCS})
-else()
-    add_library(otf2xx-reader SHARED ${READER_SRCS})
-endif()
+add_library(otf2xx-reader src/reader/callback/definitions.cpp src/reader/callback/events.cpp)
 target_link_libraries(otf2xx-reader
     PUBLIC
         otf2xx::Core)
@@ -143,7 +132,7 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
     include(CMakePackageConfigHelpers)
     write_basic_package_version_File("otf2xxConfigVersion.cmake"
-        VERSION ${otf2xx_VERSION}
+        VERSION ${PROJECT_VERSION}
         COMPATIBILITY SameMajorVersion
     )
     install(FILES "otf2xxConfig.cmake" "${CMAKE_CURRENT_BINARY_DIR}/otf2xxConfigVersion.cmake"
@@ -152,6 +141,4 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
     include(CTest)
     add_subdirectory(tests)
-else()
-    set_target_properties(otf2xx-reader PROPERTIES EXCLUDE_FROM_ALL TRUE)
 endif()
