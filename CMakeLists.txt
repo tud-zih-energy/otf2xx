@@ -56,10 +56,50 @@ option(OTF2XX_WITH_MPI "Whether OTF2xx should be build with MPI support or not. 
 option(OTF2XX_BUILD_SHARED_LIBS "Whether OTF2xx should be build shared or not." OFF)
 set(BUILD_SHARED_LIBS OTF2XX_BUILD_SHARED_LIBS) # Don't use cache variable so other projects are not influenced
 
+# Find programs required for template processing
+get_filename_component(otf2_CONFIG_path "${OTF2_CONFIG_EXE}" DIRECTORY)
+find_program(OTF2_TEMPLATE otf2-template
+    HINTS "${otf2_CONFIG_path}")
+if(NOT OTF2_TEMPLATE)
+    message(FATAL_ERROR "Could not find otf2-template")
+endif()
+find_package(ClangFormat 5.0.0 REQUIRED)
+
+# Src template dir
+set(template_folder ${CMAKE_CURRENT_SOURCE_DIR}/templates)
+# Target template dir
+set(target_template_folder ${CMAKE_CURRENT_BINARY_DIR}/gen)
+# Get all with ".template." in the name
+file(GLOB_RECURSE templates RELATIVE ${template_folder} ${template_folder}/*.tmpl)
+set(generated_files "")
+# Copy the style file to a parent directory of the templates
+file(COPY .clang-format DESTINATION ${target_template_folder})
+foreach(template IN LISTS templates)
+    set(input_file ${template_folder}/${template})
+    string(REGEX REPLACE "\\.tmpl$" "" new_name ${template})
+    set(new_file ${target_template_folder}/${new_name})
+    get_filename_component(target_folder "${new_file}" DIRECTORY)
+    # The generator cannot handle non-existing directories
+    if(NOT EXISTS ${target_folder})
+        file(MAKE_DIRECTORY ${target_folder})
+    endif()
+    add_custom_command(
+        OUTPUT  ${new_file}
+        COMMAND ${OTF2_TEMPLATE} ${input_file} ${new_file}
+        COMMAND ${CLANG_FORMAT_EXECUTABLE} -i -style=file ${new_file}
+        DEPENDS ${input_file}
+    )
+    list(APPEND generated_files ${new_file})
+endforeach()
+# Add a target on which others can depend
+add_custom_target(GenerateTemplates DEPENDS ${generated_files})
+
 add_library(otf2xx-core INTERFACE)
+add_dependencies(otf2xx-core GenerateTemplates)
 target_include_directories(otf2xx-core
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${target_template_folder}/include>
         $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(otf2xx-core
