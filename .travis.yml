@@ -1,6 +1,6 @@
 language: generic
 
-sudo: required
+sudo: false
 dist: trusty
 
 matrix:
@@ -11,10 +11,8 @@ matrix:
       addons:
         apt:
           packages:
-            - gcc-7
             - g++-7
             - cmake
-            - cmake-data
           sources: &sources
             - ubuntu-toolchain-r-test
     - os: linux
@@ -23,10 +21,8 @@ matrix:
       addons:
         apt:
           packages:
-            - gcc-6
             - g++-6
             - cmake
-            - cmake-data
           sources: *sources
     - os: linux
       env: CXX="clang++-4.0" CC="clang-4.0"
@@ -37,7 +33,6 @@ matrix:
             - clang-4.0
             - g++-5
             - cmake
-            - cmake-data
           sources:
             - llvm-toolchain-trusty-4.0
             - ubuntu-toolchain-r-test
@@ -50,27 +45,34 @@ matrix:
             - clang-5.0
             - g++-5
             - cmake
-            - cmake-data
           sources:
             - llvm-toolchain-trusty-5.0
             - ubuntu-toolchain-r-test
-            - george-edison55-precise-backports
     - os: osx
       osx_image: xcode7.3
     - os: osx
       osx_image: xcode8.3
     - os: osx
       osx_image: xcode9.3
-before_script:
-  - wget http://www.vi-hps.org/upload/packages/otf2/otf2-2.1.tar.gz
-  - tar -xf otf2-2.1.tar.gz
-  - cd otf2-2.1
-  - ./configure --prefix=/usr/local
-  - make
-  - sudo make install
-  - cd ..
-  - cmake --version
-  - cmake .
+
+cache:
+  directories:
+    - ${TRAVIS_BUILD_DIR}/deps/otf2-2.1
+
+install:
+  - OTF2_VERSION=2.1 # Update cache too when changing this!
+  - OTF2_DIR=${TRAVIS_BUILD_DIR}/deps/otf2-${OTF2_VERSION}
+  - |
+    if [ -z "$(ls -A ${OTF2_DIR})" ]; then
+      wget http://www.vi-hps.org/upload/packages/otf2/otf2-${OTF2_VERSION}.tar.gz
+      tar -xf otf2-${OTF2_VERSION}.tar.gz
+      (cd otf2-${OTF2_VERSION} && ./configure --prefix=${OTF2_DIR} && make -j2 install)
+    fi
+  - export CMAKE_PREFIX_PATH=${OTF2_DIR}:${CMAKE_PREFIX_PATH}
+
 script:
-  - make
+  - cmake --version
+  - mkdir build && cd build
+  - cmake ..
+  - make -j2
   - ctest -V .
