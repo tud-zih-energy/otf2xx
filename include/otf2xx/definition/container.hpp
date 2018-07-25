@@ -142,7 +142,7 @@ namespace definition
         }
 
         template <typename... Args>
-        const value_type& emplace(key_type ref, Args... args)
+        const value_type& emplace(key_type ref, Args&&... args)
         {
             return data
                 .emplace(std::piecewise_construct, std::forward_as_tuple(ref),
@@ -220,9 +220,9 @@ namespace definition
 
     public:
         template <typename... Args>
-        const value_type& emplace(Args... args)
+        const value_type& emplace(Args&&... args)
         {
-            data.emplace_back(args...);
+            data.emplace_back(std::forward<Args>(args)...);
 
             return data.back();
         }
