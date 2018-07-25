@@ -41,12 +41,15 @@
 
 namespace otf2
 {
+    namespace detail
+    {
+        template <class T>
+        class intrusive_ptr;
+    }
 namespace definition
 {
     namespace detail
     {
-        template <typename Def, typename Impl>
-        class base;
 
         template <typename T>
         class owning_ptr;
@@ -66,14 +69,10 @@ namespace definition
             impl_base& operator=(impl_base&&) = delete;
 
         protected:
-            template <typename Definition, typename Impl2>
-            friend class otf2::definition::detail::base2;
 
-            Impl* retain()
+            void retain()
             {
                 ref_count_.fetch_add(1, std::memory_order_relaxed);
-
-                return static_cast<Impl*>(this);
             }
 
             int64_t release()
@@ -84,9 +83,7 @@ namespace definition
             }
 
             friend class owning_ptr<Impl>;
-
-            template <typename T, typename U>
-            friend class base;
+            friend class ::otf2::detail::intrusive_ptr<Impl>;
 
         private:
             std::atomic<int64_t> ref_count_;

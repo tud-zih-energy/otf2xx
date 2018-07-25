@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/definition/pre_fwd.hpp>
-#include <otf2xx/traits/definition.hpp>
 
 namespace otf2
 {
@@ -45,14 +44,8 @@ namespace definition
 {
     namespace detail
     {
-
-        template <typename Def,
-                  typename Impl = typename otf2::traits::definition_impl_type<Def>::type>
+        template <typename Def>
         class base;
-
-        template <typename Def,
-                  typename Impl = typename otf2::traits::definition_impl_type<Def>::type>
-        class base2;
     }
 }
 
