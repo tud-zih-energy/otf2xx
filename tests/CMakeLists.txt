@@ -45,3 +45,19 @@ target_link_libraries(reader_test PRIVATE otf2xx::Reader)
 
 add_test(reader_test reader_test ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace/traces.otf2)
 set_property(TEST reader_test PROPERTY DEPENDS writer_test)
+
+function(add_failing_test name)
+    # Positive test to avoid unintended failures
+    add_executable(${name}-pass expected_failures/${name}.cpp)
+    target_link_libraries(${name}-pass PRIVATE otf2xx::Core)
+    # Provoke failure and compile only during test
+    add_executable(${name} EXCLUDE_FROM_ALL expected_failures/${name}.cpp)
+    target_link_libraries(${name} PRIVATE otf2xx::Core)
+    target_compile_definitions(${name} PRIVATE -DOTF2XX_MAKE_FAIL)
+    add_test(NAME metric_event_with_instance
+        COMMAND ${CMAKE_COMMAND} --build . --config $<CONFIG> --target metric_event_with_instance
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+    set_tests_properties(${name} PROPERTIES WILL_FAIL TRUE)
+endfunction()
+
+add_failing_test(metric_event_with_instance)
