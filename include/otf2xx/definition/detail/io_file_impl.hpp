@@ -54,7 +54,7 @@ namespace definition
         class io_file_impl : public ref_counted
         {
         public:
-            io_file_impl(otf2::reference<io_file> ref, const otf2::definition::string& name,
+            io_file_impl(otf2::io_file_ref ref, const otf2::definition::string& name,
                          const otf2::definition::system_tree_node& scope,
                          std::int64_t retain_count = 0)
             : ref_counted(retain_count), ref_(ref), name_(name), scope_(scope)
@@ -70,13 +70,13 @@ namespace definition
 
             static io_file_impl* undefined()
             {
-                static io_file_impl undef(otf2::reference<io_file>::undefined(),
+                static io_file_impl undef(otf2::io_file_ref::undefined(),
                                           string::undefined(),
                                           otf2::definition::system_tree_node::undefined(), 1);
                 return &undef;
             }
 
-            otf2::reference<io_file> ref() const
+            otf2::io_file_ref ref() const
             {
                 return ref_;
             }
@@ -92,7 +92,7 @@ namespace definition
             }
 
         private:
-            otf2::reference<io_file> ref_;
+            otf2::io_file_ref ref_;
             otf2::definition::string name_;
             otf2::definition::system_tree_node scope_;
         };

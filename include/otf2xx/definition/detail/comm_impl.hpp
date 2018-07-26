@@ -58,7 +58,7 @@ namespace definition
         class comm_impl : public ref_counted
         {
         public:
-            comm_impl(reference<comm> ref, const otf2::definition::string& name,
+            comm_impl(comm_ref ref, const otf2::definition::string& name,
                       const otf2::definition::comm_group& group, comm_impl* parent,
                       std::int64_t retain_count = 0)
             : ref_counted(retain_count), ref_(ref), name_(name), group_(group), self_group_(nullptr),
@@ -66,14 +66,14 @@ namespace definition
             {
             }
 
-            comm_impl(reference<comm> ref, const otf2::definition::string& name,
+            comm_impl(comm_ref ref, const otf2::definition::string& name,
                       const otf2::definition::comm_group& group, std::int64_t retain_count = 0)
             : ref_counted(retain_count), ref_(ref), name_(name), group_(group), self_group_(nullptr),
               parent_(nullptr)
             {
             }
 
-            comm_impl(reference<comm> ref, const otf2::definition::string& name,
+            comm_impl(comm_ref ref, const otf2::definition::string& name,
                       const otf2::definition::comm_self_group& group, comm_impl* parent,
                       std::int64_t retain_count = 0)
             : ref_counted(retain_count), ref_(ref), name_(name), group_(nullptr), self_group_(group),
@@ -81,7 +81,7 @@ namespace definition
             {
             }
 
-            comm_impl(reference<comm> ref, const otf2::definition::string& name,
+            comm_impl(comm_ref ref, const otf2::definition::string& name,
                       const otf2::definition::comm_self_group& group, std::int64_t retain_count = 0)
             : ref_counted(retain_count), ref_(ref), name_(name), group_(nullptr), self_group_(group),
               parent_(nullptr)
@@ -97,12 +97,12 @@ namespace definition
 
             static comm_impl* undefined()
             {
-                static comm_impl undef(reference<comm>::undefined(), string::undefined(),
+                static comm_impl undef(comm_ref::undefined(), string::undefined(),
                                        comm_group::undefined(), 1);
                 return &undef;
             }
 
-            reference<comm> ref() const
+            comm_ref ref() const
             {
                 return ref_;
             }
@@ -152,7 +152,7 @@ namespace definition
             }
 
         private:
-            reference<comm> ref_;
+            otf2::comm_ref ref_;
             otf2::definition::string name_;
             otf2::definition::comm_group group_;
             otf2::definition::comm_self_group self_group_;

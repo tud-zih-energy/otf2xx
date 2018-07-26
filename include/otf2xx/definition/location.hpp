@@ -61,7 +61,7 @@ namespace definition
     public:
         typedef impl_type::location_type location_type;
 
-        location(otf2::reference<otf2::definition::location> ref,
+        location(otf2::location_ref ref,
                  const otf2::definition::string& name, const otf2::definition::location_group& lg,
                  location_type type, std::uint64_t events = 0)
         : base(new impl_type(ref, name, lg, type, events))

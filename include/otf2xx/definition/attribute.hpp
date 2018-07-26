@@ -62,7 +62,7 @@ namespace definition
     public:
         typedef typename impl_type::attribute_type attribute_type;
 
-        attribute(otf2::reference<attribute> ref, const otf2::definition::string& name,
+        attribute(otf2::attribute_ref ref, const otf2::definition::string& name,
                   const otf2::definition::string& description, attribute_type type)
         : base(new impl_type(ref, name, description, type))
         {

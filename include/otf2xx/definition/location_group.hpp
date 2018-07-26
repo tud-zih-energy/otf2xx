@@ -64,7 +64,7 @@ namespace definition
     public:
         typedef otf2::common::location_group_type location_group_type;
 
-        location_group(reference<location_group> ref, const otf2::definition::string& name,
+        location_group(otf2::location_group_ref ref, const otf2::definition::string& name,
                        location_group_type type, const otf2::definition::system_tree_node& stm)
         : base(new impl_type(ref, name, type, stm))
         {

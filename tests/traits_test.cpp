@@ -36,6 +36,7 @@
 #include "catch.hpp"
 
 #include <otf2xx/traits/reference.hpp>
+#include <otf2xx/definition/fwd.hpp>
 
 #include <otf2/OTF2_GeneralDefinitions.h>
 

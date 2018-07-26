@@ -59,7 +59,7 @@ namespace definition
             using paradigm_flag_type = otf2::common::io_paradigm_flag_type;
             using paradigm_property_type = otf2::common::io_paradigm_property_type;
 
-            io_paradigm_impl(otf2::reference<io_paradigm> ref,
+            io_paradigm_impl(otf2::io_paradigm_ref ref,
                              const otf2::definition::string& identification,
                              const otf2::definition::string& name,
                              paradigm_class_type paradigmClass, paradigm_flag_type paradigmFlags,
@@ -82,12 +82,12 @@ namespace definition
             static io_paradigm_impl* undefined()
             {
                 static io_paradigm_impl undef(
-                    reference<io_paradigm>::undefined(), string::undefined(), string::undefined(),
+                    io_paradigm_ref::undefined(), string::undefined(), string::undefined(),
                     paradigm_class_type::serial, paradigm_flag_type::none, {}, {}, 1);
                 return &undef;
             }
 
-            otf2::reference<io_paradigm> ref() const
+            otf2::io_paradigm_ref ref() const
             {
                 return ref_;
             }
@@ -128,7 +128,7 @@ namespace definition
             }
 
         private:
-            otf2::reference<io_paradigm> ref_;
+            otf2::io_paradigm_ref ref_;
             otf2::definition::string identification_;
             otf2::definition::string name_;
             paradigm_class_type paradigm_class_;

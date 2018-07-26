@@ -162,7 +162,7 @@ namespace writer
 
         void write(const otf2::event::metric& metric)
         {
-            otf2::reference<otf2::definition::detail::metric_base>::ref_type ref;
+            otf2::metric_ref::ref_type ref;
 
             if (metric.has_metric_instance())
             {

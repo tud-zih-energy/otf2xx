@@ -51,7 +51,7 @@ namespace definition
         class string_impl : public ref_counted
         {
         public:
-            string_impl(otf2::reference<string> ref, const std::string& str,
+            string_impl(otf2::string_ref ref, const std::string& str,
                         std::int64_t retain_count = 0)
             : ref_counted(retain_count), ref_(ref), str_(str)
             {
@@ -66,11 +66,11 @@ namespace definition
 
             static string_impl* undefined()
             {
-                static string_impl undef(otf2::reference<string>::undefined(), std::string(""), 1);
+                static string_impl undef(otf2::string_ref::undefined(), std::string(""), 1);
                 return &undef;
             }
 
-            otf2::reference<string> ref() const
+            otf2::string_ref ref() const
             {
                 return ref_;
             }
@@ -81,7 +81,7 @@ namespace definition
             }
 
         private:
-            otf2::reference<string> ref_;
+            otf2::string_ref ref_;
             std::string str_;
         };
     }

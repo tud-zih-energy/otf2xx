@@ -39,7 +39,6 @@
 #include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/base.hpp>
-#include <otf2xx/definition/detail/metric_base.hpp>
 #include <otf2xx/definition/detail/metric_class_impl.hpp>
 
 namespace otf2
@@ -67,7 +66,7 @@ namespace definition
 
         typedef impl_type::iterator iterator;
 
-        metric_class(reference<detail::metric_base> ref, metric_occurence occurence,
+        metric_class(otf2::metric_ref ref, metric_occurence occurence,
                      recorder_kind_type recorder_kind)
         : base(new impl_type(ref, occurence, recorder_kind))
         {

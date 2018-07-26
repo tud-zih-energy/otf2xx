@@ -80,7 +80,7 @@ public:
     {
         static_assert(
             std::is_same<
-                otf2::reference<typename otf2::traits::reference_param_type<Definition>::type>,
+                otf2::traits::reference_t<Definition>,
                 RefType>::value,
             "Trying to register a definition with a different id space");
 
@@ -114,13 +114,15 @@ private:
     typename ref_type::ref_type old_max = -1;
 };
 
+class trace_reference_generator;
+
 namespace detail
 {
-    template <typename Definition>
+    template <typename T_Reference>
     class generate_ref
     {
     public:
-        otf2::reference<typename otf2::traits::reference_param_type<Definition>::type>
+        T_Reference
         operator()(trace_reference_generator& gen);
     };
 } // namespace detail
@@ -241,166 +243,156 @@ public:
     }
 
     template <typename Definition>
-    otf2::reference<typename otf2::traits::reference_param_type<Definition>::type> next()
+    otf2::traits::reference_t<Definition> next()
     {
-        return detail::generate_ref<typename traits::reference_param_type<Definition>::type>()(
-            *this);
+        return detail::generate_ref<otf2::traits::reference_t<Definition>>()(*this);
     }
 
-    reference_generator<otf2::reference<otf2::definition::location>> location_refs_;
-    reference_generator<otf2::reference<otf2::definition::location_group>> location_group_refs_;
-    reference_generator<otf2::reference<otf2::definition::system_tree_node>> system_tree_node_refs_;
-    reference_generator<otf2::reference<otf2::definition::detail::group_base>> group_refs_;
-    reference_generator<otf2::reference<otf2::definition::comm>> comm_refs_;
-    reference_generator<otf2::reference<otf2::definition::region>> region_refs_;
-    reference_generator<otf2::reference<otf2::definition::attribute>> attribute_refs_;
-    reference_generator<otf2::reference<otf2::definition::parameter>> parameter_refs_;
-    reference_generator<otf2::reference<otf2::definition::string>> string_refs_;
-    reference_generator<otf2::reference<otf2::definition::source_code_location>>
+    reference_generator<otf2::location_ref> location_refs_;
+    reference_generator<otf2::location_group_ref> location_group_refs_;
+    reference_generator<otf2::system_tree_node_ref> system_tree_node_refs_;
+    reference_generator<otf2::group_ref> group_refs_;
+    reference_generator<otf2::comm_ref> comm_refs_;
+    reference_generator<otf2::region_ref> region_refs_;
+    reference_generator<otf2::attribute_ref> attribute_refs_;
+    reference_generator<otf2::parameter_ref> parameter_refs_;
+    reference_generator<otf2::string_ref> string_refs_;
+    reference_generator<otf2::source_code_location_ref>
         source_code_location_refs_;
-    reference_generator<otf2::reference<otf2::definition::calling_context>> calling_context_refs_;
-    reference_generator<otf2::reference<otf2::definition::interrupt_generator>>
+    reference_generator<otf2::calling_context_ref> calling_context_refs_;
+    reference_generator<otf2::interrupt_generator_ref>
         interrupt_generator_refs_;
-    reference_generator<otf2::reference<otf2::definition::io_file>> io_file_refs_;
-    reference_generator<otf2::reference<otf2::definition::io_handle>> io_handle_refs_;
-    reference_generator<otf2::reference<otf2::definition::io_paradigm>> io_paradigm_refs_;
-    reference_generator<otf2::reference<otf2::definition::metric_member>> metric_member_refs_;
-    reference_generator<otf2::reference<otf2::definition::detail::metric_base>> metric_refs_;
-    reference_generator<otf2::reference<otf2::definition::marker>> marker_refs_;
+    reference_generator<otf2::io_file_ref> io_file_refs_;
+    reference_generator<otf2::io_handle_ref> io_handle_refs_;
+    reference_generator<otf2::io_paradigm_ref> io_paradigm_refs_;
+    reference_generator<otf2::metric_member_ref> metric_member_refs_;
+    reference_generator<otf2::metric_ref> metric_refs_;
+    reference_generator<otf2::marker_ref> marker_refs_;
 };
 
 namespace detail
 {
     template <>
-    inline otf2::reference<otf2::traits::reference_param_type<otf2::definition::location>::type>
-    generate_ref<otf2::definition::location>::operator()(trace_reference_generator& gen)
+    inline otf2::location_ref
+    generate_ref<otf2::location_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.location_refs_.next();
     }
 
     template <>
-    inline otf2::reference<
-        otf2::traits::reference_param_type<otf2::definition::location_group>::type>
-    generate_ref<otf2::definition::location_group>::operator()(trace_reference_generator& gen)
+    inline otf2::location_group_ref
+    generate_ref<otf2::location_group_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.location_group_refs_.next();
     }
 
     template <>
-    inline otf2::reference<
-        otf2::traits::reference_param_type<otf2::definition::system_tree_node>::type>
-    generate_ref<otf2::definition::system_tree_node>::operator()(trace_reference_generator& gen)
+    inline otf2::system_tree_node_ref
+    generate_ref<otf2::system_tree_node_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.system_tree_node_refs_.next();
     }
 
-    template <>
-    inline otf2::reference<
-        otf2::traits::reference_param_type<otf2::definition::detail::group_base>::type>
-    generate_ref<otf2::definition::detail::group_base>::operator()(trace_reference_generator& gen)
+    inline otf2::group_ref
+    generate_ref<otf2::group_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.group_refs_.next();
     }
 
     template <>
-    inline otf2::reference<otf2::traits::reference_param_type<otf2::definition::comm>::type>
-    generate_ref<otf2::definition::comm>::operator()(trace_reference_generator& gen)
+    inline otf2::comm_ref
+    generate_ref<otf2::comm_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.comm_refs_.next();
     }
 
     template <>
-    inline otf2::reference<otf2::traits::reference_param_type<otf2::definition::region>::type>
-    generate_ref<otf2::definition::region>::operator()(trace_reference_generator& gen)
+    inline otf2::region_ref
+    generate_ref<otf2::region_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.region_refs_.next();
     }
 
     template <>
-    inline otf2::reference<otf2::traits::reference_param_type<otf2::definition::attribute>::type>
-    generate_ref<otf2::definition::attribute>::operator()(trace_reference_generator& gen)
+    inline otf2::attribute_ref
+    generate_ref<otf2::attribute_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.attribute_refs_.next();
     }
 
     template <>
-    inline otf2::reference<otf2::traits::reference_param_type<otf2::definition::parameter>::type>
-    generate_ref<otf2::definition::parameter>::operator()(trace_reference_generator& gen)
+    inline otf2::parameter_ref
+    generate_ref<otf2::parameter_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.parameter_refs_.next();
     }
 
     template <>
-    inline otf2::reference<otf2::traits::reference_param_type<otf2::definition::string>::type>
-    generate_ref<otf2::definition::string>::operator()(trace_reference_generator& gen)
+    inline otf2::string_ref
+    generate_ref<otf2::string_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.string_refs_.next();
     }
 
     template <>
-    inline otf2::reference<
-        otf2::traits::reference_param_type<otf2::definition::source_code_location>::type>
-    generate_ref<otf2::definition::source_code_location>::operator()(trace_reference_generator& gen)
+    inline otf2::source_code_location_ref
+    generate_ref<otf2::source_code_location_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.source_code_location_refs_.next();
     }
 
     template <>
-    inline otf2::reference<
-        otf2::traits::reference_param_type<otf2::definition::calling_context>::type>
-    generate_ref<otf2::definition::calling_context>::operator()(trace_reference_generator& gen)
+    inline otf2::calling_context_ref
+    generate_ref<otf2::calling_context_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.calling_context_refs_.next();
     }
 
     template <>
-    inline otf2::reference<
-        otf2::traits::reference_param_type<otf2::definition::interrupt_generator>::type>
-    generate_ref<otf2::definition::interrupt_generator>::operator()(trace_reference_generator& gen)
+    inline otf2::interrupt_generator_ref
+    generate_ref<otf2::interrupt_generator_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.interrupt_generator_refs_.next();
     }
 
     template <>
-    inline otf2::reference<otf2::traits::reference_param_type<otf2::definition::io_file>::type>
-    generate_ref<otf2::definition::io_file>::operator()(trace_reference_generator& gen)
+    inline otf2::io_file_ref
+    generate_ref<otf2::io_file_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.io_file_refs_.next();
     }
 
     template <>
-    inline otf2::reference<otf2::traits::reference_param_type<otf2::definition::io_handle>::type>
-    generate_ref<otf2::definition::io_handle>::operator()(trace_reference_generator& gen)
+    inline otf2::io_handle_ref
+    generate_ref<otf2::io_handle_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.io_handle_refs_.next();
     }
 
     template <>
-    inline otf2::reference<otf2::traits::reference_param_type<otf2::definition::io_paradigm>::type>
-    generate_ref<otf2::definition::io_paradigm>::operator()(trace_reference_generator& gen)
+    inline otf2::io_paradigm_ref
+    generate_ref<otf2::io_paradigm_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.io_paradigm_refs_.next();
     }
 
     template <>
-    inline otf2::reference<
-        otf2::traits::reference_param_type<otf2::definition::metric_member>::type>
-    generate_ref<otf2::definition::metric_member>::operator()(trace_reference_generator& gen)
+    inline otf2::metric_member_ref
+    generate_ref<otf2::metric_member_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.metric_member_refs_.next();
     }
 
     template <>
-    inline otf2::reference<
-        otf2::traits::reference_param_type<otf2::definition::detail::metric_base>::type>
-    generate_ref<otf2::definition::detail::metric_base>::operator()(trace_reference_generator& gen)
+    inline otf2::metric_ref
+    generate_ref<otf2::metric_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.metric_refs_.next();
     }
 
     template <>
-    inline otf2::reference<otf2::traits::reference_param_type<otf2::definition::marker>::type>
-    generate_ref<otf2::definition::marker>::operator()(trace_reference_generator& gen)
+    inline otf2::marker_ref
+    generate_ref<otf2::marker_ref>::operator()(trace_reference_generator& gen)
     {
         return gen.marker_refs_.next();
     }

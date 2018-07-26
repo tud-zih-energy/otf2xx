@@ -58,7 +58,7 @@ namespace definition
         public:
             typedef otf2::common::location_type location_type;
 
-            location_impl(otf2::reference<location> ref, const otf2::definition::string& name,
+            location_impl(otf2::location_ref ref, const otf2::definition::string& name,
                           const otf2::definition::location_group& lg, location_type type,
                           std::uint64_t events = 0, std::int64_t retain_count = 0)
             : ref_counted(retain_count), ref_(ref), name_(name), type_(type), lg_(lg), events_(events)
@@ -75,7 +75,7 @@ namespace definition
             static location_impl* undefined()
             {
                 static location_impl undef(
-                    otf2::reference<location>::undefined(), string::undefined(),
+                    otf2::location_ref::undefined(), string::undefined(),
                     otf2::definition::location_group::undefined(), location_type::unknown, 0, 1);
                 return &undef;
             }
@@ -95,7 +95,7 @@ namespace definition
                 return type_;
             }
 
-            otf2::reference<location> ref() const
+            otf2::location_ref ref() const
             {
                 return ref_;
             }
@@ -113,7 +113,7 @@ namespace definition
             friend class writer::local;
 
         private:
-            otf2::reference<location> ref_;
+            otf2::location_ref ref_;
             otf2::definition::string name_;
             location_type type_;
             otf2::definition::location_group lg_;

@@ -55,7 +55,7 @@ namespace definition
         public:
             typedef otf2::common::parameter_type parameter_type;
 
-            parameter_impl(otf2::reference<parameter> ref, const otf2::definition::string& name,
+            parameter_impl(otf2::parameter_ref ref, const otf2::definition::string& name,
                            parameter_type type, std::int64_t retain_count = 0)
             : ref_counted(retain_count), ref_(ref), name_(name), type_(type)
             {
@@ -70,7 +70,7 @@ namespace definition
 
             static parameter_impl* undefined()
             {
-                static parameter_impl undef(otf2::reference<parameter>::undefined(),
+                static parameter_impl undef(otf2::parameter_ref::undefined(),
                                             string::undefined(), parameter_type::int64, 1);
                 return &undef;
             }
@@ -85,13 +85,13 @@ namespace definition
                 return type_;
             }
 
-            otf2::reference<parameter> ref() const
+            otf2::parameter_ref ref() const
             {
                 return ref_;
             }
 
         private:
-            otf2::reference<parameter> ref_;
+            otf2::parameter_ref ref_;
             otf2::definition::string name_;
             parameter_type type_;
         };

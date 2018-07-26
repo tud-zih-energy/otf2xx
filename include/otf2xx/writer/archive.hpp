@@ -454,7 +454,7 @@ namespace writer
         pre_flush_func pre_flush_callback_;
 
         std::unique_ptr<global> global_writer_;
-        std::map<otf2::reference<otf2::definition::location>::ref_type, local> local_writers_;
+        std::map<otf2::location_ref::ref_type, local> local_writers_;
     };
 
     template <typename Anything>

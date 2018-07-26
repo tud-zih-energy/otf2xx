@@ -55,7 +55,7 @@ namespace definition
         public:
             typedef otf2::common::type attribute_type;
 
-            attribute_impl(otf2::reference<attribute> ref, const otf2::definition::string& name,
+            attribute_impl(otf2::attribute_ref ref, const otf2::definition::string& name,
                            const otf2::definition::string& description, attribute_type type,
                            std::int64_t retain_count = 0)
             : ref_counted(retain_count), ref_(ref), name_(name), description_(description),
@@ -85,21 +85,21 @@ namespace definition
                 return type_;
             }
 
-            otf2::reference<attribute> ref() const
+            otf2::attribute_ref ref() const
             {
                 return ref_;
             }
 
             static attribute_impl* undefined()
             {
-                static attribute_impl undef(otf2::reference<attribute>::undefined(),
+                static attribute_impl undef(otf2::attribute_ref::undefined(),
                                             string::undefined(), string::undefined(),
                                             attribute_type::none, 1);
                 return &undef;
             }
 
         private:
-            otf2::reference<attribute> ref_;
+            otf2::attribute_ref ref_;
             otf2::definition::string name_;
             otf2::definition::string description_;
             attribute_type type_;

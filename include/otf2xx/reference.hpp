@@ -46,9 +46,6 @@
 #ifndef INCLUDE_OTF2XX_REFERENCE_HPP
 #define INCLUDE_OTF2XX_REFERENCE_HPP
 
-#include <otf2xx/definition/fwd.hpp>
-#include <otf2xx/traits/reference.hpp>
-
 namespace otf2
 {
 
@@ -58,10 +55,11 @@ namespace otf2
  * For each definition should be an own reference type, so the address space is seperated in a
  * typesafe manner.
  *
- * \tparam Type Used to seperate address spaces for different definitions
+ * \tparam T_Otf2Type Underlying OTF2 type
+ * \tparam T_undef_value Value used to represent an undefined value
  */
-template <typename Type>
-class reference
+template <typename T_Otf2Type, T_Otf2Type T_undef_value>
+class reference_base
 {
 public:
     /**
@@ -69,15 +67,13 @@ public:
      *
      * Mostly uint64_t or uint32_t
      */
-    typedef typename traits::reference_type<Type>::type ref_type;
-
-    reference() = delete;
-
+    using ref_type = T_Otf2Type;
+    
     /**
      * @brief construct by value
      * @param ref the number
      */
-    reference(ref_type ref) : handle(ref)
+    reference_base(ref_type ref) : handle_(ref)
     {
     }
 
@@ -87,18 +83,16 @@ public:
      */
     ref_type get() const
     {
-        return handle;
+        return handle_;
     }
 
-    ~reference() = default;
-
     /**
-     * @brief returns if the number equals to OTF2_UNDEFINED_UINT64
+     * @brief returns if the value is the undefined value
      * @return true or false
      */
     bool is_undefined() const
     {
-        return handle == undefined();
+        return handle_ == undefined();
     }
 
     /**
@@ -109,89 +103,23 @@ public:
      */
     operator ref_type() const
     {
-        return handle;
+        return handle_;
     }
 
     /**
      * @brief returns the undefined representing number
-     * @return OTF2_UNDEFINED_UINT64
      */
-    template <typename as_type = ref_type>
     static ref_type undefined()
     {
-        return static_cast<as_type>(-1);
+        return T_undef_value;
     }
 
-protected:
-    ref_type handle;
-};
-
-template <typename T, otf2::common::group_type Type>
-class reference<definition::group<T, Type>> : public reference<definition::detail::group_base>
-{
-public:
-    reference(const reference<definition::detail::group_base>& base)
-    : reference<definition::detail::group_base>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::metric_class> : public reference<definition::detail::metric_base>
-{
-public:
-    reference(const reference<definition::detail::metric_base>& base)
-    : reference<definition::detail::metric_base>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::metric_instance> : public reference<definition::detail::metric_base>
-{
-public:
-    reference(const reference<definition::detail::metric_base>& base)
-    : reference<definition::detail::metric_base>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::io_directory> : public reference<definition::io_file>
-{
-public:
-    reference(const reference<definition::io_file>& base) : reference<definition::io_file>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::io_regular_file> : public reference<definition::io_file>
-{
-public:
-    reference(const reference<definition::io_file>& base) : reference<definition::io_file>(base)
-    {
-    }
-};
-
-template <typename T>
-class reference<definition::property<T>> : public reference<T>
-{
-public:
-    reference(const reference<T>& base) : reference<T>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::io_pre_created_handle_state> : public reference<definition::io_handle>
-{
-public:
-    reference(const reference<definition::io_handle>& base) : reference<definition::io_handle>(base)
-    {
-    }
+private:
+    ref_type handle_;
 };
 
 } // namespace otf2
+
+#include <otf2xx/reference.inc.hpp>
 
 #endif // INCLUDE_OTF2XX_REFERENCE_HPP
