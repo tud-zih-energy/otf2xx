@@ -72,7 +72,7 @@ inline exception make_exception(T_Args&&... args)
 }
 
 template <typename... T_Args>
-inline exception make_exception(OTF2_ErrorCode code, T_Args&&... args)
+inline exception make_otf2_exception(OTF2_ErrorCode code, T_Args&&... args)
 {
     return make_exception(OTF2_Error_GetName(code), ": ", OTF2_Error_GetDescription(code), "\n",
                           std::forward<T_Args>(args)...);
@@ -83,7 +83,7 @@ void inline check(OTF2_ErrorCode code, T_Args&&... args)
 {
     if (code != OTF2_SUCCESS)
     {
-        throw make_exception(code, std::forward<T_Args>(args)...);
+        throw make_otf2_exception(code, std::forward<T_Args>(args)...);
     }
 }
 
