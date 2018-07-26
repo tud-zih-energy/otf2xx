@@ -53,45 +53,30 @@ struct exception : std::runtime_error
 
 namespace detail
 {
-
-    template <typename Arg, typename... Args>
-    class make_exception
+    /// Concatenate all arguments into one string
+    template <typename... T_Args>
+    inline std::string concat_args(T_Args&&... args)
     {
-    public:
-        void operator()(std::stringstream& msg, Arg arg, Args... args)
-        {
-            msg << arg;
-            make_exception<Args...>()(msg, args...);
-        }
-    };
-
-    template <typename Arg>
-    class make_exception<Arg>
-    {
-    public:
-        void operator()(std::stringstream& msg, Arg arg)
-        {
-            msg << arg;
-        }
-    };
+        std::stringstream msg;
+        using expander = int[];
+        // Pre C++17 expansion
+        (void)expander{0, (void(msg << std::forward<T_Args>(args)), 0)...};
+        return msg.str();
+    }
 }
 
 template <typename... Args>
-inline void make_exception(Args... args)
+inline void make_exception(Args&&... args)
 {
-    std::stringstream msg;
-
-    detail::make_exception<Args...>()(msg, args...);
-
-    throw exception(msg.str());
+    throw exception(detail::concat_args(std::forward<Args>(args)...));
 }
 
 template <typename... Args>
-void inline check(OTF2_ErrorCode code, Args... args)
+void inline check(OTF2_ErrorCode code, Args&&... args)
 {
     if (code != OTF2_SUCCESS)
     {
-        make_exception(args...);
+        make_exception(std::forward<Args>(args)...);
     }
 }
 
