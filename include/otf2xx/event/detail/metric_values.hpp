@@ -56,7 +56,7 @@ namespace event
             {
                 if (type_ids_.size() != values_.size())
                 {
-                    make_exception(
+                    throw make_exception(
                         "attempting to construct metric_values from data of different sizes");
                 }
             }

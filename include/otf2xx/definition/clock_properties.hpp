@@ -63,7 +63,7 @@ namespace definition
         {
             if (end_time < start_time)
             {
-                make_exception("start_time must be before end_time");
+                throw make_exception("start_time must be before end_time");
             }
         }
 

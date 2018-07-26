@@ -59,11 +59,11 @@ namespace writer
         {
             if (evt_wrt_ == nullptr)
             {
-                make_exception("Couldn't open local event writer for '", location, "'");
+                throw make_exception("Couldn't open local event writer for '", location, "'");
             }
             if (def_wrt_ == nullptr)
             {
-                make_exception("Couldn't open local definition writer for '", location, "'");
+                throw make_exception("Couldn't open local definition writer for '", location, "'");
             }
         }
 

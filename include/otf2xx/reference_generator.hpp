@@ -104,7 +104,7 @@ public:
     {
         if (ref_type::undefined() == old_max + 1)
         {
-            make_exception("Cannot generate a new unused reference number");
+            throw make_exception("Cannot generate a new unused reference number");
         }
 
         return ++old_max;

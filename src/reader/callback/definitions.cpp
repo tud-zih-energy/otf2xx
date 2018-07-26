@@ -253,7 +253,7 @@ namespace reader
 
                     case OTF2_GROUP_TYPE_UNKNOWN:
                     default:
-                        make_exception("Unknown group type isn't supported");
+                        throw make_exception("Unknown group type isn't supported");
                         break;
                     }
 
@@ -355,7 +355,7 @@ namespace reader
                         break;
 
                     default:
-                        make_exception("Unknown scope type for metric instance given");
+                        throw make_exception("Unknown scope type for metric instance given");
                     }
 
                     reader->callback().definition(reader->metric_instances()[self]);

@@ -73,7 +73,7 @@ namespace reader
         reader(const std::string& name) : rdr(OTF2_Reader_Open(name.c_str())), callback_(nullptr)
         {
             if (rdr == nullptr)
-                make_exception("Couldn't open the trace file: ", name);
+                throw make_exception("Couldn't open the trace file: ", name);
         }
 
         /**

@@ -60,23 +60,30 @@ namespace detail
         std::stringstream msg;
         using expander = int[];
         // Pre C++17 expansion
-        (void)expander{0, (void(msg << std::forward<T_Args>(args)), 0)...};
+        (void)expander{ 0, (void(msg << std::forward<T_Args>(args)), 0)... };
         return msg.str();
     }
 }
 
-template <typename... Args>
-inline void make_exception(Args&&... args)
+template <typename... T_Args>
+inline exception make_exception(T_Args&&... args)
 {
-    throw exception(detail::concat_args(std::forward<Args>(args)...));
+    return exception(detail::concat_args(std::forward<T_Args>(args)...));
 }
 
-template <typename... Args>
-void inline check(OTF2_ErrorCode code, Args&&... args)
+template <typename... T_Args>
+inline exception make_exception(OTF2_ErrorCode code, T_Args&&... args)
+{
+    return make_exception(OTF2_Error_GetName(code), ": ", OTF2_Error_GetDescription(code), "\n",
+                          std::forward<T_Args>(args)...);
+}
+
+template <typename... T_Args>
+void inline check(OTF2_ErrorCode code, T_Args&&... args)
 {
     if (code != OTF2_SUCCESS)
     {
-        make_exception(std::forward<Args>(args)...);
+        throw make_exception(code, std::forward<T_Args>(args)...);
     }
 }
 

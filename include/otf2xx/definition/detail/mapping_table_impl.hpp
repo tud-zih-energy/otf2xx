@@ -69,7 +69,7 @@ namespace definition
             {
                 if (!id_map_)
                 {
-                    make_exception("Creation of IdMap failed.");
+                    throw make_exception("Creation of IdMap failed.");
                 }
             }
 
@@ -81,7 +81,7 @@ namespace definition
             {
                 if (!id_map_)
                 {
-                    make_exception("Creation of IdMap failed.");
+                    throw make_exception("Creation of IdMap failed.");
                 }
             }
 
@@ -93,7 +93,7 @@ namespace definition
             {
                 if (!id_map_)
                 {
-                    make_exception("Creation of IdMap failed.");
+                    throw make_exception("Creation of IdMap failed.");
                 }
             }
 
