@@ -38,7 +38,7 @@
 #include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/definition/detail/weak_ref.hpp>
 #include <otf2xx/traits/definition.hpp>
-#include <otf2xx/detail/intrusive_ptr.hpp>
+#include <otf2xx/intrusive_ptr.hpp>
 
 #include <cassert>
 
@@ -169,7 +169,7 @@ namespace definition
             }
 
         protected:
-            ::otf2::detail::intrusive_ptr<Impl> data_;
+            ::otf2::intrusive_ptr<Impl> data_;
         };
 
         template <typename Def>

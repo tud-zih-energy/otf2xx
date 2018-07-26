@@ -41,7 +41,7 @@
 #include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/impl_base.hpp>
-#include <otf2xx/definition/detail/owning_ptr.hpp>
+#include <otf2xx/intrusive_ptr.hpp>
 
 #include <otf2xx/definition/string.hpp>
 
@@ -127,7 +127,7 @@ namespace definition
             reference<system_tree_node> ref_;
             otf2::definition::string name_;
             otf2::definition::string class_name_;
-            owning_ptr<system_tree_node_impl> parent_;
+            otf2::intrusive_ptr<system_tree_node_impl> parent_;
         };
     }
 }

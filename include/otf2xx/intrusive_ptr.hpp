@@ -32,12 +32,10 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DETAIL_INTRUSIVE_PTR_HPP
-#define INCLUDE_OTF2XX_DETAIL_INTRUSIVE_PTR_HPP
+#ifndef INCLUDE_OTF2XX_INTRUSIVE_PTR_HPP
+#define INCLUDE_OTF2XX_INTRUSIVE_PTR_HPP
 
 namespace otf2
-{
-namespace detail
 {
 
     /**
@@ -142,7 +140,6 @@ namespace detail
     {
         a.swap(b);
     }
-}
-} // namespace otf2::definition::detail
+} // namespace otf2
 
-#endif // INCLUDE_OTF2XX_DETAIL_INTRUSIVE_PTR_HPP
+#endif // INCLUDE_OTF2XX_INTRUSIVE_PTR_HPP

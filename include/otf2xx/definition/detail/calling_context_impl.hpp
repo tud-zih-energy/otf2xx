@@ -41,7 +41,7 @@
 #include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/impl_base.hpp>
-#include <otf2xx/definition/detail/owning_ptr.hpp>
+#include <otf2xx/intrusive_ptr.hpp>
 
 #include <otf2xx/definition/region.hpp>
 #include <otf2xx/definition/source_code_location.hpp>
@@ -124,7 +124,7 @@ namespace definition
             reference<calling_context> ref_;
             otf2::definition::region region_;
             otf2::definition::source_code_location source_code_location_;
-            owning_ptr<calling_context_impl> parent_;
+            otf2::intrusive_ptr<calling_context_impl> parent_;
         };
     }
 }

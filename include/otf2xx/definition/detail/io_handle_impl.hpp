@@ -42,7 +42,7 @@
 #include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/impl_base.hpp>
-#include <otf2xx/definition/detail/owning_ptr.hpp>
+#include <otf2xx/intrusive_ptr.hpp>
 
 #include <otf2xx/definition/comm.hpp>
 #include <otf2xx/definition/io_file.hpp>
@@ -150,7 +150,7 @@ namespace definition
             otf2::definition::io_paradigm paradigm_;
             io_handle_flag_type io_handle_flag_;
             otf2::definition::comm comm_;
-            owning_ptr<io_handle_impl> parent_;
+            otf2::intrusive_ptr<io_handle_impl> parent_;
         };
     }
 }

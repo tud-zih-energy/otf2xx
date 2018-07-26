@@ -41,7 +41,7 @@
 #include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/impl_base.hpp>
-#include <otf2xx/definition/detail/owning_ptr.hpp>
+#include <otf2xx/intrusive_ptr.hpp>
 
 #include <otf2xx/definition/group.hpp>
 #include <otf2xx/definition/string.hpp>
@@ -156,7 +156,7 @@ namespace definition
             otf2::definition::string name_;
             otf2::definition::comm_group group_;
             otf2::definition::comm_self_group self_group_;
-            owning_ptr<comm_impl> parent_;
+            otf2::intrusive_ptr<comm_impl> parent_;
         };
     }
 }

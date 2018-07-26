@@ -41,18 +41,12 @@
 
 namespace otf2
 {
-    namespace detail
-    {
-        template <class T>
-        class intrusive_ptr;
-    }
+    template <class T>
+    class intrusive_ptr;
 namespace definition
 {
     namespace detail
     {
-
-        template <typename T>
-        class owning_ptr;
 
         template <typename Impl>
         class impl_base
@@ -82,8 +76,7 @@ namespace definition
                 return ref_count_.fetch_sub(1, std::memory_order_acq_rel) - 1;
             }
 
-            friend class owning_ptr<Impl>;
-            friend class ::otf2::detail::intrusive_ptr<Impl>;
+            friend class ::otf2::intrusive_ptr<Impl>;
 
         private:
             std::atomic<int64_t> ref_count_;
