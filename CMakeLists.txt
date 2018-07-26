@@ -31,7 +31,7 @@
 
 project(otf2xx)
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.8)
 
 set(otf2xx_VERSION 1.0)
 
@@ -75,33 +75,7 @@ target_link_libraries(otf2xx-core
     INTERFACE
         otf2::otf2
 )
-target_compile_features(otf2xx-core
-    INTERFACE
-        cxx_auto_type
-        cxx_constexpr
-        cxx_decltype
-        cxx_decltype_auto
-        cxx_defaulted_functions
-        cxx_defaulted_move_initializers
-        cxx_delegating_constructors
-        cxx_deleted_functions
-        cxx_explicit_conversions
-        cxx_generalized_initializers
-        cxx_generic_lambdas
-        cxx_inheriting_constructors
-        cxx_lambdas
-        cxx_lambda_init_captures
-        cxx_noexcept
-        cxx_nullptr
-        cxx_override
-        cxx_range_for
-        cxx_return_type_deduction
-        cxx_rvalue_references
-        cxx_trailing_return_types
-        cxx_user_literals
-        cxx_variadic_templates
-        cxx_template_template_parameters
-)
+target_compile_features(otf2xx-core INTERFACE cxx_std_14)
 target_compile_definitions(otf2xx-core
     INTERFACE
         OTF2XX_CHRONO_DURATION_TYPE=${OTF2XX_CHRONO_DURATION_TYPE}
