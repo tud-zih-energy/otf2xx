@@ -46,7 +46,7 @@ namespace otf2
 
 struct exception : std::runtime_error
 {
-    explicit exception(const std::string& arg) : std::runtime_error(arg)
+    explicit exception(std::string arg) : std::runtime_error(std::move(arg))
     {
     }
 };
