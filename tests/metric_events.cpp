@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2018, Technische Universitaet Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,54 +32,42 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_EXCEPTION_HPP
-#define INCLUDE_OTF2XX_EXCEPTION_HPP
+#include "testHelpers.hpp"
+#include <otf2xx/otf2.hpp>
 
-#include <otf2/OTF2_ErrorCodes.h>
-
-#include <sstream>
-#include <stdexcept>
-#include <string>
-
-namespace otf2
+int main()
 {
+    namespace def = otf2::definition;
+    namespace common = otf2::common;
 
-struct exception : std::runtime_error
-{
-    explicit exception(std::string arg) : std::runtime_error(std::move(arg))
-    {
-    }
-};
+    def::container<def::string> strings;
+    strings.add_definition({ 0, "0" });
+    strings.add_definition({ 1, "1" });
+    strings.add_definition({ 2, "2" });
+    strings.add_definition({ 3, "3" });
+    strings.add_definition({ 4, "4" });
+    strings.add_definition({ 5, "5" });
+    strings.add_definition({ 6, "6" });
 
-namespace detail
-{
-    /// Concatenate all arguments into one string
-    template <typename... T_Args>
-    inline std::string concat_args(T_Args... args)
-    {
-        std::stringstream msg;
-        using expander = int[];
-        // Pre C++17 expansion
-        (void)expander{0, (void(msg << std::forward<T_Args>(args)), 0)...};
-        return msg.str();
-    }
+    def::system_tree_node root_node(0, strings[0], strings[1]);
+
+    def::location_group lg(0, strings[2], def::location_group::location_group_type::process,
+                           root_node);
+
+    def::location location(0, strings[3], lg, def::location::location_type::cpu_thread);
+
+    def::metric_class mClass(0, common::metric_occurence::strict, common::recorder_kind::abstract);
+    def::metric_instance mInstance(0, mClass, location, location);
+    def::metric_member mMember(0, strings[4], strings[5], common::metric_type::other,
+                               common::metric_mode::accumulated_point, common::type::uint8,
+                               common::base_type::binary, 0, strings[6]);
+    mClass.add_member(mMember);
+    TEST(mInstance.metric_class() == mClass);
+
+    otf2::event::metric ev(otf2::chrono::genesis(), mInstance);
+
+    TEST(!ev.has_metric_class());
+    TEST(ev.metric_class() != mClass);
+    TEST(ev.has_metric_instance());
+    TEST(ev.metric_instance() == mInstance);
 }
-
-template <typename... Args>
-inline void make_exception(Args... args)
-{
-    throw exception(detail::concat_args(std::forward<Args>(args)...));
-}
-
-template <typename... Args>
-void inline check(OTF2_ErrorCode code, Args... args)
-{
-    if (code != OTF2_SUCCESS)
-    {
-        make_exception(args...);
-    }
-}
-
-} // namespace otf2
-
-#endif // INCLUDE_OTF2XX_EXCEPTION_HPP

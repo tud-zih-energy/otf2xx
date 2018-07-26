@@ -29,19 +29,39 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-add_executable(enums_test enums_test.cpp)
-target_link_libraries(enums_test PRIVATE otf2xx::Core)
-add_test(enums_test enums_test)
+# Simplify adding a test
+# Pass the name of a cpp file and the name of the library to link.
+# Optionally some additional args for add_test
+function(otf2xx_add_test name library)
+    add_executable(${name} ${name}.cpp)
+    target_link_libraries(${name} PRIVATE ${library})
+    add_test(NAME ${name} COMMAND ${name} ${ARGV2})
+endfunction()
 
-add_executable(writer_test writer_test.cpp)
-target_link_libraries(writer_test PRIVATE otf2xx::Writer)
+# Add a test that will fail compilation
+# Pass the name of a cpp file in the folder 'expected_failures'
+# This will create 2 targets: One with and one w/o -DOTF2XX_MAKE_FAIL
+# For the latter a compile test is added which expects a failure
+function(add_failing_test name)
+    # Positive test to avoid unintended failures
+    add_executable(${name}-pass expected_failures/${name}.cpp)
+    target_link_libraries(${name}-pass PRIVATE otf2xx::Core)
+    # Provoke failure and compile only during test
+    add_executable(${name} EXCLUDE_FROM_ALL expected_failures/${name}.cpp)
+    target_link_libraries(${name} PRIVATE otf2xx::Core)
+    target_compile_definitions(${name} PRIVATE -DOTF2XX_MAKE_FAIL)
+    add_test(NAME metric_event_with_instance
+        COMMAND ${CMAKE_COMMAND} --build . --config $<CONFIG> --target metric_event_with_instance
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+    set_tests_properties(${name} PROPERTIES WILL_FAIL TRUE)
+endfunction()
 
-add_test(writer_test writer_test)
+otf2xx_add_test(enums_test otf2xx::Core)
+
+otf2xx_add_test(writer_test otf2xx::Writer)
 add_test(NAME writer_test_cleanup COMMAND cmake -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace)
 set_property(TEST writer_test PROPERTY DEPENDS writer_test_cleanup)
 
-add_executable(reader_test reader_test.cpp)
-target_link_libraries(reader_test PRIVATE otf2xx::Reader)
+otf2xx_add_test(reader_test otf2xx::Reader ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace/traces.otf2)
 
-add_test(reader_test reader_test ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace/traces.otf2)
-set_property(TEST reader_test PROPERTY DEPENDS writer_test)
+otf2xx_add_test(metric_events otf2xx::Core)

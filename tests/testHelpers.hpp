@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2018, Technische Universitaet Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,54 +32,27 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_EXCEPTION_HPP
-#define INCLUDE_OTF2XX_EXCEPTION_HPP
+#ifndef INCLUDE_OTF2XX_TEST_HELPERS_HPP
+#define INCLUDE_OTF2XX_TEST_HELPERS_HPP
 
-#include <otf2/OTF2_ErrorCodes.h>
-
-#include <sstream>
+#include <otf2xx/exception.hpp>
 #include <stdexcept>
-#include <string>
 
 namespace otf2
 {
-
-struct exception : std::runtime_error
+struct test_error: std::runtime_error
 {
-    explicit exception(std::string arg) : std::runtime_error(std::move(arg))
+    explicit test_error(std::string arg) : std::runtime_error(std::move(arg))
     {
     }
 };
-
-namespace detail
-{
-    /// Concatenate all arguments into one string
-    template <typename... T_Args>
-    inline std::string concat_args(T_Args... args)
-    {
-        std::stringstream msg;
-        using expander = int[];
-        // Pre C++17 expansion
-        (void)expander{0, (void(msg << std::forward<T_Args>(args)), 0)...};
-        return msg.str();
-    }
 }
 
-template <typename... Args>
-inline void make_exception(Args... args)
-{
-    throw exception(detail::concat_args(std::forward<Args>(args)...));
-}
+// Macro usable for checking test conditions: TEST(1 == 1)
+#define TEST(cond) do{                                                   \
+    if(!(cond))                                                          \
+        throw otf2::test_error(otf2::detail::concat_args(                \
+            "Test '", #cond, "' failed at ", __FILE__, ":", __LINE__));  \
+    }while(false)
 
-template <typename... Args>
-void inline check(OTF2_ErrorCode code, Args... args)
-{
-    if (code != OTF2_SUCCESS)
-    {
-        make_exception(args...);
-    }
-}
-
-} // namespace otf2
-
-#endif // INCLUDE_OTF2XX_EXCEPTION_HPP
+#endif
