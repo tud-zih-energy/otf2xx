@@ -53,21 +53,22 @@ struct exception : std::runtime_error
 
 namespace detail
 {
+    /// Concatenate all arguments into one string
     template <typename... T_Args>
-    inline exception make_exception(T_Args... args)
+    inline std::string concat_args(T_Args... args)
     {
         std::stringstream msg;
         using expander = int[];
         // Pre C++17 expansion
         (void)expander{0, (void(msg << std::forward<T_Args>(args)), 0)...};
-        return exception(msg.str());
+        return msg.str();
     }
 }
 
 template <typename... Args>
 inline void make_exception(Args... args)
 {
-    throw detail::make_exception(std::forward<Args>(args)...);
+    throw exception(detail::concat_args(std::forward<Args>(args)...));
 }
 
 template <typename... Args>

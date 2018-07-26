@@ -49,10 +49,10 @@ struct test_error: std::runtime_error
 }
 
 // Macro usable for checking test conditions: TEST(1 == 1)
-#define TEST(cond) do{                                                          \
-    if(!(cond))                                                                 \
-        throw otf2::test_error(otf2::detail::make_exception(                \
-            "Test '", #cond, "' failed at ", __FILE__, ":", __LINE__).what());  \
+#define TEST(cond) do{                                                   \
+    if(!(cond))                                                          \
+        throw otf2::test_error(otf2::detail::concat_args(                \
+            "Test '", #cond, "' failed at ", __FILE__, ":", __LINE__));  \
     }while(false)
 
 #endif
