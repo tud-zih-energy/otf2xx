@@ -95,13 +95,13 @@ namespace chrono
      * But this could also mean, that there is information loss.
      * e.g. duration_cast<seconds>milliseconds(1300) == seconds(1)
      *
-     * \tparam FromDuration type of source duration
      * \tparam ToDuration type of target duration, defaults to @see otf2::chrono::duration
+     * \tparam FromDuration type of source duration
      * \param[in] dtn duration which is casted
      *
      * \return duration to which is casted
      */
-    template <typename FromDuration, typename ToDuration = otf2::chrono::duration>
+    template <typename ToDuration = otf2::chrono::duration, typename FromDuration = otf2::chrono::duration>
     constexpr ToDuration duration_cast(const FromDuration& dtn)
     {
         return std::chrono::duration_cast<ToDuration>(dtn);
