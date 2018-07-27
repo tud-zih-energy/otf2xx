@@ -142,15 +142,10 @@ namespace definition
                 .first->second;
         }
 
-        void add_definition(Definition&& def)
+        void add_definition(Definition def)
         {
             auto ref = def.ref();
             data.emplace(ref, std::move(def));
-        }
-
-        void add_definition(const Definition& def)
-        {
-            data.emplace(def.ref(), def);
         }
 
         std::size_t count(key_type key) const
@@ -209,14 +204,7 @@ namespace definition
             return data.back();
         }
 
-        const value_type& add_definition(const value_type& def)
-        {
-            data.push_back(def);
-
-            return data.back();
-        }
-
-        const value_type& add_definition(value_type&& def)
+        const value_type& add_definition(value_type def)
         {
             data.emplace_back(std::move(def));
 
