@@ -138,7 +138,7 @@ namespace definition
         {
             return data
                 .emplace(std::piecewise_construct, std::forward_as_tuple(ref),
-                         std::forward_as_tuple(ref, args...))
+                         std::forward_as_tuple(ref, std::forward<Args>(args)...))
                 .first->second;
         }
 
