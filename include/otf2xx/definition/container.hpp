@@ -79,16 +79,18 @@ namespace definition
             {
                 assert(it != end);
 
-                it++;
+                ++it;
                 return *this;
             }
 
             iterator operator++(int) // postfix ++
             {
+                assert(it != end);
+
                 return iterator(it++, end);
             }
 
-            value_type operator*() const
+            const value_type& operator*() const
             {
                 assert(it != end);
 
@@ -102,17 +104,17 @@ namespace definition
                 return &(it->second);
             }
 
-            bool operator!=(const iterator& other) const
-            {
-                return it != other.it;
-            }
-
             bool operator==(const iterator& other) const
             {
                 return it == other.it;
             }
 
-            operator bool() const
+            bool operator!=(const iterator& other) const
+            {
+                return !(*this == other);
+            }
+
+            explicit operator bool() const
             {
                 return it != end;
             }
