@@ -66,8 +66,6 @@ namespace definition
         typedef typename otf2::reference<Definition>::ref_type key_type;
         typedef std::map<key_type, value_type> map_type;
 
-        typedef container self;
-
         class iterator
         {
         public:
@@ -122,15 +120,6 @@ namespace definition
             typename map_type::const_iterator it;
             typename map_type::const_iterator end;
         };
-
-    public:
-        container(const self&) = default;
-        self& operator=(const self&) = default;
-
-        container() = default;
-
-        container(self&&) = default;
-        self& operator=(self&&) = default;
 
     public:
         const value_type& operator[](key_type key) const
@@ -205,18 +194,7 @@ namespace definition
 
     private:
         typedef std::vector<value_type> map_type;
-
-        typedef supplement_container self;
         typedef typename map_type::const_iterator iterator;
-
-    public:
-        supplement_container(const self&) = default;
-        self& operator=(const self&) = default;
-
-        supplement_container() = default;
-
-        supplement_container(self&&) = default;
-        self& operator=(self&&) = default;
 
     public:
         template <typename... Args>
