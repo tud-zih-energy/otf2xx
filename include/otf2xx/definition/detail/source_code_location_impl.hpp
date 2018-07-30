@@ -40,7 +40,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/string.hpp>
 
@@ -51,13 +51,13 @@ namespace definition
     namespace detail
     {
 
-        class source_code_location_impl : public impl_base<source_code_location_impl>
+        class source_code_location_impl : public ref_counted
         {
         public:
             source_code_location_impl(reference<source_code_location> ref,
                                       const otf2::definition::string& file,
                                       std::uint32_t line_number, std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), file_(file), line_number_(line_number)
+            : ref_counted(retain_count), ref_(ref), file_(file), line_number_(line_number)
             {
             }
 

@@ -37,7 +37,7 @@
 
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <string>
 
@@ -48,12 +48,12 @@ namespace definition
     namespace detail
     {
 
-        class string_impl : public impl_base<string_impl>
+        class string_impl : public ref_counted
         {
         public:
             string_impl(otf2::reference<string> ref, const std::string& str,
                         std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), str_(str)
+            : ref_counted(retain_count), ref_(ref), str_(str)
             {
             }
 

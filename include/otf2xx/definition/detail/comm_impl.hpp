@@ -40,7 +40,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 #include <otf2xx/intrusive_ptr.hpp>
 
 #include <otf2xx/definition/group.hpp>
@@ -55,20 +55,20 @@ namespace definition
     namespace detail
     {
 
-        class comm_impl : public impl_base<comm_impl>
+        class comm_impl : public ref_counted
         {
         public:
             comm_impl(reference<comm> ref, const otf2::definition::string& name,
                       const otf2::definition::comm_group& group, comm_impl* parent,
                       std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), group_(group), self_group_(nullptr),
+            : ref_counted(retain_count), ref_(ref), name_(name), group_(group), self_group_(nullptr),
               parent_(parent)
             {
             }
 
             comm_impl(reference<comm> ref, const otf2::definition::string& name,
                       const otf2::definition::comm_group& group, std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), group_(group), self_group_(nullptr),
+            : ref_counted(retain_count), ref_(ref), name_(name), group_(group), self_group_(nullptr),
               parent_(nullptr)
             {
             }
@@ -76,14 +76,14 @@ namespace definition
             comm_impl(reference<comm> ref, const otf2::definition::string& name,
                       const otf2::definition::comm_self_group& group, comm_impl* parent,
                       std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), group_(nullptr), self_group_(group),
+            : ref_counted(retain_count), ref_(ref), name_(name), group_(nullptr), self_group_(group),
               parent_(parent)
             {
             }
 
             comm_impl(reference<comm> ref, const otf2::definition::string& name,
                       const otf2::definition::comm_self_group& group, std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), group_(nullptr), self_group_(group),
+            : ref_counted(retain_count), ref_(ref), name_(name), group_(nullptr), self_group_(group),
               parent_(nullptr)
             {
             }

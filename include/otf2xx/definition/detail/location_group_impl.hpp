@@ -39,7 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/string.hpp>
 #include <otf2xx/definition/system_tree_node.hpp>
@@ -51,7 +51,7 @@ namespace definition
     namespace detail
     {
 
-        class location_group_impl : public impl_base<location_group_impl>
+        class location_group_impl : public ref_counted
         {
         public:
             typedef otf2::common::location_group_type location_group_type;
@@ -60,7 +60,7 @@ namespace definition
                                 location_group_type type,
                                 const otf2::definition::system_tree_node& stm,
                                 std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), type_(type), stm_(stm)
+            : ref_counted(retain_count), ref_(ref), name_(name), type_(type), stm_(stm)
             {
             }
 

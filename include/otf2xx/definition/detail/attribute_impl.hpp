@@ -39,7 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/string.hpp>
 
@@ -50,7 +50,7 @@ namespace definition
     namespace detail
     {
 
-        class attribute_impl : public impl_base<attribute_impl>
+        class attribute_impl : public ref_counted
         {
         public:
             typedef otf2::common::type attribute_type;
@@ -58,7 +58,7 @@ namespace definition
             attribute_impl(otf2::reference<attribute> ref, const otf2::definition::string& name,
                            const otf2::definition::string& description, attribute_type type,
                            std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), description_(description),
+            : ref_counted(retain_count), ref_(ref), name_(name), description_(description),
               type_(type)
             {
             }

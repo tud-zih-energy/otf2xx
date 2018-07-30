@@ -39,7 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/string.hpp>
 
@@ -50,7 +50,7 @@ namespace definition
     namespace detail
     {
 
-        class region_impl : public impl_base<region_impl>
+        class region_impl : public ref_counted
         {
         public:
             typedef otf2::common::role_type role_type;
@@ -63,7 +63,7 @@ namespace definition
                         paradigm_type paradigm, flags_type flags,
                         const otf2::definition::string& source_file, uint32_t begin_line,
                         uint32_t end_line, std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), canonical_name_(canonical_name),
+            : ref_counted(retain_count), ref_(ref), name_(name), canonical_name_(canonical_name),
               description_(description), role_(role), paradigm_(paradigm), flags_(flags),
               source_file_(source_file), begin_line_(begin_line), end_line_(end_line)
             {

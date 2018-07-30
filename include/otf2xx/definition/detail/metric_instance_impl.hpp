@@ -39,7 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/group.hpp>
 #include <otf2xx/definition/location.hpp>
@@ -57,7 +57,7 @@ namespace definition
     namespace detail
     {
 
-        class metric_instance_impl : public impl_base<metric_instance_impl>
+        class metric_instance_impl : public ref_counted
         {
         public:
             typedef otf2::common::metric_scope metric_scope;
@@ -68,7 +68,7 @@ namespace definition
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::location& scope,
                                  std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
+            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
               location_scope_(scope), location_group_scope_(), system_tree_node_scope_(),
               group_scope_()
             {
@@ -79,7 +79,7 @@ namespace definition
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::location_group& scope,
                                  std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
+            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
               location_scope_(), location_group_scope_(scope), system_tree_node_scope_(),
               group_scope_()
             {
@@ -90,7 +90,7 @@ namespace definition
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::system_tree_node& scope,
                                  std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
+            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
               location_scope_(), location_group_scope_(), system_tree_node_scope_(scope),
               group_scope_()
             {
@@ -101,7 +101,7 @@ namespace definition
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::locations_group& scope,
                                  std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
+            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
               location_scope_(), location_group_scope_(), system_tree_node_scope_(),
               group_scope_(scope)
             {

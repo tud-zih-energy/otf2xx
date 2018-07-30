@@ -39,7 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/string.hpp>
 
@@ -50,7 +50,7 @@ namespace definition
     namespace detail
     {
 
-        class metric_member_impl : public impl_base<metric_member_impl>
+        class metric_member_impl : public ref_counted
         {
         public:
             typedef otf2::common::metric_type metric_type;
@@ -65,7 +65,7 @@ namespace definition
                                value_base_type value_base, value_exponent_type value_exponent,
                                const otf2::definition::string& value_unit,
                                std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), description_(description),
+            : ref_counted(retain_count), ref_(ref), name_(name), description_(description),
               type_(type), mode_(mode), value_type_(value_type), value_base_(value_base),
               value_exponent_(value_exponent), value_unit_(value_unit)
             {

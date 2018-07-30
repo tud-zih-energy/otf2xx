@@ -39,7 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/io_handle.hpp>
 
@@ -50,7 +50,7 @@ namespace definition
     namespace detail
     {
 
-        class io_pre_created_handle_state_impl : public impl_base<io_pre_created_handle_state_impl>
+        class io_pre_created_handle_state_impl : public ref_counted
         {
         public:
             using io_access_mode_type = otf2::common::io_access_mode_type;
@@ -59,7 +59,7 @@ namespace definition
             io_pre_created_handle_state_impl(const otf2::definition::io_handle& handle,
                                              io_access_mode_type mode, io_status_flag_type flags,
                                              int retain_count = 0)
-            : impl_base(retain_count), handle_(handle), access_mode_(mode), status_flags_(flags)
+            : ref_counted(retain_count), handle_(handle), access_mode_(mode), status_flags_(flags)
             {
             }
 

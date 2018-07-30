@@ -39,7 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/string.hpp>
 #include <otf2xx/definition/system_tree_node.hpp>
@@ -51,7 +51,7 @@ namespace definition
     namespace detail
     {
 
-        class io_directory_impl : public impl_base<io_directory_impl>
+        class io_directory_impl : public ref_counted
         {
         public:
 
@@ -59,7 +59,7 @@ namespace definition
                               const otf2::definition::string& name,
                               const otf2::definition::system_tree_node& scope,
                               std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), scope_(scope)
+            : ref_counted(retain_count), ref_(ref), name_(name), scope_(scope)
             {
             }
 

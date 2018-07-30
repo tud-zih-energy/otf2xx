@@ -41,7 +41,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 #include <otf2xx/intrusive_ptr.hpp>
 
 #include <otf2xx/definition/comm.hpp>
@@ -55,7 +55,7 @@ namespace definition
     namespace detail
     {
 
-        class io_handle_impl : public impl_base<io_handle_impl>
+        class io_handle_impl : public ref_counted
         {
         public:
             using io_handle_flag_type = otf2::common::io_handle_flag_type;
@@ -65,7 +65,7 @@ namespace definition
                            const otf2::definition::io_paradigm& paradigm,
                            io_handle_flag_type handle_flag, const otf2::definition::comm& comm,
                            io_handle_impl* parent, int retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), file_(file), paradigm_(paradigm),
+            : ref_counted(retain_count), ref_(ref), name_(name), file_(file), paradigm_(paradigm),
               io_handle_flag_(handle_flag), comm_(comm), parent_(parent)
             {
             }
@@ -75,7 +75,7 @@ namespace definition
                            const otf2::definition::io_paradigm& paradigm,
                            io_handle_flag_type handle_flag, const otf2::definition::comm& comm,
                            int retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), file_(file), paradigm_(paradigm),
+            : ref_counted(retain_count), ref_(ref), name_(name), file_(file), paradigm_(paradigm),
               io_handle_flag_(handle_flag), comm_(comm), parent_(nullptr)
             {
             }
