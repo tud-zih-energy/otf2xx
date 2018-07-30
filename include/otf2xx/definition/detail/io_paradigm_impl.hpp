@@ -39,7 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/string.hpp>
 
@@ -52,7 +52,7 @@ namespace definition
     namespace detail
     {
 
-        class io_paradigm_impl : public impl_base<io_paradigm_impl>
+        class io_paradigm_impl : public ref_counted
         {
         public:
             using paradigm_class_type = otf2::common::io_paradigm_class_type;
@@ -66,7 +66,7 @@ namespace definition
                              const std::vector<paradigm_property_type>& properties,
                              const std::vector<otf2::attribute_value>& values,
                              std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), identification_(identification), name_(name),
+            : ref_counted(retain_count), ref_(ref), identification_(identification), name_(name),
               paradigm_class_(paradigmClass), paradigm_flags_(paradigmFlags),
               properties_(properties), values_(values)
             {

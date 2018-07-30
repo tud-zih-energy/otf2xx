@@ -40,8 +40,8 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
-#include <otf2xx/definition/detail/owning_ptr.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
+#include <otf2xx/intrusive_ptr.hpp>
 
 #include <otf2xx/definition/string.hpp>
 
@@ -52,14 +52,14 @@ namespace definition
     namespace detail
     {
 
-        class system_tree_node_impl : public impl_base<system_tree_node_impl>
+        class system_tree_node_impl : public ref_counted
         {
         public:
             system_tree_node_impl(reference<system_tree_node> ref,
                                   const otf2::definition::string& name,
                                   const otf2::definition::string& class_name,
                                   system_tree_node_impl* parent, std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), class_name_(class_name),
+            : ref_counted(retain_count), ref_(ref), name_(name), class_name_(class_name),
               parent_(parent)
             {
             }
@@ -68,7 +68,7 @@ namespace definition
                                   const otf2::definition::string& name,
                                   const otf2::definition::string& class_name,
                                   std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), class_name_(class_name),
+            : ref_counted(retain_count), ref_(ref), name_(name), class_name_(class_name),
               parent_(nullptr)
             {
             }
@@ -127,7 +127,7 @@ namespace definition
             reference<system_tree_node> ref_;
             otf2::definition::string name_;
             otf2::definition::string class_name_;
-            owning_ptr<system_tree_node_impl> parent_;
+            otf2::intrusive_ptr<system_tree_node_impl> parent_;
         };
     }
 }

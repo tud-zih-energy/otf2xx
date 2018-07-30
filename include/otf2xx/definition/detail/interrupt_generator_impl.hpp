@@ -40,7 +40,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/region.hpp>
 #include <otf2xx/definition/source_code_location.hpp>
@@ -54,7 +54,7 @@ namespace definition
     namespace detail
     {
 
-        class interrupt_generator_impl : public impl_base<interrupt_generator_impl>
+        class interrupt_generator_impl : public ref_counted
         {
         public:
             using interrupt_generator_mode_type = otf2::common::interrupt_generator_mode_type;
@@ -65,7 +65,7 @@ namespace definition
                                      interrupt_generator_mode_type interrupt_generator_mode,
                                      base_type base, std::int64_t exponent, std::uint64_t period,
                                      std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name),
+            : ref_counted(retain_count), ref_(ref), name_(name),
               interrupt_generator_mode_(interrupt_generator_mode), base_(base), exponent_(exponent),
               period_(period)
             {

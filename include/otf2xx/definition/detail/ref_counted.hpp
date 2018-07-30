@@ -32,48 +32,37 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IMPL_BASE_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IMPL_BASE_HPP
-
-#include <otf2xx/definition/fwd.hpp>
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_REF_COUNTED_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_REF_COUNTED_HPP
 
 #include <atomic>
 
 namespace otf2
 {
+    template <class T>
+    class intrusive_ptr;
 namespace definition
 {
     namespace detail
     {
-        template <typename Def, typename Impl>
-        class base;
-
-        template <typename T>
-        class owning_ptr;
-
-        template <typename Impl>
-        class impl_base
+        class ref_counted
         {
         public:
-            impl_base(std::int64_t retain_count = 0) : ref_count_(retain_count)
+            ref_counted(int64_t retain_count = 0) : ref_count_(retain_count)
             {
             }
 
-            impl_base(const impl_base&) = delete;
-            impl_base& operator=(const impl_base&) = delete;
+            ref_counted(const ref_counted&) = delete;
+            ref_counted& operator=(const ref_counted&) = delete;
 
-            impl_base(impl_base&&) = delete;
-            impl_base& operator=(impl_base&&) = delete;
+            ref_counted(ref_counted&&) = delete;
+            ref_counted& operator=(ref_counted&&) = delete;
 
-        protected:
-            template <typename Definition, typename Impl2>
-            friend class otf2::definition::detail::base2;
+        private:
 
-            Impl* retain()
+            void retain()
             {
                 ref_count_.fetch_add(1, std::memory_order_relaxed);
-
-                return static_cast<Impl*>(this);
             }
 
             int64_t release()
@@ -83,16 +72,13 @@ namespace definition
                 return ref_count_.fetch_sub(1, std::memory_order_acq_rel) - 1;
             }
 
-            friend class owning_ptr<Impl>;
+            template<class T>
+            friend class ::otf2::intrusive_ptr;
 
-            template <typename T, typename U>
-            friend class base;
-
-        private:
             std::atomic<int64_t> ref_count_;
         };
     }
 }
 }
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IMPL_BASE_HPP
+#endif // INCLUDE_OTF2XX_DEFINITIONS_REF_COUNTED_HPP

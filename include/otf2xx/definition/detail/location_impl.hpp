@@ -39,7 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/location_group.hpp>
 #include <otf2xx/definition/string.hpp>
@@ -53,7 +53,7 @@ namespace definition
     namespace detail
     {
 
-        class location_impl : public impl_base<location_impl>
+        class location_impl : public ref_counted
         {
         public:
             typedef otf2::common::location_type location_type;
@@ -61,7 +61,7 @@ namespace definition
             location_impl(otf2::reference<location> ref, const otf2::definition::string& name,
                           const otf2::definition::location_group& lg, location_type type,
                           std::uint64_t events = 0, std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), type_(type), lg_(lg), events_(events)
+            : ref_counted(retain_count), ref_(ref), name_(name), type_(type), lg_(lg), events_(events)
             {
             }
 

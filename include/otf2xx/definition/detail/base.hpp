@@ -36,12 +36,11 @@
 #define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_BASE_HPP
 
 #include <otf2xx/definition/fwd.hpp>
-
 #include <otf2xx/definition/detail/weak_ref.hpp>
-#include <otf2xx/traits/traits.hpp>
+#include <otf2xx/traits/definition.hpp>
+#include <otf2xx/intrusive_ptr.hpp>
 
 #include <cassert>
-#include <memory>
 
 namespace otf2
 {
@@ -61,14 +60,13 @@ namespace definition
          * This class holds the shared_ptr and some common methods.
          *
          * \tparam Def type of definition record reference type
-         * \tparam Impl type of definiotn record implementation type
          */
-        template <typename Def, typename Impl>
+        template <typename Def>
         class base
         {
         public:
-            typedef otf2::reference<typename otf2::traits::reference_param_type<Def>::type>
-                reference_type;
+            using reference_type = otf2::reference<typename otf2::traits::reference_param_type<Def>::type>;
+            using Impl = typename otf2::traits::definition_impl_type<Def>::type;
 
             base() : data_(nullptr)
             {
@@ -76,75 +74,13 @@ namespace definition
 
             base(Impl* data) : data_(data)
             {
-                if (data_ != nullptr)
-                {
-                    data_->retain();
-                }
             }
 
-            base(const base& other) : data_(other.data_)
-            {
-                if (data_ != nullptr)
-                {
-                    data_->retain();
-                }
-            }
+            base(const base& other) = default;
+            base(base&& other) = default;
+            base& operator=(const base& other) = default;
+            base& operator=(base&& other) = default;
 
-            base& operator=(const base& other)
-            {
-                if (other.data_ == data_)
-                {
-                    return *this;
-                }
-
-                if (data_ != nullptr)
-                {
-                    if (data_->release() == 0)
-                    {
-                        delete data_;
-                    }
-                }
-
-                data_ = other.data_;
-
-                if (data_ != nullptr)
-                {
-                    data_->retain();
-                }
-
-                return *this;
-            }
-
-            base(base&& other) : data_(nullptr)
-            {
-                std::swap(data_, other.data_);
-            }
-
-            base& operator=(base&& other)
-            {
-                if (data_ != nullptr)
-                {
-                    if (data_->release() == 0)
-                    {
-                        delete data_;
-                    }
-                    data_ = nullptr;
-                }
-
-                std::swap(data_, other.data_);
-
-                return *this;
-            }
-
-            ~base()
-            {
-                if (data_ != nullptr && data_->release() == 0)
-                {
-                    delete data_;
-                }
-            }
-
-        public:
             /**
              * \brief Returns the reference number of the definition
              *
@@ -184,7 +120,7 @@ namespace definition
              */
             bool is_valid() const
             {
-                return data_ != nullptr;
+                return data_.get() != nullptr;
             }
 
             /**
@@ -205,7 +141,7 @@ namespace definition
              */
             Impl* get() const
             {
-                return data_;
+                return data_.get();
             }
 
             /**
@@ -218,7 +154,7 @@ namespace definition
              */
             const Impl& data() const
             {
-                return *(data_);
+                return *data_;
             }
 
             weak_ref<Def> get_weak_ref() const
@@ -226,12 +162,18 @@ namespace definition
                 return { *this };
             }
 
+            friend void swap(base& a, base& b)
+            {
+                using std::swap;
+                swap(a.data_, b.data_);
+            }
+
         protected:
-            Impl* data_;
+            ::otf2::intrusive_ptr<Impl> data_;
         };
 
-        template <typename Def, typename Impl>
-        inline bool operator==(const base<Def, Impl>& a, const base<Def, Impl>& b)
+        template <typename Def>
+        inline bool operator==(const base<Def>& a, const base<Def>& b)
         {
             if (!a.is_valid() || !b.is_valid())
                 return false;
@@ -239,8 +181,8 @@ namespace definition
             return a.ref() == b.ref();
         }
 
-        template <typename Def, typename Impl>
-        inline bool operator!=(const base<Def, Impl>& a, const base<Def, Impl>& b)
+        template <typename Def>
+        inline bool operator!=(const base<Def>& a, const base<Def>& b)
         {
             return !(a == b);
         }

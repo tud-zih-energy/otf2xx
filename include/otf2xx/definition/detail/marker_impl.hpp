@@ -39,7 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <string>
 
@@ -50,7 +50,7 @@ namespace definition
     namespace detail
     {
 
-        class marker_impl : public impl_base<marker_impl>
+        class marker_impl : public ref_counted
         {
         public:
             using severity_type = otf2::common::marker_severity_type;
@@ -58,7 +58,7 @@ namespace definition
             marker_impl(otf2::reference<otf2::definition::marker> ref, const std::string& group,
                         const std::string& category, severity_type severity,
                         std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), group_(group), category_(category),
+            : ref_counted(retain_count), ref_(ref), group_(group), category_(category),
               severity_(severity)
             {
             }

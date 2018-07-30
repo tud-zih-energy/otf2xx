@@ -40,7 +40,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2/OTF2_IdMap.h>
 
@@ -53,7 +53,7 @@ namespace definition
     namespace detail
     {
 
-        class mapping_table_impl : public impl_base<mapping_table_impl>
+        class mapping_table_impl : public ref_counted
         {
             using id_map_repr_type = OTF2_IdMap;
 
@@ -64,7 +64,7 @@ namespace definition
             mapping_table_impl(mapping_type_type mapping_type,
                                OTF2_IdMapMode mode = OTF2_ID_MAP_SPARSE, std::size_t size = 64,
                                std::int64_t retain_count = 0)
-            : impl_base(retain_count), mapping_type_(mapping_type),
+            : ref_counted(retain_count), mapping_type_(mapping_type),
               id_map_(OTF2_IdMap_Create(mode, size))
             {
                 if (!id_map_)
@@ -75,7 +75,7 @@ namespace definition
 
             mapping_table_impl(mapping_type_type mapping_type, std::vector<uint64_t> mappings,
                                bool optimize_size = false, std::int64_t retain_count = 0)
-            : impl_base(retain_count), mapping_type_(mapping_type),
+            : ref_counted(retain_count), mapping_type_(mapping_type),
               id_map_(
                   OTF2_IdMap_CreateFromUint64Array(mappings.size(), mappings.data(), optimize_size))
             {
@@ -87,7 +87,7 @@ namespace definition
 
             mapping_table_impl(mapping_type_type mapping_type, std::vector<uint32_t> mappings,
                                bool optimize_size = false, std::int64_t retain_count = 0)
-            : impl_base(retain_count), mapping_type_(mapping_type),
+            : ref_counted(retain_count), mapping_type_(mapping_type),
               id_map_(
                   OTF2_IdMap_CreateFromUint32Array(mappings.size(), mappings.data(), optimize_size))
             {

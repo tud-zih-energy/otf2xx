@@ -58,6 +58,8 @@ endfunction()
 
 otf2xx_add_test(enums_test otf2xx::Core)
 
+otf2xx_add_test(intrusive_ptr_test otf2xx::Core)
+
 otf2xx_add_test(writer_test otf2xx::Writer)
 add_test(NAME writer_test_cleanup COMMAND cmake -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace)
 set_property(TEST writer_test PROPERTY DEPENDS writer_test_cleanup)

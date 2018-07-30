@@ -39,7 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/metric_member.hpp>
 #include <otf2xx/definition/string.hpp>
@@ -54,7 +54,7 @@ namespace definition
     namespace detail
     {
 
-        class metric_class_impl : public impl_base<metric_class_impl>
+        class metric_class_impl : public ref_counted
         {
         public:
             typedef otf2::common::metric_occurence metric_occurence;
@@ -64,7 +64,7 @@ namespace definition
 
             metric_class_impl(reference<metric_base> ref, metric_occurence occurence,
                               recorder_kind_type recorder_kind, std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), occurence_(occurence),
+            : ref_counted(retain_count), ref_(ref), occurence_(occurence),
               recorder_kind_(recorder_kind)
             {
             }

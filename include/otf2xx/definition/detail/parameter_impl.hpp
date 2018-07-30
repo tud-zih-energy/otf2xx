@@ -39,7 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <otf2xx/definition/string.hpp>
 
@@ -50,14 +50,14 @@ namespace definition
     namespace detail
     {
 
-        class parameter_impl : public impl_base<parameter_impl>
+        class parameter_impl : public ref_counted
         {
         public:
             typedef otf2::common::parameter_type parameter_type;
 
             parameter_impl(otf2::reference<parameter> ref, const otf2::definition::string& name,
                            parameter_type type, std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), name_(name), type_(type)
+            : ref_counted(retain_count), ref_(ref), name_(name), type_(type)
             {
             }
 

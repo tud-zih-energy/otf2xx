@@ -40,8 +40,8 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/impl_base.hpp>
-#include <otf2xx/definition/detail/owning_ptr.hpp>
+#include <otf2xx/definition/detail/ref_counted.hpp>
+#include <otf2xx/intrusive_ptr.hpp>
 
 #include <otf2xx/definition/region.hpp>
 #include <otf2xx/definition/source_code_location.hpp>
@@ -53,14 +53,14 @@ namespace definition
     namespace detail
     {
 
-        class calling_context_impl : public impl_base<calling_context_impl>
+        class calling_context_impl : public ref_counted
         {
         public:
             calling_context_impl(reference<calling_context> ref,
                                  const otf2::definition::region& region,
                                  const otf2::definition::source_code_location& source_code_location,
                                  calling_context_impl* parent, std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), region_(region),
+            : ref_counted(retain_count), ref_(ref), region_(region),
               source_code_location_(source_code_location), parent_(parent)
             {
             }
@@ -69,7 +69,7 @@ namespace definition
                                  const otf2::definition::region& region,
                                  const otf2::definition::source_code_location& source_code_location,
                                  std::int64_t retain_count = 0)
-            : impl_base(retain_count), ref_(ref), region_(region),
+            : ref_counted(retain_count), ref_(ref), region_(region),
               source_code_location_(source_code_location), parent_(nullptr)
             {
             }
@@ -124,7 +124,7 @@ namespace definition
             reference<calling_context> ref_;
             otf2::definition::region region_;
             otf2::definition::source_code_location source_code_location_;
-            owning_ptr<calling_context_impl> parent_;
+            otf2::intrusive_ptr<calling_context_impl> parent_;
         };
     }
 }
