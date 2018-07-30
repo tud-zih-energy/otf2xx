@@ -229,4 +229,7 @@ TEST_CASE("test lifetime", "[intrusive_ptr]")
             }
         }
     }
+    // Those must be equal as all objects should be freed by now.
+    // The Catch2-sections allow to assert this for all cases combined
+    REQUIRE(debug_ptr::calls.retain == debug_ptr::calls.release);
 }
