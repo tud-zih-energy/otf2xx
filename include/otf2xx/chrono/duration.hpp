@@ -38,8 +38,6 @@
 #include <chrono>
 #include <iostream>
 
-using namespace std::literals::chrono_literals;
-
 namespace otf2
 {
 namespace chrono
