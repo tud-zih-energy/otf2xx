@@ -66,8 +66,7 @@ namespace definition
         typedef typename otf2::reference<Definition>::ref_type key_type;
         typedef std::map<key_type, value_type> map_type;
 
-        typedef container self;
-
+    public:
         class iterator
         {
         public:
@@ -80,16 +79,18 @@ namespace definition
             {
                 assert(it != end);
 
-                it++;
+                ++it;
                 return *this;
             }
 
             iterator operator++(int) // postfix ++
             {
+                assert(it != end);
+
                 return iterator(it++, end);
             }
 
-            value_type operator*() const
+            const value_type& operator*() const
             {
                 assert(it != end);
 
@@ -103,17 +104,17 @@ namespace definition
                 return &(it->second);
             }
 
-            bool operator!=(const iterator& other) const
-            {
-                return it != other.it;
-            }
-
             bool operator==(const iterator& other) const
             {
                 return it == other.it;
             }
 
-            operator bool() const
+            bool operator!=(const iterator& other) const
+            {
+                return !(*this == other);
+            }
+
+            explicit operator bool() const
             {
                 return it != end;
             }
@@ -122,17 +123,8 @@ namespace definition
             typename map_type::const_iterator it;
             typename map_type::const_iterator end;
         };
+        typedef iterator const_iterator;
 
-    public:
-        container(const self&) = default;
-        self& operator=(const self&) = default;
-
-        container() = default;
-
-        container(self&&) = default;
-        self& operator=(self&&) = default;
-
-    public:
         const value_type& operator[](key_type key) const
         {
             if (key == otf2::reference<Definition>::undefined())
@@ -146,19 +138,14 @@ namespace definition
         {
             return data
                 .emplace(std::piecewise_construct, std::forward_as_tuple(ref),
-                         std::forward_as_tuple(ref, args...))
+                         std::forward_as_tuple(ref, std::forward<Args>(args)...))
                 .first->second;
         }
 
-        void add_definition(Definition&& def)
+        void add_definition(Definition def)
         {
             auto ref = def.ref();
             data.emplace(ref, std::move(def));
-        }
-
-        void add_definition(const Definition& def)
-        {
-            data.emplace(def.ref(), def);
         }
 
         std::size_t count(key_type key) const
@@ -171,18 +158,17 @@ namespace definition
             return data.size();
         }
 
-        iterator find(key_type key) const
+        const_iterator find(key_type key) const
         {
             return iterator(data.find(key), data.end());
         }
 
-    public:
-        iterator begin() const
+        const_iterator begin() const
         {
             return iterator(data.begin(), data.end());
         }
 
-        iterator end() const
+        const_iterator end() const
         {
             return iterator(data.end(), data.end());
         }
@@ -206,19 +192,10 @@ namespace definition
     private:
         typedef std::vector<value_type> map_type;
 
-        typedef supplement_container self;
+    public:
         typedef typename map_type::const_iterator iterator;
+        typedef iterator const_iterator;
 
-    public:
-        supplement_container(const self&) = default;
-        self& operator=(const self&) = default;
-
-        supplement_container() = default;
-
-        supplement_container(self&&) = default;
-        self& operator=(self&&) = default;
-
-    public:
         template <typename... Args>
         const value_type& emplace(Args&&... args)
         {
@@ -227,14 +204,7 @@ namespace definition
             return data.back();
         }
 
-        const value_type& add_definition(const value_type& def)
-        {
-            data.push_back(def);
-
-            return data.back();
-        }
-
-        const value_type& add_definition(value_type&& def)
+        const value_type& add_definition(value_type def)
         {
             data.emplace_back(std::move(def));
 
@@ -246,13 +216,12 @@ namespace definition
             return data.size();
         }
 
-    public:
-        iterator begin() const
+        const_iterator begin() const
         {
             return data.cbegin();
         }
 
-        iterator end() const
+        const_iterator end() const
         {
             return data.cend();
         }
