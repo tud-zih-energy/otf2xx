@@ -53,11 +53,9 @@ namespace definition
     /**
      * \brief class for representing location definitions
      */
-    class location : public detail::base<location>
+    class location : public detail::base<location, detail::location_impl>
     {
-        typedef detail::base<location> base;
-        typedef otf2::traits::definition_impl_type<location>::type impl_type;
-
+        using base = detail::base<location, detail::location_impl>;
         using base::base;
 
     public:
@@ -152,7 +150,7 @@ namespace definition
     {
         return lhs.ref() == rhs.ref();
     }
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_LOCATION_HPP

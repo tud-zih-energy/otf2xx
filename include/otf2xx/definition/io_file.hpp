@@ -49,11 +49,9 @@ namespace otf2
 {
 namespace definition
 {
-    class io_file : public detail::base<io_file>
+    class io_file : public detail::base<io_file, detail::io_file_impl>
     {
-        typedef detail::base<io_file> base;
-        typedef typename otf2::traits::definition_impl_type<io_file>::type impl_type;
-
+        using base = detail::base<io_file, detail::io_file_impl>;
         using base::base;
 
     public:

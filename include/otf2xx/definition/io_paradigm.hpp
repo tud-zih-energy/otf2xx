@@ -49,10 +49,9 @@ namespace otf2
 namespace definition
 {
 
-    class io_paradigm : public detail::base<io_paradigm>
+    class io_paradigm : public detail::base<io_paradigm, detail::io_paradigm_impl>
     {
-        typedef detail::base<io_paradigm> base;
-        typedef typename otf2::traits::definition_impl_type<io_paradigm>::type impl_type;
+        using base = detail::base<io_paradigm, detail::io_paradigm_impl>;
         using base::base;
 
     public:
@@ -116,7 +115,7 @@ namespace definition
             return data_->values();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_IO_PARADIGM_HPP

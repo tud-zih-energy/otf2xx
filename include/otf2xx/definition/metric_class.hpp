@@ -56,10 +56,9 @@ namespace definition
      * and recorder of this metric is implicitly given by the location,
      * where the referencing metric event occures.
      */
-    class metric_class : public detail::base<metric_class>
+    class metric_class : public detail::base<metric_class, detail::metric_class_impl>
     {
-        typedef detail::base<metric_class> base;
-        typedef otf2::traits::definition_impl_type<metric_class>::type impl_type;
+        using base = detail::base<metric_class, detail::metric_class_impl>;
         using base::base;
 
     public:
@@ -137,7 +136,7 @@ namespace definition
             return this->data_->end();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_METRIC_CLASS_HPP

@@ -52,10 +52,10 @@ namespace definition
     /**
      * \brief class for representing source_code_location definitions
      */
-    class source_code_location : public detail::base<source_code_location>
+    class source_code_location
+    : public detail::base<source_code_location, detail::source_code_location_impl>
     {
-        typedef detail::base<source_code_location> base;
-        typedef otf2::traits::definition_impl_type<source_code_location>::type impl_type;
+        using base = detail::base<source_code_location, detail::source_code_location_impl>;
         using base::base;
 
     public:
@@ -90,7 +90,7 @@ namespace definition
             return data_->line_number();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_SOURCE_CODE_LOCATION_HPP

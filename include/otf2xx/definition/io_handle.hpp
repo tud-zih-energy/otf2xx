@@ -50,10 +50,9 @@ namespace otf2
 namespace definition
 {
 
-    class io_handle : public detail::base<io_handle>
+    class io_handle : public detail::base<io_handle, detail::io_handle_impl>
     {
-        typedef detail::base<io_handle> base;
-        typedef typename otf2::traits::definition_impl_type<io_handle>::type impl_type;
+        using base = detail::base<io_handle, detail::io_handle_impl>;
         using base::base;
 
     public:
@@ -152,7 +151,7 @@ namespace definition
             return data_->parent();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_IO_HANDLE_HPP

@@ -54,11 +54,9 @@ namespace definition
     /**
      * \brief class for representing a attribute definition
      */
-    class attribute : public detail::base<attribute>
+    class attribute : public detail::base<attribute, detail::attribute_impl>
     {
-        typedef detail::base<attribute> base;
-        typedef typename otf2::traits::definition_impl_type<attribute>::type impl_type;
-
+        using base = detail::base<attribute, detail::attribute_impl>;
         using base::base;
 
     public:
@@ -105,7 +103,7 @@ namespace definition
             return data_->type();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_ATTRIBUTE_HPP

@@ -135,8 +135,8 @@ namespace definition
             recorder_kind_type recorder_kind_;
             std::vector<otf2::definition::metric_member> members_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_METRIC_CLASS_HPP

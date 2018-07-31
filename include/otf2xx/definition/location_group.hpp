@@ -56,10 +56,9 @@ namespace definition
      * location definitions.
      *
      */
-    class location_group : public detail::base<location_group>
+    class location_group : public detail::base<location_group, detail::location_group_impl>
     {
-        typedef detail::base<location_group> base;
-        typedef otf2::traits::definition_impl_type<location_group>::type impl_type;
+        using base = detail::base<location_group, detail::location_group_impl>;
         using base::base;
 
     public:
@@ -111,7 +110,7 @@ namespace definition
             return data_->parent();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_LOCATION_GROUP_HPP

@@ -38,6 +38,8 @@
 #include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/traits/traits.hpp>
 
+#include <type_traits>
+
 #include <cstdint>
 
 namespace otf2
@@ -172,56 +174,19 @@ namespace traits
     {
     };
 
-    template <typename T, typename...>
+    template <typename T, typename... Args>
     struct reference_type_var : reference_type<T>
     {
+        static_assert(std::is_same<typename reference_type<T>::type,
+                                   typename reference_type_var<Args...>::type>::value,
+                      "Can only use this for compatible definitions");
     };
 
     template <typename T>
-    struct reference_param_type : otf2::traits::identity<T>
+    struct reference_type_var<T> : reference_type<T>
     {
     };
 
-    template <typename T, otf2::common::group_type Type>
-    struct reference_param_type<definition::group<T, Type>>
-    : otf2::traits::identity<definition::detail::group_base>
-    {
-    };
-
-    template <>
-    struct reference_param_type<definition::metric_class>
-    : otf2::traits::identity<definition::detail::metric_base>
-    {
-    };
-
-    template <>
-    struct reference_param_type<definition::metric_instance>
-    : otf2::traits::identity<definition::detail::metric_base>
-    {
-    };
-
-    template <>
-    struct reference_param_type<definition::io_directory>
-    : otf2::traits::identity<definition::io_file>
-    {
-    };
-
-    template <>
-    struct reference_param_type<definition::io_regular_file>
-    : otf2::traits::identity<definition::io_file>
-    {
-    };
-
-    template <typename T>
-    struct reference_param_type<definition::property<T>> : otf2::traits::identity<T>
-    {
-    };
-
-    template <>
-    struct reference_param_type<definition::io_pre_created_handle_state>
-    : otf2::traits::identity<definition::io_handle>
-    {
-    };
 } // namespace traits
 } // namespace otf2
 

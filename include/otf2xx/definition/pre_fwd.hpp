@@ -84,7 +84,7 @@ namespace definition
 
         template <typename Definition>
         class weak_ref;
-    }
+    } // namespace detail
 
     class location;
     class location_group;
@@ -146,8 +146,11 @@ namespace definition
     class marker;
 
     template <typename Definition>
-    detail::weak_ref<Definition> make_weak_ref(const Definition&);
-}
-} // namespace otf2::definition
+    using weak_ref = detail::weak_ref<Definition>;
+
+    template <typename Definition>
+    weak_ref<Definition> make_weak_ref(const Definition&);
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITION_PRE_FWD_HPP

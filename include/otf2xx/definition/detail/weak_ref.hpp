@@ -50,7 +50,7 @@ namespace definition
             static_assert(otf2::traits::is_definition<Definition>::value,
                           "Definition must be an otf2xx definition.");
 
-            using Impl = typename otf2::traits::definition_impl_type<Definition>::type;
+            using Impl = typename Definition::impl_type;
 
         public:
             weak_ref() : ptr_(nullptr)
@@ -122,12 +122,12 @@ namespace definition
         private:
             Impl* ptr_;
         };
-    }
+    } // namespace detail
 
     template <typename Definition>
     detail::weak_ref<Definition> make_weak_ref(const Definition& def)
     {
         return { def };
     }
-}
-}
+} // namespace definition
+} // namespace otf2

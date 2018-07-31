@@ -49,10 +49,9 @@ namespace definition
     /**
      * \brief class for representing marker definitions
      */
-    class marker : public detail::base<marker>
+    class marker : public detail::base<marker, detail::marker_impl>
     {
-        typedef detail::base<marker> base;
-        typedef otf2::traits::definition_impl_type<marker>::type impl_type;
+        using base = detail::base<marker, detail::marker_impl>;
         using base::base;
 
     public:
@@ -91,7 +90,7 @@ namespace definition
             return this->data_->severity();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_MARKER_HPP

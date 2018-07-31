@@ -62,16 +62,18 @@ namespace definition
      */
     template <class MemberType,
               otf2::common::group_type GroupType = otf2::common::group_type::unknown>
-    class group : public detail::base<group<MemberType, GroupType>>
+    class group
+    : public detail::base<group<MemberType, GroupType>, detail::group_impl<MemberType, GroupType>>
     {
-        typedef detail::base<group<MemberType, GroupType>> base;
-        typedef typename otf2::traits::definition_impl_type<group<MemberType, GroupType>>::type
-            impl_type;
+        using base =
+            detail::base<group<MemberType, GroupType>, detail::group_impl<MemberType, GroupType>>;
 
         static_assert(otf2::traits::is_definition<MemberType>::value,
                       "The MemberType has to be a otf2::definition.");
 
         using base::base;
+
+        using impl_type = typename base::impl_type;
 
     public:
         typedef typename impl_type::group_type group_type;
@@ -194,7 +196,7 @@ namespace definition
         }
     };
 
-} // namespace otf2::definition
+} // namespace definition
 
 } // namespace otf2
 

@@ -44,11 +44,11 @@ namespace definition
 {
     namespace detail
     {
-        template <typename Def>
+        template <typename Def, typename Impl>
         class base;
     }
-}
+} // namespace definition
 
-} // namespace otf2::definition::detail
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITION_FWD_HPP

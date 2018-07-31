@@ -46,9 +46,8 @@
 #ifndef INCLUDE_OTF2XX_REFERENCE_HPP
 #define INCLUDE_OTF2XX_REFERENCE_HPP
 
+#include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/traits/reference.hpp>
-
-#include <cassert>
 
 namespace otf2
 {
@@ -123,8 +122,74 @@ public:
         return static_cast<as_type>(-1);
     }
 
-private:
+protected:
     ref_type handle;
+};
+
+template <typename T, otf2::common::group_type Type>
+class reference<definition::group<T, Type>> : public reference<definition::detail::group_base>
+{
+public:
+    reference(const reference<definition::detail::group_base>& base)
+    : reference<definition::detail::group_base>(base)
+    {
+    }
+};
+
+template <>
+class reference<definition::metric_class> : public reference<definition::detail::metric_base>
+{
+public:
+    reference(const reference<definition::detail::metric_base>& base)
+    : reference<definition::detail::metric_base>(base)
+    {
+    }
+};
+
+template <>
+class reference<definition::metric_instance> : public reference<definition::detail::metric_base>
+{
+public:
+    reference(const reference<definition::detail::metric_base>& base)
+    : reference<definition::detail::metric_base>(base)
+    {
+    }
+};
+
+template <>
+class reference<definition::io_directory> : public reference<definition::io_file>
+{
+public:
+    reference(const reference<definition::io_file>& base) : reference<definition::io_file>(base)
+    {
+    }
+};
+
+template <>
+class reference<definition::io_regular_file> : public reference<definition::io_file>
+{
+public:
+    reference(const reference<definition::io_file>& base) : reference<definition::io_file>(base)
+    {
+    }
+};
+
+template <typename T>
+class reference<definition::property<T>> : public reference<T>
+{
+public:
+    reference(const reference<T>& base) : reference<T>(base)
+    {
+    }
+};
+
+template <>
+class reference<definition::io_pre_created_handle_state> : public reference<definition::io_handle>
+{
+public:
+    reference(const reference<definition::io_handle>& base) : reference<definition::io_handle>(base)
+    {
+    }
 };
 
 } // namespace otf2

@@ -56,11 +56,9 @@ namespace definition
     /**
      * \brief class for representing a comm definition
      */
-    class comm : public detail::base<comm>
+    class comm : public detail::base<comm, detail::comm_impl>
     {
-        typedef typename otf2::traits::definition_impl_type<comm>::type impl_type;
-        typedef detail::base<comm> base;
-
+        using base = detail::base<comm, detail::comm_impl>;
         using base::base;
 
     public:
@@ -174,7 +172,7 @@ namespace definition
         }
     };
 
-} // namespace otf2::definition
+} // namespace definition
 
 } // namespace otf2
 

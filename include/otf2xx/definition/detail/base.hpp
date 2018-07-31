@@ -35,10 +35,10 @@
 #ifndef INCLUDE_OTF2XX_DEFINITIONS_DETAIL_BASE_HPP
 #define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_BASE_HPP
 
-#include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/definition/detail/weak_ref.hpp>
-#include <otf2xx/traits/definition.hpp>
+#include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/intrusive_ptr.hpp>
+#include <otf2xx/traits/definition.hpp>
 
 #include <cassert>
 
@@ -61,12 +61,12 @@ namespace definition
          *
          * \tparam Def type of definition record reference type
          */
-        template <typename Def>
+        template <typename Def, typename Impl>
         class base
         {
         public:
-            using reference_type = otf2::reference<typename otf2::traits::reference_param_type<Def>::type>;
-            using Impl = typename otf2::traits::definition_impl_type<Def>::type;
+            using reference_type = otf2::reference<Def>;
+            using impl_type = Impl;
 
             base() : data_(nullptr)
             {
@@ -172,8 +172,8 @@ namespace definition
             ::otf2::intrusive_ptr<Impl> data_;
         };
 
-        template <typename Def>
-        inline bool operator==(const base<Def>& a, const base<Def>& b)
+        template <typename Def, typename Impl>
+        inline bool operator==(const base<Def, Impl>& a, const base<Def, Impl>& b)
         {
             if (!a.is_valid() || !b.is_valid())
                 return false;
@@ -181,8 +181,8 @@ namespace definition
             return a.ref() == b.ref();
         }
 
-        template <typename Def>
-        inline bool operator!=(const base<Def>& a, const base<Def>& b)
+        template <typename Def, typename Impl>
+        inline bool operator!=(const base<Def, Impl>& a, const base<Def, Impl>& b)
         {
             return !(a == b);
         }

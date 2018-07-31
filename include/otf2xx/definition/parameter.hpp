@@ -52,10 +52,9 @@ namespace definition
     /**
      * \brief class for representing parameter definitions
      */
-    class parameter : public detail::base<parameter>
+    class parameter : public detail::base<parameter, detail::parameter_impl>
     {
-        typedef detail::base<parameter> base;
-        typedef otf2::traits::definition_impl_type<parameter>::type impl_type;
+        using base = detail::base<parameter, detail::parameter_impl>;
         using base::base;
 
     public:
@@ -90,7 +89,7 @@ namespace definition
             return data_->type();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_PARAMETER_HPP
