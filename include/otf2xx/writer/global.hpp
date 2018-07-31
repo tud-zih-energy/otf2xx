@@ -240,7 +240,7 @@ namespace writer
                 break;
 
             default:
-                make_exception("Unsupported scope type given");
+                throw make_exception("Unsupported scope type given");
             }
 
             check(OTF2_GlobalDefWriter_WriteMetricInstance(

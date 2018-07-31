@@ -46,52 +46,44 @@ namespace otf2
 
 struct exception : std::runtime_error
 {
-    explicit exception(const std::string& arg) : std::runtime_error(arg)
+    explicit exception(std::string arg) : std::runtime_error(std::move(arg))
     {
     }
 };
 
 namespace detail
 {
-
-    template <typename Arg, typename... Args>
-    class make_exception
+    /// Concatenate all arguments into one string
+    template <typename... T_Args>
+    inline std::string concat_args(T_Args&&... args)
     {
-    public:
-        void operator()(std::stringstream& msg, Arg arg, Args... args)
-        {
-            msg << arg;
-            make_exception<Args...>()(msg, args...);
-        }
-    };
-
-    template <typename Arg>
-    class make_exception<Arg>
-    {
-    public:
-        void operator()(std::stringstream& msg, Arg arg)
-        {
-            msg << arg;
-        }
-    };
+        std::stringstream msg;
+        using expander = int[];
+        // Pre C++17 expansion
+        (void)expander{ 0, (void(msg << std::forward<T_Args>(args)), 0)... };
+        return msg.str();
+    }
 }
 
-template <typename... Args>
-inline void make_exception(Args... args)
+template <typename... T_Args>
+inline exception make_exception(T_Args&&... args)
 {
-    std::stringstream msg;
-
-    detail::make_exception<Args...>()(msg, args...);
-
-    throw exception(msg.str());
+    return exception(detail::concat_args(std::forward<T_Args>(args)...));
 }
 
-template <typename... Args>
-void inline check(OTF2_ErrorCode code, Args... args)
+template <typename... T_Args>
+inline exception make_otf2_exception(OTF2_ErrorCode code, T_Args&&... args)
+{
+    return make_exception(OTF2_Error_GetName(code), ": ", OTF2_Error_GetDescription(code), "\n",
+                          std::forward<T_Args>(args)...);
+}
+
+template <typename... T_Args>
+void inline check(OTF2_ErrorCode code, T_Args&&... args)
 {
     if (code != OTF2_SUCCESS)
     {
-        make_exception(args...);
+        throw make_otf2_exception(code, std::forward<T_Args>(args)...);
     }
 }
 

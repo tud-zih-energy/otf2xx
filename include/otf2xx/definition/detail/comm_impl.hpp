@@ -115,7 +115,7 @@ namespace definition
             const otf2::definition::comm_group& group() const
             {
                 if (has_self_group())
-                    make_exception("The comm with id ", ref_.get(),
+                    throw make_exception("The comm with id ", ref_.get(),
                                    " hasn't got a group. It has a self group.");
 
                 return group_;
@@ -124,7 +124,7 @@ namespace definition
             const otf2::definition::comm_self_group& self_group() const
             {
                 if (!has_self_group())
-                    make_exception("The comm with id ", ref_.get(), " hasn't got a self group");
+                    throw make_exception("The comm with id ", ref_.get(), " hasn't got a self group");
 
                 return self_group_;
             }

@@ -72,7 +72,7 @@ namespace writer
           serial(false), comm_(comm)
         {
             if (ar == nullptr)
-                make_exception("Couldn't open the archive '", name, "'");
+                throw make_exception("Couldn't open the archive '", name, "'");
 
             set_flush_callbacks();
             set_collective_callbacks();
@@ -92,7 +92,7 @@ namespace writer
           serial(true)
         {
             if (ar == nullptr)
-                make_exception("Couldn't open the archive '", name, "'");
+                throw make_exception("Couldn't open the archive '", name, "'");
 
             set_flush_callbacks();
             OTF2_Archive_SetSerialCollectiveCallbacks(ar);
@@ -419,7 +419,7 @@ namespace writer
             }
             else
             {
-                make_exception(
+                throw make_exception(
                     "Archive is in slave mode, so there can't be any global definition writer");
             }
 
@@ -461,7 +461,7 @@ namespace writer
     global& operator<<(archive& ar, Anything any)
     {
         if (!ar.is_master())
-            make_exception(
+            throw make_exception(
                 "Archive is in slave mode, so there can't be any global definition writer");
         return ar.get_global_writer() << any;
     }
@@ -469,7 +469,7 @@ namespace writer
     inline global& operator<<(archive& ar, const otf2::event::marker& evt)
     {
         if (!ar.is_master())
-            make_exception(
+            throw make_exception(
                 "Archive is in slave mode, so there can't be any global definition writer");
         return ar.get_global_writer() << evt;
     }
@@ -478,7 +478,7 @@ namespace writer
     global& operator<<(archive& ar, const otf2::definition::container<Definition>& c)
     {
         if (!ar.is_master())
-            make_exception(
+            throw make_exception(
                 "Archive is in slave mode, so there can't be any global definition writer");
 
         global& wrt = ar.get_global_writer();

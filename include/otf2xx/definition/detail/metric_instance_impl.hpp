@@ -157,7 +157,7 @@ namespace definition
                 if (group_scope_.is_valid())
                     return metric_scope::group;
 
-                make_exception("There is no valid scope definition for this metric instance.");
+                throw make_exception("There is no valid scope definition for this metric instance.");
 
                 return metric_scope::group;
             }

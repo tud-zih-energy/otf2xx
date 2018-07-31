@@ -517,7 +517,7 @@ namespace event
                     break;
 
                 default:
-                    make_exception("Added unknown event type to event buffer");
+                    throw make_exception("Added unknown event type to event buffer");
                     break;
                 }
             }
@@ -706,7 +706,7 @@ namespace event
                     break;
 
                 default:
-                    make_exception("Added unknown event type to event buffer");
+                    throw make_exception("Added unknown event type to event buffer");
                     break;
                 }
 

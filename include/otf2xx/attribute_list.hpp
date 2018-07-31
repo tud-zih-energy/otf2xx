@@ -665,7 +665,7 @@ private:
 
         if (attribute_list_ == nullptr)
         {
-            make_exception("Couldn't create a new attribute list.");
+            throw make_exception("Couldn't create a new attribute list.");
         }
 
         owned_ = true;

@@ -137,7 +137,7 @@ namespace definition
             {
                 if (!has_parent())
                 {
-                    make_exception("The io handle '", name().str(), "' hasn't got a parent.");
+                    throw make_exception("The io handle '", name().str(), "' hasn't got a parent.");
                 }
 
                 return parent_.get();

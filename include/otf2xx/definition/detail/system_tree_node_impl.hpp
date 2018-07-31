@@ -116,7 +116,7 @@ namespace definition
             {
                 if (!has_parent())
                 {
-                    make_exception("The system tree node '", name().str(),
+                    throw make_exception("The system tree node '", name().str(),
                                    "' hasn't got a parent.");
                 }
 

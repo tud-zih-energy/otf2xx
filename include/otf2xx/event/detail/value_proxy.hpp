@@ -84,7 +84,7 @@ namespace event
                 case otf2::common::type::uint64:
                     return static_cast<double>(value_.unsigned_int);
                 default:
-                    make_exception("Unexpected type given in metric member");
+                    throw make_exception("Unexpected type given in metric member");
                 }
 
                 return 0;
@@ -101,7 +101,7 @@ namespace event
                 case otf2::common::type::uint64:
                     return static_cast<std::int64_t>(value_.unsigned_int);
                 default:
-                    make_exception("Unexpected type given in metric member");
+                    throw make_exception("Unexpected type given in metric member");
                 }
 
                 return 0;
@@ -118,7 +118,7 @@ namespace event
                 case otf2::common::type::uint64:
                     return static_cast<std::uint64_t>(value_.unsigned_int);
                 default:
-                    make_exception("Unexpected type given in metric member");
+                    throw make_exception("Unexpected type given in metric member");
                 }
 
                 return 0;
@@ -139,7 +139,7 @@ namespace event
                     value_.unsigned_int = static_cast<std::uint64_t>(x);
                     break;
                 default:
-                    make_exception("Unexpected type given in metric member");
+                    throw make_exception("Unexpected type given in metric member");
                 }
             }
 
