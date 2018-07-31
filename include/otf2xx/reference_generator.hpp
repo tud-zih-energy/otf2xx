@@ -183,7 +183,7 @@ public:
         interrupt_generator_refs_.register_definition(def);
     }
 
-    void register_definition(const otf2::definition::io_file& def)
+    void register_definition(const otf2::definition::io_regular_file& def)
     {
         io_file_refs_.register_definition(def);
     }

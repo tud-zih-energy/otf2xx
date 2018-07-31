@@ -58,6 +58,8 @@ endfunction()
 
 otf2xx_add_test(enums_test otf2xx::Core)
 
+otf2xx_add_test(traits_test otf2xx::Core)
+
 otf2xx_add_test(intrusive_ptr_test otf2xx::Core)
 
 otf2xx_add_test(writer_test otf2xx::Writer)

@@ -88,7 +88,7 @@ namespace definition
             return data_->scope();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_IO_FILE_HPP

@@ -163,7 +163,7 @@ namespace traits
     };
 
     template <>
-    struct reference_type<definition::io_paradigm> : identity<std::uint32_t>
+    struct reference_type<definition::io_paradigm> : identity<std::uint8_t>
     {
     };
 

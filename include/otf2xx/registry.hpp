@@ -199,11 +199,6 @@ public:
         return interrupt_generators_;
     }
 
-    DefinitionHolder<otf2::definition::io_file>& io_files()
-    {
-        return io_files_;
-    }
-
     DefinitionHolder<otf2::definition::io_regular_file>& io_regular_files()
     {
         return io_regular_files_;
@@ -438,7 +433,6 @@ private:
     DefinitionHolder<otf2::definition::calling_context> calling_contexts_;
     DefinitionHolder<otf2::definition::interrupt_generator> interrupt_generators_;
     DefinitionHolder<otf2::definition::io_handle> io_handles_;
-    DefinitionHolder<otf2::definition::io_file> io_files_;
     DefinitionHolder<otf2::definition::io_regular_file> io_regular_files_;
     DefinitionHolder<otf2::definition::io_directory> io_directories_;
     DefinitionHolder<otf2::definition::io_paradigm> io_paradigms_;
