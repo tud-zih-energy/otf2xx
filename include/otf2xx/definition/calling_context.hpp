@@ -55,11 +55,9 @@ namespace definition
     /**
      * \brief class for representing a attribute definition
      */
-    class calling_context : public detail::base<calling_context>
+    class calling_context : public detail::base<calling_context, detail::calling_context_impl>
     {
-        typedef detail::base<calling_context> base;
-        typedef typename otf2::traits::definition_impl_type<calling_context>::type impl_type;
-
+        using base = detail::base<calling_context, detail::calling_context_impl>;
         using base::base;
 
     public:
@@ -121,7 +119,7 @@ namespace definition
             return data_->parent();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_CALLING_CONTEXT_HPP

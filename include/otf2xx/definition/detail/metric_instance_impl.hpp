@@ -68,9 +68,9 @@ namespace definition
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::location& scope,
                                  std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
-              location_scope_(scope), location_group_scope_(), system_tree_node_scope_(),
-              group_scope_()
+            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class),
+              recorder_(recorder), location_scope_(scope), location_group_scope_(),
+              system_tree_node_scope_(), group_scope_()
             {
             }
 
@@ -79,9 +79,9 @@ namespace definition
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::location_group& scope,
                                  std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
-              location_scope_(), location_group_scope_(scope), system_tree_node_scope_(),
-              group_scope_()
+            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class),
+              recorder_(recorder), location_scope_(), location_group_scope_(scope),
+              system_tree_node_scope_(), group_scope_()
             {
             }
 
@@ -90,9 +90,9 @@ namespace definition
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::system_tree_node& scope,
                                  std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
-              location_scope_(), location_group_scope_(), system_tree_node_scope_(scope),
-              group_scope_()
+            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class),
+              recorder_(recorder), location_scope_(), location_group_scope_(),
+              system_tree_node_scope_(scope), group_scope_()
             {
             }
 
@@ -101,9 +101,9 @@ namespace definition
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::locations_group& scope,
                                  std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class), recorder_(recorder),
-              location_scope_(), location_group_scope_(), system_tree_node_scope_(),
-              group_scope_(scope)
+            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class),
+              recorder_(recorder), location_scope_(), location_group_scope_(),
+              system_tree_node_scope_(), group_scope_(scope)
             {
             }
 
@@ -193,8 +193,8 @@ namespace definition
             otf2::definition::system_tree_node system_tree_node_scope_;
             otf2::definition::locations_group group_scope_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_METRIC_INSTANCE_HPP

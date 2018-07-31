@@ -54,11 +54,10 @@ namespace definition
     /**
      * \brief class for representing a attribute definition
      */
-    class interrupt_generator : public detail::base<interrupt_generator>
+    class interrupt_generator
+    : public detail::base<interrupt_generator, detail::interrupt_generator_impl>
     {
-        typedef detail::base<interrupt_generator> base;
-        typedef typename otf2::traits::definition_impl_type<interrupt_generator>::type impl_type;
-
+        using base = detail::base<interrupt_generator, detail::interrupt_generator_impl>;
         using base::base;
 
     public:
@@ -125,7 +124,7 @@ namespace definition
             return data_->period();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_INTERRUPT_GENERATOR_HPP

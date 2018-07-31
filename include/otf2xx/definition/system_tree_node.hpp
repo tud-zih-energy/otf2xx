@@ -53,10 +53,9 @@ namespace definition
     /**
      * \brief class for representing system tree node definitions
      */
-    class system_tree_node : public detail::base<system_tree_node>
+    class system_tree_node : public detail::base<system_tree_node, detail::system_tree_node_impl>
     {
-        typedef detail::base<system_tree_node> base;
-        typedef otf2::traits::definition_impl_type<system_tree_node>::type impl_type;
+        using base = detail::base<system_tree_node, detail::system_tree_node_impl>;
         using base::base;
 
     public:
@@ -132,7 +131,7 @@ namespace definition
         }
     };
 
-} // namespace otf2::definition
+} // namespace definition
 
 } // namespace otf2
 

@@ -48,11 +48,11 @@ namespace otf2
 {
 namespace definition
 {
-    class io_pre_created_handle_state : public detail::base<io_pre_created_handle_state>
+    class io_pre_created_handle_state
+    : public detail::base<io_pre_created_handle_state, detail::io_pre_created_handle_state_impl>
     {
-        typedef detail::base<io_pre_created_handle_state> base;
-        typedef typename otf2::traits::definition_impl_type<io_pre_created_handle_state>::type
-            impl_type;
+        using base =
+            detail::base<io_pre_created_handle_state, detail::io_pre_created_handle_state_impl>;
         using base::base;
 
     public:
@@ -85,7 +85,7 @@ namespace definition
             return data_->status_flags();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_IO_PRE_CREATED_HANDLE_STATE_HPP

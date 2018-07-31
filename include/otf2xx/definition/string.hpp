@@ -54,10 +54,9 @@ namespace definition
      *
      * This class represents an OTF2 string definition.
      */
-    class string : public detail::base<string>
+    class string : public detail::base<string, detail::string_impl>
     {
-        typedef detail::base<string> base;
-        typedef otf2::traits::definition_impl_type<string>::type impl_type;
+        using base = detail::base<string, detail::string_impl>;
         using base::base;
 
     public:
@@ -106,7 +105,7 @@ namespace definition
         return s << str.str();
     }
 
-} // namespace otf2::definition
+} // namespace definition
 
 } // namespace otf2
 

@@ -53,15 +53,15 @@ namespace definition
      * \brief class for representing property definitions
      */
     template <class Definition>
-    class property : public detail::base<property<Definition>>
+    class property : public detail::base<property<Definition>, detail::property_impl<Definition>>
     {
-        typedef typename detail::base<property<Definition>> base;
-        typedef typename otf2::traits::definition_impl_type<property<Definition>>::type impl_type;
-
+        using base = typename detail::base<property<Definition>, detail::property_impl<Definition>>;
         using base::base;
 
         static_assert(otf2::traits::is_definition<Definition>::value,
                       "The Definition has to be a otf2::definition.");
+
+        using impl_type = typename base::impl_type;
 
     public:
         using type_type = typename impl_type::type_type;
@@ -121,7 +121,7 @@ namespace definition
             return this->data_->def();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_PROPERTY_HPP

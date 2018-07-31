@@ -55,10 +55,9 @@ namespace definition
      * A metric member defines one "channel" of an metric. It defines the value
      * type, name etc.
      */
-    class metric_member : public detail::base<metric_member>
+    class metric_member : public detail::base<metric_member, detail::metric_member_impl>
     {
-        typedef detail::base<metric_member> base;
-        typedef otf2::traits::definition_impl_type<metric_member>::type impl_type;
+        using base = detail::base<metric_member, detail::metric_member_impl>;
         using base::base;
 
     public:
@@ -167,7 +166,7 @@ namespace definition
             return data_->value_unit();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_METRIC_MEMBER_HPP

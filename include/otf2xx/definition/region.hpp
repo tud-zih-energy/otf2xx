@@ -52,10 +52,9 @@ namespace definition
     /**
      * \brief class for represening a region definition
      */
-    class region : public detail::base<region>
+    class region : public detail::base<region, detail::region_impl>
     {
-        typedef detail::base<region> base;
-        typedef otf2::traits::definition_impl_type<region>::type impl_type;
+        using base = detail::base<region, detail::region_impl>;
         using base::base;
 
     public:
@@ -170,7 +169,7 @@ namespace definition
             return data_->end_line();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_REGION_HPP

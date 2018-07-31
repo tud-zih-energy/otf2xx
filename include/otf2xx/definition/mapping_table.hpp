@@ -55,10 +55,9 @@ namespace definition
      * and recorder of this metric is implicitly given by the location,
      * where the referencing metric event occures.
      */
-    class mapping_table : public detail::base<mapping_table>
+    class mapping_table : public detail::base<mapping_table, detail::mapping_table_impl>
     {
-        typedef detail::base<mapping_table> base;
-        typedef otf2::traits::definition_impl_type<mapping_table>::type impl_type;
+        using base = detail::base<mapping_table, detail::mapping_table_impl>;
         using base::base;
 
     public:
@@ -103,7 +102,7 @@ namespace definition
             return this->data_->id_map();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_MAPPING_TABLE_HPP

@@ -50,10 +50,9 @@ namespace definition
     /**
      * \brief class for representing metric instance definitions
      */
-    class metric_instance : public detail::base<metric_instance>
+    class metric_instance : public detail::base<metric_instance, detail::metric_instance_impl>
     {
-        typedef detail::base<metric_instance> base;
-        typedef otf2::traits::definition_impl_type<metric_instance>::type impl_type;
+        using base = detail::base<metric_instance, detail::metric_instance_impl>;
         using base::base;
 
     public:
@@ -195,7 +194,7 @@ namespace definition
             return this->data_->group_scope();
         }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_METRIC_INSTANCE_HPP
