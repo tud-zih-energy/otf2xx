@@ -58,10 +58,10 @@ namespace detail
     class make_exception
     {
     public:
-        void operator()(std::stringstream& msg, Arg arg, Args... args)
+        void operator()(std::stringstream& msg, Arg&& arg, Args&&... args)
         {
-            msg << arg;
-            make_exception<Args...>()(msg, args...);
+            msg << std::forward<Arg>(arg);
+            make_exception<Args...>()(msg, std::forward<Args>(args)...);
         }
     };
 
@@ -69,29 +69,36 @@ namespace detail
     class make_exception<Arg>
     {
     public:
-        void operator()(std::stringstream& msg, Arg arg)
+        void operator()(std::stringstream& msg, Arg&& arg)
         {
-            msg << arg;
+            msg << std::forward<Arg>(arg);
         }
     };
-}
+} // namespace detail
 
 template <typename... Args>
-inline void make_exception(Args... args)
+[[noreturn]] inline void make_exception(Args&&... args)
 {
     std::stringstream msg;
 
-    detail::make_exception<Args...>()(msg, args...);
+    detail::make_exception<Args...>()(msg, std::forward<Args>(args)...);
 
     throw exception(msg.str());
 }
 
 template <typename... Args>
-void inline check(OTF2_ErrorCode code, Args... args)
+inline void make_otf2_exception(OTF2_ErrorCode code, Args&&... args)
+{
+    make_exception(OTF2_Error_GetName(code), ": ", OTF2_Error_GetDescription(code), "\n",
+                   std::forward<Args>(args)...);
+}
+
+template <typename... Args>
+void inline check(OTF2_ErrorCode code, Args&&... args)
 {
     if (code != OTF2_SUCCESS)
     {
-        make_exception(args...);
+        make_otf2_exception(code, std::forward<Args>(args)...);
     }
 }
 
