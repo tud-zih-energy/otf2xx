@@ -239,7 +239,8 @@ public:
     template <typename Definition>
     otf2::reference<Definition> next()
     {
-        return detail::generate_ref<Definition>()(*this);
+        using Tag = typename otf2::reference<Definition>::Tag;
+        return detail::generate_ref<Tag>()(*this);
     }
 
     reference_generator<otf2::reference<otf2::definition::location>> location_refs_;

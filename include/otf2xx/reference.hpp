@@ -74,18 +74,22 @@ namespace detail
      * For each definition should be an own reference type, so the address space is seperated in a
      * typesafe manner.
      *
-     * \tparam Type Used to seperate address spaces for different definitions
+     * \tparam T_Tag Used to seperate address spaces for different definitions
      */
-    template <typename Type>
+    template <typename T_Tag>
     class reference
     {
     public:
         /**
-         * @brief ref_type the underlying type of refernce numbers
+         * @brief Tag type used for this reference number space
+         */
+        typedef T_Tag Tag;
+        /**
+         * @brief ref_type the underlying type of reference numbers
          *
          * Mostly uint64_t or uint32_t
          */
-        typedef typename traits::reference_type<Type>::type ref_type;
+        typedef typename traits::reference_type<Tag>::type ref_type;
 
         reference() = delete;
 
