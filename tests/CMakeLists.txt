@@ -62,6 +62,7 @@ otf2xx_add_test(traits_test otf2xx::Core)
 
 otf2xx_add_test(intrusive_ptr_test otf2xx::Core)
 otf2xx_add_test(ref_gen_test otf2xx::Core)
+otf2xx_add_test(registry_test otf2xx::Core)
 
 otf2xx_add_test(writer_test otf2xx::Writer)
 add_test(NAME writer_test_cleanup COMMAND cmake -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace)
