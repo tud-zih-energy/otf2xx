@@ -52,144 +52,147 @@
 namespace otf2
 {
 
+template <class T_Definition>
+struct reference_map;
+
 /**
  * @brief represents a reference number for definitions
  *
  * For each definition should be an own reference type, so the address space is seperated in a
  * typesafe manner.
  *
- * \tparam Type Used to seperate address spaces for different definitions
+ * \tparam T_Definition Definition this reference should refer to
  */
-template <typename Type>
-class reference
+template <class T_Definition>
+using reference = typename reference_map<T_Definition>::type;
+
+namespace detail
 {
-public:
     /**
-     * @brief ref_type the underlying type of refernce numbers
+     * @brief represents a reference number for definitions
      *
-     * Mostly uint64_t or uint32_t
-     */
-    typedef typename traits::reference_type<Type>::type ref_type;
-
-    reference() = delete;
-
-    /**
-     * @brief construct by value
-     * @param ref the number
-     */
-    reference(ref_type ref) : handle(ref)
-    {
-    }
-
-    /**
-     * @brief returns the reference number
-     * @return the reference number
-     */
-    ref_type get() const
-    {
-        return handle;
-    }
-
-    ~reference() = default;
-
-    /**
-     * @brief returns if the number equals to OTF2_UNDEFINED_UINT64
-     * @return true or false
-     */
-    bool is_undefined() const
-    {
-        return handle == undefined();
-    }
-
-    /**
-     * @brief operator ref_type
+     * For each definition should be an own reference type, so the address space is seperated in a
+     * typesafe manner.
      *
-     * implicitly convertible to ref_type
-     *
+     * \tparam T_Tag Used to seperate address spaces for different definitions
      */
-    operator ref_type() const
+    template <typename T_Tag>
+    class reference
     {
-        return handle;
-    }
+    public:
+        /**
+         * @brief Tag type used for this reference number space
+         */
+        typedef T_Tag Tag;
+        /**
+         * @brief ref_type the underlying type of reference numbers
+         *
+         * Mostly uint64_t or uint32_t
+         */
+        typedef typename traits::reference_type<Tag>::type ref_type;
 
-    /**
-     * @brief returns the undefined representing number
-     * @return OTF2_UNDEFINED_UINT64
-     */
-    template <typename as_type = ref_type>
-    static ref_type undefined()
-    {
-        return static_cast<as_type>(-1);
-    }
+        reference() = delete;
 
-protected:
-    ref_type handle;
+        /**
+         * @brief construct by value
+         * @param ref the number
+         */
+        reference(ref_type ref) : handle(ref)
+        {
+        }
+
+        /**
+         * @brief returns the reference number
+         * @return the reference number
+         */
+        ref_type get() const
+        {
+            return handle;
+        }
+
+        ~reference() = default;
+
+        /**
+         * @brief returns if the number equals to OTF2_UNDEFINED_UINT64
+         * @return true or false
+         */
+        bool is_undefined() const
+        {
+            return handle == undefined();
+        }
+
+        /**
+         * @brief operator ref_type
+         *
+         * implicitly convertible to ref_type
+         *
+         */
+        operator ref_type() const
+        {
+            return handle;
+        }
+
+        /**
+         * @brief returns the undefined representing number
+         * @return OTF2_UNDEFINED_UINT64
+         */
+        template <typename as_type = ref_type>
+        static ref_type undefined()
+        {
+            return static_cast<as_type>(-1);
+        }
+
+    protected:
+        ref_type handle;
+    };
+}
+
+template <class T_Definition>
+struct reference_map
+{
+    using type = detail::reference<T_Definition>;
 };
 
 template <typename T, otf2::common::group_type Type>
-class reference<definition::group<T, Type>> : public reference<definition::detail::group_base>
+struct reference_map<definition::group<T, Type>>
 {
-public:
-    reference(const reference<definition::detail::group_base>& base)
-    : reference<definition::detail::group_base>(base)
-    {
-    }
+    using type = detail::reference<definition::detail::group_base>;
 };
 
 template <>
-class reference<definition::metric_class> : public reference<definition::detail::metric_base>
+struct reference_map<definition::metric_class>
 {
-public:
-    reference(const reference<definition::detail::metric_base>& base)
-    : reference<definition::detail::metric_base>(base)
-    {
-    }
+    using type = detail::reference<definition::detail::metric_base>;
 };
 
 template <>
-class reference<definition::metric_instance> : public reference<definition::detail::metric_base>
+struct reference_map<definition::metric_instance>
 {
-public:
-    reference(const reference<definition::detail::metric_base>& base)
-    : reference<definition::detail::metric_base>(base)
-    {
-    }
+    using type = detail::reference<definition::detail::metric_base>;
 };
 
 template <>
-class reference<definition::io_directory> : public reference<definition::io_file>
+struct reference_map<definition::io_directory>
 {
-public:
-    reference(const reference<definition::io_file>& base) : reference<definition::io_file>(base)
-    {
-    }
+    using type = detail::reference<definition::io_file>;
 };
 
 template <>
-class reference<definition::io_regular_file> : public reference<definition::io_file>
+struct reference_map<definition::io_regular_file>
 {
-public:
-    reference(const reference<definition::io_file>& base) : reference<definition::io_file>(base)
-    {
-    }
+    using type = detail::reference<definition::io_file>;
 };
 
 template <typename T>
-class reference<definition::property<T>> : public reference<T>
+struct reference_map<definition::property<T>>
 {
-public:
-    reference(const reference<T>& base) : reference<T>(base)
-    {
-    }
+    using type = detail::reference<T>;
 };
 
 template <>
-class reference<definition::io_pre_created_handle_state> : public reference<definition::io_handle>
+struct reference_map<definition::io_pre_created_handle_state>
 {
-public:
-    reference(const reference<definition::io_handle>& base) : reference<definition::io_handle>(base)
-    {
-    }
+    using type = detail::reference<definition::io_handle>;
 };
 
 } // namespace otf2

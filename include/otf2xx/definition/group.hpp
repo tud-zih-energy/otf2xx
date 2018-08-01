@@ -73,9 +73,8 @@ namespace definition
 
         using base::base;
 
-        using impl_type = typename base::impl_type;
-
     public:
+        using impl_type = typename base::impl_type;
         typedef typename impl_type::group_type group_type;
         typedef typename impl_type::group_flag_type group_flag_type;
         typedef typename impl_type::paradigm_type paradigm_type;

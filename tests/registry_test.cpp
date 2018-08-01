@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2018, Technische Universitaet Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,27 +32,58 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_FWD_HPP
-#define INCLUDE_OTF2XX_FWD_HPP
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
 
-namespace otf2
+#include <otf2xx/otf2.hpp>
+#include <otf2xx/registry.hpp>
+#include <set>
+
+template <typename T>
+bool contains(const std::set<T>& container, const T& el)
 {
+    return container.find(el) != container.end();
+}
 
-template <typename Definition>
-class reference_generator;
-
-class trace_reference_generator;
-
-class attribute_list;
-
-class attribute_value;
-
-} // namespace otf2
-
-#include <otf2xx/definition/fwd.hpp>
-#include <otf2xx/event/fwd.hpp>
-
-#include <otf2xx/reader/fwd.hpp>
-#include <otf2xx/writer/fwd.hpp>
-
-#endif // INCLUDE_OTF2XX_FWD_HPP
+TEST_CASE("Add and get strings")
+{
+    otf2::Registry reg;
+    SECTION("Use predefined id")
+    {
+        const std::string value = "The answer.";
+        SECTION("Add existing string")
+        {
+            otf2::definition::string str(42, value);
+            reg.register_definition(str);
+            REQUIRE(str == reg.strings()[42]);
+        }
+        SECTION("Create with id")
+        {
+            auto str = reg.strings().create(42, value);
+            REQUIRE(str.str() == value);
+            REQUIRE(str.ref() == 42);
+            REQUIRE(str == reg.strings()[42]);
+        }
+        auto str = reg.strings()[42];
+        REQUIRE(str.str() == value);
+        REQUIRE(str.ref() == 42);
+    }
+    SECTION("Use auto-generated id")
+    {
+        std::set<otf2::reference<otf2::definition::string>> refs;
+        SECTION("With manually added string")
+        {
+            refs.insert(reg.strings().create(42, "foo").ref());
+        }
+        SECTION("Without manually added string")
+        {
+            // Nothing to do
+        }
+        for (int i = 0; i < int(1e5); i++)
+        {
+            auto str = reg.strings().create("Value" + std::to_string(i));
+            REQUIRE(!contains(refs, str.ref()));
+            refs.insert(str.ref());
+        }
+    }
+}
