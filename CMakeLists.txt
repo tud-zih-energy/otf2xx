@@ -33,7 +33,7 @@ cmake_minimum_required(VERSION 3.8)
 
 project(otf2xx VERSION 1.0.0)
 
-list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_CURRENT_LIST_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 find_package(OTF2 8.0.1 EXACT)
 
 if (NOT OTF2_FOUND)
@@ -81,6 +81,18 @@ if(OTF2XX_WITH_MPI)
         INTERFACE
             OTF2XX_HAS_MPI
     )
+    find_package(Boost REQUIRED COMPONENTS mpi)
+    find_package(MPI REQUIRED COMPONENTS CXX)
+    if(NOT TARGET MPI::MPI_CXX) # For CMake < 3.9
+        add_library(MPI::MPI_CXX INTERFACE IMPORTED)
+        set_target_properties(MPI::MPI_CXX PROPERTIES
+            INTERFACE_COMPILE_OPTIONS "${MPI_CXX_COMPILE_FLAGS}"
+            INTERFACE_INCLUDE_DIRECTORIES "${MPI_CXX_INCLUDE_PATH}"
+            INTERFACE_LINK_LIBRARIES "${MPI_CXX_LIBRARIES}")
+        if(MPI_CXX_LINK_FLAGS)
+            set_property(TARGET MPI::MPI_CXX APPEND PROPERTY INTERFACE_LINK_LIBRARIES "${MPI_CXX_LINK_FLAGS}")
+        endif()
+    endif()      
     target_link_libraries(otf2xx-core INTERFACE Boost::mpi MPI::MPI_CXX)
 endif()
 
