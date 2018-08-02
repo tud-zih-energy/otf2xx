@@ -2,3 +2,7 @@
 
 # otf2xx
 C++ wrapper for the Open Trace Format 2
+
+# Known issues
+
+-   Do NOT use space in the install path of OTF2
