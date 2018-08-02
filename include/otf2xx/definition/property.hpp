@@ -61,9 +61,8 @@ namespace definition
         static_assert(otf2::traits::is_definition<Definition>::value,
                       "The Definition has to be a otf2::definition.");
 
-        using impl_type = typename base::impl_type;
-
     public:
+        using impl_type = typename base::impl_type;
         using type_type = typename impl_type::type_type;
         using value_type = typename impl_type::value_type;
 

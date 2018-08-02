@@ -134,9 +134,8 @@ public:
     : attributes_(refs_), comms_(refs_), locations_(refs_), location_groups_(refs_),
       parameters_(refs_), regions_(refs_), strings_(refs_), system_tree_nodes_(refs_),
       source_code_locations_(refs_), calling_contexts_(refs_), interrupt_generators_(refs_),
-      io_handles_(refs_), io_files_(refs_), io_regular_files_(refs_), io_directories_(refs_),
-      io_paradigms_(refs_), io_pre_created_handle_states_(refs_), locations_groups_(refs_),
-      regions_groups_(refs_),
+      io_handles_(refs_), io_regular_files_(refs_), io_directories_(refs_), io_paradigms_(refs_),
+      io_pre_created_handle_states_(refs_), locations_groups_(refs_), regions_groups_(refs_),
       // metric_groups_(refs_),
       comm_locations_groups_(refs_), comm_groups_(refs_), comm_self_groups_(refs_),
       metric_members_(refs_), metric_classes_(refs_), metric_instances_(refs_)
@@ -350,11 +349,6 @@ public:
     void register_definition(const otf2::definition::io_handle& def)
     {
         io_handles_(def);
-    }
-
-    void register_definition(const otf2::definition::io_file& def)
-    {
-        io_files_(def);
     }
 
     void register_definition(const otf2::definition::io_regular_file& def)

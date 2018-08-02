@@ -86,3 +86,57 @@ TEST_CASE("test string reference generator")
         string_refs.insert(new_ref);
     }
 }
+
+TEST_CASE("test io reference generator")
+{
+    otf2::trace_reference_generator ref_gen;
+    otf2::definition::string str{ 0, "" };
+    otf2::definition::system_tree_node sys_node{ 1, str, str };
+    otf2::definition::io_regular_file file{ 1, str, sys_node };
+    otf2::definition::io_directory dir{ 2, str, sys_node };
+    using ref = otf2::reference<otf2::definition::io_file>;
+    std::set<ref> refs;
+    SECTION("Directory ref must be unique after adding file ref")
+    {
+        ref_gen(file);
+        refs.insert(file.ref());
+        for (int i = 0; i < 100; i++)
+        {
+            auto new_ref = ref_gen.next<otf2::definition::io_directory>();
+            REQUIRE_FALSE(contains(refs, ref(new_ref)));
+            refs.insert(new_ref);
+        }
+    }
+    SECTION("File ref must be unique after adding directory ref")
+    {
+        ref_gen(dir);
+        refs.insert(dir.ref());
+        for (int i = 0; i < 100; i++)
+        {
+            auto new_ref = ref_gen.next<otf2::definition::io_regular_file>();
+            REQUIRE_FALSE(contains(refs, ref(new_ref)));
+            refs.insert(new_ref);
+        }
+    }
+    SECTION("All refs must be unqiue after adding both")
+    {
+        ref_gen(file);
+        refs.insert(file.ref());
+        ref_gen(dir);
+        refs.insert(dir.ref());
+        for (int i = 0; i < 100; i++)
+        {
+            // THIS is not valid
+            // auto new_ref = ref_gen.next<otf2::definition::io_file>();
+            // REQUIRE_FALSE(contains(refs, new_ref));
+            // refs.insert(new_ref);
+
+            auto new_ref = ref_gen.next<otf2::definition::io_regular_file>();
+            REQUIRE_FALSE(contains(refs, ref(new_ref)));
+            refs.insert(new_ref);
+            new_ref = ref_gen.next<otf2::definition::io_directory>();
+            REQUIRE_FALSE(contains(refs, ref(new_ref)));
+            refs.insert(new_ref);
+        }
+    }
+}
