@@ -41,6 +41,7 @@
 #include <otf2xx/definition/io_pre_created_handle_state.hpp>
 
 #include <otf2xx/traits/definition.hpp>
+#include <otf2xx/traits/reference.hpp>
 
 #include <algorithm>
 #include <cassert>
@@ -63,7 +64,7 @@ namespace definition
         typedef Definition value_type;
 
     private:
-        typedef typename otf2::reference<Definition>::ref_type key_type;
+        typedef otf2::traits::reference_type_t<Definition> key_type;
         typedef std::map<key_type, value_type> map_type;
 
     public:
@@ -127,7 +128,7 @@ namespace definition
 
         const value_type& operator[](key_type key) const
         {
-            if (key == otf2::reference<Definition>::undefined())
+            if (key == otf2::traits::reference_t<Definition>::undefined())
                 return value_type::undefined();
 
             return data.at(key);

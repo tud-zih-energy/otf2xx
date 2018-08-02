@@ -35,159 +35,31 @@
 #ifndef INCLUDE_OTF2XX_TRAITS_REFERENCE_HPP
 #define INCLUDE_OTF2XX_TRAITS_REFERENCE_HPP
 
-#include <otf2xx/definition/fwd.hpp>
-#include <otf2xx/traits/traits.hpp>
-
-#include <type_traits>
-
-#include <cstdint>
-
 namespace otf2
 {
 namespace traits
 {
 
-    template <typename Type>
-    struct reference_type;
+    /**  Return the otf2xx type for representing a reference to the given definition */
+    template <typename T_Definition>
+    struct reference;
 
-    // Type traits for Definitions
-    template <>
-    struct reference_type<definition::location> : identity<std::uint64_t>
+    template <typename T_Definition>
+    using reference_t = typename reference<T_Definition>::type;
+
+    /** Return the OTF2 type for a reference to the given definition */
+    template <typename T_Definition>
+    struct reference_type
     {
+        using type = typename reference_t<T_Definition>::ref_type;
     };
 
-    template <>
-    struct reference_type<definition::location_group> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::system_tree_node> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::string> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::detail::group_base> : identity<std::uint32_t>
-    {
-    };
-
-    template <typename Def, otf2::common::group_type Type>
-    struct reference_type<definition::group<Def, Type>>
-    : reference_type<definition::detail::group_base>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::comm> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::attribute> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::parameter> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::region> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::calling_context> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::source_code_location> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::interrupt_generator> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::detail::metric_base> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::marker> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::metric_class>
-    : reference_type<definition::detail::metric_base>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::metric_instance>
-    : reference_type<definition::detail::metric_base>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::metric_member> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::io_file> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::io_regular_file> : reference_type<definition::io_file>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::io_directory> : reference_type<definition::io_file>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::io_handle> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::io_paradigm> : identity<std::uint8_t>
-    {
-    };
-
-    template <typename Definition>
-    struct reference_type<definition::property<Definition>> : identity<std::uint32_t>
-    {
-    };
-
-    template <typename T, typename... Args>
-    struct reference_type_var : reference_type<T>
-    {
-        static_assert(std::is_same<typename reference_type<T>::type,
-                                   typename reference_type_var<Args...>::type>::value,
-                      "Can only use this for compatible definitions");
-    };
-
-    template <typename T>
-    struct reference_type_var<T> : reference_type<T>
-    {
-    };
+    template <typename T_Definition>
+    using reference_type_t = typename reference_type<T_Definition>::type;
 
 } // namespace traits
 } // namespace otf2
+
+#include <otf2xx/traits/reference.inc.hpp>
 
 #endif // INCLUDE_OTF2XX_TRAITS_REFERENCE_HPP

@@ -55,7 +55,7 @@ namespace definition
         {
         public:
 
-            io_directory_impl(otf2::reference<io_file_base> ref,
+            io_directory_impl(otf2::io_file_base_ref ref,
                               const otf2::definition::string& name,
                               const otf2::definition::system_tree_node& scope,
                               std::int64_t retain_count = 0)
@@ -73,14 +73,14 @@ namespace definition
             static io_directory_impl* undefined()
             {
                 static io_directory_impl undef(
-                            otf2::reference<io_file_base>::undefined(),
+                            otf2::io_file_base_ref::undefined(),
                             otf2::definition::string::undefined(),
                             otf2::definition::system_tree_node::undefined(), 1
                         );
                 return &undef;
             }
 
-            otf2::reference<io_file_base> ref() const
+            otf2::io_file_base_ref ref() const
             {
                 return ref_;
             }
@@ -96,7 +96,7 @@ namespace definition
             }
 
         private:
-            otf2::reference<io_file_base> ref_;
+            otf2::io_file_base_ref ref_;
             otf2::definition::string name_;
             otf2::definition::system_tree_node scope_;
         };

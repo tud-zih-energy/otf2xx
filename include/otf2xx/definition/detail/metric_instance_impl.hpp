@@ -63,7 +63,7 @@ namespace definition
             typedef otf2::common::metric_scope metric_scope;
             typedef otf2::common::metric_occurence metric_occurence;
 
-            metric_instance_impl(reference<detail::metric_base> ref,
+            metric_instance_impl(otf2::metric_ref ref,
                                  const otf2::definition::metric_class& metric_class,
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::location& scope,
@@ -74,7 +74,7 @@ namespace definition
             {
             }
 
-            metric_instance_impl(reference<detail::metric_base> ref,
+            metric_instance_impl(otf2::metric_ref ref,
                                  const otf2::definition::metric_class& metric_class,
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::location_group& scope,
@@ -85,7 +85,7 @@ namespace definition
             {
             }
 
-            metric_instance_impl(reference<detail::metric_base> ref,
+            metric_instance_impl(otf2::metric_ref ref,
                                  const otf2::definition::metric_class& metric_class,
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::system_tree_node& scope,
@@ -96,7 +96,7 @@ namespace definition
             {
             }
 
-            metric_instance_impl(reference<detail::metric_base> ref,
+            metric_instance_impl(otf2::metric_ref ref,
                                  const otf2::definition::metric_class& metric_class,
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::locations_group& scope,
@@ -116,14 +116,14 @@ namespace definition
 
             static metric_instance_impl* undefined()
             {
-                static metric_instance_impl undef(otf2::reference<metric_instance>::undefined(),
+                static metric_instance_impl undef(otf2::metric_ref::undefined(),
                                                   otf2::definition::metric_class::undefined(),
                                                   otf2::definition::location::undefined(),
                                                   otf2::definition::location::undefined(), 1);
                 return &undef;
             }
 
-            otf2::reference<metric_base> ref() const
+            otf2::metric_ref ref() const
             {
                 return ref_;
             }
@@ -183,7 +183,7 @@ namespace definition
             }
 
         private:
-            reference<metric_base> ref_;
+            otf2::metric_ref ref_;
 
             otf2::definition::metric_class metric_class_;
             otf2::definition::location recorder_;

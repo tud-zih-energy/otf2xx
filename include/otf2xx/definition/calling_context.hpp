@@ -61,7 +61,7 @@ namespace definition
         using base::base;
 
     public:
-        calling_context(otf2::reference<calling_context> ref,
+        calling_context(otf2::calling_context_ref ref,
                         const otf2::definition::region& region,
                         const otf2::definition::source_code_location& source_code_location,
                         const otf2::definition::calling_context& parent)
@@ -69,7 +69,7 @@ namespace definition
         {
         }
 
-        calling_context(otf2::reference<calling_context> ref,
+        calling_context(otf2::calling_context_ref ref,
                         const otf2::definition::region& region,
                         const otf2::definition::source_code_location& source_code_location)
         : base(new impl_type(ref, region, source_code_location))

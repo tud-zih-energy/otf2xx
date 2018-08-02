@@ -60,7 +60,7 @@ namespace definition
             using interrupt_generator_mode_type = otf2::common::interrupt_generator_mode_type;
             using base_type = otf2::common::base_type;
 
-            interrupt_generator_impl(reference<interrupt_generator> ref,
+            interrupt_generator_impl(otf2::interrupt_generator_ref ref,
                                      const otf2::definition::string& name,
                                      interrupt_generator_mode_type interrupt_generator_mode,
                                      base_type base, std::int64_t exponent, std::uint64_t period,
@@ -81,12 +81,12 @@ namespace definition
             static interrupt_generator_impl* undefined()
             {
                 static interrupt_generator_impl undef(
-                    otf2::reference<interrupt_generator>::undefined(), string::undefined(),
+                    otf2::interrupt_generator_ref::undefined(), string::undefined(),
                     interrupt_generator_mode_type::time, base_type::decimal, 0, 0, 1);
                 return &undef;
             }
 
-            reference<interrupt_generator> ref() const
+            otf2::interrupt_generator_ref ref() const
             {
                 return ref_;
             }
@@ -125,7 +125,7 @@ namespace definition
             }
 
         private:
-            reference<interrupt_generator> ref_;
+            otf2::interrupt_generator_ref ref_;
             otf2::definition::string name_;
             interrupt_generator_mode_type interrupt_generator_mode_;
             base_type base_;

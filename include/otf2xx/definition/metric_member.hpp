@@ -67,7 +67,7 @@ namespace definition
         typedef impl_type::value_base_type value_base_type;
         typedef impl_type::value_exponent_type value_exponent_type;
 
-        metric_member(reference<metric_member> ref, const otf2::definition::string& name,
+        metric_member(otf2::metric_member_ref ref, const otf2::definition::string& name,
                       const otf2::definition::string& description, metric_type type,
                       metric_mode mode, value_type_type value_type, value_base_type value_base,
                       value_exponent_type value_exponent,

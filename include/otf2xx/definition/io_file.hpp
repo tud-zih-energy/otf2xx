@@ -55,7 +55,7 @@ namespace definition
         using base::base;
 
     public:
-        io_file(otf2::reference<io_file> ref, const otf2::definition::string& name,
+        io_file(otf2::io_file_ref ref, const otf2::definition::string& name,
                 const otf2::definition::system_tree_node& stn)
         : base(new impl_type(ref, name, stn))
         {

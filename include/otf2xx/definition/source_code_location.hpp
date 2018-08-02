@@ -59,7 +59,7 @@ namespace definition
         using base::base;
 
     public:
-        source_code_location(otf2::reference<source_code_location> ref, string file,
+        source_code_location(otf2::source_code_location_ref ref, string file,
                              std::uint32_t line_number)
         : base(new impl_type(ref, file, line_number))
         {

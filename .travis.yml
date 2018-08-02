@@ -13,8 +13,10 @@ matrix:
           packages:
             - g++-7
             - cmake
+            - clang-format-5.0
           sources: &sources
             - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-5.0
     - os: linux
       env: CXX="g++-6" CC="gcc-6"
       compiler: gcc
@@ -23,6 +25,7 @@ matrix:
           packages:
             - g++-6
             - cmake
+            - clang-format-5.0
           sources: *sources
     - os: linux
       env: CXX="clang++-4.0" CC="clang-4.0"
@@ -33,9 +36,10 @@ matrix:
             - clang-4.0
             - g++-5
             - cmake
+            - clang-format-5.0
           sources:
+            - *sources
             - llvm-toolchain-trusty-4.0
-            - ubuntu-toolchain-r-test
     - os: linux
       env: CXX="clang++-5.0" CC="clang-5.0"
       compiler: clang
@@ -45,9 +49,8 @@ matrix:
             - clang-5.0
             - g++-5
             - cmake
-          sources:
-            - llvm-toolchain-trusty-5.0
-            - ubuntu-toolchain-r-test
+            - clang-format-5.0
+          sources: *sources
     - os: osx
       osx_image: xcode7.3
       before_install:
@@ -63,6 +66,12 @@ cache:
     - ${TRAVIS_BUILD_DIR}/deps/otf2-2.1
 
 install:
+  - |
+    if [ ${TRAVIS_OS_NAME} == "osx" ]; then
+      brew search clang-format
+      brew install clang-format
+      brew info clang-format
+    fi
   - OTF2_VERSION=2.1 # Update cache too when changing this!
   - OTF2_DIR=${TRAVIS_BUILD_DIR}/deps/otf2-${OTF2_VERSION}
   - |

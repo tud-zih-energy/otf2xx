@@ -58,7 +58,7 @@ namespace definition
     public:
         using io_handle_flag_type = impl_type::io_handle_flag_type;
 
-        io_handle(otf2::reference<io_handle> ref, const otf2::definition::string& name,
+        io_handle(otf2::io_handle_ref ref, const otf2::definition::string& name,
                   const otf2::definition::io_file& file,
                   const otf2::definition::io_paradigm& paradigm, io_handle_flag_type handle_flag,
                   const otf2::definition::comm& comm, const otf2::definition::io_handle& parent)
@@ -66,7 +66,7 @@ namespace definition
         {
         }
 
-        io_handle(otf2::reference<io_handle> ref, const otf2::definition::string& name,
+        io_handle(otf2::io_handle_ref ref, const otf2::definition::string& name,
                   const otf2::definition::io_file& file,
                   const otf2::definition::io_paradigm& paradigm, io_handle_flag_type handle_flag,
                   const otf2::definition::comm& comm)

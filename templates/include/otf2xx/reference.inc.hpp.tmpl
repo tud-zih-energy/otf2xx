@@ -1,0 +1,34 @@
+/*
+ * Copyright 2013-2018, Technische Universitaet Dresden, Germany
+ * All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
+#ifndef INCLUDE_OTF2XX_REFERENCE_INC_HPP
+#define INCLUDE_OTF2XX_REFERENCE_INC_HPP
+
+#include <otf2/otf2.h>
+#include <otf2xx/reference.hpp>
+
+namespace otf2
+{
+    @otf2 for def in defs|referable_defs|first_born_defs|sort:
+    /** @brief Type used to indicate a reference to a @eref{@@def.siblings|join('}, or a @eref{')@@} definition */
+    struct @@def.ref_lower@@_ref: reference_base<@@def.self_attr.type@@, OTF2_UNDEFINED_@@def.self_attr.type.otf2|upper@@>
+    {
+        using reference_base::reference_base;
+    };
+
+    @otf2 endfor
+
+    //@ Not included in the template
+    struct marker_ref: reference_base<OTF2_MarkerRef, OTF2_UNDEFINED_MARKER>
+    {
+        using reference_base::reference_base;
+    };
+
+}
+
+#endif // INCLUDE_OTF2XX_REFERENCE_INC_HPP

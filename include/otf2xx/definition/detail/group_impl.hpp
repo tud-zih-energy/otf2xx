@@ -55,13 +55,6 @@ namespace definition
     namespace detail
     {
 
-        /**
-         * Dummy class to have all group templates in the same id space
-         */
-        class group_base
-        {
-        };
-
         template <class MemberType,
                   otf2::common::group_type GroupType = otf2::common::group_type::unknown>
         class group_impl : public ref_counted
@@ -78,7 +71,7 @@ namespace definition
             typedef MemberType value_type;
 
         public:
-            group_impl(otf2::reference<detail::group_base> ref,
+            group_impl(otf2::group_ref ref,
                        const otf2::definition::string& name, paradigm_type paradigm,
                        group_flag_type group_flag, std::int64_t retain_count = 0)
             : ref_counted(retain_count), ref_(ref), name_(name), paradigm_(paradigm),
@@ -95,13 +88,13 @@ namespace definition
 
             static group_impl* undefined()
             {
-                static group_impl undef(otf2::reference<detail::group_base>::undefined(),
+                static group_impl undef(otf2::group_ref::undefined(),
                                         string::undefined(), paradigm_type::unknown,
                                         group_flag_type::none, 1);
                 return &undef;
             }
 
-            otf2::reference<detail::group_base> ref() const
+            otf2::group_ref ref() const
             {
                 return ref_;
             }
@@ -159,7 +152,7 @@ namespace definition
             }
 
         private:
-            otf2::reference<detail::group_base> ref_;
+            otf2::group_ref ref_;
             otf2::definition::string name_;
             members_type members_;
             paradigm_type paradigm_;

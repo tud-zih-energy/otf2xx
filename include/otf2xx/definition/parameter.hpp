@@ -60,7 +60,7 @@ namespace definition
     public:
         typedef impl_type::parameter_type parameter_type;
 
-        parameter(otf2::reference<parameter> ref, string name, parameter_type type)
+        parameter(otf2::parameter_ref ref, string name, parameter_type type)
         : base(new impl_type(ref, name, type))
         {
         }

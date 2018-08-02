@@ -62,7 +62,7 @@ namespace definition
 
             typedef std::vector<otf2::definition::metric_member>::const_iterator iterator;
 
-            metric_class_impl(reference<metric_base> ref, metric_occurence occurence,
+            metric_class_impl(otf2::metric_ref ref, metric_occurence occurence,
                               recorder_kind_type recorder_kind, std::int64_t retain_count = 0)
             : ref_counted(retain_count), ref_(ref), occurence_(occurence),
               recorder_kind_(recorder_kind)
@@ -78,13 +78,13 @@ namespace definition
 
             static metric_class_impl* undefined()
             {
-                static metric_class_impl undef(otf2::reference<metric_class>::undefined(),
+                static metric_class_impl undef(otf2::metric_ref::undefined(),
                                                metric_occurence::async, recorder_kind_type::unknown,
                                                1);
                 return &undef;
             }
 
-            otf2::reference<metric_base> ref() const
+            otf2::metric_ref ref() const
             {
                 return ref_;
             }
@@ -130,7 +130,7 @@ namespace definition
             }
 
         private:
-            reference<metric_base> ref_;
+            otf2::metric_ref ref_;
             metric_occurence occurence_;
             recorder_kind_type recorder_kind_;
             std::vector<otf2::definition::metric_member> members_;

@@ -60,7 +60,7 @@ namespace definition
         using paradigm_property_type = impl_type::paradigm_property_type;
 
         // TODO: missing arguments
-        io_paradigm(otf2::reference<otf2::definition::io_paradigm> ref,
+        io_paradigm(otf2::io_paradigm_ref ref,
                     const otf2::definition::string& identification,
                     const otf2::definition::string& name, paradigm_class_type paradigmClass,
                     paradigm_flag_type paradigmFlags,

@@ -36,9 +36,8 @@
 #define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_BASE_HPP
 
 #include <otf2xx/definition/detail/weak_ref.hpp>
-#include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/intrusive_ptr.hpp>
-#include <otf2xx/traits/definition.hpp>
+#include <otf2xx/traits/reference.hpp>
 
 #include <cassert>
 
@@ -64,8 +63,14 @@ namespace definition
         template <typename Def, typename Impl>
         class base
         {
+            // TODO: Not all definitions have a reference. They should use a different base.
+            // For now just use void for the reference_type
+            template<typename T_Def>
+            static otf2::traits::reference_t<T_Def> test_for_reference(T_Def*);
+            template<typename T_Def>
+            static void test_for_reference(...);
         public:
-            using reference_type = otf2::reference<Def>;
+            using reference_type = decltype(test_for_reference<Def>(0));
             using impl_type = Impl;
 
             base() : data_(nullptr)

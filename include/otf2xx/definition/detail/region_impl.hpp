@@ -57,7 +57,7 @@ namespace definition
             typedef otf2::common::paradigm_type paradigm_type;
             typedef otf2::common::flags_type flags_type;
 
-            region_impl(otf2::reference<region> ref, const otf2::definition::string& name,
+            region_impl(otf2::region_ref ref, const otf2::definition::string& name,
                         const otf2::definition::string& canonical_name,
                         const otf2::definition::string& description, role_type role,
                         paradigm_type paradigm, flags_type flags,
@@ -78,7 +78,7 @@ namespace definition
 
             static region_impl* undefined()
             {
-                static region_impl undef(reference<region>::undefined(), string::undefined(),
+                static region_impl undef(otf2::region_ref::undefined(), string::undefined(),
                                          string::undefined(), string::undefined(),
                                          role_type::unknown, paradigm_type::unknown,
                                          flags_type::none, string::undefined(), 0, 0, 1);
@@ -86,7 +86,7 @@ namespace definition
             }
 
         public:
-            otf2::reference<region> ref() const
+            otf2::region_ref ref() const
             {
                 return ref_;
             }
@@ -137,7 +137,7 @@ namespace definition
             }
 
         private:
-            otf2::reference<region> ref_;
+            otf2::region_ref ref_;
             otf2::definition::string name_;
             otf2::definition::string canonical_name_;
             otf2::definition::string description_;

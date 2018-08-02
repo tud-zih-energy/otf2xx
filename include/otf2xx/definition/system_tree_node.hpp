@@ -59,14 +59,14 @@ namespace definition
         using base::base;
 
     public:
-        system_tree_node(reference<system_tree_node> ref, const otf2::definition::string& name,
+        system_tree_node(system_tree_node_ref ref, const otf2::definition::string& name,
                          const otf2::definition::string& class_name,
                          const otf2::definition::system_tree_node& parent)
         : base(new impl_type(ref, name, class_name, parent.get()))
         {
         }
 
-        system_tree_node(reference<system_tree_node> ref, const otf2::definition::string& name,
+        system_tree_node(system_tree_node_ref ref, const otf2::definition::string& name,
                          const otf2::definition::string& class_name)
         : base(new impl_type(ref, name, class_name))
         {

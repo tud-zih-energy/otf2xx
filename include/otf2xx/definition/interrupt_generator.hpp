@@ -64,7 +64,7 @@ namespace definition
         using base_type = impl_type::base_type;
         using interrupt_generator_mode_type = impl_type::interrupt_generator_mode_type;
 
-        interrupt_generator(otf2::reference<interrupt_generator> ref,
+        interrupt_generator(otf2::interrupt_generator_ref ref,
                             const otf2::definition::string& name,
                             interrupt_generator_mode_type interrupt_generator_mode,
                             base_type period_base, std::int64_t exponent, std::uint64_t period)

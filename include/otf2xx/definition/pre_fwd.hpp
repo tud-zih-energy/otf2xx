@@ -72,7 +72,6 @@ namespace definition
 
         class mapping_table_impl;
 
-        class metric_base;
         class metric_class_impl;
         class metric_instance_impl;
         class metric_member_impl;

@@ -112,7 +112,7 @@ namespace writer
 
         void store(const otf2::definition::comm& data)
         {
-            otf2::reference<otf2::definition::detail::group_base>::ref_type group_ref;
+            otf2::group_ref::ref_type group_ref;
 
             if (data.has_self_group())
                 group_ref = data.self_group().ref();
@@ -126,7 +126,7 @@ namespace writer
             else
                 check(OTF2_GlobalDefWriter_WriteComm(
                           wrt, data.ref(), data.name().ref(), group_ref,
-                          otf2::reference<otf2::definition::comm>::undefined()),
+                          otf2::comm_ref::undefined()),
                       "Couldn't write comm to global definitions writer");
         }
 
@@ -199,7 +199,7 @@ namespace writer
 
         void store(const otf2::definition::metric_class& data)
         {
-            std::vector<otf2::reference<otf2::definition::metric_member>::ref_type> members;
+            std::vector<otf2::metric_member_ref::ref_type> members;
 
             members.reserve(data.size());
 
@@ -303,7 +303,7 @@ namespace writer
             else
                 check(OTF2_GlobalDefWriter_WriteSystemTreeNode(
                           wrt, data.ref(), data.name().ref(), data.class_name().ref(),
-                          otf2::reference<otf2::definition::system_tree_node>::undefined()),
+                          otf2::system_tree_node_ref::undefined()),
                       "Couldn't write system tree node to global definitions "
                       "writer");
         }
@@ -368,7 +368,7 @@ namespace writer
             {
                 check(OTF2_GlobalDefWriter_WriteCallingContext(
                           wrt, data.ref(), data.region().ref(), data.source_code_location().ref(),
-                          otf2::reference<otf2::definition::calling_context>::undefined()),
+                          otf2::calling_context_ref::undefined()),
                       "Couldn't write to global definitions writer");
             }
         }
@@ -416,7 +416,7 @@ namespace writer
                           wrt, data.ref(), data.name().ref(), data.file().ref(),
                           data.paradigm().ref(),
                           static_cast<OTF2_IoHandleFlag>(data.io_handle_flag()), data.comm().ref(),
-                          otf2::reference<otf2::definition::io_handle>::undefined()),
+                          otf2::io_handle_ref::undefined()),
                       "Couldn't write to global definitions writer");
             }
         }
@@ -487,7 +487,7 @@ namespace writer
         {
             auto iters = std::make_tuple(cs.begin()...);
 
-            using common_ref_type = typename otf2::traits::reference_type_var<Definitions...>::type;
+            using common_ref_type = std::common_type_t<typename Definitions::reference_type::ref_type...>;
             constexpr auto max_ref = std::numeric_limits<common_ref_type>::max();
 
             while (otf2::traits::reduce_tuple([](auto& it) { return static_cast<bool>(it); },

@@ -56,7 +56,7 @@ namespace definition
         public:
             typedef otf2::common::location_group_type location_group_type;
 
-            location_group_impl(reference<location_group> ref, const otf2::definition::string& name,
+            location_group_impl(otf2::location_group_ref ref, const otf2::definition::string& name,
                                 location_group_type type,
                                 const otf2::definition::system_tree_node& stm,
                                 std::int64_t retain_count = 0)
@@ -73,13 +73,13 @@ namespace definition
 
             static location_group_impl* undefined()
             {
-                static location_group_impl undef(reference<location_group>::undefined(),
+                static location_group_impl undef(otf2::location_group_ref::undefined(),
                                                  string::undefined(), location_group_type::unknown,
                                                  system_tree_node::undefined(), 1);
                 return &undef;
             }
 
-            reference<location_group> ref() const
+            otf2::location_group_ref ref() const
             {
                 return ref_;
             }
@@ -105,7 +105,7 @@ namespace definition
             }
 
         private:
-            reference<location_group> ref_;
+            otf2::location_group_ref ref_;
             otf2::definition::string name_;
             location_group_type type_;
             otf2::definition::system_tree_node stm_;

@@ -106,11 +106,6 @@ namespace definition
                 return def_;
             }
 
-            otf2::reference<property<Definition>> ref() const
-            {
-                return otf2::reference<property<Definition>>::undefined();
-            }
-
         private:
             Definition def_;
             otf2::definition::string name_;

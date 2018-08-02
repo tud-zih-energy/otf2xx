@@ -1,0 +1,38 @@
+/*
+ * Copyright 2013-2018, Technische Universitaet Dresden, Germany
+ * All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
+#ifndef INCLUDE_OTF2XX_DEFFWD_HPP
+#define INCLUDE_OTF2XX_DEFFWD_HPP
+
+#include <otf2xx/common.hpp>
+
+namespace otf2
+{
+namespace definition
+{
+    // Forward declaration for definitions
+
+    @otf2 for def in defs|referable_defs|sort:
+    @otf2  if def.lower == 'group':
+    template <typename T_Def, otf2::common::group_type GroupType>
+    class @@def.lower@@;
+    @otf2  else:
+    class @@def.lower@@;
+    @otf2  endif
+    @otf2 endfor
+
+    class marker;
+
+    // Forward declaration for virtual class definitions
+    @otf2 for def in defs|referable_defs|shared_defs|first_born_defs|sort:
+    class @@def.ref_lower@@;
+    @otf2 endfor
+}
+}
+
+#endif // INCLUDE_OTF2XX_DEFFWD_HPP

@@ -62,7 +62,7 @@ namespace definition
         typedef typename impl_type::paradigm_type paradigm_type;
         typedef typename impl_type::flags_type flags_type;
 
-        region(otf2::reference<region> ref, const otf2::definition::string& name,
+        region(otf2::region_ref ref, const otf2::definition::string& name,
                const otf2::definition::string& canonical_name,
                const otf2::definition::string& description, role_type role, paradigm_type paradigm,
                flags_type flags, const otf2::definition::string& source_file, uint32_t begin_line,

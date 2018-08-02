@@ -59,7 +59,7 @@ namespace definition
             typedef otf2::common::base_type value_base_type;
             typedef std::int64_t value_exponent_type;
 
-            metric_member_impl(reference<metric_member> ref, const otf2::definition::string& name,
+            metric_member_impl(otf2::metric_member_ref ref, const otf2::definition::string& name,
                                const otf2::definition::string& description, metric_type type,
                                metric_mode mode, value_type_type value_type,
                                value_base_type value_base, value_exponent_type value_exponent,
@@ -81,14 +81,14 @@ namespace definition
             static metric_member_impl* undefined()
             {
                 static metric_member_impl undef(
-                    otf2::reference<metric_member>::undefined(),
+                    otf2::metric_member_ref::undefined(),
                     otf2::definition::string::undefined(), otf2::definition::string::undefined(),
                     metric_type::other, metric_mode::absolute_last, value_type_type::none,
                     value_base_type::binary, 0, otf2::definition::string::undefined(), 1);
                 return &undef;
             }
 
-            otf2::reference<metric_member> ref() const
+            otf2::metric_member_ref ref() const
             {
                 return ref_;
             }
@@ -142,7 +142,7 @@ namespace definition
             }
 
         private:
-            reference<metric_member> ref_;
+            otf2::metric_member_ref ref_;
             otf2::definition::string name_;
             otf2::definition::string description_;
             metric_type type_;

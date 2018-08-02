@@ -56,7 +56,7 @@ namespace definition
         class calling_context_impl : public ref_counted
         {
         public:
-            calling_context_impl(reference<calling_context> ref,
+            calling_context_impl(otf2::calling_context_ref ref,
                                  const otf2::definition::region& region,
                                  const otf2::definition::source_code_location& source_code_location,
                                  calling_context_impl* parent, std::int64_t retain_count = 0)
@@ -65,7 +65,7 @@ namespace definition
             {
             }
 
-            calling_context_impl(reference<calling_context> ref,
+            calling_context_impl(otf2::calling_context_ref ref,
                                  const otf2::definition::region& region,
                                  const otf2::definition::source_code_location& source_code_location,
                                  std::int64_t retain_count = 0)
@@ -84,13 +84,13 @@ namespace definition
             static calling_context_impl* undefined()
             {
                 static calling_context_impl undef(
-                    otf2::reference<calling_context>::undefined(),
+                    otf2::calling_context_ref::undefined(),
                     otf2::definition::region::undefined(),
                     otf2::definition::source_code_location::undefined(), 1);
                 return &undef;
             }
 
-            reference<calling_context> ref() const
+            otf2::calling_context_ref ref() const
             {
                 return ref_;
             }
@@ -121,7 +121,7 @@ namespace definition
             }
 
         private:
-            reference<calling_context> ref_;
+            otf2::calling_context_ref ref_;
             otf2::definition::region region_;
             otf2::definition::source_code_location source_code_location_;
             otf2::intrusive_ptr<calling_context_impl> parent_;
