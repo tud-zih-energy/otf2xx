@@ -137,21 +137,21 @@ public:
 };
 
 template <>
-class reference<definition::metric_class> : public reference<definition::detail::metric_base>
+class reference<definition::metric_class> : public reference<definition::metric>
 {
 public:
-    reference(const reference<definition::detail::metric_base>& base)
-    : reference<definition::detail::metric_base>(base)
+    reference(const reference<definition::metric>& base)
+    : reference<definition::metric>(base)
     {
     }
 };
 
 template <>
-class reference<definition::metric_instance> : public reference<definition::detail::metric_base>
+class reference<definition::metric_instance> : public reference<definition::metric>
 {
 public:
-    reference(const reference<definition::detail::metric_base>& base)
-    : reference<definition::detail::metric_base>(base)
+    reference(const reference<definition::metric>& base)
+    : reference<definition::metric>(base)
     {
     }
 };

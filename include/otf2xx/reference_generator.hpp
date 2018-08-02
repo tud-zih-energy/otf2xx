@@ -265,7 +265,7 @@ public:
     reference_generator<otf2::reference<otf2::definition::io_handle>> io_handle_refs_;
     reference_generator<otf2::reference<otf2::definition::io_paradigm>> io_paradigm_refs_;
     reference_generator<otf2::reference<otf2::definition::metric_member>> metric_member_refs_;
-    reference_generator<otf2::reference<otf2::definition::detail::metric_base>> metric_refs_;
+    reference_generator<otf2::reference<otf2::definition::metric>> metric_refs_;
     reference_generator<otf2::reference<otf2::definition::marker>> marker_refs_;
 };
 
@@ -392,8 +392,8 @@ namespace detail
 
     template <>
     inline otf2::reference<
-        otf2::traits::reference_param_type<otf2::definition::detail::metric_base>::type>
-    generate_ref<otf2::definition::detail::metric_base>::operator()(trace_reference_generator& gen)
+        otf2::traits::reference_param_type<otf2::definition::metric>::type>
+    generate_ref<otf2::definition::metric>::operator()(trace_reference_generator& gen)
     {
         return gen.metric_refs_.next();
     }

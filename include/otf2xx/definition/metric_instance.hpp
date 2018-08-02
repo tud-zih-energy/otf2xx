@@ -39,7 +39,6 @@
 #include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/base.hpp>
-#include <otf2xx/definition/detail/metric_base.hpp>
 #include <otf2xx/definition/detail/metric_instance_impl.hpp>
 
 namespace otf2
@@ -59,7 +58,7 @@ namespace definition
         typedef impl_type::metric_occurence metric_occurence;
         typedef impl_type::metric_scope metric_scope;
 
-        metric_instance(reference<detail::metric_base> ref,
+        metric_instance(reference<metric> ref,
                         const otf2::definition::metric_class& metric_class,
                         const otf2::definition::location& recorder,
                         const otf2::definition::location& scope)
@@ -67,7 +66,7 @@ namespace definition
         {
         }
 
-        metric_instance(reference<detail::metric_base> ref,
+        metric_instance(reference<metric> ref,
                         const otf2::definition::metric_class& metric_class,
                         const otf2::definition::location& recorder,
                         const otf2::definition::location_group& scope)
@@ -75,7 +74,7 @@ namespace definition
         {
         }
 
-        metric_instance(reference<detail::metric_base> ref,
+        metric_instance(reference<metric> ref,
                         const otf2::definition::metric_class& metric_class,
                         const otf2::definition::location& recorder,
                         const otf2::definition::system_tree_node& scope)
@@ -83,7 +82,7 @@ namespace definition
         {
         }
 
-        metric_instance(reference<detail::metric_base> ref,
+        metric_instance(reference<metric> ref,
                         const otf2::definition::metric_class& metric_class,
                         const otf2::definition::location& recorder,
                         const otf2::definition::locations_group& scope)

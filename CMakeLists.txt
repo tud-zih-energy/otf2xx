@@ -120,6 +120,8 @@ add_library(otf2xx::Reader ALIAS otf2xx-reader)
 add_library(otf2xx::Writer ALIAS otf2xx-writer)
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    add_subdirectory(templates)
+
     target_compile_options(otf2xx-core
         INTERFACE
             -Wall -Wextra -pedantic

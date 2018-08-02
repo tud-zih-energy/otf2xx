@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2016, Technische Universitaet Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,47 +35,69 @@
 #ifndef INCLUDE_OTF2XX_TRAITS_REFERENCE_HPP
 #define INCLUDE_OTF2XX_TRAITS_REFERENCE_HPP
 
+#include <otf2/OTF2_GeneralDefinitions.h>
+#include <otf2/OTF2_Marker.h>
 #include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/traits/traits.hpp>
 
 #include <type_traits>
 
-#include <cstdint>
-
 namespace otf2
 {
 namespace traits
 {
-
-    template <typename Type>
+    template <typename T_Definition>
     struct reference_type;
 
-    // Type traits for Definitions
     template <>
-    struct reference_type<definition::location> : identity<std::uint64_t>
+    struct reference_type<definition::io_paradigm> : identity<OTF2_IoParadigmRef>
     {
     };
 
     template <>
-    struct reference_type<definition::location_group> : identity<std::uint32_t>
+    struct reference_type<definition::string> : identity<OTF2_StringRef>
     {
     };
 
     template <>
-    struct reference_type<definition::system_tree_node> : identity<std::uint32_t>
+    struct reference_type<definition::attribute> : identity<OTF2_AttributeRef>
     {
     };
 
     template <>
-    struct reference_type<definition::string> : identity<std::uint32_t>
+    struct reference_type<definition::system_tree_node> : identity<OTF2_SystemTreeNodeRef>
     {
     };
 
     template <>
-    struct reference_type<definition::detail::group_base> : identity<std::uint32_t>
+    struct reference_type<definition::location_group> : identity<OTF2_LocationGroupRef>
     {
     };
 
+    template <>
+    struct reference_type<definition::location> : identity<OTF2_LocationRef>
+    {
+    };
+
+    template <>
+    struct reference_type<definition::region> : identity<OTF2_RegionRef>
+    {
+    };
+
+    template <>
+    struct reference_type<definition::callsite> : identity<OTF2_CallsiteRef>
+    {
+    };
+
+    template <>
+    struct reference_type<definition::callpath> : identity<OTF2_CallpathRef>
+    {
+    };
+
+    template <>
+    struct reference_type<definition::detail::group_base> : identity<OTF2_GroupRef>
+    {
+    };
     template <typename Def, otf2::common::group_type Type>
     struct reference_type<definition::group<Def, Type>>
     : reference_type<definition::detail::group_base>
@@ -83,94 +105,88 @@ namespace traits
     };
 
     template <>
-    struct reference_type<definition::comm> : identity<std::uint32_t>
+    struct reference_type<definition::metric_member> : identity<OTF2_MetricMemberRef>
     {
     };
 
     template <>
-    struct reference_type<definition::attribute> : identity<std::uint32_t>
+    struct reference_type<definition::metric_class> : identity<OTF2_MetricRef>
     {
     };
 
     template <>
-    struct reference_type<definition::parameter> : identity<std::uint32_t>
+    struct reference_type<definition::metric_instance> : identity<OTF2_MetricRef>
     {
     };
 
     template <>
-    struct reference_type<definition::region> : identity<std::uint32_t>
+    struct reference_type<definition::comm> : identity<OTF2_CommRef>
     {
     };
 
     template <>
-    struct reference_type<definition::calling_context> : identity<std::uint32_t>
+    struct reference_type<definition::parameter> : identity<OTF2_ParameterRef>
     {
     };
 
     template <>
-    struct reference_type<definition::source_code_location> : identity<std::uint32_t>
+    struct reference_type<definition::rma_win> : identity<OTF2_RmaWinRef>
     {
     };
 
     template <>
-    struct reference_type<definition::interrupt_generator> : identity<std::uint32_t>
+    struct reference_type<definition::cart_dimension> : identity<OTF2_CartDimensionRef>
     {
     };
 
     template <>
-    struct reference_type<definition::detail::metric_base> : identity<std::uint32_t>
+    struct reference_type<definition::cart_topology> : identity<OTF2_CartTopologyRef>
     {
     };
 
     template <>
-    struct reference_type<definition::marker> : identity<std::uint32_t>
+    struct reference_type<definition::source_code_location> : identity<OTF2_SourceCodeLocationRef>
     {
     };
 
     template <>
-    struct reference_type<definition::metric_class>
-    : reference_type<definition::detail::metric_base>
+    struct reference_type<definition::calling_context> : identity<OTF2_CallingContextRef>
     {
     };
 
     template <>
-    struct reference_type<definition::metric_instance>
-    : reference_type<definition::detail::metric_base>
+    struct reference_type<definition::interrupt_generator> : identity<OTF2_InterruptGeneratorRef>
     {
     };
 
     template <>
-    struct reference_type<definition::metric_member> : identity<std::uint32_t>
+    struct reference_type<definition::io_regular_file> : identity<OTF2_IoFileRef>
     {
     };
 
     template <>
-    struct reference_type<definition::io_file> : identity<std::uint32_t>
+    struct reference_type<definition::io_directory> : identity<OTF2_IoFileRef>
     {
     };
 
     template <>
-    struct reference_type<definition::io_regular_file> : reference_type<definition::io_file>
+    struct reference_type<definition::io_handle> : identity<OTF2_IoHandleRef>
+    {
+    };
+
+    // Virtual class definitions
+    template <>
+    struct reference_type<definition::metric> : identity<OTF2_MetricRef>
     {
     };
 
     template <>
-    struct reference_type<definition::io_directory> : reference_type<definition::io_file>
+    struct reference_type<definition::io_file> : identity<OTF2_IoFileRef>
     {
     };
 
     template <>
-    struct reference_type<definition::io_handle> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::io_paradigm> : identity<std::uint8_t>
-    {
-    };
-
-    template <typename Definition>
-    struct reference_type<definition::property<Definition>> : identity<std::uint32_t>
+    struct reference_type<definition::marker> : identity<OTF2_MarkerRef>
     {
     };
 
