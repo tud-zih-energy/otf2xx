@@ -37,7 +37,7 @@ matrix:
             - llvm-toolchain-trusty-4.0
             - ubuntu-toolchain-r-test
     - os: linux
-      env: CXX="clang++-5.0" CC="clang-5.0"
+      env: CXX="clang++-5.0" CC="clang-5.0" TEST_TEMPLATE_GEN=y
       compiler: clang
       addons:
         apt:
@@ -45,6 +45,7 @@ matrix:
             - clang-5.0
             - g++-5
             - cmake
+            - clang-format-5.0
           sources:
             - llvm-toolchain-trusty-5.0
             - ubuntu-toolchain-r-test
@@ -77,5 +78,12 @@ script:
   - cmake --version
   - mkdir build && cd build
   - cmake ..
+  - |
+    if [ "${TEST_TEMPLATE_GEN}" = "y" ]; then
+      make --always-make GenerateTemplates
+      # Check that template code is up2data excluding whitespace changes
+      printf "build\ndeps" >> ../.git/info/exclude
+      git diff --minimal --ignore-space-change --ignore-all-space --ignore-blank-lines --exit-code
+    fi
   - make -j2
   - ctest -V .
