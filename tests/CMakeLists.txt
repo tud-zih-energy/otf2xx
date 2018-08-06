@@ -63,11 +63,28 @@ otf2xx_add_test(traits_test otf2xx::Core)
 otf2xx_add_test(intrusive_ptr_test otf2xx::Core)
 otf2xx_add_test(ref_gen_test otf2xx::Core)
 otf2xx_add_test(registry_test otf2xx::Core)
+otf2xx_add_test(metric_events otf2xx::Core)
 
 otf2xx_add_test(writer_test otf2xx::Writer)
-add_test(NAME writer_test_cleanup COMMAND cmake -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace)
-set_property(TEST writer_test PROPERTY DEPENDS writer_test_cleanup)
+set_property(TEST writer_test PROPERTY FIXTURES_SETUP writer_trace)
+
+otf2xx_add_test(writer_registry_test otf2xx::Writer)
+set_property(TEST writer_registry_test PROPERTY FIXTURES_SETUP writer_registry_trace)
 
 otf2xx_add_test(reader_test otf2xx::Reader ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace/traces.otf2)
+set_property(TEST reader_test PROPERTY FIXTURES_REQUIRED writer_trace)
 
-otf2xx_add_test(metric_events otf2xx::Core)
+add_test(NAME reader_registry_test COMMAND reader_test ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_registry_trace/traces.otf2)
+set_property(TEST reader_registry_test PROPERTY FIXTURES_REQUIRED writer_registry_trace)
+
+add_test(NAME trace_compare_test
+    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/trace_compare.sh ${OTF2_PRINT} ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_registry_trace/traces.otf2 ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace/traces.otf2
+)
+set_property(TEST trace_compare_test PROPERTY FIXTURES_REQUIRED "writer_registry_trace;writer_trace")
+
+
+# cleanup traces
+add_test(NAME writer_test_cleanup COMMAND cmake -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace)
+set_property(TEST writer_test_cleanup PROPERTY FIXTURES_CLEANUP writer_trace)
+add_test(NAME writer_test_registry_cleanup COMMAND cmake -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_registry_trace)
+set_property(TEST writer_test_registry_cleanup PROPERTY FIXTURES_CLEANUP writer_registry_trace)
