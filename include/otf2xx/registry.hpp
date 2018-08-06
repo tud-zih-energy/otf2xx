@@ -95,6 +95,16 @@ public:
         return definitions_;
     }
 
+    auto begin() const
+    {
+        return definitions_.begin();
+    }
+
+    auto end() const
+    {
+        return definitions_.end();
+    }
+
 private:
     otf2::definition::container<Definition> definitions_;
     otf2::trace_reference_generator& refs_;
@@ -118,6 +128,16 @@ public:
     const otf2::definition::container<Property>& data() const
     {
         return properties_;
+    }
+
+    auto begin() const
+    {
+        return properties_.begin();
+    }
+
+    auto end() const
+    {
+        return properties_.end();
     }
 
 private:
@@ -286,6 +306,158 @@ public:
     }
 
     PropertyHolder<otf2::definition::io_file_property>& io_file_properties()
+    {
+        return io_file_properties_;
+    }
+
+public:
+    const DefinitionHolder<otf2::definition::attribute>& attributes() const
+    {
+        return attributes_;
+    }
+
+    const DefinitionHolder<otf2::definition::comm>& comms() const
+    {
+        return comms_;
+    }
+
+    const DefinitionHolder<otf2::definition::location>& locations() const
+    {
+        return locations_;
+    }
+
+    const DefinitionHolder<otf2::definition::location_group>& location_groups() const
+    {
+        return location_groups_;
+    }
+
+    const DefinitionHolder<otf2::definition::parameter>& parameters() const
+    {
+        return parameters_;
+    }
+
+    const DefinitionHolder<otf2::definition::region>& regions() const
+    {
+        return regions_;
+    }
+
+    const DefinitionHolder<otf2::definition::string>& strings() const
+    {
+        return strings_;
+    }
+
+    const DefinitionHolder<otf2::definition::system_tree_node>& system_tree_nodes() const
+    {
+        return system_tree_nodes_;
+    }
+
+    const DefinitionHolder<otf2::definition::source_code_location>& source_code_locations() const
+    {
+        return source_code_locations_;
+    }
+
+    const DefinitionHolder<otf2::definition::calling_context>& calling_contexts() const
+    {
+        return calling_contexts_;
+    }
+
+    const DefinitionHolder<otf2::definition::interrupt_generator>& interrupt_generators() const
+    {
+        return interrupt_generators_;
+    }
+
+    const DefinitionHolder<otf2::definition::io_regular_file>& io_regular_files() const
+    {
+        return io_regular_files_;
+    }
+
+    const DefinitionHolder<otf2::definition::io_directory>& io_directories() const
+    {
+        return io_directories_;
+    }
+
+    const DefinitionHolder<otf2::definition::io_handle>& io_handles() const
+    {
+        return io_handles_;
+    }
+
+    const DefinitionHolder<otf2::definition::io_paradigm>& io_paradigms() const
+    {
+        return io_paradigms_;
+    }
+
+    const DefinitionHolder<otf2::definition::io_pre_created_handle_state>&
+    io_pre_created_handle_states() const
+    {
+        return io_pre_created_handle_states_;
+    }
+
+    const DefinitionHolder<otf2::definition::locations_group>& locations_groups() const
+    {
+        return locations_groups_;
+    }
+
+    const DefinitionHolder<otf2::definition::regions_group>& regions_groups() const
+    {
+        return regions_groups_;
+    }
+
+    // DefinitionHolder<otf2::definition::metric_group>& metric_groups_;
+    const DefinitionHolder<otf2::definition::comm_locations_group>& comm_locations_groups() const
+    {
+        return comm_locations_groups_;
+    }
+
+    const DefinitionHolder<otf2::definition::comm_group>& comm_groups() const
+    {
+        return comm_groups_;
+    }
+
+    const DefinitionHolder<otf2::definition::comm_self_group>& comm_self_groups() const
+    {
+        return comm_self_groups_;
+    }
+
+    const DefinitionHolder<otf2::definition::metric_member>& metric_members() const
+    {
+        return metric_members_;
+    }
+
+    const DefinitionHolder<otf2::definition::metric_class>& metric_classes() const
+    {
+        return metric_classes_;
+    }
+
+    const DefinitionHolder<otf2::definition::metric_instance>& metric_instances() const
+    {
+        return metric_instances_;
+    }
+
+public:
+    const PropertyHolder<otf2::definition::location_property>& location_properties() const
+    {
+        return location_properties_;
+    }
+
+    const PropertyHolder<otf2::definition::location_group_property>&
+    location_group_properties() const
+    {
+        return location_group_properties_;
+    }
+
+    const PropertyHolder<otf2::definition::system_tree_node_property>&
+    system_tree_node_properties() const
+    {
+        return system_tree_node_properties_;
+    }
+
+    const PropertyHolder<otf2::definition::calling_context_property>&
+    calling_context_properties() const
+    {
+        return calling_context_properties_;
+    }
+
+    const PropertyHolder<otf2::definition::io_file_property>& io_file_properties() const
     {
         return io_file_properties_;
     }
