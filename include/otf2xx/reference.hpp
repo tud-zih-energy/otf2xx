@@ -176,24 +176,6 @@ public:
     }
 };
 
-template <typename T>
-class reference<definition::property<T>> : public reference<T>
-{
-public:
-    reference(const reference<T>& base) : reference<T>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::io_pre_created_handle_state> : public reference<definition::io_handle>
-{
-public:
-    reference(const reference<definition::io_handle>& base) : reference<definition::io_handle>(base)
-    {
-    }
-};
-
 } // namespace otf2
 
 #endif // INCLUDE_OTF2XX_REFERENCE_HPP
