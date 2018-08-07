@@ -95,5 +95,3 @@
                          OTF2_MetricRef>::value, "type mismatch");
     static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::metric_instance>::type,
                          OTF2_MetricRef>::value, "type mismatch");
-
-int main(){}

@@ -400,5 +400,3 @@ using namespace otf2::common;
            OTF2_MARKER_SCOPE_SYSTEM_TREE_NODE, "Enum value mismatch");
     static_assert(static_cast<int>(marker_scope_type::group) == OTF2_MARKER_SCOPE_GROUP, "Enum value mismatch");
     static_assert(static_cast<int>(marker_scope_type::comm) == OTF2_MARKER_SCOPE_COMM, "Enum value mismatch");
-
-int main(){}
