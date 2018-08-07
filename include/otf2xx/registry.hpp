@@ -155,7 +155,7 @@ public:
       parameters_(refs_), regions_(refs_), strings_(refs_), system_tree_nodes_(refs_),
       source_code_locations_(refs_), calling_contexts_(refs_), interrupt_generators_(refs_),
       io_handles_(refs_), io_regular_files_(refs_), io_directories_(refs_), io_paradigms_(refs_),
-      io_pre_created_handle_states_(refs_), locations_groups_(refs_), regions_groups_(refs_),
+      locations_groups_(refs_), regions_groups_(refs_),
       // metric_groups_(refs_),
       comm_locations_groups_(refs_), comm_groups_(refs_), comm_self_groups_(refs_),
       metric_members_(refs_), metric_classes_(refs_), metric_instances_(refs_)
@@ -238,11 +238,6 @@ public:
         return io_paradigms_;
     }
 
-    DefinitionHolder<otf2::definition::io_pre_created_handle_state>& io_pre_created_handle_states()
-    {
-        return io_pre_created_handle_states_;
-    }
-
     DefinitionHolder<otf2::definition::locations_group>& locations_groups()
     {
         return locations_groups_;
@@ -308,6 +303,11 @@ public:
     PropertyHolder<otf2::definition::io_file_property>& io_file_properties()
     {
         return io_file_properties_;
+    }
+
+    PropertyHolder<otf2::definition::io_pre_created_handle_state>& io_pre_created_handle_states()
+    {
+        return io_pre_created_handle_states_;
     }
 
 public:
@@ -386,12 +386,6 @@ public:
         return io_paradigms_;
     }
 
-    const DefinitionHolder<otf2::definition::io_pre_created_handle_state>&
-    io_pre_created_handle_states() const
-    {
-        return io_pre_created_handle_states_;
-    }
-
     const DefinitionHolder<otf2::definition::locations_group>& locations_groups() const
     {
         return locations_groups_;
@@ -460,6 +454,12 @@ public:
     const PropertyHolder<otf2::definition::io_file_property>& io_file_properties() const
     {
         return io_file_properties_;
+    }
+
+    const PropertyHolder<otf2::definition::io_pre_created_handle_state>&
+    io_pre_created_handle_states() const
+    {
+        return io_pre_created_handle_states_;
     }
 
 public:
@@ -602,7 +602,6 @@ private:
     DefinitionHolder<otf2::definition::io_regular_file> io_regular_files_;
     DefinitionHolder<otf2::definition::io_directory> io_directories_;
     DefinitionHolder<otf2::definition::io_paradigm> io_paradigms_;
-    DefinitionHolder<otf2::definition::io_pre_created_handle_state> io_pre_created_handle_states_;
 
     DefinitionHolder<otf2::definition::locations_group> locations_groups_;
     DefinitionHolder<otf2::definition::regions_group> regions_groups_;
@@ -620,5 +619,6 @@ private:
     PropertyHolder<otf2::definition::system_tree_node_property> system_tree_node_properties_;
     PropertyHolder<otf2::definition::calling_context_property> calling_context_properties_;
     PropertyHolder<otf2::definition::io_file_property> io_file_properties_;
+    PropertyHolder<otf2::definition::io_pre_created_handle_state> io_pre_created_handle_states_;
 };
 } // namespace otf2
