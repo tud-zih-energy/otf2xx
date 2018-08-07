@@ -32,63 +32,68 @@
  *
  */
 
-#define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
-#include "catch.hpp"
 
 #include <otf2xx/traits/reference.hpp>
 
 #include <otf2/OTF2_GeneralDefinitions.h>
 
-TEST_CASE("test types of references")
-{
+/**
+ * @brief: Checks the OTF2 and OTF2xx types to be equal This test is VERY!
+ * important. Compile time test only.
+ *
+ * \warning { If this test fails, expect problems with all traces.
+ * Fix the problem first. Seriously! }
+ *
+ */
 
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::attribute>::type,
-                         OTF2_AttributeRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::comm>::type,
-                         OTF2_CommRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::location>::type,
-                         OTF2_LocationRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::location_group>::type,
-                         OTF2_LocationGroupRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::parameter>::type,
-                         OTF2_ParameterRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::region>::type,
-                         OTF2_RegionRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::string>::type,
-                         OTF2_StringRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::system_tree_node>::type,
-                         OTF2_SystemTreeNodeRef>::value);
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::attribute>::type,
+                         OTF2_AttributeRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::comm>::type,
+                         OTF2_CommRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::location>::type,
+                         OTF2_LocationRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::location_group>::type,
+                         OTF2_LocationGroupRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::parameter>::type,
+                         OTF2_ParameterRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::region>::type,
+                         OTF2_RegionRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::string>::type,
+                         OTF2_StringRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::system_tree_node>::type,
+                         OTF2_SystemTreeNodeRef>::value, "type mismatch");
 
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::source_code_location>::type,
-                         OTF2_SourceCodeLocationRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::calling_context>::type,
-                         OTF2_CallingContextRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::interrupt_generator>::type,
-                         OTF2_InterruptGeneratorRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::io_handle>::type,
-                         OTF2_IoHandleRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::io_regular_file>::type,
-                         OTF2_IoFileRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::io_directory>::type,
-                         OTF2_IoFileRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::io_paradigm>::type,
-                         OTF2_IoParadigmRef>::value);
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::source_code_location>::type,
+                         OTF2_SourceCodeLocationRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::calling_context>::type,
+                         OTF2_CallingContextRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::interrupt_generator>::type,
+                         OTF2_InterruptGeneratorRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::io_handle>::type,
+                         OTF2_IoHandleRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::io_regular_file>::type,
+                         OTF2_IoFileRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::io_directory>::type,
+                         OTF2_IoFileRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::io_paradigm>::type,
+                         OTF2_IoParadigmRef>::value, "type mismatch");
 
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::locations_group>::type,
-                         OTF2_GroupRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::regions_group>::type,
-                         OTF2_GroupRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::comm_locations_group>::type,
-                         OTF2_GroupRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::comm_group>::type,
-                         OTF2_GroupRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::comm_self_group>::type,
-                         OTF2_GroupRef>::value);
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::locations_group>::type,
+                         OTF2_GroupRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::regions_group>::type,
+                         OTF2_GroupRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::comm_locations_group>::type,
+                         OTF2_GroupRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::comm_group>::type,
+                         OTF2_GroupRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::comm_self_group>::type,
+                         OTF2_GroupRef>::value, "type mismatch");
 
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::metric_member>::type,
-                         OTF2_MetricMemberRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::metric_class>::type,
-                         OTF2_MetricRef>::value);
-    REQUIRE(std::is_same<otf2::traits::reference_type<otf2::definition::metric_instance>::type,
-                         OTF2_MetricRef>::value);
-}
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::metric_member>::type,
+                         OTF2_MetricMemberRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::metric_class>::type,
+                         OTF2_MetricRef>::value, "type mismatch");
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::metric_instance>::type,
+                         OTF2_MetricRef>::value, "type mismatch");
+
+int main(){}
