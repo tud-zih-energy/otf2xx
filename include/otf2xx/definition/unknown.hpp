@@ -35,17 +35,6 @@
 #ifndef INCLUDE_OTF2XX_DEFINITIONS_UNKNOWN_HPP
 #define INCLUDE_OTF2XX_DEFINITIONS_UNKNOWN_HPP
 
-#include <otf2xx/common.hpp>
-#include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
-
-#include <otf2xx/definition/string.hpp>
-
-#include <otf2xx/definition/detail/attribute_impl.hpp>
-#include <otf2xx/definition/detail/base.hpp>
-
-#include <memory>
-
 namespace otf2
 {
 namespace definition
@@ -57,7 +46,7 @@ namespace definition
     class unknown
     {
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_UNKNOWN_HPP
