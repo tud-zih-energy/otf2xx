@@ -203,11 +203,6 @@ public:
         io_paradigm_refs_.register_definition(def);
     }
 
-    void register_definition(const otf2::definition::io_pre_created_handle_state& def)
-    {
-        io_handle_refs_.register_definition(def.handle());
-    }
-
     void register_definition(const otf2::definition::metric_member& def)
     {
         metric_member_refs_.register_definition(def);
