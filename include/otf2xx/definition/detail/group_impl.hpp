@@ -54,14 +54,6 @@ namespace definition
 {
     namespace detail
     {
-
-        /**
-         * Dummy class to have all group templates in the same id space
-         */
-        class group_base
-        {
-        };
-
         template <class MemberType,
                   otf2::common::group_type GroupType = otf2::common::group_type::unknown>
         class group_impl : public ref_counted
