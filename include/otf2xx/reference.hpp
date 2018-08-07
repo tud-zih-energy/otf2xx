@@ -69,9 +69,12 @@ public:
      *
      * Mostly uint64_t or uint32_t
      */
-    typedef typename traits::reference_type<Type>::type ref_type;
-    /** @brief Tag The tag type used to distinguish this id space */
-    using Tag = Type;
+    using ref_type = typename traits::reference_type<Type>::type;
+
+    /**
+     * @brief tag_type used to distinguish this id space
+     */
+    using tag_type = Type;
 
     reference() = delete;
 
