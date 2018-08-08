@@ -72,6 +72,8 @@ if(NOT OTF2XX_ENABLE_ALL_TESTS)
     return()
 endif()
 
+otf2xx_add_test(tmp_test otf2xx::Core)
+
 otf2xx_add_test(intrusive_ptr_test otf2xx::Core)
 otf2xx_add_test(ref_gen_test otf2xx::Core)
 otf2xx_add_test(registry_test otf2xx::Core)
