@@ -65,7 +65,6 @@ namespace definition
         class base
         {
         public:
-            using reference_type = otf2::reference<Def>;
             using impl_type = Impl;
 
             base() : data_(nullptr)
@@ -80,32 +79,6 @@ namespace definition
             base(base&& other) = default;
             base& operator=(const base& other) = default;
             base& operator=(base&& other) = default;
-
-            /**
-             * \brief Returns the reference number of the definition
-             *
-             * This number is used by libotf2 to identify a definition record.
-             *
-             * \returns a reference number
-             */
-            reference_type ref() const
-            {
-                assert(is_valid());
-                return data_->ref();
-            }
-
-            /**
-             * \brief Returns a reference to an undefined definition.
-             *
-             * In most cases undefined means, that the ref() of this definition is -1.
-             *
-             * \return a definiton object
-             */
-            static const Def& undefined()
-            {
-                static Def undef(Impl::undefined());
-                return undef;
-            }
 
             /**
              * \brief Returns if the definition object is valid
@@ -171,21 +144,6 @@ namespace definition
         protected:
             ::otf2::intrusive_ptr<Impl> data_;
         };
-
-        template <typename Def, typename Impl>
-        inline bool operator==(const base<Def, Impl>& a, const base<Def, Impl>& b)
-        {
-            if (!a.is_valid() || !b.is_valid())
-                return false;
-
-            return a.ref() == b.ref();
-        }
-
-        template <typename Def, typename Impl>
-        inline bool operator!=(const base<Def, Impl>& a, const base<Def, Impl>& b)
-        {
-            return !(a == b);
-        }
     } // namespace detail
 } // namespace definition
 } // namespace otf2
