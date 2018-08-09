@@ -38,7 +38,7 @@
 namespace otf2
 {
 
-template <typename T>
+template <typename T, typename Tag>
 class reference;
 
 template <typename Definition>
