@@ -169,11 +169,6 @@ namespace traits
     {
     };
 
-    template <typename Definition>
-    struct reference_type<definition::property<Definition>> : identity<std::uint32_t>
-    {
-    };
-
     template <typename T, typename... Args>
     struct reference_type_var : reference_type<T>
     {

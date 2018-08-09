@@ -32,24 +32,26 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_DETAIL_METRIC_BASE_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_METRIC_BASE_HPP
+#ifndef INCLUDE_OTF2XX_TMP_TYPELIST_HPP
+#define INCLUDE_OTF2XX_TMP_TYPELIST_HPP
+
+#include <type_traits>
 
 namespace otf2
 {
-namespace definition
+namespace tmp
 {
-    namespace detail
+    /**
+     * @brief A list of types
+     * This is used for all template metaprogramming algorithms.
+     * To convert any variadic template into a typelist use apply_t<MyList, typelist>
+     */
+    template <typename... Ts>
+    struct typelist
     {
+    };
 
-        /**
-         * \brief Dummy class to have metric instances and metric classes in the same id space
-         */
-        class metric_base
-        {
-        };
-    }
-}
-} // namespace otf2::definition::detail
+} // namespace tmp
+} // namespace otf2
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_METRIC_CLASS_HPP
+#endif // INCLUDE_OTF2XX_TMP_TYPELIST_HPP

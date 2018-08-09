@@ -39,7 +39,6 @@
 #include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/base.hpp>
-#include <otf2xx/definition/detail/metric_base.hpp>
 #include <otf2xx/definition/detail/metric_instance_impl.hpp>
 
 namespace otf2

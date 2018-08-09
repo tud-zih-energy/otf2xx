@@ -38,6 +38,14 @@ function(otf2xx_add_test name library)
     add_test(NAME ${name} COMMAND ${name} ${ARGV2})
 endfunction()
 
+# Add a compile-only test. The compilation must succeed
+# Pass the name of a cpp file and the name of the library to link.
+function(otf2xx_add_compile_test name library)
+    set(lib_name otf2xx-compiletest-${name})
+    add_library(${lib_name} STATIC ${name}.cpp)
+    target_link_libraries(${lib_name} PRIVATE ${library})
+endfunction()
+
 # Add a test that will fail compilation
 # Pass the name of a cpp file in the folder 'expected_failures'
 # This will create 2 targets: One with and one w/o -DOTF2XX_MAKE_FAIL
@@ -56,9 +64,15 @@ function(add_failing_test name)
     set_tests_properties(${name} PROPERTIES WILL_FAIL TRUE)
 endfunction()
 
-otf2xx_add_test(enums_test otf2xx::Core)
+# Always add compile tests
+otf2xx_add_compile_test(enums_test otf2xx::Core)
+otf2xx_add_compile_test(traits_test otf2xx::Core)
+# Skip other tests when not enabled
+if(NOT OTF2XX_ENABLE_ALL_TESTS)
+    return()
+endif()
 
-otf2xx_add_test(traits_test otf2xx::Core)
+otf2xx_add_test(tmp_test otf2xx::Core)
 
 otf2xx_add_test(intrusive_ptr_test otf2xx::Core)
 otf2xx_add_test(ref_gen_test otf2xx::Core)

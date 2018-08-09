@@ -69,7 +69,12 @@ public:
      *
      * Mostly uint64_t or uint32_t
      */
-    typedef typename traits::reference_type<Type>::type ref_type;
+    using ref_type = typename traits::reference_type<Type>::type;
+
+    /**
+     * @brief tag_type used to distinguish this id space
+     */
+    using tag_type = Type;
 
     reference() = delete;
 
@@ -170,24 +175,6 @@ class reference<definition::io_regular_file> : public reference<definition::io_f
 {
 public:
     reference(const reference<definition::io_file>& base) : reference<definition::io_file>(base)
-    {
-    }
-};
-
-template <typename T>
-class reference<definition::property<T>> : public reference<T>
-{
-public:
-    reference(const reference<T>& base) : reference<T>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::io_pre_created_handle_state> : public reference<definition::io_handle>
-{
-public:
-    reference(const reference<definition::io_handle>& base) : reference<definition::io_handle>(base)
     {
     }
 };

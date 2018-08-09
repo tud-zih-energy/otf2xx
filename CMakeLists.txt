@@ -145,5 +145,9 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     )
 
     include(CTest)
-    add_subdirectory(tests)
+    set(OTF2XX_ENABLE_ALL_TESTS ON)
+else()
+    set_target_properties(otf2xx-reader PROPERTIES EXCLUDE_FROM_ALL TRUE)
 endif()
+
+add_subdirectory(tests)

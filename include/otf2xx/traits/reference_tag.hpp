@@ -32,21 +32,25 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_UNKNOWN_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_UNKNOWN_HPP
+#ifndef INCLUDE_OTF2XX_TRAITS_REFERENCE_TAG_HPP
+#define INCLUDE_OTF2XX_TRAITS_REFERENCE_TAG_HPP
+
+#include <otf2xx/reference.hpp>
 
 namespace otf2
 {
-namespace definition
+namespace traits
 {
-
-    /**
-     * \brief class for representing an unknown definition
-     */
-    class unknown
+    /** @brief Get the tag type used for the id space of a definition */
+    template <typename Definition>
+    struct reference_tag
     {
+        using type = typename ::otf2::reference<Definition>::tag_type;
     };
-} // namespace definition
+    template <typename Definition>
+    using reference_tag_t = typename reference_tag<Definition>::type;
+
+} // namespace traits
 } // namespace otf2
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_UNKNOWN_HPP
+#endif // INCLUDE_OTF2XX_TRAITS_REFERENCE_TAG_HPP

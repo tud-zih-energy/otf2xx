@@ -32,21 +32,12 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_UNKNOWN_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_UNKNOWN_HPP
+#ifndef INCLUDE_OTF2XX_TMP_HPP
+#define INCLUDE_OTF2XX_TMP_HPP
 
-namespace otf2
-{
-namespace definition
-{
+#include <otf2xx/tmp/algorithm.hpp>
+#include <otf2xx/tmp/runtime.hpp>
+#include <otf2xx/tmp/typelist.hpp>
 
-    /**
-     * \brief class for representing an unknown definition
-     */
-    class unknown
-    {
-    };
-} // namespace definition
-} // namespace otf2
+#endif // INCLUDE_OTF2XX_TMP_HPP
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_UNKNOWN_HPP
