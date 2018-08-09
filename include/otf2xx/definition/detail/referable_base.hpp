@@ -69,7 +69,8 @@ namespace definition
             {
             }
 
-            referable_base(reference_type ref, Impl* data = nullptr) : base(data), ref_(ref)
+            explicit referable_base(reference_type ref, Impl* data = nullptr)
+            : base(data), ref_(ref)
             {
             }
 

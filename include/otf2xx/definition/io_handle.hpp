@@ -150,7 +150,7 @@ namespace definition
         {
             assert(this->is_valid());
             auto p = data_->parent();
-            return { p.second, p.first };
+            return otf2::definition::io_handle{ p.second, p.first };
         }
     };
 } // namespace definition

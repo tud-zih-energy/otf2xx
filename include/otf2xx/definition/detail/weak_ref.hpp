@@ -163,7 +163,7 @@ namespace definition
 
             Definition lock() const
             {
-                return { ref_, ptr_ };
+                return Definition{ ref_, ptr_ };
             }
 
             Impl& get()
