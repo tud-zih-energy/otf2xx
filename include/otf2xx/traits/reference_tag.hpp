@@ -45,7 +45,7 @@ namespace traits
     template <typename Definition>
     struct reference_tag
     {
-        using type = typename ::otf2::reference<Definition>::tag_type;
+        using type = typename Definition::reference_type::tag_type;
     };
     template <typename Definition>
     using reference_tag_t = typename reference_tag<Definition>::type;

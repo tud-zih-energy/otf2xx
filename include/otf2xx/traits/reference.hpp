@@ -145,7 +145,12 @@ namespace traits
     };
 
     template <>
-    struct reference_type<definition::io_file> : identity<std::uint32_t>
+    struct reference_type<definition::detail::io_file_base> : identity<std::uint32_t>
+    {
+    };
+
+    template <>
+    struct reference_type<definition::io_file> : reference_type<definition::detail::io_file_base>
     {
     };
 
