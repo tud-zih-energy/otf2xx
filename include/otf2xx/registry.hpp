@@ -48,6 +48,8 @@ class Registry;
 template <typename Definition>
 class DefinitionHolder
 {
+    static_assert(otf2::traits::is_referable_definition<Definition>::value, "Whoopsy.");
+
 public:
     DefinitionHolder(otf2::trace_reference_generator& refs) : refs_(refs)
     {
