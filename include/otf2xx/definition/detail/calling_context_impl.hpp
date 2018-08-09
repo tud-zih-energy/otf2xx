@@ -55,22 +55,24 @@ namespace definition
 
         class calling_context_impl : public ref_counted
         {
+            using parent_ref_type = otf2::reference<calling_context>;
+
         public:
-            calling_context_impl(reference<calling_context> ref,
-                                 const otf2::definition::region& region,
+            calling_context_impl(const otf2::definition::region& region,
                                  const otf2::definition::source_code_location& source_code_location,
-                                 calling_context_impl* parent, std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), region_(region),
-              source_code_location_(source_code_location), parent_(parent)
+                                 calling_context_impl* parent, parent_ref_type pref,
+                                 std::int64_t retain_count = 0)
+            : ref_counted(retain_count), region_(region),
+              source_code_location_(source_code_location), parent_(parent), pref_(pref)
             {
             }
 
-            calling_context_impl(reference<calling_context> ref,
-                                 const otf2::definition::region& region,
+            calling_context_impl(const otf2::definition::region& region,
                                  const otf2::definition::source_code_location& source_code_location,
                                  std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), region_(region),
-              source_code_location_(source_code_location), parent_(nullptr)
+            : ref_counted(retain_count), region_(region),
+              source_code_location_(source_code_location), parent_(nullptr),
+              pref_(parent_ref_type::undefined())
             {
             }
 
@@ -80,20 +82,6 @@ namespace definition
 
             calling_context_impl(calling_context_impl&&) = default;
             calling_context_impl& operator=(calling_context_impl&&) = default;
-
-            static calling_context_impl* undefined()
-            {
-                static calling_context_impl undef(
-                    otf2::reference<calling_context>::undefined(),
-                    otf2::definition::region::undefined(),
-                    otf2::definition::source_code_location::undefined(), 1);
-                return &undef;
-            }
-
-            reference<calling_context> ref() const
-            {
-                return ref_;
-            }
 
             const otf2::definition::region& region() const
             {
@@ -110,24 +98,24 @@ namespace definition
                 return parent_.get() != nullptr;
             }
 
-            calling_context_impl* parent() const
+            auto parent() const
             {
                 if (!has_parent())
                 {
-                    make_exception("The calling context #", ref(), " hasn't got a parent.");
+                    make_exception("The calling context hasn't got a parent.");
                 }
 
-                return parent_.get();
+                return std::make_pair(parent_.get(), pref_);
             }
 
         private:
-            reference<calling_context> ref_;
             otf2::definition::region region_;
             otf2::definition::source_code_location source_code_location_;
             otf2::intrusive_ptr<calling_context_impl> parent_;
+            parent_ref_type pref_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_CALLING_CONTEXT_HPP

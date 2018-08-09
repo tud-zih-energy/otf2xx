@@ -38,7 +38,6 @@
 #include <otf2xx/exception.hpp>
 
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -54,10 +53,9 @@ namespace definition
         class source_code_location_impl : public ref_counted
         {
         public:
-            source_code_location_impl(reference<source_code_location> ref,
-                                      const otf2::definition::string& file,
+            source_code_location_impl(const otf2::definition::string& file,
                                       std::uint32_t line_number, std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), file_(file), line_number_(line_number)
+            : ref_counted(retain_count), file_(file), line_number_(line_number)
             {
             }
 
@@ -67,18 +65,6 @@ namespace definition
 
             source_code_location_impl(source_code_location_impl&&) = default;
             source_code_location_impl& operator=(source_code_location_impl&&) = default;
-
-            static source_code_location_impl* undefined()
-            {
-                static source_code_location_impl undef(
-                    otf2::reference<source_code_location>::undefined(), string::undefined(), 0, 1);
-                return &undef;
-            }
-
-            reference<source_code_location> ref() const
-            {
-                return ref_;
-            }
 
             const otf2::definition::string& file() const
             {
@@ -91,12 +77,11 @@ namespace definition
             }
 
         private:
-            reference<source_code_location> ref_;
             otf2::definition::string file_;
             std::uint32_t line_number_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_SOURCE_CODE_LOCATION_HPP

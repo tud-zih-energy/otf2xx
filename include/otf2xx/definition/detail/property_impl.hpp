@@ -35,10 +35,9 @@
 #ifndef INCLUDE_OTF2XX_DEFINITIONS_DETAIL_PROPERTY_HPP
 #define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_PROPERTY_HPP
 
+#include <otf2xx/attribute_value.hpp>
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
-#include <otf2xx/attribute_value.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -68,7 +67,7 @@ namespace definition
 
             property_impl(const Definition& def, const otf2::definition::string& name,
                           const otf2::attribute_value& value, std::int64_t retain_count = 0)
-                    : ref_counted(retain_count), def_(def), name_(name), value_(value)
+            : ref_counted(retain_count), def_(def), name_(name), value_(value)
             {
             }
 
@@ -78,13 +77,6 @@ namespace definition
 
             property_impl(property_impl&&) = default;
             property_impl& operator=(property_impl&&) = default;
-
-            static property_impl* undefined()
-            {
-                static property_impl undef(Definition::undefined(), string::undefined(),
-                                           otf2::attribute_value());
-                return &undef;
-            }
 
             const otf2::definition::string& name() const
             {
@@ -106,18 +98,13 @@ namespace definition
                 return def_;
             }
 
-            otf2::reference<property<Definition>> ref() const
-            {
-                return otf2::reference<property<Definition>>::undefined();
-            }
-
         private:
             Definition def_;
             otf2::definition::string name_;
             otf2::attribute_value value_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_PROPERTY_HPP

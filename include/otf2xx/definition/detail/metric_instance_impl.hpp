@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -63,47 +62,43 @@ namespace definition
             typedef otf2::common::metric_scope metric_scope;
             typedef otf2::common::metric_occurence metric_occurence;
 
-            metric_instance_impl(reference<detail::metric_base> ref,
-                                 const otf2::definition::metric_class& metric_class,
+            metric_instance_impl(const otf2::definition::metric_class& metric_class,
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::location& scope,
                                  std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class),
-              recorder_(recorder), location_scope_(scope), location_group_scope_(),
-              system_tree_node_scope_(), group_scope_()
+            : ref_counted(retain_count), metric_class_(metric_class), recorder_(recorder),
+              location_scope_(scope), location_group_scope_(), system_tree_node_scope_(),
+              group_scope_()
             {
             }
 
-            metric_instance_impl(reference<detail::metric_base> ref,
-                                 const otf2::definition::metric_class& metric_class,
+            metric_instance_impl(const otf2::definition::metric_class& metric_class,
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::location_group& scope,
                                  std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class),
-              recorder_(recorder), location_scope_(), location_group_scope_(scope),
-              system_tree_node_scope_(), group_scope_()
+            : ref_counted(retain_count), metric_class_(metric_class), recorder_(recorder),
+              location_scope_(), location_group_scope_(scope), system_tree_node_scope_(),
+              group_scope_()
             {
             }
 
-            metric_instance_impl(reference<detail::metric_base> ref,
-                                 const otf2::definition::metric_class& metric_class,
+            metric_instance_impl(const otf2::definition::metric_class& metric_class,
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::system_tree_node& scope,
                                  std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class),
-              recorder_(recorder), location_scope_(), location_group_scope_(),
-              system_tree_node_scope_(scope), group_scope_()
+            : ref_counted(retain_count), metric_class_(metric_class), recorder_(recorder),
+              location_scope_(), location_group_scope_(), system_tree_node_scope_(scope),
+              group_scope_()
             {
             }
 
-            metric_instance_impl(reference<detail::metric_base> ref,
-                                 const otf2::definition::metric_class& metric_class,
+            metric_instance_impl(const otf2::definition::metric_class& metric_class,
                                  const otf2::definition::location& recorder,
                                  const otf2::definition::locations_group& scope,
                                  std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), metric_class_(metric_class),
-              recorder_(recorder), location_scope_(), location_group_scope_(),
-              system_tree_node_scope_(), group_scope_(scope)
+            : ref_counted(retain_count), metric_class_(metric_class), recorder_(recorder),
+              location_scope_(), location_group_scope_(), system_tree_node_scope_(),
+              group_scope_(scope)
             {
             }
 
@@ -113,20 +108,6 @@ namespace definition
 
             metric_instance_impl(metric_instance_impl&&) = default;
             metric_instance_impl& operator=(metric_instance_impl&&) = default;
-
-            static metric_instance_impl* undefined()
-            {
-                static metric_instance_impl undef(otf2::reference<metric_instance>::undefined(),
-                                                  otf2::definition::metric_class::undefined(),
-                                                  otf2::definition::location::undefined(),
-                                                  otf2::definition::location::undefined(), 1);
-                return &undef;
-            }
-
-            otf2::reference<metric_base> ref() const
-            {
-                return ref_;
-            }
 
             metric_occurence occurence() const
             {
@@ -183,8 +164,6 @@ namespace definition
             }
 
         private:
-            reference<metric_base> ref_;
-
             otf2::definition::metric_class metric_class_;
             otf2::definition::location recorder_;
 

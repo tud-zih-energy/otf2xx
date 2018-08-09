@@ -38,7 +38,6 @@
 #include <otf2xx/common.hpp>
 #include <otf2xx/exception.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -132,8 +131,8 @@ namespace definition
             mapping_type_type mapping_type_;
             std::unique_ptr<id_map_repr_type, OTF2_IdMap_deleter> id_map_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_MAPPING_TABLE_HPP

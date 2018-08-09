@@ -57,26 +57,29 @@ namespace definition
 
         class io_handle_impl : public ref_counted
         {
+            using parent_ref_type = otf2::reference<io_handle>;
+
         public:
             using io_handle_flag_type = otf2::common::io_handle_flag_type;
 
-            io_handle_impl(otf2::reference<io_handle> ref, const otf2::definition::string& name,
+            io_handle_impl(const otf2::definition::string& name,
                            const otf2::definition::io_file& file,
                            const otf2::definition::io_paradigm& paradigm,
                            io_handle_flag_type handle_flag, const otf2::definition::comm& comm,
-                           io_handle_impl* parent, int retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), file_(file), paradigm_(paradigm),
-              io_handle_flag_(handle_flag), comm_(comm), parent_(parent)
+                           io_handle_impl* parent, parent_ref_type pref, int retain_count = 0)
+            : ref_counted(retain_count), name_(name), file_(file), paradigm_(paradigm),
+              io_handle_flag_(handle_flag), comm_(comm), parent_(parent), pref_(pref)
             {
             }
 
-            io_handle_impl(otf2::reference<io_handle> ref, const otf2::definition::string& name,
+            io_handle_impl(const otf2::definition::string& name,
                            const otf2::definition::io_file& file,
                            const otf2::definition::io_paradigm& paradigm,
                            io_handle_flag_type handle_flag, const otf2::definition::comm& comm,
                            int retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), file_(file), paradigm_(paradigm),
-              io_handle_flag_(handle_flag), comm_(comm), parent_(nullptr)
+            : ref_counted(retain_count), name_(name), file_(file), paradigm_(paradigm),
+              io_handle_flag_(handle_flag), comm_(comm), parent_(nullptr),
+              pref_(parent_ref_type::undefined())
             {
             }
 
@@ -86,22 +89,6 @@ namespace definition
 
             io_handle_impl(io_handle_impl&&) = default;
             io_handle_impl& operator=(io_handle_impl&&) = default;
-
-            static io_handle_impl* undefined()
-            {
-                static io_handle_impl undef(
-                    otf2::reference<io_handle>::undefined(), otf2::definition::string::undefined(),
-                    otf2::definition::io_file::undefined(),
-                    otf2::definition::io_paradigm::undefined(), io_handle_flag_type::none,
-                    otf2::definition::comm::undefined());
-
-                return &undef;
-            }
-
-            otf2::reference<io_handle> ref() const
-            {
-                return ref_;
-            }
 
             const otf2::definition::string& name() const
             {
@@ -133,27 +120,27 @@ namespace definition
                 return parent_.get() != nullptr;
             }
 
-            io_handle_impl* parent() const
+            auto parent() const
             {
                 if (!has_parent())
                 {
                     make_exception("The io handle '", name().str(), "' hasn't got a parent.");
                 }
 
-                return parent_.get();
+                return std::make_pair(parent_.get(), pref_);
             }
 
         private:
-            otf2::reference<io_handle> ref_;
             otf2::definition::string name_;
             otf2::definition::io_file file_;
             otf2::definition::io_paradigm paradigm_;
             io_handle_flag_type io_handle_flag_;
             otf2::definition::comm comm_;
             otf2::intrusive_ptr<io_handle_impl> parent_;
+            parent_ref_type pref_;
         };
-    }
-}
-} // naespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_HANDLE_HPP

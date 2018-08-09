@@ -35,8 +35,6 @@
 #ifndef INCLUDE_OTF2XX_DEFINITIONS_DETAIL_STRING_HPP
 #define INCLUDE_OTF2XX_DEFINITIONS_DETAIL_STRING_HPP
 
-#include <otf2xx/reference.hpp>
-
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
 #include <string>
@@ -51,9 +49,8 @@ namespace definition
         class string_impl : public ref_counted
         {
         public:
-            string_impl(otf2::reference<string> ref, const std::string& str,
-                        std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), str_(str)
+            string_impl(const std::string& str, std::int64_t retain_count = 0)
+            : ref_counted(retain_count), str_(str)
             {
             }
 
@@ -64,28 +61,16 @@ namespace definition
             string_impl(string_impl&&) = default;
             string_impl& operator=(string_impl&&) = default;
 
-            static string_impl* undefined()
-            {
-                static string_impl undef(otf2::reference<string>::undefined(), std::string(""), 1);
-                return &undef;
-            }
-
-            otf2::reference<string> ref() const
-            {
-                return ref_;
-            }
-
             const std::string& str() const
             {
                 return str_;
             }
 
         private:
-            otf2::reference<string> ref_;
             std::string str_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_STRING_HPP

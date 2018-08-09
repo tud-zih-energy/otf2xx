@@ -42,7 +42,7 @@
 #include <otf2xx/definition/string.hpp>
 
 #include <otf2xx/definition/detail/attribute_impl.hpp>
-#include <otf2xx/definition/detail/base.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 #include <memory>
 
@@ -54,17 +54,17 @@ namespace definition
     /**
      * \brief class for representing a attribute definition
      */
-    class attribute : public detail::base<attribute, detail::attribute_impl>
+    class attribute : public detail::referable_base<attribute, detail::attribute_impl>
     {
-        using base = detail::base<attribute, detail::attribute_impl>;
+        using base = detail::referable_base<attribute, detail::attribute_impl>;
         using base::base;
 
     public:
         typedef typename impl_type::attribute_type attribute_type;
 
-        attribute(otf2::reference<attribute> ref, const otf2::definition::string& name,
+        attribute(reference_type ref, const otf2::definition::string& name,
                   const otf2::definition::string& description, attribute_type type)
-        : base(new impl_type(ref, name, description, type))
+        : base(ref, new impl_type(name, description, type))
         {
         }
 

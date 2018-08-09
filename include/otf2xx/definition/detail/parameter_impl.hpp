@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -55,9 +54,9 @@ namespace definition
         public:
             typedef otf2::common::parameter_type parameter_type;
 
-            parameter_impl(otf2::reference<parameter> ref, const otf2::definition::string& name,
-                           parameter_type type, std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), type_(type)
+            parameter_impl(const otf2::definition::string& name, parameter_type type,
+                           std::int64_t retain_count = 0)
+            : ref_counted(retain_count), name_(name), type_(type)
             {
             }
 
@@ -67,13 +66,6 @@ namespace definition
 
             parameter_impl(parameter_impl&&) = default;
             parameter_impl& operator=(parameter_impl&&) = default;
-
-            static parameter_impl* undefined()
-            {
-                static parameter_impl undef(otf2::reference<parameter>::undefined(),
-                                            string::undefined(), parameter_type::int64, 1);
-                return &undef;
-            }
 
             const otf2::definition::string& name() const
             {
@@ -85,18 +77,12 @@ namespace definition
                 return type_;
             }
 
-            otf2::reference<parameter> ref() const
-            {
-                return ref_;
-            }
-
         private:
-            otf2::reference<parameter> ref_;
             otf2::definition::string name_;
             parameter_type type_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_PARAMETER_HPP

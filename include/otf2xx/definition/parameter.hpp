@@ -41,8 +41,8 @@
 
 #include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/parameter_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 namespace otf2
 {
@@ -52,16 +52,16 @@ namespace definition
     /**
      * \brief class for representing parameter definitions
      */
-    class parameter : public detail::base<parameter, detail::parameter_impl>
+    class parameter : public detail::referable_base<parameter, detail::parameter_impl>
     {
-        using base = detail::base<parameter, detail::parameter_impl>;
+        using base = detail::referable_base<parameter, detail::parameter_impl>;
         using base::base;
 
     public:
         typedef impl_type::parameter_type parameter_type;
 
-        parameter(otf2::reference<parameter> ref, string name, parameter_type type)
-        : base(new impl_type(ref, name, type))
+        parameter(reference_type ref, string name, parameter_type type)
+        : base(ref, new impl_type(name, type))
         {
         }
 

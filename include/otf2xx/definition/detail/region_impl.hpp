@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -57,13 +56,13 @@ namespace definition
             typedef otf2::common::paradigm_type paradigm_type;
             typedef otf2::common::flags_type flags_type;
 
-            region_impl(otf2::reference<region> ref, const otf2::definition::string& name,
+            region_impl(const otf2::definition::string& name,
                         const otf2::definition::string& canonical_name,
                         const otf2::definition::string& description, role_type role,
                         paradigm_type paradigm, flags_type flags,
                         const otf2::definition::string& source_file, uint32_t begin_line,
                         uint32_t end_line, std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), canonical_name_(canonical_name),
+            : ref_counted(retain_count), name_(name), canonical_name_(canonical_name),
               description_(description), role_(role), paradigm_(paradigm), flags_(flags),
               source_file_(source_file), begin_line_(begin_line), end_line_(end_line)
             {
@@ -75,21 +74,6 @@ namespace definition
 
             region_impl(region_impl&&) = default;
             region_impl& operator=(region_impl&&) = default;
-
-            static region_impl* undefined()
-            {
-                static region_impl undef(reference<region>::undefined(), string::undefined(),
-                                         string::undefined(), string::undefined(),
-                                         role_type::unknown, paradigm_type::unknown,
-                                         flags_type::none, string::undefined(), 0, 0, 1);
-                return &undef;
-            }
-
-        public:
-            otf2::reference<region> ref() const
-            {
-                return ref_;
-            }
 
             const otf2::definition::string& name() const
             {
@@ -137,7 +121,6 @@ namespace definition
             }
 
         private:
-            otf2::reference<region> ref_;
             otf2::definition::string name_;
             otf2::definition::string canonical_name_;
             otf2::definition::string description_;
@@ -148,8 +131,8 @@ namespace definition
             uint32_t begin_line_;
             uint32_t end_line_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_REGION_HPP

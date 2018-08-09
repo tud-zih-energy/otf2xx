@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -62,10 +61,9 @@ namespace definition
 
             typedef std::vector<otf2::definition::metric_member>::const_iterator iterator;
 
-            metric_class_impl(reference<metric_base> ref, metric_occurence occurence,
-                              recorder_kind_type recorder_kind, std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), occurence_(occurence),
-              recorder_kind_(recorder_kind)
+            metric_class_impl(metric_occurence occurence, recorder_kind_type recorder_kind,
+                              std::int64_t retain_count = 0)
+            : ref_counted(retain_count), occurence_(occurence), recorder_kind_(recorder_kind)
             {
             }
 
@@ -75,19 +73,6 @@ namespace definition
 
             metric_class_impl(metric_class_impl&&) = default;
             metric_class_impl& operator=(metric_class_impl&&) = default;
-
-            static metric_class_impl* undefined()
-            {
-                static metric_class_impl undef(otf2::reference<metric_class>::undefined(),
-                                               metric_occurence::async, recorder_kind_type::unknown,
-                                               1);
-                return &undef;
-            }
-
-            otf2::reference<metric_base> ref() const
-            {
-                return ref_;
-            }
 
             std::size_t size() const
             {
@@ -130,7 +115,6 @@ namespace definition
             }
 
         private:
-            reference<metric_base> ref_;
             metric_occurence occurence_;
             recorder_kind_type recorder_kind_;
             std::vector<otf2::definition::metric_member> members_;

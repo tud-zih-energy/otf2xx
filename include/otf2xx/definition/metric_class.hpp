@@ -38,13 +38,21 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/metric_class_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 namespace otf2
 {
 namespace definition
 {
+    namespace detail
+    {
+        class metric_base
+        {
+        public:
+            using reference_type = otf2::reference<metric_base, metric_base>;
+        };
+    } // namespace detail
 
     /**
      * \brief class for representing metric class definitions
@@ -55,9 +63,11 @@ namespace definition
      * and recorder of this metric is implicitly given by the location,
      * where the referencing metric event occures.
      */
-    class metric_class : public detail::base<metric_class, detail::metric_class_impl>
+    class metric_class
+    : public detail::referable_base<metric_class, detail::metric_class_impl, detail::metric_base>
     {
-        using base = detail::base<metric_class, detail::metric_class_impl>;
+        using base =
+            detail::referable_base<metric_class, detail::metric_class_impl, detail::metric_base>;
         using base::base;
 
     public:
@@ -66,9 +76,9 @@ namespace definition
 
         typedef impl_type::iterator iterator;
 
-        metric_class(reference<detail::metric_base> ref, metric_occurence occurence,
+        metric_class(reference_type ref, metric_occurence occurence,
                      recorder_kind_type recorder_kind)
-        : base(new impl_type(ref, occurence, recorder_kind))
+        : base(ref, new impl_type(occurence, recorder_kind))
         {
         }
 

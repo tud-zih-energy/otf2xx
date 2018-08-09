@@ -38,8 +38,8 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/marker_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 namespace otf2
 {
@@ -49,17 +49,17 @@ namespace definition
     /**
      * \brief class for representing marker definitions
      */
-    class marker : public detail::base<marker, detail::marker_impl>
+    class marker : public detail::referable_base<marker, detail::marker_impl>
     {
-        using base = detail::base<marker, detail::marker_impl>;
+        using base = detail::referable_base<marker, detail::marker_impl>;
         using base::base;
 
     public:
         using severity_type = impl_type::severity_type;
 
-        marker(otf2::reference<otf2::definition::marker> ref, const std::string& group,
-               const std::string& category, severity_type severity)
-        : base(new impl_type(ref, group, category, severity))
+        marker(reference_type ref, const std::string& group, const std::string& category,
+               severity_type severity)
+        : base(ref, new impl_type(group, category, severity))
         {
         }
 

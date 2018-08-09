@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -56,11 +55,10 @@ namespace definition
         public:
             typedef otf2::common::location_group_type location_group_type;
 
-            location_group_impl(reference<location_group> ref, const otf2::definition::string& name,
-                                location_group_type type,
+            location_group_impl(const otf2::definition::string& name, location_group_type type,
                                 const otf2::definition::system_tree_node& stm,
                                 std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), type_(type), stm_(stm)
+            : ref_counted(retain_count), name_(name), type_(type), stm_(stm)
             {
             }
 
@@ -70,19 +68,6 @@ namespace definition
 
             location_group_impl(location_group_impl&&) = default;
             location_group_impl& operator=(location_group_impl&&) = default;
-
-            static location_group_impl* undefined()
-            {
-                static location_group_impl undef(reference<location_group>::undefined(),
-                                                 string::undefined(), location_group_type::unknown,
-                                                 system_tree_node::undefined(), 1);
-                return &undef;
-            }
-
-            reference<location_group> ref() const
-            {
-                return ref_;
-            }
 
             const otf2::definition::string& name() const
             {
@@ -105,13 +90,12 @@ namespace definition
             }
 
         private:
-            reference<location_group> ref_;
             otf2::definition::string name_;
             location_group_type type_;
             otf2::definition::system_tree_node stm_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_LOCATION_GROUP_HPP

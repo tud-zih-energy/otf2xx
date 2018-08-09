@@ -38,7 +38,6 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/mapping_table_impl.hpp>
 
 namespace otf2

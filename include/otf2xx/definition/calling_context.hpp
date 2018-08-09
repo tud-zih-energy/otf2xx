@@ -42,8 +42,8 @@
 #include <otf2xx/definition/region.hpp>
 #include <otf2xx/definition/source_code_location.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/calling_context_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 #include <memory>
 
@@ -55,9 +55,10 @@ namespace definition
     /**
      * \brief class for representing a attribute definition
      */
-    class calling_context : public detail::base<calling_context, detail::calling_context_impl>
+    class calling_context
+    : public detail::referable_base<calling_context, detail::calling_context_impl>
     {
-        using base = detail::base<calling_context, detail::calling_context_impl>;
+        using base = detail::referable_base<calling_context, detail::calling_context_impl>;
         using base::base;
 
     public:
@@ -65,14 +66,14 @@ namespace definition
                         const otf2::definition::region& region,
                         const otf2::definition::source_code_location& source_code_location,
                         const otf2::definition::calling_context& parent)
-        : base(new impl_type(ref, region, source_code_location, parent.get()))
+        : base(ref, new impl_type(region, source_code_location, parent.get(), parent.ref()))
         {
         }
 
         calling_context(otf2::reference<calling_context> ref,
                         const otf2::definition::region& region,
                         const otf2::definition::source_code_location& source_code_location)
-        : base(new impl_type(ref, region, source_code_location))
+        : base(ref, new impl_type(region, source_code_location))
         {
         }
 
@@ -116,7 +117,8 @@ namespace definition
         otf2::definition::calling_context parent() const
         {
             assert(this->is_valid());
-            return data_->parent();
+            auto p = data_->parent();
+            return { p.second, p.first };
         }
     };
 } // namespace definition

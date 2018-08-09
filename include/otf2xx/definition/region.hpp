@@ -41,7 +41,7 @@
 
 #include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 #include <otf2xx/definition/detail/region_impl.hpp>
 
 namespace otf2
@@ -52,9 +52,9 @@ namespace definition
     /**
      * \brief class for represening a region definition
      */
-    class region : public detail::base<region, detail::region_impl>
+    class region : public detail::referable_base<region, detail::region_impl>
     {
-        using base = detail::base<region, detail::region_impl>;
+        using base = detail::referable_base<region, detail::region_impl>;
         using base::base;
 
     public:
@@ -62,13 +62,13 @@ namespace definition
         typedef typename impl_type::paradigm_type paradigm_type;
         typedef typename impl_type::flags_type flags_type;
 
-        region(otf2::reference<region> ref, const otf2::definition::string& name,
+        region(reference_type ref, const otf2::definition::string& name,
                const otf2::definition::string& canonical_name,
                const otf2::definition::string& description, role_type role, paradigm_type paradigm,
                flags_type flags, const otf2::definition::string& source_file, uint32_t begin_line,
                uint32_t end_line)
-        : base(new impl_type(ref, name, canonical_name, description, role, paradigm, flags,
-                             source_file, begin_line, end_line))
+        : base(ref, new impl_type(name, canonical_name, description, role, paradigm, flags,
+                                  source_file, begin_line, end_line))
         {
         }
 

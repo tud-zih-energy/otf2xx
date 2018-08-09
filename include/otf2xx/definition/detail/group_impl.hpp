@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/definition/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -70,11 +69,9 @@ namespace definition
             typedef MemberType value_type;
 
         public:
-            group_impl(otf2::reference<detail::group_base> ref,
-                       const otf2::definition::string& name, paradigm_type paradigm,
+            group_impl(const otf2::definition::string& name, paradigm_type paradigm,
                        group_flag_type group_flag, std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), paradigm_(paradigm),
-              group_flag_(group_flag)
+            : ref_counted(retain_count), name_(name), paradigm_(paradigm), group_flag_(group_flag)
             {
             }
 
@@ -84,19 +81,6 @@ namespace definition
 
             group_impl(group_impl&&) = default;
             group_impl& operator=(group_impl&&) = default;
-
-            static group_impl* undefined()
-            {
-                static group_impl undef(otf2::reference<detail::group_base>::undefined(),
-                                        string::undefined(), paradigm_type::unknown,
-                                        group_flag_type::none, 1);
-                return &undef;
-            }
-
-            otf2::reference<detail::group_base> ref() const
-            {
-                return ref_;
-            }
 
             otf2::definition::string& name()
             {
@@ -151,14 +135,13 @@ namespace definition
             }
 
         private:
-            otf2::reference<detail::group_base> ref_;
             otf2::definition::string name_;
             members_type members_;
             paradigm_type paradigm_;
             group_flag_type group_flag_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_GROUP_HPP
