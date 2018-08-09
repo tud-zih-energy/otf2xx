@@ -65,8 +65,8 @@ namespace definition
         class calling_context_impl;
         class interrupt_generator_impl;
 
+        class io_file_base;
         class io_file_impl;
-        class io_directory_impl;
         class io_handle_impl;
         class io_paradigm_impl;
         class io_pre_created_handle_state_impl;
@@ -84,7 +84,7 @@ namespace definition
 
         class marker_impl;
 
-        template <typename Definition>
+        template <typename Definition, typename = void>
         class weak_ref;
     } // namespace detail
 
