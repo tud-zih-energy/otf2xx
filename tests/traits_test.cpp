@@ -36,6 +36,7 @@
 #include <otf2xx/traits/reference.hpp>
 
 #include <otf2/OTF2_GeneralDefinitions.h>
+#include <otf2/OTF2_Marker.h>
 
 /**
  * @brief: Checks the OTF2 and OTF2xx types to be equal This test is VERY!
@@ -95,3 +96,6 @@
                          OTF2_MetricRef>::value, "type mismatch");
     static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::metric_instance>::type,
                          OTF2_MetricRef>::value, "type mismatch");
+
+    static_assert(std::is_same<otf2::traits::reference_type<otf2::definition::marker>::type,
+                         OTF2_MarkerRef>::value, "type mismatch");
