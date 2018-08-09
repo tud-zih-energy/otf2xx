@@ -62,7 +62,8 @@ namespace definition
             using base = otf2::definition::detail::base<Def, Impl>;
 
         public:
-            using reference_type = otf2::reference<Def, Tag>;
+            using reference_type = otf2::reference_impl<Def, Tag>;
+            using tag_type = Tag;
 
             referable_base() : base(), ref_(reference_type::undefined())
             {

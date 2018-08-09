@@ -54,7 +54,7 @@ namespace definition
 
         class system_tree_node_impl : public ref_counted
         {
-            using parent_ref_type = otf2::reference<system_tree_node>;
+            using parent_ref_type = otf2::reference_impl<system_tree_node, system_tree_node>;
 
         public:
             system_tree_node_impl(const otf2::definition::string& name,

@@ -62,8 +62,8 @@ namespace otf2
  *
  * \tparam Type Used to seperate address spaces for different definitions
  */
-template <typename Type, typename Tag = Type>
-class reference
+template <typename Type, typename Tag>
+class reference_impl
 {
 public:
     /**
@@ -75,18 +75,18 @@ public:
 
     using tag_type = Tag;
 
-    reference() = delete;
+    reference_impl() = delete;
 
     /**
      * @brief construct by value
      * @param ref the number
      */
-    reference(ref_type ref) : handle(ref)
+    reference_impl(ref_type ref) : handle(ref)
     {
     }
 
     template <typename Type2>
-    reference(reference<Type2, Tag> ref) : handle(ref)
+    reference_impl(reference_impl<Type2, Tag> ref) : handle(ref)
     {
     }
 
@@ -99,7 +99,7 @@ public:
         return handle;
     }
 
-    ~reference() = default;
+    ~reference_impl() = default;
 
     /**
      * @brief returns if the number equals to OTF2_UNDEFINED_UINT64
@@ -135,8 +135,11 @@ protected:
     ref_type handle;
 };
 
+template <typename Type>
+using reference = reference_impl<Type, typename Type::reference_type::tag_type>;
+
 template <typename Type, typename Tag>
-inline std::ostream& operator<<(std::ostream& s, reference<Type, Tag> ref)
+inline std::ostream& operator<<(std::ostream& s, reference_impl<Type, Tag> ref)
 {
     return s << ref.get();
 }

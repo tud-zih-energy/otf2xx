@@ -156,5 +156,10 @@ TEST_CASE("Metric foo test")
         new_ref = ref_gen.next<otf2::definition::metric_instance>();
 
         REQUIRE(new_ref == 1);
+
+        otf2::reference<otf2::definition::metric_class> mref =
+            ref_gen.next<otf2::definition::metric_class>();
+
+        REQUIRE(mref == 2);
     }
 }

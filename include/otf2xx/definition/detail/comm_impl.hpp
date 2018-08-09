@@ -57,7 +57,7 @@ namespace definition
 
         class comm_impl : public ref_counted
         {
-            using parent_ref_type = otf2::reference<comm>;
+            using parent_ref_type = otf2::reference_impl<comm, comm>;
 
         public:
             comm_impl(const otf2::definition::string& name,

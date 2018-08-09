@@ -38,9 +38,6 @@
 namespace otf2
 {
 
-template <typename T, typename Tag>
-class reference;
-
 template <typename Definition>
 class reference_generator;
 

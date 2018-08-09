@@ -54,7 +54,7 @@ namespace definition
         class io_file_base
         {
         public:
-            using reference_type = otf2::reference<io_file_base, io_file_base>;
+            using reference_type = otf2::reference_impl<io_file_base, io_file_base>;
         };
     } // namespace detail
 

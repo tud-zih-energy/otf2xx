@@ -119,9 +119,9 @@ class trace_reference_generator
     template <typename Definition>
     struct make_generator
     {
-        using type =
-            reference_generator<otf2::reference<typename Definition::reference_type::tag_type,
-                                                typename Definition::reference_type::tag_type>>;
+        using type = reference_generator<
+            otf2::reference_impl<typename Definition::reference_type::tag_type,
+                                 typename Definition::reference_type::tag_type>>;
     };
 
     using generators =

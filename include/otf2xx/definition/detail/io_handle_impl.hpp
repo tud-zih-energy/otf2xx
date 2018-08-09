@@ -57,7 +57,7 @@ namespace definition
 
         class io_handle_impl : public ref_counted
         {
-            using parent_ref_type = otf2::reference<io_handle>;
+            using parent_ref_type = otf2::reference_impl<io_handle, io_handle>;
 
         public:
             using io_handle_flag_type = otf2::common::io_handle_flag_type;

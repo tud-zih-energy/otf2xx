@@ -55,7 +55,7 @@ namespace definition
         class group_base
         {
         public:
-            using reference_type = otf2::reference<detail::group_base, detail::group_base>;
+            using reference_type = otf2::reference_impl<detail::group_base, detail::group_base>;
         };
     } // namespace detail
 
