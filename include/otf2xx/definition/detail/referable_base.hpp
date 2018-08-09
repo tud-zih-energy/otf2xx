@@ -64,7 +64,7 @@ namespace definition
         public:
             using reference_type = otf2::reference<Def, Tag>;
 
-            referable_base() : base(nullptr), ref_(reference_type::undefined())
+            referable_base() : base(), ref_(reference_type::undefined())
             {
             }
 
