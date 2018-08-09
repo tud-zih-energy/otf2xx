@@ -49,6 +49,8 @@
 #include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/traits/reference.hpp>
 
+#include <iostream>
+
 namespace otf2
 {
 
@@ -60,7 +62,7 @@ namespace otf2
  *
  * \tparam Type Used to seperate address spaces for different definitions
  */
-template <typename Type>
+template <typename Type, typename Tag = Type>
 class reference
 {
 public:
@@ -69,12 +71,9 @@ public:
      *
      * Mostly uint64_t or uint32_t
      */
-    using ref_type = typename traits::reference_type<Type>::type;
+    using ref_type = typename traits::reference_type<Tag>::type;
 
-    /**
-     * @brief tag_type used to distinguish this id space
-     */
-    using tag_type = Type;
+    using tag_type = Tag;
 
     reference() = delete;
 
@@ -83,6 +82,11 @@ public:
      * @param ref the number
      */
     reference(ref_type ref) : handle(ref)
+    {
+    }
+
+    template <typename Type2>
+    reference(reference<Type2, Tag> ref) : handle(ref)
     {
     }
 
@@ -131,53 +135,11 @@ protected:
     ref_type handle;
 };
 
-template <typename T, otf2::common::group_type Type>
-class reference<definition::group<T, Type>> : public reference<definition::detail::group_base>
+template <typename Type, typename Tag>
+inline std::ostream& operator<<(std::ostream& s, reference<Type, Tag> ref)
 {
-public:
-    reference(const reference<definition::detail::group_base>& base)
-    : reference<definition::detail::group_base>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::metric_class> : public reference<definition::detail::metric_base>
-{
-public:
-    reference(const reference<definition::detail::metric_base>& base)
-    : reference<definition::detail::metric_base>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::metric_instance> : public reference<definition::detail::metric_base>
-{
-public:
-    reference(const reference<definition::detail::metric_base>& base)
-    : reference<definition::detail::metric_base>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::io_directory> : public reference<definition::io_file>
-{
-public:
-    reference(const reference<definition::io_file>& base) : reference<definition::io_file>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::io_regular_file> : public reference<definition::io_file>
-{
-public:
-    reference(const reference<definition::io_file>& base) : reference<definition::io_file>(base)
-    {
-    }
-};
+    return s << ref.get();
+}
 
 } // namespace otf2
 

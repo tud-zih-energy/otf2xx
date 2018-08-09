@@ -81,7 +81,7 @@ public:
     template <typename Definition>
     void register_definition(const Definition& def)
     {
-        static_assert(std::is_convertible<otf2::reference<Definition>, RefType>::value,
+        static_assert(std::is_convertible<typename Definition::reference_type, RefType>::value,
                       "Trying to register a definition with a different id space");
 
         register_reference(def.ref());
@@ -119,8 +119,9 @@ class trace_reference_generator
     template <typename Definition>
     struct make_generator
     {
-        using tag_type = traits::reference_tag_t<Definition>;
-        using type = reference_generator<reference<tag_type>>;
+        using type =
+            reference_generator<otf2::reference<typename Definition::reference_type::tag_type,
+                                                typename Definition::reference_type::tag_type>>;
     };
 
     using generators =
@@ -150,7 +151,7 @@ public:
     }
 
     template <typename Definition>
-    otf2::reference<Definition> next()
+    typename Definition::reference_type next()
     {
         return get_generator<Definition>().next();
     }
