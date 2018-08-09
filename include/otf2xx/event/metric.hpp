@@ -197,7 +197,7 @@ namespace event
 
         void metric_class(const otf2::definition::metric_class& mc)
         {
-            metric_instance_ = nullptr;
+            metric_instance_ = otf2::definition::metric_instance();
             metric_class_ = mc;
         }
 
@@ -213,7 +213,7 @@ namespace event
 
         void metric_instance(const otf2::definition::metric_instance& mi)
         {
-            metric_class_ = nullptr;
+            metric_class_ = otf2::definition::metric_class();
             metric_instance_ = mi;
         }
 
