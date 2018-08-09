@@ -94,7 +94,7 @@ TEST_CASE("test io reference generator")
     otf2::definition::system_tree_node sys_node{ 1, str, str };
     otf2::definition::io_regular_file file{ 1, str, sys_node };
     otf2::definition::io_directory dir{ 2, str, sys_node };
-    using ref = otf2::reference<otf2::definition::io_file>;
+    using ref = otf2::reference<otf2::definition::detail::io_file_base>;
     std::set<ref> refs;
     SECTION("Directory ref must be unique after adding file ref")
     {
@@ -138,5 +138,23 @@ TEST_CASE("test io reference generator")
             REQUIRE_FALSE(contains(refs, ref(new_ref)));
             refs.insert(new_ref);
         }
+    }
+}
+
+TEST_CASE("Metric foo test")
+{
+    otf2::trace_reference_generator ref_gen;
+
+    // using ref = otf2::reference<otf2::definition::detail::metric_base>;
+
+    SECTION("metric instance and classes can get a ref")
+    {
+        auto new_ref = ref_gen.next<otf2::definition::metric_class>();
+
+        REQUIRE(new_ref == 0);
+
+        new_ref = ref_gen.next<otf2::definition::metric_instance>();
+
+        REQUIRE(new_ref == 1);
     }
 }
