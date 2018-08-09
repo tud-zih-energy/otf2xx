@@ -87,7 +87,7 @@ namespace tmp
     template <class Seq, typename F>
     void foreach (Seq&& seq, F && f)
     {
-        using clean_seq = std::remove_reference_t<Seq>;
+        using clean_seq = std::decay_t<Seq>;
         detail::foreach<clean_seq>::apply(std::forward<Seq>(seq), std::forward<F>(f));
     }
 
