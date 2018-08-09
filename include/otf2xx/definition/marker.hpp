@@ -63,6 +63,8 @@ namespace definition
         {
         }
 
+        marker() = default;
+
         /**
          * \brief returns the group of the marker
          */
