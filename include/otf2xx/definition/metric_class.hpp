@@ -50,7 +50,7 @@ namespace definition
         class metric_base
         {
         public:
-            using reference_type = otf2::reference_impl<metric_base, metric_base>;
+            using tag_type = metric_base;
         };
     } // namespace detail
 

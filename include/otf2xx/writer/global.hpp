@@ -488,7 +488,8 @@ namespace writer
         {
             auto iters = std::make_tuple(cs.begin()...);
 
-            using common_ref_type = typename otf2::traits::reference_type_var<Definitions...>::type;
+            using common_ref_type =
+                typename otf2::traits::reference_type_var<typename Definitions::tag_type...>::type;
             constexpr auto max_ref = std::numeric_limits<common_ref_type>::max();
 
             while (otf2::traits::reduce_tuple([](auto& it) { return static_cast<bool>(it); },
