@@ -58,10 +58,9 @@ namespace definition
         };
     } // namespace detail
 
-    class io_file
-    : public detail::referable_base<io_file, detail::io_file_impl, detail::io_file_base>
+    class io_file : public detail::referable_base<detail::io_file_impl>
     {
-        using base = detail::referable_base<io_file, detail::io_file_impl, detail::io_file_base>;
+        using base = detail::referable_base<detail::io_file_impl>;
         using base::base;
 
     public:

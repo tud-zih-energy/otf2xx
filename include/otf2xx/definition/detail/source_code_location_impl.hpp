@@ -53,6 +53,8 @@ namespace definition
         class source_code_location_impl : public ref_counted
         {
         public:
+            using tag_type = source_code_location;
+
             source_code_location_impl(const otf2::definition::string& file,
                                       std::uint32_t line_number, std::int64_t retain_count = 0)
             : ref_counted(retain_count), file_(file), line_number_(line_number)

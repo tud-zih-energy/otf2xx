@@ -69,6 +69,8 @@ namespace definition
             typedef MemberType value_type;
 
         public:
+            using tag_type = group_base;
+
             group_impl(const otf2::definition::string& name, paradigm_type paradigm,
                        group_flag_type group_flag, std::int64_t retain_count = 0)
             : ref_counted(retain_count), name_(name), paradigm_(paradigm), group_flag_(group_flag)

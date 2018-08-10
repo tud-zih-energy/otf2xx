@@ -54,12 +54,16 @@ namespace definition
 
         class system_tree_node_impl : public ref_counted
         {
-            using parent_ref_type = otf2::reference_impl<system_tree_node>;
+        public:
+            using tag_type = system_tree_node;
+
+        private:
+            using reference_type = otf2::reference_impl<tag_type>;
 
         public:
             system_tree_node_impl(const otf2::definition::string& name,
                                   const otf2::definition::string& class_name,
-                                  system_tree_node_impl* parent, parent_ref_type pref,
+                                  system_tree_node_impl* parent, reference_type pref,
                                   std::int64_t retain_count = 0)
             : ref_counted(retain_count), name_(name), class_name_(class_name), parent_(parent),
               pref_(pref)
@@ -70,7 +74,7 @@ namespace definition
                                   const otf2::definition::string& class_name,
                                   std::int64_t retain_count = 0)
             : ref_counted(retain_count), name_(name), class_name_(class_name), parent_(nullptr),
-              pref_(parent_ref_type::undefined())
+              pref_(reference_type::undefined())
             {
             }
 
@@ -116,7 +120,7 @@ namespace definition
             otf2::definition::string name_;
             otf2::definition::string class_name_;
             otf2::intrusive_ptr<system_tree_node_impl> parent_;
-            parent_ref_type pref_;
+            reference_type pref_;
         };
     } // namespace detail
 } // namespace definition

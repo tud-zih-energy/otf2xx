@@ -53,9 +53,9 @@ namespace definition
     /**
      * \brief class for representing location definitions
      */
-    class location : public detail::referable_base<location, detail::location_impl>
+    class location : public detail::referable_base<detail::location_impl>
     {
-        using base = detail::referable_base<location, detail::location_impl>;
+        using base = detail::referable_base<detail::location_impl>;
         using base::base;
 
     public:

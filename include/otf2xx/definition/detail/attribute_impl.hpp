@@ -52,6 +52,8 @@ namespace definition
         class attribute_impl : public ref_counted
         {
         public:
+            using tag_type = attribute;
+
             typedef otf2::common::type attribute_type;
 
             attribute_impl(const otf2::definition::string& name,

@@ -54,10 +54,9 @@ namespace definition
     /**
      * \brief class for representing a attribute definition
      */
-    class interrupt_generator
-    : public detail::referable_base<interrupt_generator, detail::interrupt_generator_impl>
+    class interrupt_generator : public detail::referable_base<detail::interrupt_generator_impl>
     {
-        using base = detail::referable_base<interrupt_generator, detail::interrupt_generator_impl>;
+        using base = detail::referable_base<detail::interrupt_generator_impl>;
         using base::base;
 
     public:

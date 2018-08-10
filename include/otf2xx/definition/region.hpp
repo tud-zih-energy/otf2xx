@@ -52,9 +52,9 @@ namespace definition
     /**
      * \brief class for represening a region definition
      */
-    class region : public detail::referable_base<region, detail::region_impl>
+    class region : public detail::referable_base<detail::region_impl>
     {
-        using base = detail::referable_base<region, detail::region_impl>;
+        using base = detail::referable_base<detail::region_impl>;
         using base::base;
 
     public:

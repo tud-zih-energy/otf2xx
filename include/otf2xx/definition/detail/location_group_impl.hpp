@@ -53,6 +53,8 @@ namespace definition
         class location_group_impl : public ref_counted
         {
         public:
+            using tag_type = location_group;
+
             typedef otf2::common::location_group_type location_group_type;
 
             location_group_impl(const otf2::definition::string& name, location_group_type type,

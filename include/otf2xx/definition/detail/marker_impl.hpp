@@ -52,6 +52,8 @@ namespace definition
         class marker_impl : public ref_counted
         {
         public:
+            using tag_type = marker;
+
             using severity_type = otf2::common::marker_severity_type;
 
             marker_impl(const std::string& group, const std::string& category,

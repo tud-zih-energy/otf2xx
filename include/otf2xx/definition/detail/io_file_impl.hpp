@@ -52,6 +52,8 @@ namespace definition
         class io_file_impl : public ref_counted
         {
         public:
+            using tag_type = io_file_base;
+
             io_file_impl(const otf2::definition::string& name,
                          const otf2::definition::system_tree_node& scope,
                          std::int64_t retain_count = 0)

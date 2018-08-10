@@ -44,10 +44,10 @@ namespace definition
 {
     namespace detail
     {
-        template <typename Def, typename Impl>
+        template <typename Impl>
         class base;
 
-        template <typename Def, typename Impl, typename Tag>
+        template <typename Impl>
         class referable_base;
     } // namespace detail
 } // namespace definition

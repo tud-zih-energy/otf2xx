@@ -57,12 +57,16 @@ namespace definition
 
         class comm_impl : public ref_counted
         {
-            using parent_ref_type = otf2::reference_impl<comm>;
+        public:
+            using tag_type = comm;
+
+        private:
+            using reference_type = otf2::reference_impl<tag_type>;
 
         public:
             comm_impl(const otf2::definition::string& name,
                       const otf2::definition::comm_group& group, comm_impl* parent,
-                      parent_ref_type pref, std::int64_t retain_count = 0)
+                      reference_type pref, std::int64_t retain_count = 0)
             : ref_counted(retain_count), name_(name), group_(group), self_group_(), parent_(parent),
               pref_(pref)
             {
@@ -71,13 +75,13 @@ namespace definition
             comm_impl(const otf2::definition::string& name,
                       const otf2::definition::comm_group& group, std::int64_t retain_count = 0)
             : ref_counted(retain_count), name_(name), group_(group), self_group_(), parent_(),
-              pref_(parent_ref_type::undefined())
+              pref_(reference_type::undefined())
             {
             }
 
             comm_impl(const otf2::definition::string& name,
                       const otf2::definition::comm_self_group& group, comm_impl* parent,
-                      parent_ref_type pref, std::int64_t retain_count = 0)
+                      reference_type pref, std::int64_t retain_count = 0)
             : ref_counted(retain_count), name_(name), group_(), self_group_(group), parent_(parent),
               pref_(pref)
             {
@@ -86,7 +90,7 @@ namespace definition
             comm_impl(const otf2::definition::string& name,
                       const otf2::definition::comm_self_group& group, std::int64_t retain_count = 0)
             : ref_counted(retain_count), name_(name), group_(), self_group_(group), parent_(),
-              pref_(parent_ref_type::undefined())
+              pref_(reference_type::undefined())
             {
             }
 
@@ -145,7 +149,7 @@ namespace definition
             otf2::definition::comm_group group_;
             otf2::definition::comm_self_group self_group_;
             otf2::intrusive_ptr<comm_impl> parent_;
-            parent_ref_type pref_;
+            reference_type pref_;
         };
     } // namespace detail
 } // namespace definition

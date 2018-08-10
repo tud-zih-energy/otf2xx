@@ -54,6 +54,8 @@ namespace definition
         class io_paradigm_impl : public ref_counted
         {
         public:
+            using tag_type = io_paradigm;
+
             using paradigm_class_type = otf2::common::io_paradigm_class_type;
             using paradigm_flag_type = otf2::common::io_paradigm_flag_type;
             using paradigm_property_type = otf2::common::io_paradigm_property_type;

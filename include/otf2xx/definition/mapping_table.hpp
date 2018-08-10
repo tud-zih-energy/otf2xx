@@ -54,9 +54,9 @@ namespace definition
      * and recorder of this metric is implicitly given by the location,
      * where the referencing metric event occures.
      */
-    class mapping_table : public detail::base<mapping_table, detail::mapping_table_impl>
+    class mapping_table : public detail::base<detail::mapping_table_impl>
     {
-        using base = detail::base<mapping_table, detail::mapping_table_impl>;
+        using base = detail::base<detail::mapping_table_impl>;
         using base::base;
 
     public:

@@ -49,12 +49,9 @@ namespace definition
     /**
      * \brief class for representing metric instance definitions
      */
-    class metric_instance
-    : public detail::referable_base<metric_instance, detail::metric_instance_impl,
-                                    detail::metric_base>
+    class metric_instance : public detail::referable_base<detail::metric_instance_impl>
     {
-        using base = detail::referable_base<metric_instance, detail::metric_instance_impl,
-                                            detail::metric_base>;
+        using base = detail::referable_base<detail::metric_instance_impl>;
         using base::base;
 
     public:

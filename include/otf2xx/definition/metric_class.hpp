@@ -63,11 +63,9 @@ namespace definition
      * and recorder of this metric is implicitly given by the location,
      * where the referencing metric event occures.
      */
-    class metric_class
-    : public detail::referable_base<metric_class, detail::metric_class_impl, detail::metric_base>
+    class metric_class : public detail::referable_base<detail::metric_class_impl>
     {
-        using base =
-            detail::referable_base<metric_class, detail::metric_class_impl, detail::metric_base>;
+        using base = detail::referable_base<detail::metric_class_impl>;
         using base::base;
 
     public:

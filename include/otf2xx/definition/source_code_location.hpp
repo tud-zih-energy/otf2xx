@@ -52,11 +52,9 @@ namespace definition
     /**
      * \brief class for representing source_code_location definitions
      */
-    class source_code_location
-    : public detail::referable_base<source_code_location, detail::source_code_location_impl>
+    class source_code_location : public detail::referable_base<detail::source_code_location_impl>
     {
-        using base =
-            detail::referable_base<source_code_location, detail::source_code_location_impl>;
+        using base = detail::referable_base<detail::source_code_location_impl>;
         using base::base;
 
     public:

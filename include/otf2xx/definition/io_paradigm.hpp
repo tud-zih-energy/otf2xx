@@ -49,9 +49,9 @@ namespace otf2
 namespace definition
 {
 
-    class io_paradigm : public detail::referable_base<io_paradigm, detail::io_paradigm_impl>
+    class io_paradigm : public detail::referable_base<detail::io_paradigm_impl>
     {
-        using base = detail::referable_base<io_paradigm, detail::io_paradigm_impl>;
+        using base = detail::referable_base<detail::io_paradigm_impl>;
         using base::base;
 
     public:

@@ -57,7 +57,11 @@ namespace definition
 
         class io_handle_impl : public ref_counted
         {
-            using parent_ref_type = otf2::reference_impl<io_handle>;
+        public:
+            using tag_type = io_handle;
+
+        private:
+            using reference_type = otf2::reference_impl<tag_type>;
 
         public:
             using io_handle_flag_type = otf2::common::io_handle_flag_type;
@@ -66,7 +70,7 @@ namespace definition
                            const otf2::definition::io_file& file,
                            const otf2::definition::io_paradigm& paradigm,
                            io_handle_flag_type handle_flag, const otf2::definition::comm& comm,
-                           io_handle_impl* parent, parent_ref_type pref, int retain_count = 0)
+                           io_handle_impl* parent, reference_type pref, int retain_count = 0)
             : ref_counted(retain_count), name_(name), file_(file), paradigm_(paradigm),
               io_handle_flag_(handle_flag), comm_(comm), parent_(parent), pref_(pref)
             {
@@ -79,7 +83,7 @@ namespace definition
                            int retain_count = 0)
             : ref_counted(retain_count), name_(name), file_(file), paradigm_(paradigm),
               io_handle_flag_(handle_flag), comm_(comm), parent_(nullptr),
-              pref_(parent_ref_type::undefined())
+              pref_(reference_type::undefined())
             {
             }
 
@@ -137,7 +141,7 @@ namespace definition
             io_handle_flag_type io_handle_flag_;
             otf2::definition::comm comm_;
             otf2::intrusive_ptr<io_handle_impl> parent_;
-            parent_ref_type pref_;
+            reference_type pref_;
         };
     } // namespace detail
 } // namespace definition

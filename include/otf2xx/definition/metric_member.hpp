@@ -55,9 +55,9 @@ namespace definition
      * A metric member defines one "channel" of an metric. It defines the value
      * type, name etc.
      */
-    class metric_member : public detail::referable_base<metric_member, detail::metric_member_impl>
+    class metric_member : public detail::referable_base<detail::metric_member_impl>
     {
-        using base = detail::referable_base<metric_member, detail::metric_member_impl>;
+        using base = detail::referable_base<detail::metric_member_impl>;
         using base::base;
 
     public:

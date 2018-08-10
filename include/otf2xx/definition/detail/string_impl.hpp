@@ -49,6 +49,8 @@ namespace definition
         class string_impl : public ref_counted
         {
         public:
+            using tag_type = string;
+
             string_impl(const std::string& str, std::int64_t retain_count = 0)
             : ref_counted(retain_count), str_(str)
             {

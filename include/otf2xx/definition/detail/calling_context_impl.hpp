@@ -58,6 +58,8 @@ namespace definition
             using parent_ref_type = otf2::reference_impl<calling_context>;
 
         public:
+            using tag_type = calling_context;
+
             calling_context_impl(const otf2::definition::region& region,
                                  const otf2::definition::source_code_location& source_code_location,
                                  calling_context_impl* parent, parent_ref_type pref,

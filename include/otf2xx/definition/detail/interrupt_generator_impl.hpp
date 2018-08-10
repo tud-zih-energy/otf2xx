@@ -56,6 +56,8 @@ namespace definition
         class interrupt_generator_impl : public ref_counted
         {
         public:
+            using tag_type = interrupt_generator;
+
             using interrupt_generator_mode_type = otf2::common::interrupt_generator_mode_type;
             using base_type = otf2::common::base_type;
 

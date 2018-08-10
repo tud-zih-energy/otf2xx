@@ -55,6 +55,8 @@ namespace definition
         class location_impl : public ref_counted
         {
         public:
+            using tag_type = location;
+
             typedef otf2::common::location_type location_type;
 
             location_impl(const otf2::definition::string& name,

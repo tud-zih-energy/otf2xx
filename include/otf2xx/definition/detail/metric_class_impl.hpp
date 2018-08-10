@@ -56,6 +56,8 @@ namespace definition
         class metric_class_impl : public ref_counted
         {
         public:
+            using tag_type = metric_base;
+
             typedef otf2::common::metric_occurence metric_occurence;
             typedef otf2::common::recorder_kind recorder_kind_type;
 

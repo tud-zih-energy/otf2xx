@@ -52,6 +52,8 @@ namespace definition
         class region_impl : public ref_counted
         {
         public:
+            using tag_type = region;
+
             typedef otf2::common::role_type role_type;
             typedef otf2::common::paradigm_type paradigm_type;
             typedef otf2::common::flags_type flags_type;

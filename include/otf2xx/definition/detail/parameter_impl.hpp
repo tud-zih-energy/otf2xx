@@ -52,6 +52,8 @@ namespace definition
         class parameter_impl : public ref_counted
         {
         public:
+            using tag_type = parameter;
+
             typedef otf2::common::parameter_type parameter_type;
 
             parameter_impl(const otf2::definition::string& name, parameter_type type,

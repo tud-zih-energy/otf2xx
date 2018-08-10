@@ -54,9 +54,9 @@ namespace definition
     /**
      * \brief class for representing a attribute definition
      */
-    class attribute : public detail::referable_base<attribute, detail::attribute_impl>
+    class attribute : public detail::referable_base<detail::attribute_impl>
     {
-        using base = detail::referable_base<attribute, detail::attribute_impl>;
+        using base = detail::referable_base<detail::attribute_impl>;
         using base::base;
 
     public:

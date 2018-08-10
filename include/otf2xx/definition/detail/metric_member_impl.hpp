@@ -52,6 +52,8 @@ namespace definition
         class metric_member_impl : public ref_counted
         {
         public:
+            using tag_type = metric_member;
+
             typedef otf2::common::metric_type metric_type;
             typedef otf2::common::metric_mode metric_mode;
             typedef otf2::common::type value_type_type;

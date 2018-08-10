@@ -53,23 +53,21 @@ namespace definition
          * \brief CRTP base class for definition references
          *
          * This class is used to implement some common methods, contructors and
-         * member for the definition record reference types.
+         * member for the definition record types.
          *
          * This class is implemented using CRTP.
          *
-         * This class holds the shared_ptr and some common methods.
+         * This class holds the intrusive_ptr and some common methods.
          *
-         * \tparam Def type of definition record reference type
+         * \tparam Impl type of definition record impl type
          */
-        template <typename Def, typename Impl>
+        template <typename Impl>
         class base
         {
         public:
             using impl_type = Impl;
 
-            base() : data_(nullptr)
-            {
-            }
+            base() = default;
 
             base(Impl* data) : data_(data)
             {
@@ -93,7 +91,7 @@ namespace definition
              */
             bool is_valid() const
             {
-                return data_.get() != nullptr;
+                return static_cast<bool>(data_);
             }
 
             /**
@@ -108,7 +106,7 @@ namespace definition
              * \brief Returns the internal pointer
              *
              * \warning { This method isn't part of the public interface of definition
-             *          objects. You're disencouraged to relie on it. }
+             *          objects. You're disencouraged to rely on it. }
              *
              * \return Impl* to the referenced object
              */
@@ -121,18 +119,13 @@ namespace definition
              * \brief Returns the impl object
              *
              * \warning { This method isn't part of the public interface of definition
-             *          objects. You're disencouraged to relie on it. }
+             *          objects. You're disencouraged to rely on it. }
              *
              * \return const Impl& to the referenced object
              */
             const Impl& data() const
             {
                 return *data_;
-            }
-
-            weak_ref<Def> get_weak_ref() const
-            {
-                return { *this };
             }
 
             friend void swap(base& a, base& b)
