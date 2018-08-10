@@ -538,6 +538,7 @@ namespace common
         comm
     };
 }
+using namespace common;
 }
 
 #endif // INCLUDE_OTF2XX_COMMON_HPP
