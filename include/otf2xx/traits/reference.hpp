@@ -76,12 +76,6 @@ namespace traits
     {
     };
 
-    template <typename Def, otf2::common::group_type Type>
-    struct reference_type<definition::group<Def, Type>>
-    : reference_type<definition::detail::group_base>
-    {
-    };
-
     template <>
     struct reference_type<definition::comm> : identity<std::uint32_t>
     {
@@ -128,39 +122,12 @@ namespace traits
     };
 
     template <>
-    struct reference_type<definition::metric_class>
-    : reference_type<definition::detail::metric_base>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::metric_instance>
-    : reference_type<definition::detail::metric_base>
-    {
-    };
-
-    template <>
     struct reference_type<definition::metric_member> : identity<std::uint32_t>
     {
     };
 
     template <>
     struct reference_type<definition::detail::io_file_base> : identity<std::uint32_t>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::io_file> : reference_type<definition::detail::io_file_base>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::io_regular_file> : reference_type<definition::io_file>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::io_directory> : reference_type<definition::io_file>
     {
     };
 
