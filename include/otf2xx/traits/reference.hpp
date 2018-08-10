@@ -40,7 +40,11 @@
 
 #include <type_traits>
 
-#include <cstdint>
+extern "C"
+{
+#include <otf2/OTF2_GeneralDefinitions.h>
+#include <otf2/OTF2_Marker.h>
+}
 
 namespace otf2
 {
@@ -50,94 +54,95 @@ namespace traits
     template <typename Type>
     struct reference_type;
 
-    // Type traits for Definitions
+    // Type traits for Definitions tags
+    // only add specializations for base / tag types
     template <>
-    struct reference_type<definition::location> : identity<std::uint64_t>
+    struct reference_type<definition::location> : identity<OTF2_LocationRef>
     {
     };
 
     template <>
-    struct reference_type<definition::location_group> : identity<std::uint32_t>
+    struct reference_type<definition::location_group> : identity<OTF2_LocationGroupRef>
     {
     };
 
     template <>
-    struct reference_type<definition::system_tree_node> : identity<std::uint32_t>
+    struct reference_type<definition::system_tree_node> : identity<OTF2_SystemTreeNodeRef>
     {
     };
 
     template <>
-    struct reference_type<definition::string> : identity<std::uint32_t>
+    struct reference_type<definition::string> : identity<OTF2_StringRef>
     {
     };
 
     template <>
-    struct reference_type<definition::detail::group_base> : identity<std::uint32_t>
+    struct reference_type<definition::detail::group_base> : identity<OTF2_GroupRef>
     {
     };
 
     template <>
-    struct reference_type<definition::comm> : identity<std::uint32_t>
+    struct reference_type<definition::comm> : identity<OTF2_CommRef>
     {
     };
 
     template <>
-    struct reference_type<definition::attribute> : identity<std::uint32_t>
+    struct reference_type<definition::attribute> : identity<OTF2_AttributeRef>
     {
     };
 
     template <>
-    struct reference_type<definition::parameter> : identity<std::uint32_t>
+    struct reference_type<definition::parameter> : identity<OTF2_ParameterRef>
     {
     };
 
     template <>
-    struct reference_type<definition::region> : identity<std::uint32_t>
+    struct reference_type<definition::region> : identity<OTF2_RegionRef>
     {
     };
 
     template <>
-    struct reference_type<definition::calling_context> : identity<std::uint32_t>
+    struct reference_type<definition::calling_context> : identity<OTF2_CallingContextRef>
     {
     };
 
     template <>
-    struct reference_type<definition::source_code_location> : identity<std::uint32_t>
+    struct reference_type<definition::source_code_location> : identity<OTF2_SourceCodeLocationRef>
     {
     };
 
     template <>
-    struct reference_type<definition::interrupt_generator> : identity<std::uint32_t>
+    struct reference_type<definition::interrupt_generator> : identity<OTF2_InterruptGeneratorRef>
     {
     };
 
     template <>
-    struct reference_type<definition::detail::metric_base> : identity<std::uint32_t>
+    struct reference_type<definition::detail::metric_base> : identity<OTF2_MetricRef>
     {
     };
 
     template <>
-    struct reference_type<definition::marker> : identity<std::uint32_t>
+    struct reference_type<definition::marker> : identity<OTF2_MarkerRef>
     {
     };
 
     template <>
-    struct reference_type<definition::metric_member> : identity<std::uint32_t>
+    struct reference_type<definition::metric_member> : identity<OTF2_MetricMemberRef>
     {
     };
 
     template <>
-    struct reference_type<definition::detail::io_file_base> : identity<std::uint32_t>
+    struct reference_type<definition::detail::io_file_base> : identity<OTF2_IoFileRef>
     {
     };
 
     template <>
-    struct reference_type<definition::io_handle> : identity<std::uint32_t>
+    struct reference_type<definition::io_handle> : identity<OTF2_IoHandleRef>
     {
     };
 
     template <>
-    struct reference_type<definition::io_paradigm> : identity<std::uint8_t>
+    struct reference_type<definition::io_paradigm> : identity<OTF2_IoParadigmRef>
     {
     };
 
