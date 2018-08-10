@@ -68,7 +68,7 @@ namespace definition
          * @param ref reference number
          * @param str string value
          */
-        string(otf2::reference<string> ref, const std::string& str) : base(ref, new impl_type(str))
+        string(reference_type ref, const std::string& str) : base(ref, new impl_type(str))
         {
         }
 
