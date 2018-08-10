@@ -55,10 +55,6 @@ namespace definition
         template <typename Def, typename Impl, typename Tag = Def>
         class referable_base : public otf2::definition::detail::base<Def, Impl>
         {
-            // TODO doesn't work for group
-            // static_assert(otf2::tmp::contains<otf2::traits::referable_definitions, Def>::value,
-            //               "Only referable_definitions can inherit from referable_base");
-
             using base = otf2::definition::detail::base<Def, Impl>;
 
         public:
