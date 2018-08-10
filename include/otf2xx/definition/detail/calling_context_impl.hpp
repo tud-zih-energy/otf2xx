@@ -55,7 +55,7 @@ namespace definition
 
         class calling_context_impl : public ref_counted
         {
-            using parent_ref_type = otf2::reference_impl<calling_context, calling_context>;
+            using parent_ref_type = otf2::reference_impl<calling_context>;
 
         public:
             calling_context_impl(const otf2::definition::region& region,

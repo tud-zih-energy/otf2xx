@@ -60,9 +60,9 @@ namespace otf2
  * For each definition should be an own reference type, so the address space is seperated in a
  * typesafe manner.
  *
- * \tparam Type Used to seperate address spaces for different definitions
+ * \tparam Tag Used to seperate address spaces for different definitions
  */
-template <typename Type, typename Tag>
+template <typename Tag>
 class reference_impl
 {
 public:
@@ -82,11 +82,6 @@ public:
      * @param ref the number
      */
     reference_impl(ref_type ref) : handle(ref)
-    {
-    }
-
-    template <typename Type2>
-    reference_impl(reference_impl<Type2, Tag> ref) : handle(ref)
     {
     }
 
@@ -136,10 +131,10 @@ protected:
 };
 
 template <typename Type>
-using reference = reference_impl<Type, typename Type::reference_type::tag_type>;
+using reference = reference_impl<typename Type::tag_type>;
 
-template <typename Type, typename Tag>
-inline std::ostream& operator<<(std::ostream& s, reference_impl<Type, Tag> ref)
+template <typename Tag>
+inline std::ostream& operator<<(std::ostream& s, reference_impl<Tag> ref)
 {
     return s << ref.get();
 }
