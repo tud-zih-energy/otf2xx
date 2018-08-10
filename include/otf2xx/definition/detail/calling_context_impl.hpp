@@ -55,11 +55,13 @@ namespace definition
 
         class calling_context_impl : public ref_counted
         {
-            using parent_ref_type = otf2::reference_impl<calling_context>;
-
         public:
             using tag_type = calling_context;
 
+        private:
+            using parent_ref_type = otf2::reference_impl<tag_type>;
+
+        public:
             calling_context_impl(const otf2::definition::region& region,
                                  const otf2::definition::source_code_location& source_code_location,
                                  calling_context_impl* parent, parent_ref_type pref,
