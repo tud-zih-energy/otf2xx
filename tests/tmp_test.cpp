@@ -153,7 +153,7 @@ struct print_type
 
 TEST_CASE("foreach", "[tmp]")
 {
-    std::tuple<int, unsigned, int, float> values{ 1, 1, 1, 1 };
+    const std::tuple<int, unsigned, int, float> values{ 1, 1, 1, 1 };
 
     print_type visitor;
     SECTION("Visit full sequence")
@@ -176,8 +176,9 @@ TEST_CASE("foreach", "[tmp]")
 
     SECTION("Modify sequence")
     {
-        tmp::foreach (values, [](auto& val) { ++val; });
-        decltype(values) expected{ 2, 2, 2, 2 };
-        REQUIRE(values == expected);
+        auto values2 = values;
+        tmp::foreach (values2, [](auto& val) { ++val; });
+        decltype(values2) expected{ 2, 2, 2, 2 };
+        REQUIRE(values2 == expected);
     }
 }
