@@ -99,8 +99,6 @@ public:
         return handle;
     }
 
-    ~reference_impl() = default;
-
     /**
      * @brief returns if the number equals to OTF2_UNDEFINED_UINT64
      * @return true or false
