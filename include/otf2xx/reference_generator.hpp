@@ -119,11 +119,10 @@ private:
 
 class trace_reference_generator
 {
-    template <typename Definition>
+    template <typename Tag>
     struct make_generator
     {
-        using type = reference_generator<
-            otf2::reference_impl<typename Definition::tag_type, typename Definition::tag_type>>;
+        using type = reference_generator<otf2::reference_impl<Tag, Tag>>;
     };
 
     using generators =
@@ -133,7 +132,7 @@ class trace_reference_generator
     template <class Definition>
     auto& get_generator()
     {
-        using generator = typename make_generator<Definition>::type;
+        using generator = typename make_generator<typename Definition::tag_type>::type;
         static_assert(tmp::contains<generators, generator>(),
                       "Cannot get a generator for this definition!");
         return std::get<generator>(ref_generators_);
