@@ -98,3 +98,7 @@ static_assert(std::is_same<otf2::reference<otf2::definition::metric_instance>::r
 
 static_assert(std::is_same<otf2::reference<otf2::definition::marker>::ref_type,
                      OTF2_MarkerRef>::value, "type mismatch");
+
+int shut_up_the_warning_this_has_no_global_symbol_defined() {
+    return 42;
+}
