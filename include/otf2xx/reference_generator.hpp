@@ -159,6 +159,7 @@ public:
         return get_generator<Definition>().template next<typename Definition::reference_type>();
     }
 
+private:
     /// std::tuple of reference_generator for each definition (tag)
     generators ref_generators_;
 };
