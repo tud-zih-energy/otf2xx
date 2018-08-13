@@ -50,9 +50,9 @@ namespace otf2
 namespace definition
 {
 
-    class io_handle : public detail::referable_base<detail::io_handle_impl>
+    class io_handle : public detail::referable_base<io_handle, detail::io_handle_impl>
     {
-        using base = detail::referable_base<detail::io_handle_impl>;
+        using base = detail::referable_base<io_handle, detail::io_handle_impl>;
         using base::base;
 
     public:

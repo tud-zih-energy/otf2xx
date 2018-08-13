@@ -70,9 +70,11 @@ namespace definition
      */
     template <class MemberType,
               otf2::common::group_type GroupType = otf2::common::group_type::unknown>
-    class group : public detail::referable_base<detail::group_impl<MemberType, GroupType>>
+    class group : public detail::referable_base<group<MemberType, GroupType>,
+                                                detail::group_impl<MemberType, GroupType>>
     {
-        using base = detail::referable_base<detail::group_impl<MemberType, GroupType>>;
+        using base = detail::referable_base<group<MemberType, GroupType>,
+                                            detail::group_impl<MemberType, GroupType>>;
 
         static_assert(otf2::traits::is_definition<MemberType>::value,
                       "The MemberType has to be a otf2::definition.");

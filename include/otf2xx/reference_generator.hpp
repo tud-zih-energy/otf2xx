@@ -80,10 +80,10 @@ public:
     template <typename Definition>
     void register_definition(const Definition& def)
     {
-        static_assert(std::is_same<typename Definition::reference_type, RefType>::value,
+        static_assert(std::is_constructible<typename Definition::reference_type, RefType>::value,
                       "Trying to register a definition with a different id space");
 
-        register_reference(def.ref());
+        register_reference(static_cast<RefType>(def.ref()));
     }
 
     void register_reference(ref_type ref)
@@ -99,8 +99,12 @@ public:
         old_max = max(ref.get(), old_max);
     }
 
-    ref_type next()
+    template <typename RefType2 = ref_type>
+    RefType2 next()
     {
+        static_assert(std::is_constructible<RefType2, ref_type>::value,
+                      "Trying to get a reference for a definition with a different id space");
+
         if (ref_type::undefined() == old_max + 1)
         {
             make_exception("Cannot generate a new unused reference number");
@@ -118,7 +122,8 @@ class trace_reference_generator
     template <typename Definition>
     struct make_generator
     {
-        using type = reference_generator<otf2::reference_impl<typename Definition::tag_type>>;
+        using type = reference_generator<
+            otf2::reference_impl<typename Definition::tag_type, typename Definition::tag_type>>;
     };
 
     using generators =
@@ -150,7 +155,8 @@ public:
     template <typename Definition>
     typename Definition::reference_type next()
     {
-        return get_generator<Definition>().next();
+        // TMP-code-obfuscator was here
+        return get_generator<Definition>().template next<typename Definition::reference_type>();
     }
 
     /// std::tuple of reference_generator for each definition (tag)

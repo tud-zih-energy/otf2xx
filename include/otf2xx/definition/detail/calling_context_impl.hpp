@@ -59,12 +59,12 @@ namespace definition
             using tag_type = calling_context;
 
         private:
-            using parent_ref_type = otf2::reference_impl<tag_type>;
+            using reference_type = otf2::reference_impl<calling_context, tag_type>;
 
         public:
             calling_context_impl(const otf2::definition::region& region,
                                  const otf2::definition::source_code_location& source_code_location,
-                                 calling_context_impl* parent, parent_ref_type pref,
+                                 calling_context_impl* parent, reference_type pref,
                                  std::int64_t retain_count = 0)
             : ref_counted(retain_count), region_(region),
               source_code_location_(source_code_location), parent_(parent), pref_(pref)
@@ -76,7 +76,7 @@ namespace definition
                                  std::int64_t retain_count = 0)
             : ref_counted(retain_count), region_(region),
               source_code_location_(source_code_location), parent_(nullptr),
-              pref_(parent_ref_type::undefined())
+              pref_(reference_type::undefined())
             {
             }
 
@@ -116,7 +116,7 @@ namespace definition
             otf2::definition::region region_;
             otf2::definition::source_code_location source_code_location_;
             otf2::intrusive_ptr<calling_context_impl> parent_;
-            parent_ref_type pref_;
+            reference_type pref_;
         };
     } // namespace detail
 } // namespace definition

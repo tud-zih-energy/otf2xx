@@ -52,9 +52,9 @@ namespace definition
     /**
      * \brief class for representing parameter definitions
      */
-    class parameter : public detail::referable_base<detail::parameter_impl>
+    class parameter : public detail::referable_base<parameter, detail::parameter_impl>
     {
-        using base = detail::referable_base<detail::parameter_impl>;
+        using base = detail::referable_base<parameter, detail::parameter_impl>;
         using base::base;
 
     public:

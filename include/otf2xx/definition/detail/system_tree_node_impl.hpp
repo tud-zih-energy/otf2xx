@@ -58,7 +58,7 @@ namespace definition
             using tag_type = system_tree_node;
 
         private:
-            using reference_type = otf2::reference_impl<tag_type>;
+            using reference_type = otf2::reference_impl<system_tree_node, tag_type>;
 
         public:
             system_tree_node_impl(const otf2::definition::string& name,

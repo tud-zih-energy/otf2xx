@@ -47,7 +47,7 @@ namespace definition
         template <typename Impl>
         class base;
 
-        template <typename Impl>
+        template <typename Definition, typename Impl>
         class referable_base;
     } // namespace detail
 } // namespace definition

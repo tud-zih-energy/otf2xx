@@ -61,7 +61,7 @@ namespace definition
             using tag_type = io_handle;
 
         private:
-            using reference_type = otf2::reference_impl<tag_type>;
+            using reference_type = otf2::reference_impl<io_handle, tag_type>;
 
         public:
             using io_handle_flag_type = otf2::common::io_handle_flag_type;

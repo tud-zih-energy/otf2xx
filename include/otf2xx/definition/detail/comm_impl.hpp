@@ -61,7 +61,7 @@ namespace definition
             using tag_type = comm;
 
         private:
-            using reference_type = otf2::reference_impl<tag_type>;
+            using reference_type = otf2::reference_impl<comm, tag_type>;
 
         public:
             comm_impl(const otf2::definition::string& name,

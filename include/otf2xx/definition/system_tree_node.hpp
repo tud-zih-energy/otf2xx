@@ -53,9 +53,10 @@ namespace definition
     /**
      * \brief class for representing system tree node definitions
      */
-    class system_tree_node : public detail::referable_base<detail::system_tree_node_impl>
+    class system_tree_node
+    : public detail::referable_base<system_tree_node, detail::system_tree_node_impl>
     {
-        using base = detail::referable_base<detail::system_tree_node_impl>;
+        using base = detail::referable_base<system_tree_node, detail::system_tree_node_impl>;
         using base::base;
 
     public:

@@ -55,9 +55,10 @@ namespace definition
     /**
      * \brief class for representing a attribute definition
      */
-    class calling_context : public detail::referable_base<detail::calling_context_impl>
+    class calling_context
+    : public detail::referable_base<calling_context, detail::calling_context_impl>
     {
-        using base = detail::referable_base<detail::calling_context_impl>;
+        using base = detail::referable_base<calling_context, detail::calling_context_impl>;
         using base::base;
 
     public:

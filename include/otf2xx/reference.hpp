@@ -62,7 +62,7 @@ namespace otf2
  *
  * \tparam Tag Used to seperate address spaces for different definitions
  */
-template <typename Tag>
+template <typename Definition, typename Tag>
 class reference_impl
 {
 public:
@@ -82,6 +82,11 @@ public:
      * @param ref the number
      */
     reference_impl(ref_type ref) : handle(ref)
+    {
+    }
+
+    template <typename Definition2>
+    explicit reference_impl(reference_impl<Definition2, Tag> other) : handle(other.get())
     {
     }
 
@@ -131,10 +136,10 @@ protected:
 };
 
 template <typename Type>
-using reference = reference_impl<typename Type::tag_type>;
+using reference = reference_impl<Type, typename Type::tag_type>;
 
-template <typename Tag>
-inline std::ostream& operator<<(std::ostream& s, reference_impl<Tag> ref)
+template <typename Type, typename Tag>
+inline std::ostream& operator<<(std::ostream& s, reference_impl<Type, Tag> ref)
 {
     return s << ref.get();
 }

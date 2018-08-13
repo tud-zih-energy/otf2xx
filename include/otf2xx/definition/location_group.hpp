@@ -56,9 +56,10 @@ namespace definition
      * location definitions.
      *
      */
-    class location_group : public detail::referable_base<detail::location_group_impl>
+    class location_group
+    : public detail::referable_base<location_group, detail::location_group_impl>
     {
-        using base = detail::referable_base<detail::location_group_impl>;
+        using base = detail::referable_base<location_group, detail::location_group_impl>;
         using base::base;
 
     public:

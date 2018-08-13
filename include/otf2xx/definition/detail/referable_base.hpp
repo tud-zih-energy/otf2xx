@@ -52,14 +52,14 @@ namespace definition
          *
          * This class is implemented using CRTP.
          */
-        template <typename Impl>
+        template <typename Definition, typename Impl>
         class referable_base : public otf2::definition::detail::base<Impl>
         {
             using base = otf2::definition::detail::base<Impl>;
 
         public:
             using tag_type = typename Impl::tag_type;
-            using reference_type = otf2::reference_impl<tag_type>;
+            using reference_type = otf2::reference_impl<Definition, tag_type>;
 
             referable_base() : ref_(reference_type::undefined())
             {
@@ -91,18 +91,17 @@ namespace definition
             reference_type ref_;
         };
 
-        template <typename Impl, typename Impl2>
+        template <typename Def, typename Def2, typename Impl, typename Impl2>
         inline std::enable_if_t<
             std::is_same<typename Impl::tag_type, typename Impl2::tag_type>::value, bool>
-        operator==(const referable_base<Impl>& a, const referable_base<Impl2>& b)
+        operator==(const referable_base<Def, Impl>& a, const referable_base<Def2, Impl2>& b)
         {
             return a.ref() == b.ref();
         }
 
-        template <typename Impl, typename Impl2>
-        inline std::enable_if_t<
-            std::is_same<typename Impl::tag_type, typename Impl2::tag_type>::value, bool>
-        operator!=(const referable_base<Impl>& a, const referable_base<Impl2>& b)
+        template <typename Def, typename Def2, typename Impl, typename Impl2>
+        inline bool operator!=(const referable_base<Def, Impl>& a,
+                               const referable_base<Def2, Impl2>& b)
         {
             return !(a == b);
         }

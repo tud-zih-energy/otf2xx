@@ -99,31 +99,31 @@ TEST_CASE("test io reference generator")
     SECTION("Directory ref must be unique after adding file ref")
     {
         ref_gen(file);
-        refs.insert(file.ref());
+        refs.insert(static_cast<ref>(file.ref()));
         for (int i = 0; i < 100; i++)
         {
             auto new_ref = ref_gen.next<otf2::definition::io_directory>();
             REQUIRE_FALSE(contains(refs, ref(new_ref)));
-            refs.insert(new_ref);
+            refs.insert(static_cast<ref>(new_ref));
         }
     }
     SECTION("File ref must be unique after adding directory ref")
     {
         ref_gen(dir);
-        refs.insert(dir.ref());
+        refs.insert(static_cast<ref>(dir.ref()));
         for (int i = 0; i < 100; i++)
         {
             auto new_ref = ref_gen.next<otf2::definition::io_regular_file>();
             REQUIRE_FALSE(contains(refs, ref(new_ref)));
-            refs.insert(new_ref);
+            refs.insert(static_cast<ref>(new_ref));
         }
     }
     SECTION("All refs must be unqiue after adding both")
     {
         ref_gen(file);
-        refs.insert(file.ref());
+        refs.insert(static_cast<ref>(file.ref()));
         ref_gen(dir);
-        refs.insert(dir.ref());
+        refs.insert(static_cast<ref>(dir.ref()));
         for (int i = 0; i < 100; i++)
         {
             // THIS is not valid
@@ -133,10 +133,10 @@ TEST_CASE("test io reference generator")
 
             auto new_ref = ref_gen.next<otf2::definition::io_regular_file>();
             REQUIRE_FALSE(contains(refs, ref(new_ref)));
-            refs.insert(new_ref);
+            refs.insert(static_cast<ref>(new_ref));
             new_ref = ref_gen.next<otf2::definition::io_directory>();
             REQUIRE_FALSE(contains(refs, ref(new_ref)));
-            refs.insert(new_ref);
+            refs.insert(static_cast<ref>(new_ref));
         }
     }
 }
@@ -153,7 +153,8 @@ TEST_CASE("Metric foo test")
 
         REQUIRE(new_ref == 0);
 
-        new_ref = ref_gen.next<otf2::definition::metric_instance>();
+        new_ref = static_cast<otf2::reference<otf2::definition::metric_class>>(
+            ref_gen.next<otf2::definition::metric_instance>());
 
         REQUIRE(new_ref == 1);
 

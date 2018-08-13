@@ -54,9 +54,9 @@ namespace definition
      *
      * This class represents an OTF2 string definition.
      */
-    class string : public detail::referable_base<detail::string_impl>
+    class string : public detail::referable_base<string, detail::string_impl>
     {
-        using base = detail::referable_base<detail::string_impl>;
+        using base = detail::referable_base<string, detail::string_impl>;
         using base::base;
 
     public:

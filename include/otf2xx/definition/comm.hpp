@@ -56,9 +56,9 @@ namespace definition
     /**
      * \brief class for representing a comm definition
      */
-    class comm : public detail::referable_base<detail::comm_impl>
+    class comm : public detail::referable_base<comm, detail::comm_impl>
     {
-        using base = detail::referable_base<detail::comm_impl>;
+        using base = detail::referable_base<comm, detail::comm_impl>;
         using base::base;
 
     public:

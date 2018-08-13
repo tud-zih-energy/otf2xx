@@ -49,9 +49,9 @@ namespace definition
     /**
      * \brief class for representing marker definitions
      */
-    class marker : public detail::referable_base<detail::marker_impl>
+    class marker : public detail::referable_base<marker, detail::marker_impl>
     {
-        using base = detail::referable_base<detail::marker_impl>;
+        using base = detail::referable_base<marker, detail::marker_impl>;
         using base::base;
 
     public:
