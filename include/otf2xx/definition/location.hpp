@@ -89,6 +89,16 @@ namespace definition
         }
 
         /**
+         * \brief set the name of the location definion as a string definition
+         *
+         */
+        void name(const otf2::definition::string& new_name)
+        {
+            assert(this->is_valid());
+            return data_->name(new_name);
+        }
+
+        /**
          * \brief returns the location group of the location definion
          *
          * \returns a \ref location_group definiton

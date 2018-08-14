@@ -85,6 +85,11 @@ namespace definition
                 return name_;
             }
 
+            void name(const otf2::definition::string& new_name)
+            {
+                name_ = new_name;
+            }
+
             const otf2::definition::location_group& location_group() const
             {
                 return lg_;
