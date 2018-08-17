@@ -48,7 +48,10 @@ ELSE()
         IF(${_ARG} MATCHES "^-l")
             STRING(REGEX REPLACE "^-l" "" _ARG "${_ARG}")
             STRING(STRIP "${_ARG}" _ARG)
-            # NO_DEFAULT_PATH - We have to "filter" -lm, as g++ links it anyways. And then stuff explodes
+            # We have to "filter" -lm, as g++ links it anyways. And then stuff explodes
+            IF(${_ARG} STREQUAL "m")
+                continue()
+            ENDIF()
             FIND_LIBRARY(_OTF2_LIB_FROM_ARG NAMES ${_ARG}
                 HINTS ${OTF2_LINK_DIRS} NO_DEFAULT_PATH
             )
@@ -80,7 +83,8 @@ if(OTF2_FOUND)
         # Note for MacOS: libm is a symlink to libSystem, so there is no harm to link it anyways, but it isn't required
         INTERFACE_LINK_LIBRARIES "m"
     )
-
+    # make sure, if anyone uses the old interface, they still link libm
+    LIST(APPEND OTF2_LIBRARIES "m")
 else()
     unset(OTF2_PRINT)
     unset(OTF2_LINK_DIRS)
