@@ -41,6 +41,7 @@
 #include <otf2xx/event/marker.hpp>
 #include <otf2xx/exception.hpp>
 #include <otf2xx/registry.hpp>
+#include <otf2xx/tmp/runtime.hpp>
 #include <otf2xx/traits/tuple_meta.hpp>
 
 #include <algorithm>
@@ -813,150 +814,12 @@ namespace writer
 
     inline global& operator<<(global& wrt, const otf2::Registry& reg)
     {
-        for (const auto& def : reg.attributes())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.comms())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.locations())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.location_groups())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.parameters())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.regions())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.strings())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.system_tree_nodes())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.source_code_locations())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.calling_contexts())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.interrupt_generators())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.io_regular_files())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.io_directories())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.io_handles())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.io_paradigms())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.io_pre_created_handle_states())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.locations_groups())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.regions_groups())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.comm_locations_groups())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.comm_groups())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.comm_self_groups())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.metric_members())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.metric_classes())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.metric_instances())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.location_properties())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.location_group_properties())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.system_tree_node_properties())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.calling_context_properties())
-        {
-            wrt << def;
-        }
-
-        for (const auto& def : reg.io_file_properties())
-        {
-            wrt << def;
-        }
+        tmp::foreach (reg.get_holders(), [&wrt](const auto& holder) {
+            for (const auto& def : holder)
+            {
+                wrt << def;
+            }
+        });
 
         return wrt;
     }

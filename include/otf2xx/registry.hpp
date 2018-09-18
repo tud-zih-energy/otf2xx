@@ -116,6 +116,10 @@ template <typename Property>
 class PropertyHolder
 {
 public:
+    PropertyHolder(otf2::trace_reference_generator&)
+    {
+    }
+
     void operator()(const Property& def)
     {
         properties_.emplace(def);
@@ -146,481 +150,110 @@ private:
     otf2::definition::container<Property> properties_;
 };
 
+template <typename Definition, typename = void>
+struct Holder;
+
+template <typename Definition>
+struct Holder<Definition,
+              typename std::enable_if<!traits::is_referable_definition<Definition>::value>::type>
+{
+    using type = PropertyHolder<Definition>;
+};
+
+template <typename Definition>
+struct Holder<Definition,
+              typename std::enable_if<traits::is_referable_definition<Definition>::value>::type>
+{
+    using type = DefinitionHolder<Definition>;
+};
+
 class Registry
 {
     template <typename Definition>
-    using map_type = otf2::DefinitionHolder<Definition>;
+    struct make_holder
+    {
+        using type = typename Holder<Definition>::type;
+    };
+
+    using holders =
+        tmp::apply_t<tmp::transform_t<traits::usable_definitions, make_holder>, std::tuple>;
+
+    template <class Definition>
+    auto& get_holder()
+    {
+        using holder = typename make_holder<Definition>::type;
+        static_assert(tmp::contains<holders, holder>(), "Cannot get a holder for this definition!");
+        return std::get<holder>(holders_);
+    }
+
+    template <class Definition>
+    const auto& get_holder() const
+    {
+        using holder = typename make_holder<Definition>::type;
+        static_assert(tmp::contains<holders, holder>(), "Cannot get a holder for this definition!");
+        return std::get<holder>(holders_);
+    }
+
+    template <typename Holders>
+    class construct_holders;
+
+    template <typename... Holders>
+    class construct_holders<std::tuple<Holders...>>
+    {
+    public:
+        template <typename... Args>
+        auto operator()(Args&&... args)
+        {
+            return std::make_tuple(Holders{ args... }...);
+        }
+    };
 
 public:
-    Registry()
-    : attributes_(refs_), comms_(refs_), locations_(refs_), location_groups_(refs_),
-      parameters_(refs_), regions_(refs_), strings_(refs_), system_tree_nodes_(refs_),
-      source_code_locations_(refs_), calling_contexts_(refs_), interrupt_generators_(refs_),
-      io_handles_(refs_), io_regular_files_(refs_), io_directories_(refs_), io_paradigms_(refs_),
-      locations_groups_(refs_), regions_groups_(refs_),
-      // metric_groups_(refs_),
-      comm_locations_groups_(refs_), comm_groups_(refs_), comm_self_groups_(refs_),
-      metric_members_(refs_), metric_classes_(refs_), metric_instances_(refs_)
+    Registry() : holders_(construct_holders<holders>()(refs_))
     {
-    }
-
-public:
-    DefinitionHolder<otf2::definition::attribute>& attributes()
-    {
-        return attributes_;
-    }
-
-    DefinitionHolder<otf2::definition::comm>& comms()
-    {
-        return comms_;
-    }
-
-    DefinitionHolder<otf2::definition::location>& locations()
-    {
-        return locations_;
-    }
-
-    DefinitionHolder<otf2::definition::location_group>& location_groups()
-    {
-        return location_groups_;
-    }
-
-    DefinitionHolder<otf2::definition::parameter>& parameters()
-    {
-        return parameters_;
-    }
-
-    DefinitionHolder<otf2::definition::region>& regions()
-    {
-        return regions_;
-    }
-
-    DefinitionHolder<otf2::definition::string>& strings()
-    {
-        return strings_;
-    }
-
-    DefinitionHolder<otf2::definition::system_tree_node>& system_tree_nodes()
-    {
-        return system_tree_nodes_;
-    }
-
-    DefinitionHolder<otf2::definition::source_code_location>& source_code_locations()
-    {
-        return source_code_locations_;
-    }
-
-    DefinitionHolder<otf2::definition::calling_context>& calling_contexts()
-    {
-        return calling_contexts_;
-    }
-
-    DefinitionHolder<otf2::definition::interrupt_generator>& interrupt_generators()
-    {
-        return interrupt_generators_;
-    }
-
-    DefinitionHolder<otf2::definition::io_regular_file>& io_regular_files()
-    {
-        return io_regular_files_;
-    }
-
-    DefinitionHolder<otf2::definition::io_directory>& io_directories()
-    {
-        return io_directories_;
-    }
-
-    DefinitionHolder<otf2::definition::io_handle>& io_handles()
-    {
-        return io_handles_;
-    }
-
-    DefinitionHolder<otf2::definition::io_paradigm>& io_paradigms()
-    {
-        return io_paradigms_;
-    }
-
-    DefinitionHolder<otf2::definition::locations_group>& locations_groups()
-    {
-        return locations_groups_;
-    }
-
-    DefinitionHolder<otf2::definition::regions_group>& regions_groups()
-    {
-        return regions_groups_;
-    }
-
-    // DefinitionHolder<otf2::definition::metric_group>& metric_groups_;
-    DefinitionHolder<otf2::definition::comm_locations_group>& comm_locations_groups()
-    {
-        return comm_locations_groups_;
-    }
-
-    DefinitionHolder<otf2::definition::comm_group>& comm_groups()
-    {
-        return comm_groups_;
-    }
-
-    DefinitionHolder<otf2::definition::comm_self_group>& comm_self_groups()
-    {
-        return comm_self_groups_;
-    }
-
-    DefinitionHolder<otf2::definition::metric_member>& metric_members()
-    {
-        return metric_members_;
-    }
-
-    DefinitionHolder<otf2::definition::metric_class>& metric_classes()
-    {
-        return metric_classes_;
-    }
-
-    DefinitionHolder<otf2::definition::metric_instance>& metric_instances()
-    {
-        return metric_instances_;
     }
 
 public:
-    PropertyHolder<otf2::definition::location_property>& location_properties()
+    template <typename Definition>
+    const auto& all() const
     {
-        return location_properties_;
+        return get_holder<Definition>();
     }
 
-    PropertyHolder<otf2::definition::location_group_property>& location_group_properties()
+    template <typename Definition>
+    auto& all()
     {
-        return location_group_properties_;
+        return get_holder<Definition>();
     }
 
-    PropertyHolder<otf2::definition::system_tree_node_property>& system_tree_node_properties()
+    template <typename Definition, typename... Args>
+    auto& create(Args&&... args)
     {
-        return system_tree_node_properties_;
+        return get_holder<Definition>().create(std::forward<Args>(args)...);
     }
 
-    PropertyHolder<otf2::definition::calling_context_property>& calling_context_properties()
+    template <typename Definition, typename Key>
+    const auto& get(const Key& key) const
     {
-        return calling_context_properties_;
-    }
-
-    PropertyHolder<otf2::definition::io_file_property>& io_file_properties()
-    {
-        return io_file_properties_;
-    }
-
-    PropertyHolder<otf2::definition::io_pre_created_handle_state>& io_pre_created_handle_states()
-    {
-        return io_pre_created_handle_states_;
+        return get_holder<Definition>()[key];
     }
 
 public:
-    const DefinitionHolder<otf2::definition::attribute>& attributes() const
+    template <class Definition>
+    void register_definition(const Definition& def)
     {
-        return attributes_;
-    }
-
-    const DefinitionHolder<otf2::definition::comm>& comms() const
-    {
-        return comms_;
-    }
-
-    const DefinitionHolder<otf2::definition::location>& locations() const
-    {
-        return locations_;
-    }
-
-    const DefinitionHolder<otf2::definition::location_group>& location_groups() const
-    {
-        return location_groups_;
-    }
-
-    const DefinitionHolder<otf2::definition::parameter>& parameters() const
-    {
-        return parameters_;
-    }
-
-    const DefinitionHolder<otf2::definition::region>& regions() const
-    {
-        return regions_;
-    }
-
-    const DefinitionHolder<otf2::definition::string>& strings() const
-    {
-        return strings_;
-    }
-
-    const DefinitionHolder<otf2::definition::system_tree_node>& system_tree_nodes() const
-    {
-        return system_tree_nodes_;
-    }
-
-    const DefinitionHolder<otf2::definition::source_code_location>& source_code_locations() const
-    {
-        return source_code_locations_;
-    }
-
-    const DefinitionHolder<otf2::definition::calling_context>& calling_contexts() const
-    {
-        return calling_contexts_;
-    }
-
-    const DefinitionHolder<otf2::definition::interrupt_generator>& interrupt_generators() const
-    {
-        return interrupt_generators_;
-    }
-
-    const DefinitionHolder<otf2::definition::io_regular_file>& io_regular_files() const
-    {
-        return io_regular_files_;
-    }
-
-    const DefinitionHolder<otf2::definition::io_directory>& io_directories() const
-    {
-        return io_directories_;
-    }
-
-    const DefinitionHolder<otf2::definition::io_handle>& io_handles() const
-    {
-        return io_handles_;
-    }
-
-    const DefinitionHolder<otf2::definition::io_paradigm>& io_paradigms() const
-    {
-        return io_paradigms_;
-    }
-
-    const DefinitionHolder<otf2::definition::locations_group>& locations_groups() const
-    {
-        return locations_groups_;
-    }
-
-    const DefinitionHolder<otf2::definition::regions_group>& regions_groups() const
-    {
-        return regions_groups_;
-    }
-
-    // DefinitionHolder<otf2::definition::metric_group>& metric_groups_;
-    const DefinitionHolder<otf2::definition::comm_locations_group>& comm_locations_groups() const
-    {
-        return comm_locations_groups_;
-    }
-
-    const DefinitionHolder<otf2::definition::comm_group>& comm_groups() const
-    {
-        return comm_groups_;
-    }
-
-    const DefinitionHolder<otf2::definition::comm_self_group>& comm_self_groups() const
-    {
-        return comm_self_groups_;
-    }
-
-    const DefinitionHolder<otf2::definition::metric_member>& metric_members() const
-    {
-        return metric_members_;
-    }
-
-    const DefinitionHolder<otf2::definition::metric_class>& metric_classes() const
-    {
-        return metric_classes_;
-    }
-
-    const DefinitionHolder<otf2::definition::metric_instance>& metric_instances() const
-    {
-        return metric_instances_;
+        get_holder<Definition>()(def);
     }
 
 public:
-    const PropertyHolder<otf2::definition::location_property>& location_properties() const
+    const holders& get_holders() const
     {
-        return location_properties_;
-    }
-
-    const PropertyHolder<otf2::definition::location_group_property>&
-    location_group_properties() const
-    {
-        return location_group_properties_;
-    }
-
-    const PropertyHolder<otf2::definition::system_tree_node_property>&
-    system_tree_node_properties() const
-    {
-        return system_tree_node_properties_;
-    }
-
-    const PropertyHolder<otf2::definition::calling_context_property>&
-    calling_context_properties() const
-    {
-        return calling_context_properties_;
-    }
-
-    const PropertyHolder<otf2::definition::io_file_property>& io_file_properties() const
-    {
-        return io_file_properties_;
-    }
-
-    const PropertyHolder<otf2::definition::io_pre_created_handle_state>&
-    io_pre_created_handle_states() const
-    {
-        return io_pre_created_handle_states_;
-    }
-
-public:
-    void register_definition(const otf2::definition::attribute& def)
-    {
-        attributes_(def);
-    }
-
-    void register_definition(const otf2::definition::comm& def)
-    {
-        comms_(def);
-    }
-
-    void register_definition(const otf2::definition::location& def)
-    {
-        locations_(def);
-    }
-
-    void register_definition(const otf2::definition::location_group& def)
-    {
-        location_groups_(def);
-    }
-
-    void register_definition(const otf2::definition::parameter& def)
-    {
-        parameters_(def);
-    }
-
-    void register_definition(const otf2::definition::region& def)
-    {
-        regions_(def);
-    }
-
-    void register_definition(const otf2::definition::string& def)
-    {
-        strings_(def);
-    }
-
-    void register_definition(const otf2::definition::system_tree_node& def)
-    {
-        system_tree_nodes_(def);
-    }
-
-    void register_definition(const otf2::definition::source_code_location& def)
-    {
-        source_code_locations_(def);
-    }
-
-    void register_definition(const otf2::definition::calling_context& def)
-    {
-        calling_contexts_(def);
-    }
-
-    void register_definition(const otf2::definition::interrupt_generator& def)
-    {
-        interrupt_generators_(def);
-    }
-
-    void register_definition(const otf2::definition::io_handle& def)
-    {
-        io_handles_(def);
-    }
-
-    void register_definition(const otf2::definition::io_regular_file& def)
-    {
-        io_regular_files_(def);
-    }
-
-    void register_definition(const otf2::definition::io_directory& def)
-    {
-        io_directories_(def);
-    }
-
-    void register_definition(const otf2::definition::io_paradigm& def)
-    {
-        io_paradigms_(def);
-    }
-
-    void register_definition(const otf2::definition::io_pre_created_handle_state& def)
-    {
-        io_pre_created_handle_states_(def);
-    }
-
-    void register_definition(const otf2::definition::locations_group& def)
-    {
-        locations_groups_(def);
-    }
-
-    void register_definition(const otf2::definition::regions_group& def)
-    {
-        regions_groups_(def);
-    }
-
-    void register_definition(const otf2::definition::comm_locations_group& def)
-    {
-        comm_locations_groups_(def);
-    }
-
-    void register_definition(const otf2::definition::comm_group& def)
-    {
-        comm_groups_(def);
-    }
-
-    void register_definition(const otf2::definition::comm_self_group& def)
-    {
-        comm_self_groups_(def);
-    }
-
-    void register_definition(const otf2::definition::metric_member& def)
-    {
-        metric_members_(def);
-    }
-
-    void register_definition(const otf2::definition::metric_class& def)
-    {
-        metric_classes_(def);
-    }
-
-    void register_definition(const otf2::definition::metric_instance& def)
-    {
-        metric_instances_(def);
+        return holders_;
     }
 
 private:
     trace_reference_generator refs_;
 
-    DefinitionHolder<otf2::definition::attribute> attributes_;
-    DefinitionHolder<otf2::definition::comm> comms_;
-    DefinitionHolder<otf2::definition::location> locations_;
-    DefinitionHolder<otf2::definition::location_group> location_groups_;
-    DefinitionHolder<otf2::definition::parameter> parameters_;
-    DefinitionHolder<otf2::definition::region> regions_;
-    DefinitionHolder<otf2::definition::string> strings_;
-    DefinitionHolder<otf2::definition::system_tree_node> system_tree_nodes_;
-
-    DefinitionHolder<otf2::definition::source_code_location> source_code_locations_;
-    DefinitionHolder<otf2::definition::calling_context> calling_contexts_;
-    DefinitionHolder<otf2::definition::interrupt_generator> interrupt_generators_;
-    DefinitionHolder<otf2::definition::io_handle> io_handles_;
-    DefinitionHolder<otf2::definition::io_regular_file> io_regular_files_;
-    DefinitionHolder<otf2::definition::io_directory> io_directories_;
-    DefinitionHolder<otf2::definition::io_paradigm> io_paradigms_;
-
-    DefinitionHolder<otf2::definition::locations_group> locations_groups_;
-    DefinitionHolder<otf2::definition::regions_group> regions_groups_;
-    // DefinitionHolder<otf2::definition::metric_group> metric_groups_;
-    DefinitionHolder<otf2::definition::comm_locations_group> comm_locations_groups_;
-    DefinitionHolder<otf2::definition::comm_group> comm_groups_;
-    DefinitionHolder<otf2::definition::comm_self_group> comm_self_groups_;
-
-    DefinitionHolder<otf2::definition::metric_member> metric_members_;
-    DefinitionHolder<otf2::definition::metric_class> metric_classes_;
-    DefinitionHolder<otf2::definition::metric_instance> metric_instances_;
-
-    PropertyHolder<otf2::definition::location_property> location_properties_;
-    PropertyHolder<otf2::definition::location_group_property> location_group_properties_;
-    PropertyHolder<otf2::definition::system_tree_node_property> system_tree_node_properties_;
-    PropertyHolder<otf2::definition::calling_context_property> calling_context_properties_;
-    PropertyHolder<otf2::definition::io_file_property> io_file_properties_;
-    PropertyHolder<otf2::definition::io_pre_created_handle_state> io_pre_created_handle_states_;
+    holders holders_;
 };
 } // namespace otf2
