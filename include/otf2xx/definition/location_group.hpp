@@ -42,8 +42,8 @@
 #include <otf2xx/definition/string.hpp>
 #include <otf2xx/definition/system_tree_node.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/location_group_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 namespace otf2
 {
@@ -56,17 +56,18 @@ namespace definition
      * location definitions.
      *
      */
-    class location_group : public detail::base<location_group, detail::location_group_impl>
+    class location_group
+    : public detail::referable_base<location_group, detail::location_group_impl>
     {
-        using base = detail::base<location_group, detail::location_group_impl>;
+        using base = detail::referable_base<location_group, detail::location_group_impl>;
         using base::base;
 
     public:
         typedef otf2::common::location_group_type location_group_type;
 
-        location_group(reference<location_group> ref, const otf2::definition::string& name,
+        location_group(reference_type ref, const otf2::definition::string& name,
                        location_group_type type, const otf2::definition::system_tree_node& stm)
-        : base(new impl_type(ref, name, type, stm))
+        : base(ref, new impl_type(name, type, stm))
         {
         }
 

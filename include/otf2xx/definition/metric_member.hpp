@@ -41,8 +41,8 @@
 
 #include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/metric_member_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 namespace otf2
 {
@@ -55,9 +55,9 @@ namespace definition
      * A metric member defines one "channel" of an metric. It defines the value
      * type, name etc.
      */
-    class metric_member : public detail::base<metric_member, detail::metric_member_impl>
+    class metric_member : public detail::referable_base<metric_member, detail::metric_member_impl>
     {
-        using base = detail::base<metric_member, detail::metric_member_impl>;
+        using base = detail::referable_base<metric_member, detail::metric_member_impl>;
         using base::base;
 
     public:
@@ -67,13 +67,13 @@ namespace definition
         typedef impl_type::value_base_type value_base_type;
         typedef impl_type::value_exponent_type value_exponent_type;
 
-        metric_member(reference<metric_member> ref, const otf2::definition::string& name,
+        metric_member(reference_type ref, const otf2::definition::string& name,
                       const otf2::definition::string& description, metric_type type,
                       metric_mode mode, value_type_type value_type, value_base_type value_base,
                       value_exponent_type value_exponent,
                       const otf2::definition::string& value_unit)
-        : base(new impl_type(ref, name, description, type, mode, value_type, value_base,
-                             value_exponent, value_unit))
+        : base(ref, new impl_type(name, description, type, mode, value_type, value_base,
+                                  value_exponent, value_unit))
         {
         }
 

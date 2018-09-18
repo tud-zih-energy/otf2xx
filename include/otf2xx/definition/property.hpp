@@ -53,9 +53,9 @@ namespace definition
      * \brief class for representing property definitions
      */
     template <class Definition>
-    class property : public detail::base<property<Definition>, detail::property_impl<Definition>>
+    class property : public detail::base<detail::property_impl<Definition>>
     {
-        using base = typename detail::base<property<Definition>, detail::property_impl<Definition>>;
+        using base = typename detail::base<detail::property_impl<Definition>>;
         using base::base;
 
         static_assert(otf2::traits::is_definition<Definition>::value,

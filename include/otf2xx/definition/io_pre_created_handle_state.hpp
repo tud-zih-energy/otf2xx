@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/io_handle.hpp>
 
@@ -49,10 +48,9 @@ namespace otf2
 namespace definition
 {
     class io_pre_created_handle_state
-    : public detail::base<io_pre_created_handle_state, detail::io_pre_created_handle_state_impl>
+    : public detail::base<detail::io_pre_created_handle_state_impl>
     {
-        using base =
-            detail::base<io_pre_created_handle_state, detail::io_pre_created_handle_state_impl>;
+        using base = detail::base<detail::io_pre_created_handle_state_impl>;
         using base::base;
 
     public:

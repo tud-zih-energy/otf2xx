@@ -43,8 +43,8 @@
 #include <otf2xx/definition/group.hpp>
 #include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/comm_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 #include <sstream>
 
@@ -56,33 +56,33 @@ namespace definition
     /**
      * \brief class for representing a comm definition
      */
-    class comm : public detail::base<comm, detail::comm_impl>
+    class comm : public detail::referable_base<comm, detail::comm_impl>
     {
-        using base = detail::base<comm, detail::comm_impl>;
+        using base = detail::referable_base<comm, detail::comm_impl>;
         using base::base;
 
     public:
-        comm(reference<comm> ref, const otf2::definition::string& name,
+        comm(reference_type ref, const otf2::definition::string& name,
              const otf2::definition::comm_group& group, const otf2::definition::comm& parent)
-        : base(new impl_type(ref, name, group, parent.get()))
+        : base(ref, new impl_type(name, group, parent.get(), parent.ref()))
         {
         }
 
-        comm(reference<comm> ref, const otf2::definition::string& name,
+        comm(reference_type ref, const otf2::definition::string& name,
              const otf2::definition::comm_group& group)
-        : base(new impl_type(ref, name, group))
+        : base(ref, new impl_type(name, group))
         {
         }
 
-        comm(reference<comm> ref, const otf2::definition::string& name,
-             const otf2::definition::comm_self_group& group, comm parent)
-        : base(new impl_type(ref, name, group, parent.get()))
+        comm(reference_type ref, const otf2::definition::string& name,
+             const otf2::definition::comm_self_group& group, const otf2::definition::comm& parent)
+        : base(ref, new impl_type(name, group, parent.get(), parent.ref()))
         {
         }
 
-        comm(reference<comm> ref, const otf2::definition::string& name,
+        comm(reference_type ref, const otf2::definition::string& name,
              const otf2::definition::comm_self_group& group)
-        : base(new impl_type(ref, name, group))
+        : base(ref, new impl_type(name, group))
         {
         }
 
@@ -168,7 +168,8 @@ namespace definition
         otf2::definition::comm parent() const
         {
             assert(this->is_valid());
-            return data_->parent();
+            auto p = data_->parent();
+            return otf2::definition::comm{ p.second, p.first };
         }
     };
 

@@ -44,9 +44,12 @@ namespace definition
 {
     namespace detail
     {
-        template <typename Def, typename Impl>
+        template <typename Impl>
         class base;
-    }
+
+        template <typename Definition, typename Impl>
+        class referable_base;
+    } // namespace detail
 } // namespace definition
 
 } // namespace otf2

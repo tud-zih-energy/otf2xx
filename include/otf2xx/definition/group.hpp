@@ -43,13 +43,21 @@
 
 #include <otf2xx/traits/definition.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/group_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 namespace otf2
 {
 namespace definition
 {
+    namespace detail
+    {
+        class group_base
+        {
+        public:
+            using tag_type = group_base;
+        };
+    } // namespace detail
 
     /**
      * \brief class template for representing groups
@@ -62,11 +70,11 @@ namespace definition
      */
     template <class MemberType,
               otf2::common::group_type GroupType = otf2::common::group_type::unknown>
-    class group
-    : public detail::base<group<MemberType, GroupType>, detail::group_impl<MemberType, GroupType>>
+    class group : public detail::referable_base<group<MemberType, GroupType>,
+                                                detail::group_impl<MemberType, GroupType>>
     {
-        using base =
-            detail::base<group<MemberType, GroupType>, detail::group_impl<MemberType, GroupType>>;
+        using base = detail::referable_base<group<MemberType, GroupType>,
+                                            detail::group_impl<MemberType, GroupType>>;
 
         static_assert(otf2::traits::is_definition<MemberType>::value,
                       "The MemberType has to be a otf2::definition.");
@@ -75,6 +83,7 @@ namespace definition
 
     public:
         using impl_type = typename base::impl_type;
+        using reference_type = typename base::reference_type;
 
         typedef typename impl_type::group_type group_type;
         typedef typename impl_type::group_flag_type group_flag_type;
@@ -82,9 +91,9 @@ namespace definition
         typedef typename impl_type::value_type value_type;
 
     public:
-        group(otf2::reference<detail::group_base> ref, const otf2::definition::string& name,
-              paradigm_type paradigm, group_flag_type group_flag)
-        : base(new impl_type(ref, name, paradigm, group_flag))
+        group(reference_type ref, const otf2::definition::string& name, paradigm_type paradigm,
+              group_flag_type group_flag)
+        : base(ref, new impl_type(name, paradigm, group_flag))
         {
         }
 

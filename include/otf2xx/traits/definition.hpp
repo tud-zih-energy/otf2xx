@@ -45,25 +45,31 @@ namespace otf2
 namespace traits
 {
     /// All definitions that can be referred to and have a unique id space (Tag of reference<>)
-    using referable_definitions_base = tmp::typelist<
-        otf2::definition::attribute, otf2::definition::comm, otf2::definition::detail::group_base,
-        otf2::definition::location, otf2::definition::location_group, otf2::definition::parameter,
-        otf2::definition::region, otf2::definition::string, otf2::definition::system_tree_node,
-        otf2::definition::detail::metric_base, otf2::definition::metric_member,
-        otf2::definition::source_code_location, otf2::definition::calling_context,
-        otf2::definition::interrupt_generator, otf2::definition::marker, otf2::definition::io_file,
-        otf2::definition::io_handle, otf2::definition::io_paradigm>;
+    using referable_definitions_base =
+        tmp::typelist<otf2::definition::attribute, otf2::definition::comm,
+                      otf2::definition::detail::group_base, otf2::definition::location,
+                      otf2::definition::location_group, otf2::definition::parameter,
+                      otf2::definition::region, otf2::definition::string,
+                      otf2::definition::system_tree_node, otf2::definition::detail::metric_base,
+                      otf2::definition::metric_member, otf2::definition::source_code_location,
+                      otf2::definition::calling_context, otf2::definition::interrupt_generator,
+                      otf2::definition::marker, otf2::definition::detail::io_file_base,
+                      otf2::definition::io_handle, otf2::definition::io_paradigm>;
     /// Definitions that can be referred to but don't have a unique id space
     /// They will use an id from the space of one of the types in @ref referable_definitions_base
     using referable_definitions_ext =
         tmp::typelist<otf2::definition::metric_class, otf2::definition::metric_instance,
-                      otf2::definition::io_regular_file, otf2::definition::io_directory>;
+                      otf2::definition::io_file, otf2::definition::io_regular_file,
+                      otf2::definition::io_directory>;
     /// Definitions without a reference
     using unreferable_definitions = tmp::typelist<otf2::definition::mapping_table,
                                                   otf2::definition::io_pre_created_handle_state>;
 
     using all_definitions = tmp::concat_t<referable_definitions_base, referable_definitions_ext,
                                           unreferable_definitions>;
+
+    using referable_definitions =
+        tmp::concat_t<referable_definitions_base, referable_definitions_ext>;
 
     template <typename Type>
     struct is_definition : tmp::contains<all_definitions, Type>
@@ -80,6 +86,15 @@ namespace traits
     {
     };
 
+    template <typename Type>
+    struct is_referable_definition : tmp::contains<referable_definitions, Type>
+    {
+    };
+
+    template <typename T, otf2::common::group_type GroupType>
+    struct is_referable_definition<otf2::definition::group<T, GroupType>> : std::true_type
+    {
+    };
 } // namespace traits
 } // namespace otf2
 

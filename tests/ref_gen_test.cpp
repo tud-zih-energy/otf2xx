@@ -94,36 +94,36 @@ TEST_CASE("test io reference generator")
     otf2::definition::system_tree_node sys_node{ 1, str, str };
     otf2::definition::io_regular_file file{ 1, str, sys_node };
     otf2::definition::io_directory dir{ 2, str, sys_node };
-    using ref = otf2::reference<otf2::definition::io_file>;
+    using ref = otf2::reference<otf2::definition::detail::io_file_base>;
     std::set<ref> refs;
     SECTION("Directory ref must be unique after adding file ref")
     {
         ref_gen(file);
-        refs.insert(file.ref());
+        refs.insert(static_cast<ref>(file.ref()));
         for (int i = 0; i < 100; i++)
         {
             auto new_ref = ref_gen.next<otf2::definition::io_directory>();
             REQUIRE_FALSE(contains(refs, ref(new_ref)));
-            refs.insert(new_ref);
+            refs.insert(static_cast<ref>(new_ref));
         }
     }
     SECTION("File ref must be unique after adding directory ref")
     {
         ref_gen(dir);
-        refs.insert(dir.ref());
+        refs.insert(static_cast<ref>(dir.ref()));
         for (int i = 0; i < 100; i++)
         {
             auto new_ref = ref_gen.next<otf2::definition::io_regular_file>();
             REQUIRE_FALSE(contains(refs, ref(new_ref)));
-            refs.insert(new_ref);
+            refs.insert(static_cast<ref>(new_ref));
         }
     }
     SECTION("All refs must be unqiue after adding both")
     {
         ref_gen(file);
-        refs.insert(file.ref());
+        refs.insert(static_cast<ref>(file.ref()));
         ref_gen(dir);
-        refs.insert(dir.ref());
+        refs.insert(static_cast<ref>(dir.ref()));
         for (int i = 0; i < 100; i++)
         {
             // THIS is not valid
@@ -133,10 +133,34 @@ TEST_CASE("test io reference generator")
 
             auto new_ref = ref_gen.next<otf2::definition::io_regular_file>();
             REQUIRE_FALSE(contains(refs, ref(new_ref)));
-            refs.insert(new_ref);
+            refs.insert(static_cast<ref>(new_ref));
             new_ref = ref_gen.next<otf2::definition::io_directory>();
             REQUIRE_FALSE(contains(refs, ref(new_ref)));
-            refs.insert(new_ref);
+            refs.insert(static_cast<ref>(new_ref));
         }
+    }
+}
+
+TEST_CASE("Metric foo test")
+{
+    otf2::trace_reference_generator ref_gen;
+
+    // using ref = otf2::reference<otf2::definition::detail::metric_base>;
+
+    SECTION("metric instance and classes can get a ref")
+    {
+        auto new_ref = ref_gen.next<otf2::definition::metric_class>();
+
+        REQUIRE(new_ref == 0);
+
+        new_ref = static_cast<otf2::reference<otf2::definition::metric_class>>(
+            ref_gen.next<otf2::definition::metric_instance>());
+
+        REQUIRE(new_ref == 1);
+
+        otf2::reference<otf2::definition::metric_class> mref =
+            ref_gen.next<otf2::definition::metric_class>();
+
+        REQUIRE(mref == 2);
     }
 }

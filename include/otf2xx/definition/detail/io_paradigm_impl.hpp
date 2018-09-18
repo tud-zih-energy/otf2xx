@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -55,18 +54,19 @@ namespace definition
         class io_paradigm_impl : public ref_counted
         {
         public:
+            using tag_type = io_paradigm;
+
             using paradigm_class_type = otf2::common::io_paradigm_class_type;
             using paradigm_flag_type = otf2::common::io_paradigm_flag_type;
             using paradigm_property_type = otf2::common::io_paradigm_property_type;
 
-            io_paradigm_impl(otf2::reference<io_paradigm> ref,
-                             const otf2::definition::string& identification,
+            io_paradigm_impl(const otf2::definition::string& identification,
                              const otf2::definition::string& name,
                              paradigm_class_type paradigmClass, paradigm_flag_type paradigmFlags,
                              const std::vector<paradigm_property_type>& properties,
                              const std::vector<otf2::attribute_value>& values,
                              std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), identification_(identification), name_(name),
+            : ref_counted(retain_count), identification_(identification), name_(name),
               paradigm_class_(paradigmClass), paradigm_flags_(paradigmFlags),
               properties_(properties), values_(values)
             {
@@ -78,19 +78,6 @@ namespace definition
 
             io_paradigm_impl(io_paradigm_impl&&) = default;
             io_paradigm_impl& operator=(io_paradigm_impl&&) = default;
-
-            static io_paradigm_impl* undefined()
-            {
-                static io_paradigm_impl undef(
-                    reference<io_paradigm>::undefined(), string::undefined(), string::undefined(),
-                    paradigm_class_type::serial, paradigm_flag_type::none, {}, {}, 1);
-                return &undef;
-            }
-
-            otf2::reference<io_paradigm> ref() const
-            {
-                return ref_;
-            }
 
             const otf2::definition::string& identification() const
             {
@@ -128,7 +115,6 @@ namespace definition
             }
 
         private:
-            otf2::reference<io_paradigm> ref_;
             otf2::definition::string identification_;
             otf2::definition::string name_;
             paradigm_class_type paradigm_class_;
@@ -136,8 +122,8 @@ namespace definition
             std::vector<otf2::common::io_paradigm_property_type> properties_;
             std::vector<otf2::attribute_value> values_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_PARADIGM_HPP

@@ -46,17 +46,13 @@ namespace definition
     public:
         using io_file::io_file;
 
+        io_directory() = default;
+
         io_directory(const io_file& def) : io_file(def)
         {
         }
-
-        static const io_directory& undefined()
-        {
-            static io_directory undef(io_file::undefined());
-            return undef;
-        }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_IO_DIRECTORY_HPP

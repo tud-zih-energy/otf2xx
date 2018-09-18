@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -53,20 +52,22 @@ namespace definition
         class metric_member_impl : public ref_counted
         {
         public:
+            using tag_type = metric_member;
+
             typedef otf2::common::metric_type metric_type;
             typedef otf2::common::metric_mode metric_mode;
             typedef otf2::common::type value_type_type;
             typedef otf2::common::base_type value_base_type;
             typedef std::int64_t value_exponent_type;
 
-            metric_member_impl(reference<metric_member> ref, const otf2::definition::string& name,
+            metric_member_impl(const otf2::definition::string& name,
                                const otf2::definition::string& description, metric_type type,
                                metric_mode mode, value_type_type value_type,
                                value_base_type value_base, value_exponent_type value_exponent,
                                const otf2::definition::string& value_unit,
                                std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), description_(description),
-              type_(type), mode_(mode), value_type_(value_type), value_base_(value_base),
+            : ref_counted(retain_count), name_(name), description_(description), type_(type),
+              mode_(mode), value_type_(value_type), value_base_(value_base),
               value_exponent_(value_exponent), value_unit_(value_unit)
             {
             }
@@ -77,21 +78,6 @@ namespace definition
 
             metric_member_impl(metric_member_impl&&) = default;
             metric_member_impl& operator=(metric_member_impl&&) = default;
-
-            static metric_member_impl* undefined()
-            {
-                static metric_member_impl undef(
-                    otf2::reference<metric_member>::undefined(),
-                    otf2::definition::string::undefined(), otf2::definition::string::undefined(),
-                    metric_type::other, metric_mode::absolute_last, value_type_type::none,
-                    value_base_type::binary, 0, otf2::definition::string::undefined(), 1);
-                return &undef;
-            }
-
-            otf2::reference<metric_member> ref() const
-            {
-                return ref_;
-            }
 
             const otf2::definition::string& name() const
             {
@@ -142,7 +128,6 @@ namespace definition
             }
 
         private:
-            reference<metric_member> ref_;
             otf2::definition::string name_;
             otf2::definition::string description_;
             metric_type type_;
@@ -152,8 +137,8 @@ namespace definition
             value_exponent_type value_exponent_;
             otf2::definition::string value_unit_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_METRIC_MEMBER_HPP

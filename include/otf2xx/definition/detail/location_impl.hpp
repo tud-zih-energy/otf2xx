@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -56,12 +55,14 @@ namespace definition
         class location_impl : public ref_counted
         {
         public:
+            using tag_type = location;
+
             typedef otf2::common::location_type location_type;
 
-            location_impl(otf2::reference<location> ref, const otf2::definition::string& name,
+            location_impl(const otf2::definition::string& name,
                           const otf2::definition::location_group& lg, location_type type,
                           std::uint64_t events = 0, std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), type_(type), lg_(lg), events_(events)
+            : ref_counted(retain_count), name_(name), type_(type), lg_(lg), events_(events)
             {
             }
 
@@ -71,14 +72,6 @@ namespace definition
 
             location_impl(location_impl&&) = default;
             location_impl& operator=(location_impl&&) = default;
-
-            static location_impl* undefined()
-            {
-                static location_impl undef(
-                    otf2::reference<location>::undefined(), string::undefined(),
-                    otf2::definition::location_group::undefined(), location_type::unknown, 0, 1);
-                return &undef;
-            }
 
             const otf2::definition::string& name() const
             {
@@ -100,11 +93,6 @@ namespace definition
                 return type_;
             }
 
-            otf2::reference<location> ref() const
-            {
-                return ref_;
-            }
-
             std::uint64_t num_events() const
             {
                 return events_;
@@ -118,14 +106,13 @@ namespace definition
             friend class writer::local;
 
         private:
-            otf2::reference<location> ref_;
             otf2::definition::string name_;
             location_type type_;
             otf2::definition::location_group lg_;
             std::uint64_t events_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_LOCATION_HPP

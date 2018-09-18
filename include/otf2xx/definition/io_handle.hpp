@@ -42,35 +42,36 @@
 #include <otf2xx/definition/io_paradigm.hpp>
 #include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/io_handle_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 namespace otf2
 {
 namespace definition
 {
 
-    class io_handle : public detail::base<io_handle, detail::io_handle_impl>
+    class io_handle : public detail::referable_base<io_handle, detail::io_handle_impl>
     {
-        using base = detail::base<io_handle, detail::io_handle_impl>;
+        using base = detail::referable_base<io_handle, detail::io_handle_impl>;
         using base::base;
 
     public:
         using io_handle_flag_type = impl_type::io_handle_flag_type;
 
-        io_handle(otf2::reference<io_handle> ref, const otf2::definition::string& name,
+        io_handle(reference_type ref, const otf2::definition::string& name,
                   const otf2::definition::io_file& file,
                   const otf2::definition::io_paradigm& paradigm, io_handle_flag_type handle_flag,
                   const otf2::definition::comm& comm, const otf2::definition::io_handle& parent)
-        : base(new impl_type(ref, name, file, paradigm, handle_flag, comm, parent.get()))
+        : base(ref,
+               new impl_type(name, file, paradigm, handle_flag, comm, parent.get(), parent.ref()))
         {
         }
 
-        io_handle(otf2::reference<io_handle> ref, const otf2::definition::string& name,
+        io_handle(reference_type ref, const otf2::definition::string& name,
                   const otf2::definition::io_file& file,
                   const otf2::definition::io_paradigm& paradigm, io_handle_flag_type handle_flag,
                   const otf2::definition::comm& comm)
-        : base(new impl_type(ref, name, file, paradigm, handle_flag, comm))
+        : base(ref, new impl_type(name, file, paradigm, handle_flag, comm))
         {
         }
 
@@ -148,7 +149,8 @@ namespace definition
         otf2::definition::io_handle parent() const
         {
             assert(this->is_valid());
-            return data_->parent();
+            auto p = data_->parent();
+            return otf2::definition::io_handle{ p.second, p.first };
         }
     };
 } // namespace definition

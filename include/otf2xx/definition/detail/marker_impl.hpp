@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -53,13 +52,13 @@ namespace definition
         class marker_impl : public ref_counted
         {
         public:
+            using tag_type = marker;
+
             using severity_type = otf2::common::marker_severity_type;
 
-            marker_impl(otf2::reference<otf2::definition::marker> ref, const std::string& group,
-                        const std::string& category, severity_type severity,
-                        std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), group_(group), category_(category),
-              severity_(severity)
+            marker_impl(const std::string& group, const std::string& category,
+                        severity_type severity, std::int64_t retain_count = 0)
+            : ref_counted(retain_count), group_(group), category_(category), severity_(severity)
             {
             }
 
@@ -69,13 +68,6 @@ namespace definition
 
             marker_impl(marker_impl&&) = default;
             marker_impl& operator=(marker_impl&&) = default;
-
-            static marker_impl* undefined()
-            {
-                static marker_impl undef(otf2::reference<otf2::definition::marker>::undefined(), "",
-                                         "", severity_type::none, 1);
-                return &undef;
-            }
 
             const std::string& group() const
             {
@@ -92,19 +84,13 @@ namespace definition
                 return severity_;
             }
 
-            otf2::reference<otf2::definition::marker> ref() const
-            {
-                return ref_;
-            }
-
         private:
-            otf2::reference<otf2::definition::marker> ref_;
             std::string group_;
             std::string category_;
             severity_type severity_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_MARKER_HPP

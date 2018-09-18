@@ -50,7 +50,6 @@
 #include <otf2xx/tmp/typelist.hpp>
 #include <otf2xx/traits/definition.hpp>
 #include <otf2xx/traits/reference.hpp>
-#include <otf2xx/traits/reference_tag.hpp>
 
 #include <otf2xx/exception.hpp>
 
@@ -81,10 +80,10 @@ public:
     template <typename Definition>
     void register_definition(const Definition& def)
     {
-        static_assert(std::is_convertible<otf2::reference<Definition>, RefType>::value,
+        static_assert(std::is_constructible<typename Definition::reference_type, RefType>::value,
                       "Trying to register a definition with a different id space");
 
-        register_reference(def.ref());
+        register_reference(static_cast<RefType>(def.ref()));
     }
 
     void register_reference(ref_type ref)
@@ -100,8 +99,12 @@ public:
         old_max = max(ref.get(), old_max);
     }
 
-    ref_type next()
+    template <typename RefType2 = ref_type>
+    RefType2 next()
     {
+        static_assert(std::is_constructible<RefType2, ref_type>::value,
+                      "Trying to get a reference for a definition with a different id space");
+
         if (ref_type::undefined() == old_max + 1)
         {
             make_exception("Cannot generate a new unused reference number");
@@ -116,11 +119,10 @@ private:
 
 class trace_reference_generator
 {
-    template <typename Definition>
+    template <typename Tag>
     struct make_generator
     {
-        using tag_type = traits::reference_tag_t<Definition>;
-        using type = reference_generator<reference<tag_type>>;
+        using type = reference_generator<otf2::reference_impl<Tag, Tag>>;
     };
 
     using generators =
@@ -130,7 +132,7 @@ class trace_reference_generator
     template <class Definition>
     auto& get_generator()
     {
-        using generator = typename make_generator<Definition>::type;
+        using generator = typename make_generator<typename Definition::tag_type>::type;
         static_assert(tmp::contains<generators, generator>(),
                       "Cannot get a generator for this definition!");
         return std::get<generator>(ref_generators_);
@@ -150,11 +152,13 @@ public:
     }
 
     template <typename Definition>
-    otf2::reference<Definition> next()
+    typename Definition::reference_type next()
     {
-        return get_generator<Definition>().next();
+        // TMP-code-obfuscator was here
+        return get_generator<Definition>().template next<typename Definition::reference_type>();
     }
 
+private:
     /// std::tuple of reference_generator for each definition (tag)
     generators ref_generators_;
 };

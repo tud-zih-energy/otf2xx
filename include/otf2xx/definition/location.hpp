@@ -42,8 +42,8 @@
 #include <otf2xx/definition/location_group.hpp>
 #include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/location_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 namespace otf2
 {
@@ -53,24 +53,24 @@ namespace definition
     /**
      * \brief class for representing location definitions
      */
-    class location : public detail::base<location, detail::location_impl>
+    class location : public detail::referable_base<location, detail::location_impl>
     {
-        using base = detail::base<location, detail::location_impl>;
+        using base = detail::referable_base<location, detail::location_impl>;
         using base::base;
 
     public:
         typedef impl_type::location_type location_type;
 
-        location(otf2::reference<otf2::definition::location> ref,
-                 const otf2::definition::string& name, const otf2::definition::location_group& lg,
-                 location_type type, std::uint64_t events = 0)
-        : base(new impl_type(ref, name, lg, type, events))
+        location(reference_type ref, const otf2::definition::string& name,
+                 const otf2::definition::location_group& lg, location_type type,
+                 std::uint64_t events = 0)
+        : base(ref, new impl_type(name, lg, type, events))
         {
         }
 
         location(const otf2::definition::location& other, std::uint64_t events)
-        : base(new impl_type(other.ref(), other.name(), other.location_group(), other.type(),
-                             events))
+        : base(other.ref(),
+               new impl_type(other.name(), other.location_group(), other.type(), events))
         {
         }
 
@@ -150,15 +150,9 @@ namespace definition
         friend class writer::local;
     };
 
-    inline std::ostream& operator<<(std::ostream& s, location loc)
+    inline std::ostream& operator<<(std::ostream& s, const location& loc)
     {
         return s << "location #" << loc.ref() << " (\"" << loc.name() << "\")";
-    }
-
-    inline bool operator==(const otf2::definition::location& lhs,
-                           const otf2::definition::location& rhs)
-    {
-        return lhs.ref() == rhs.ref();
     }
 } // namespace definition
 } // namespace otf2

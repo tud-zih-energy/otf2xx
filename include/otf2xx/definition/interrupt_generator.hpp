@@ -41,8 +41,8 @@
 
 #include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/interrupt_generator_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 #include <memory>
 
@@ -55,20 +55,19 @@ namespace definition
      * \brief class for representing a attribute definition
      */
     class interrupt_generator
-    : public detail::base<interrupt_generator, detail::interrupt_generator_impl>
+    : public detail::referable_base<interrupt_generator, detail::interrupt_generator_impl>
     {
-        using base = detail::base<interrupt_generator, detail::interrupt_generator_impl>;
+        using base = detail::referable_base<interrupt_generator, detail::interrupt_generator_impl>;
         using base::base;
 
     public:
         using base_type = impl_type::base_type;
         using interrupt_generator_mode_type = impl_type::interrupt_generator_mode_type;
 
-        interrupt_generator(otf2::reference<interrupt_generator> ref,
-                            const otf2::definition::string& name,
+        interrupt_generator(reference_type ref, const otf2::definition::string& name,
                             interrupt_generator_mode_type interrupt_generator_mode,
                             base_type period_base, std::int64_t exponent, std::uint64_t period)
-        : base(new impl_type(ref, name, interrupt_generator_mode, period_base, exponent, period))
+        : base(ref, new impl_type(name, interrupt_generator_mode, period_base, exponent, period))
         {
         }
 

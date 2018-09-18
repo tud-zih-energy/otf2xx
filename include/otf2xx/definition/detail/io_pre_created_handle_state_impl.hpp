@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -72,15 +71,6 @@ namespace definition
             io_pre_created_handle_state_impl&
             operator=(io_pre_created_handle_state_impl&&) = default;
 
-            static io_pre_created_handle_state_impl* undefined()
-            {
-                static io_pre_created_handle_state_impl undef(
-                    otf2::definition::io_handle::undefined(), io_access_mode_type::read_only,
-                    io_status_flag_type::none);
-
-                return &undef;
-            }
-
             const otf2::definition::io_handle& handle() const
             {
                 return handle_;
@@ -101,8 +91,8 @@ namespace definition
             io_access_mode_type access_mode_;
             io_status_flag_type status_flags_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_PRE_CREATED_HANDLE_STATE_HPP

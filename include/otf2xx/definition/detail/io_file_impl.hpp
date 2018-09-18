@@ -37,7 +37,6 @@
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
-#include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
@@ -50,14 +49,15 @@ namespace definition
 {
     namespace detail
     {
-
         class io_file_impl : public ref_counted
         {
         public:
-            io_file_impl(otf2::reference<io_file> ref, const otf2::definition::string& name,
+            using tag_type = io_file_base;
+
+            io_file_impl(const otf2::definition::string& name,
                          const otf2::definition::system_tree_node& scope,
                          std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), scope_(scope)
+            : ref_counted(retain_count), name_(name), scope_(scope)
             {
             }
 
@@ -67,19 +67,6 @@ namespace definition
 
             io_file_impl(io_file_impl&&) = default;
             io_file_impl& operator=(io_file_impl&&) = default;
-
-            static io_file_impl* undefined()
-            {
-                static io_file_impl undef(otf2::reference<io_file>::undefined(),
-                                          string::undefined(),
-                                          otf2::definition::system_tree_node::undefined(), 1);
-                return &undef;
-            }
-
-            otf2::reference<io_file> ref() const
-            {
-                return ref_;
-            }
 
             const otf2::definition::string& name() const
             {
@@ -92,12 +79,11 @@ namespace definition
             }
 
         private:
-            otf2::reference<io_file> ref_;
             otf2::definition::string name_;
             otf2::definition::system_tree_node scope_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_IO_FILE_HPP

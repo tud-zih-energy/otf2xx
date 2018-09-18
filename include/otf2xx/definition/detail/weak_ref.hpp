@@ -44,7 +44,7 @@ namespace definition
 {
     namespace detail
     {
-        template <typename Definition>
+        template <typename Definition, typename Enable>
         class weak_ref
         {
             static_assert(otf2::traits::is_definition<Definition>::value,
@@ -121,6 +121,94 @@ namespace definition
 
         private:
             Impl* ptr_;
+        };
+
+        template <typename Definition>
+        class weak_ref<Definition, typename std::enable_if_t<
+                                       otf2::traits::is_referable_definition<Definition>::value>>
+        {
+            static_assert(otf2::traits::is_definition<Definition>::value,
+                          "Definition must be an otf2xx definition.");
+
+            using Impl = typename Definition::impl_type;
+            using ref_type = typename Definition::reference_type;
+
+        public:
+            weak_ref() : ptr_(nullptr), ref_(ref_type::undefined())
+            {
+            }
+
+            weak_ref(const Definition& def) : ptr_(def.get()), ref_(def.ref())
+            {
+            }
+
+            weak_ref& operator=(const Definition& def)
+            {
+                ptr_ = def.get();
+                ref_ = def.ref();
+
+                return *this;
+            }
+
+            weak_ref(const weak_ref&) = default;
+            weak_ref& operator=(const weak_ref&) = default;
+
+            weak_ref(weak_ref&&) = default;
+            weak_ref& operator=(weak_ref&&) = default;
+
+            operator Definition() const
+            {
+                return lock();
+            }
+
+            Definition lock() const
+            {
+                return Definition{ ref_, ptr_ };
+            }
+
+            Impl& get()
+            {
+                return *ptr_;
+            }
+
+            Impl* operator->()
+            {
+                return ptr_;
+            }
+
+            Impl& operator*()
+            {
+                return *ptr_;
+            }
+
+            const Impl& get() const
+            {
+                return *ptr_;
+            }
+
+            const Impl* operator->() const
+            {
+                return ptr_;
+            }
+
+            const Impl& operator*() const
+            {
+                return *ptr_;
+            }
+
+            operator bool() const
+            {
+                return ptr_ != nullptr;
+            }
+
+            ref_type ref() const
+            {
+                return ref_;
+            }
+
+        private:
+            Impl* ptr_;
+            ref_type ref_;
         };
     } // namespace detail
 

@@ -48,13 +48,15 @@ class Registry;
 template <typename Definition>
 class DefinitionHolder
 {
+    static_assert(otf2::traits::is_referable_definition<Definition>::value, "Whoopsy.");
+
 public:
     DefinitionHolder(otf2::trace_reference_generator& refs) : refs_(refs)
     {
     }
 
 public:
-    const Definition& operator[](otf2::reference<Definition> ref) const
+    const Definition& operator[](typename Definition::reference_type ref) const
     {
         return definitions_[ref];
     }
@@ -79,7 +81,7 @@ public:
     }
 
     template <typename RefType, typename... Args>
-    std::enable_if_t<std::is_convertible<RefType, otf2::reference<Definition>>::value,
+    std::enable_if_t<std::is_convertible<RefType, typename Definition::reference_type>::value,
                      const Definition&>
     create(RefType ref, Args&&... args)
     {

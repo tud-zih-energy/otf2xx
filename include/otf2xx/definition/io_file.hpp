@@ -42,22 +42,34 @@
 #include <otf2xx/definition/string.hpp>
 #include <otf2xx/definition/system_tree_node.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/io_file_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 namespace otf2
 {
 namespace definition
 {
-    class io_file : public detail::base<io_file, detail::io_file_impl>
+    namespace detail
     {
-        using base = detail::base<io_file, detail::io_file_impl>;
+        class io_file_base
+        {
+        public:
+            using tag_type = io_file_base;
+        };
+    } // namespace detail
+
+    class io_file : public detail::referable_base<io_file, detail::io_file_impl>
+    {
+        using base = detail::referable_base<io_file, detail::io_file_impl>;
         using base::base;
 
     public:
-        io_file(otf2::reference<io_file> ref, const otf2::definition::string& name,
+        using reference_type = typename base::reference_type;
+        using impl_type = typename base::impl_type;
+
+        io_file(reference_type ref, const otf2::definition::string& name,
                 const otf2::definition::system_tree_node& stn)
-        : base(new impl_type(ref, name, stn))
+        : base(ref, new impl_type(name, stn))
         {
         }
 
@@ -72,7 +84,7 @@ namespace definition
         const otf2::definition::string& name() const
         {
             assert(this->is_valid());
-            return data_->name();
+            return this->data_->name();
         }
 
         /**
@@ -83,7 +95,7 @@ namespace definition
         const otf2::definition::system_tree_node& scope() const
         {
             assert(this->is_valid());
-            return data_->scope();
+            return this->data_->scope();
         }
     };
 } // namespace definition

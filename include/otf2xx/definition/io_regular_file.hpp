@@ -46,17 +46,13 @@ namespace definition
     public:
         using io_file::io_file;
 
+        io_regular_file() = default;
+
         io_regular_file(const io_file& def) : io_file(def)
         {
         }
-
-        static const io_regular_file& undefined()
-        {
-            static io_regular_file undef(io_file::undefined());
-            return undef;
-        }
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_IO_REGULAR_FILE_HPP

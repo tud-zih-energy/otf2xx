@@ -58,33 +58,39 @@ namespace definition
         class comm_impl : public ref_counted
         {
         public:
-            comm_impl(reference<comm> ref, const otf2::definition::string& name,
+            using tag_type = comm;
+
+        private:
+            using reference_type = otf2::reference_impl<comm, tag_type>;
+
+        public:
+            comm_impl(const otf2::definition::string& name,
                       const otf2::definition::comm_group& group, comm_impl* parent,
-                      std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), group_(group), self_group_(nullptr),
-              parent_(parent)
+                      reference_type pref, std::int64_t retain_count = 0)
+            : ref_counted(retain_count), name_(name), group_(group), self_group_(), parent_(parent),
+              pref_(pref)
             {
             }
 
-            comm_impl(reference<comm> ref, const otf2::definition::string& name,
+            comm_impl(const otf2::definition::string& name,
                       const otf2::definition::comm_group& group, std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), group_(group), self_group_(nullptr),
-              parent_(nullptr)
+            : ref_counted(retain_count), name_(name), group_(group), self_group_(), parent_(),
+              pref_(reference_type::undefined())
             {
             }
 
-            comm_impl(reference<comm> ref, const otf2::definition::string& name,
+            comm_impl(const otf2::definition::string& name,
                       const otf2::definition::comm_self_group& group, comm_impl* parent,
-                      std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), group_(nullptr), self_group_(group),
-              parent_(parent)
+                      reference_type pref, std::int64_t retain_count = 0)
+            : ref_counted(retain_count), name_(name), group_(), self_group_(group), parent_(parent),
+              pref_(pref)
             {
             }
 
-            comm_impl(reference<comm> ref, const otf2::definition::string& name,
+            comm_impl(const otf2::definition::string& name,
                       const otf2::definition::comm_self_group& group, std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), group_(nullptr), self_group_(group),
-              parent_(nullptr)
+            : ref_counted(retain_count), name_(name), group_(), self_group_(group), parent_(),
+              pref_(reference_type::undefined())
             {
             }
 
@@ -95,18 +101,6 @@ namespace definition
             comm_impl(comm_impl&&) = default;
             comm_impl& operator=(comm_impl&&) = default;
 
-            static comm_impl* undefined()
-            {
-                static comm_impl undef(reference<comm>::undefined(), string::undefined(),
-                                       comm_group::undefined(), 1);
-                return &undef;
-            }
-
-            reference<comm> ref() const
-            {
-                return ref_;
-            }
-
             otf2::definition::string& name()
             {
                 return name_;
@@ -115,8 +109,7 @@ namespace definition
             const otf2::definition::comm_group& group() const
             {
                 if (has_self_group())
-                    make_exception("The comm with id ", ref_.get(),
-                                   " hasn't got a group. It has a self group.");
+                    make_exception("The comm hasn't got a group. It has a self group.");
 
                 return group_;
             }
@@ -124,7 +117,7 @@ namespace definition
             const otf2::definition::comm_self_group& self_group() const
             {
                 if (!has_self_group())
-                    make_exception("The comm with id ", ref_.get(), " hasn't got a self group");
+                    make_exception("The comm hasn't got a self group");
 
                 return self_group_;
             }
@@ -139,7 +132,7 @@ namespace definition
                 return parent_.get() != nullptr;
             }
 
-            comm_impl* parent() const
+            auto parent() const
             {
                 if (!has_parent())
                 {
@@ -148,18 +141,18 @@ namespace definition
                     throw exception(msg.str());
                 }
 
-                return parent_.get();
+                return std::make_pair(parent_.get(), pref_);
             }
 
         private:
-            reference<comm> ref_;
             otf2::definition::string name_;
             otf2::definition::comm_group group_;
             otf2::definition::comm_self_group self_group_;
             otf2::intrusive_ptr<comm_impl> parent_;
+            reference_type pref_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_COMM_HPP

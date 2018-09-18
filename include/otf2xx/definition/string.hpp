@@ -41,7 +41,7 @@
 
 #include <iostream>
 
-#include <otf2xx/definition/detail/base.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 #include <otf2xx/definition/detail/string_impl.hpp>
 
 namespace otf2
@@ -54,9 +54,9 @@ namespace definition
      *
      * This class represents an OTF2 string definition.
      */
-    class string : public detail::base<string, detail::string_impl>
+    class string : public detail::referable_base<string, detail::string_impl>
     {
-        using base = detail::base<string, detail::string_impl>;
+        using base = detail::referable_base<string, detail::string_impl>;
         using base::base;
 
     public:
@@ -68,7 +68,7 @@ namespace definition
          * @param ref reference number
          * @param str string value
          */
-        string(otf2::reference<string> ref, const std::string& str) : base(new impl_type(ref, str))
+        string(reference_type ref, const std::string& str) : base(ref, new impl_type(str))
         {
         }
 

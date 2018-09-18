@@ -128,7 +128,7 @@ namespace definition
         const value_type& operator[](key_type key) const
         {
             if (key == otf2::reference<Definition>::undefined())
-                return value_type::undefined();
+                return undefined_;
 
             return data.at(key);
         }
@@ -175,6 +175,7 @@ namespace definition
 
     private:
         map_type data;
+        value_type undefined_;
     };
 
     /**

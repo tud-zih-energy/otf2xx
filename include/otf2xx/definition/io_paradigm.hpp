@@ -41,17 +41,17 @@
 
 #include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/io_paradigm_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 namespace otf2
 {
 namespace definition
 {
 
-    class io_paradigm : public detail::base<io_paradigm, detail::io_paradigm_impl>
+    class io_paradigm : public detail::referable_base<io_paradigm, detail::io_paradigm_impl>
     {
-        using base = detail::base<io_paradigm, detail::io_paradigm_impl>;
+        using base = detail::referable_base<io_paradigm, detail::io_paradigm_impl>;
         using base::base;
 
     public:
@@ -60,14 +60,13 @@ namespace definition
         using paradigm_property_type = impl_type::paradigm_property_type;
 
         // TODO: missing arguments
-        io_paradigm(otf2::reference<otf2::definition::io_paradigm> ref,
-                    const otf2::definition::string& identification,
+        io_paradigm(reference_type ref, const otf2::definition::string& identification,
                     const otf2::definition::string& name, paradigm_class_type paradigmClass,
                     paradigm_flag_type paradigmFlags,
                     const std::vector<paradigm_property_type>& properties,
                     const std::vector<otf2::attribute_value>& values)
-        : base(new impl_type(ref, identification, name, paradigmClass, paradigmFlags, properties,
-                             values))
+        : base(ref, new impl_type(identification, name, paradigmClass, paradigmFlags, properties,
+                                  values))
         {
         }
 

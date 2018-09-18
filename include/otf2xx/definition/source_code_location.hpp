@@ -41,7 +41,7 @@
 
 #include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 #include <otf2xx/definition/detail/source_code_location_impl.hpp>
 
 namespace otf2
@@ -53,15 +53,15 @@ namespace definition
      * \brief class for representing source_code_location definitions
      */
     class source_code_location
-    : public detail::base<source_code_location, detail::source_code_location_impl>
+    : public detail::referable_base<source_code_location, detail::source_code_location_impl>
     {
-        using base = detail::base<source_code_location, detail::source_code_location_impl>;
+        using base =
+            detail::referable_base<source_code_location, detail::source_code_location_impl>;
         using base::base;
 
     public:
-        source_code_location(otf2::reference<source_code_location> ref, string file,
-                             std::uint32_t line_number)
-        : base(new impl_type(ref, file, line_number))
+        source_code_location(reference_type ref, string file, std::uint32_t line_number)
+        : base(ref, new impl_type(file, line_number))
         {
         }
 

@@ -55,21 +55,26 @@ namespace definition
         class system_tree_node_impl : public ref_counted
         {
         public:
-            system_tree_node_impl(reference<system_tree_node> ref,
-                                  const otf2::definition::string& name,
+            using tag_type = system_tree_node;
+
+        private:
+            using reference_type = otf2::reference_impl<system_tree_node, tag_type>;
+
+        public:
+            system_tree_node_impl(const otf2::definition::string& name,
                                   const otf2::definition::string& class_name,
-                                  system_tree_node_impl* parent, std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), class_name_(class_name),
-              parent_(parent)
+                                  system_tree_node_impl* parent, reference_type pref,
+                                  std::int64_t retain_count = 0)
+            : ref_counted(retain_count), name_(name), class_name_(class_name), parent_(parent),
+              pref_(pref)
             {
             }
 
-            system_tree_node_impl(reference<system_tree_node> ref,
-                                  const otf2::definition::string& name,
+            system_tree_node_impl(const otf2::definition::string& name,
                                   const otf2::definition::string& class_name,
                                   std::int64_t retain_count = 0)
-            : ref_counted(retain_count), ref_(ref), name_(name), class_name_(class_name),
-              parent_(nullptr)
+            : ref_counted(retain_count), name_(name), class_name_(class_name), parent_(nullptr),
+              pref_(reference_type::undefined())
             {
             }
 
@@ -79,18 +84,6 @@ namespace definition
 
             system_tree_node_impl(system_tree_node_impl&&) = default;
             system_tree_node_impl& operator=(system_tree_node_impl&&) = default;
-
-            static system_tree_node_impl* undefined()
-            {
-                static system_tree_node_impl undef(otf2::reference<system_tree_node>::undefined(),
-                                                   string::undefined(), string::undefined(), 1);
-                return &undef;
-            }
-
-            reference<system_tree_node> ref() const
-            {
-                return ref_;
-            }
 
             const otf2::definition::string& name() const
             {
@@ -112,7 +105,7 @@ namespace definition
                 return parent_.get() != nullptr;
             }
 
-            system_tree_node_impl* parent() const
+            auto parent() const
             {
                 if (!has_parent())
                 {
@@ -120,17 +113,17 @@ namespace definition
                                    "' hasn't got a parent.");
                 }
 
-                return parent_.get();
+                return std::make_pair(parent_.get(), pref_);
             }
 
         private:
-            reference<system_tree_node> ref_;
             otf2::definition::string name_;
             otf2::definition::string class_name_;
             otf2::intrusive_ptr<system_tree_node_impl> parent_;
+            reference_type pref_;
         };
-    }
-}
-} // namespace otf2::definition::detail
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DETAIL_SYSTEM_TREE_NODE_HPP

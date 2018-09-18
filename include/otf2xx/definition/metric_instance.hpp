@@ -38,8 +38,8 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
 #include <otf2xx/definition/detail/metric_instance_impl.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 
 namespace otf2
 {
@@ -49,44 +49,41 @@ namespace definition
     /**
      * \brief class for representing metric instance definitions
      */
-    class metric_instance : public detail::base<metric_instance, detail::metric_instance_impl>
+    class metric_instance
+    : public detail::referable_base<metric_instance, detail::metric_instance_impl>
     {
-        using base = detail::base<metric_instance, detail::metric_instance_impl>;
+        using base = detail::referable_base<metric_instance, detail::metric_instance_impl>;
         using base::base;
 
     public:
         typedef impl_type::metric_occurence metric_occurence;
         typedef impl_type::metric_scope metric_scope;
 
-        metric_instance(reference<detail::metric_base> ref,
-                        const otf2::definition::metric_class& metric_class,
+        metric_instance(reference_type ref, const otf2::definition::metric_class& metric_class,
                         const otf2::definition::location& recorder,
                         const otf2::definition::location& scope)
-        : base(new impl_type(ref, metric_class, recorder, scope))
+        : base(ref, new impl_type(metric_class, recorder, scope))
         {
         }
 
-        metric_instance(reference<detail::metric_base> ref,
-                        const otf2::definition::metric_class& metric_class,
+        metric_instance(reference_type ref, const otf2::definition::metric_class& metric_class,
                         const otf2::definition::location& recorder,
                         const otf2::definition::location_group& scope)
-        : base(new impl_type(ref, metric_class, recorder, scope))
+        : base(ref, new impl_type(metric_class, recorder, scope))
         {
         }
 
-        metric_instance(reference<detail::metric_base> ref,
-                        const otf2::definition::metric_class& metric_class,
+        metric_instance(reference_type ref, const otf2::definition::metric_class& metric_class,
                         const otf2::definition::location& recorder,
                         const otf2::definition::system_tree_node& scope)
-        : base(new impl_type(ref, metric_class, recorder, scope))
+        : base(ref, new impl_type(metric_class, recorder, scope))
         {
         }
 
-        metric_instance(reference<detail::metric_base> ref,
-                        const otf2::definition::metric_class& metric_class,
+        metric_instance(reference_type ref, const otf2::definition::metric_class& metric_class,
                         const otf2::definition::location& recorder,
                         const otf2::definition::locations_group& scope)
-        : base(new impl_type(ref, metric_class, recorder, scope))
+        : base(ref, new impl_type(metric_class, recorder, scope))
         {
         }
 

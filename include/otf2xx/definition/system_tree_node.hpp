@@ -42,7 +42,7 @@
 
 #include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/base.hpp>
+#include <otf2xx/definition/detail/referable_base.hpp>
 #include <otf2xx/definition/detail/system_tree_node_impl.hpp>
 
 namespace otf2
@@ -53,22 +53,23 @@ namespace definition
     /**
      * \brief class for representing system tree node definitions
      */
-    class system_tree_node : public detail::base<system_tree_node, detail::system_tree_node_impl>
+    class system_tree_node
+    : public detail::referable_base<system_tree_node, detail::system_tree_node_impl>
     {
-        using base = detail::base<system_tree_node, detail::system_tree_node_impl>;
+        using base = detail::referable_base<system_tree_node, detail::system_tree_node_impl>;
         using base::base;
 
     public:
         system_tree_node(reference<system_tree_node> ref, const otf2::definition::string& name,
                          const otf2::definition::string& class_name,
                          const otf2::definition::system_tree_node& parent)
-        : base(new impl_type(ref, name, class_name, parent.get()))
+        : base(ref, new impl_type(name, class_name, parent.get(), parent.ref()))
         {
         }
 
         system_tree_node(reference<system_tree_node> ref, const otf2::definition::string& name,
                          const otf2::definition::string& class_name)
-        : base(new impl_type(ref, name, class_name))
+        : base(ref, new impl_type(name, class_name))
         {
         }
 
@@ -127,7 +128,8 @@ namespace definition
         otf2::definition::system_tree_node parent() const
         {
             assert(this->is_valid());
-            return data_->parent();
+            auto p = data_->parent();
+            return otf2::definition::system_tree_node{ p.second, p.first };
         }
     };
 

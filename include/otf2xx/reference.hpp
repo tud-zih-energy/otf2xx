@@ -49,6 +49,8 @@
 #include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/traits/reference.hpp>
 
+#include <iostream>
+
 namespace otf2
 {
 
@@ -58,10 +60,10 @@ namespace otf2
  * For each definition should be an own reference type, so the address space is seperated in a
  * typesafe manner.
  *
- * \tparam Type Used to seperate address spaces for different definitions
+ * \tparam Tag Used to seperate address spaces for different definitions
  */
-template <typename Type>
-class reference
+template <typename Definition, typename Tag>
+class reference_impl
 {
 public:
     /**
@@ -69,20 +71,22 @@ public:
      *
      * Mostly uint64_t or uint32_t
      */
-    using ref_type = typename traits::reference_type<Type>::type;
+    using ref_type = typename traits::reference_type<Tag>::type;
 
-    /**
-     * @brief tag_type used to distinguish this id space
-     */
-    using tag_type = Type;
+    using tag_type = Tag;
 
-    reference() = delete;
+    reference_impl() = delete;
 
     /**
      * @brief construct by value
      * @param ref the number
      */
-    reference(ref_type ref) : handle(ref)
+    reference_impl(ref_type ref) : handle(ref)
+    {
+    }
+
+    template <typename Definition2>
+    explicit reference_impl(reference_impl<Definition2, Tag> other) : handle(other.get())
     {
     }
 
@@ -94,8 +98,6 @@ public:
     {
         return handle;
     }
-
-    ~reference() = default;
 
     /**
      * @brief returns if the number equals to OTF2_UNDEFINED_UINT64
@@ -131,53 +133,14 @@ protected:
     ref_type handle;
 };
 
-template <typename T, otf2::common::group_type Type>
-class reference<definition::group<T, Type>> : public reference<definition::detail::group_base>
-{
-public:
-    reference(const reference<definition::detail::group_base>& base)
-    : reference<definition::detail::group_base>(base)
-    {
-    }
-};
+template <typename Type>
+using reference = reference_impl<Type, typename Type::tag_type>;
 
-template <>
-class reference<definition::metric_class> : public reference<definition::detail::metric_base>
+template <typename Type, typename Tag>
+inline std::ostream& operator<<(std::ostream& s, reference_impl<Type, Tag> ref)
 {
-public:
-    reference(const reference<definition::detail::metric_base>& base)
-    : reference<definition::detail::metric_base>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::metric_instance> : public reference<definition::detail::metric_base>
-{
-public:
-    reference(const reference<definition::detail::metric_base>& base)
-    : reference<definition::detail::metric_base>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::io_directory> : public reference<definition::io_file>
-{
-public:
-    reference(const reference<definition::io_file>& base) : reference<definition::io_file>(base)
-    {
-    }
-};
-
-template <>
-class reference<definition::io_regular_file> : public reference<definition::io_file>
-{
-public:
-    reference(const reference<definition::io_file>& base) : reference<definition::io_file>(base)
-    {
-    }
-};
+    return s << ref.get();
+}
 
 } // namespace otf2
 
