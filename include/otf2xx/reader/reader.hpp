@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2018, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -226,6 +226,8 @@ namespace reader
             check(OTF2_GlobalEvtReaderCallbacks_SetParameterIntCallback(event_callbacks, detail::event::parameter_int), "Couldn't set parameter_int event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetParameterStringCallback(event_callbacks, detail::event::parameter_string), "Couldn't set parameter_string event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetParameterUnsignedIntCallback(event_callbacks, detail::event::parameter_unsigned_int), "Couldn't set parameter_unsigned_int event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetCallingContextEnterCallback(event_callbacks, detail::event::calling_context_enter), "Couldn't set calling_context_enter event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetCallingContextLeaveCallback(event_callbacks, detail::event::calling_context_leave), "Couldn't set calling_context_leave event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetCallingContextSampleCallback(event_callbacks, detail::event::calling_context_sample), "Couldn't set calling_context_sample event callback");
             //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaAcquireLockCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
             //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaAtomicCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
@@ -417,7 +419,6 @@ namespace reader
         {
             return comms_;
         }
-
 
         /**
          * \brief returns all locations
@@ -724,7 +725,8 @@ namespace reader
         }
 
         /**
-         * \brief returns all io files, which could be either io regular files or io directories in a const context
+         * \brief returns all io files, which could be either io regular files or io directories in
+         *a const context
          *
          * This function returns every io file definition, which was read until the call of
          *the function.
@@ -892,7 +894,8 @@ namespace reader
          *
          * \returns a otf2::definition::container which contains all definitions
          */
-        const map_type<otf2::definition::io_pre_created_handle_state>& io_pre_created_handle_states() const
+        const map_type<otf2::definition::io_pre_created_handle_state>&
+        io_pre_created_handle_states() const
         {
             return io_pre_created_handle_states_;
         }
@@ -1249,7 +1252,8 @@ namespace reader
          *
          * \returns a otf2::definition::container which contains all definitions
          */
-        const map_type<otf2::definition::system_tree_node_property>& system_tree_node_properties() const
+        const map_type<otf2::definition::system_tree_node_property>&
+        system_tree_node_properties() const
         {
             return system_tree_node_properties_;
         }
@@ -1281,7 +1285,8 @@ namespace reader
          *
          * \returns a otf2::definition::container which contains all definitions
          */
-        const map_type<otf2::definition::calling_context_property>& calling_context_properties() const
+        const map_type<otf2::definition::calling_context_property>&
+        calling_context_properties() const
         {
             return calling_context_properties_;
         }

@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2018, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -393,6 +393,43 @@ namespace reader
                         otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
                             time - reader->clock_properties().start_time().count())),
                         reader->parameters()[parameter], value));
+
+                return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+            }
+
+            OTF2_CallbackCode calling_context_enter(OTF2_LocationRef locationID,
+                                                    OTF2_TimeStamp time, void* userData,
+                                                    OTF2_AttributeList* attributeList,
+                                                    OTF2_CallingContextRef callingContext,
+                                                    uint32_t unwindDistance)
+            {
+                otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                reader->callback().event(
+                    reader->locations()[locationID],
+                    otf2::event::calling_context_enter(
+                        attributeList,
+                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
+                            time - reader->clock_properties().start_time().count())),
+                        reader->calling_contexts()[callingContext], unwindDistance));
+
+                return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+            }
+
+            OTF2_CallbackCode calling_context_leave(OTF2_LocationRef locationID,
+                                                    OTF2_TimeStamp time, void* userData,
+                                                    OTF2_AttributeList* attributeList,
+                                                    OTF2_CallingContextRef callingContext)
+            {
+                otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                reader->callback().event(
+                    reader->locations()[locationID],
+                    otf2::event::calling_context_leave(
+                        attributeList,
+                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
+                            time - reader->clock_properties().start_time().count())),
+                        reader->calling_contexts()[callingContext]));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }

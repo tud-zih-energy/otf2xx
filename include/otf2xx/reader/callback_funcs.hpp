@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2018, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -66,6 +66,8 @@ namespace reader
             OTF2_CallbackCode parameter_int  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_ParameterRef parameter, int64_t value);
             OTF2_CallbackCode parameter_string  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_ParameterRef parameter, OTF2_StringRef string);
             OTF2_CallbackCode parameter_unsigned_int  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_ParameterRef parameter, uint64_t value);
+            OTF2_CallbackCode calling_context_enter (OTF2_LocationRef location, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_CallingContextRef callingContext, uint32_t unwindDistance);
+            OTF2_CallbackCode calling_context_leave (OTF2_LocationRef location, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_CallingContextRef callingContext);
             OTF2_CallbackCode calling_context_sample (OTF2_LocationRef location, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_CallingContextRef callingContext, uint32_t unwindDistance, OTF2_InterruptGeneratorRef interruptGenerator);
     //             OTF2_CallbackCode RmaAcquireLock  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_RmaWinRef win, uint32_t remote, uint64_t lockId, OTF2_LockType lockType);
     //             OTF2_CallbackCode RmaAtomic  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_RmaWinRef win, uint32_t remote, OTF2_RmaAtomicType type, uint64_t bytesSent, uint64_t bytesReceived, uint64_t matchingId);
@@ -117,7 +119,7 @@ namespace reader
             OTF2_CallbackCode unknown  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList);
 
             // clang-format on
-        }
+        } // namespace event
 
         namespace definition
         {
@@ -162,10 +164,10 @@ namespace reader
                 OTF2_CallbackCode unknown  (void *userData);
 
                 // clang-format on
-            }
-        }
-    }
-}
-}
+            } // namespace global
+        }     // namespace definition
+    }         // namespace detail
+} // namespace reader
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_READER_CALLBACK_FUNCS_HPP
