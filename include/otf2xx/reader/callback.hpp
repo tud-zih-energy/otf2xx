@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2018, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -98,6 +98,8 @@ namespace reader
         virtual void event(const otf2::definition::location&, const otf2::event::parameter_int&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::parameter_unsigned_int&) {}
 
+        virtual void event(const otf2::definition::location&, const otf2::event::calling_context_enter&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::calling_context_leave&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::calling_context_sample&) {}
 
         virtual void event(const otf2::definition::location&, const otf2::event::thread_fork&) {}
@@ -204,7 +206,7 @@ namespace reader
     inline callback::~callback()
     {
     }
-}
-} // namespace otf2::reader
+} // namespace reader
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_READER_CALLBACK_HPP

@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2018, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -301,6 +301,24 @@ namespace writer
             location_.event_written();
         }
 
+        void write(const otf2::event::calling_context_enter& data)
+        {
+            check(OTF2_EvtWriter_CallingContextEnter(
+                      evt_wrt_, data.attribute_list().get(), convert(data.timestamp()),
+                      data.calling_context_->ref(), data.unwind_distance()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::calling_context_leave& data)
+        {
+            check(OTF2_EvtWriter_CallingContextLeave(evt_wrt_, data.attribute_list().get(),
+                                                     convert(data.timestamp()),
+                                                     data.calling_context_->ref()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
         void write(const otf2::event::calling_context_sample& data)
         {
             check(OTF2_EvtWriter_CallingContextSample(
@@ -313,6 +331,23 @@ namespace writer
 
         // TODO find a better solution to allow high-performance writing of this event without
         // using shread ptrs
+        void write_calling_context_enter(otf2::chrono::time_point timestamp,
+                                         OTF2_CallingContextRef ref, uint32_t unwind_distance)
+        {
+            check(OTF2_EvtWriter_CallingContextEnter(evt_wrt_, nullptr, convert(timestamp), ref,
+                                                     unwind_distance),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write_calling_context_leave(otf2::chrono::time_point timestamp,
+                                         OTF2_CallingContextRef ref)
+        {
+            check(OTF2_EvtWriter_CallingContextLeave(evt_wrt_, nullptr, convert(timestamp), ref),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
         void write_calling_context_sample(otf2::chrono::time_point timestamp,
                                           OTF2_CallingContextRef ref, uint32_t unwind_distance,
                                           OTF2_InterruptGeneratorRef interrupt_generator_ref)

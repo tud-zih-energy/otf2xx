@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2018, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,6 +57,8 @@
 #include <otf2xx/event/parameter_string.hpp>
 #include <otf2xx/event/parameter_unsigned_int.hpp>
 
+#include <otf2xx/event/calling_context_enter.hpp>
+#include <otf2xx/event/calling_context_leave.hpp>
 #include <otf2xx/event/calling_context_sample.hpp>
 
 #include <otf2xx/event/thread_acquire_lock.hpp>
@@ -75,19 +77,19 @@
 
 #include <otf2xx/event/marker.hpp>
 
+#include <otf2xx/event/io_acquire_lock.hpp>
+#include <otf2xx/event/io_change_status_flag.hpp>
 #include <otf2xx/event/io_create_handle.hpp>
+#include <otf2xx/event/io_delete_file.hpp>
 #include <otf2xx/event/io_destroy_handle.hpp>
 #include <otf2xx/event/io_duplicate_handle.hpp>
-#include <otf2xx/event/io_seek.hpp>
-#include <otf2xx/event/io_change_status_flag.hpp>
-#include <otf2xx/event/io_delete_file.hpp>
 #include <otf2xx/event/io_operation_begin.hpp>
-#include <otf2xx/event/io_operation_test.hpp>
-#include <otf2xx/event/io_operation_issued.hpp>
 #include <otf2xx/event/io_operation_cancelled.hpp>
 #include <otf2xx/event/io_operation_complete.hpp>
-#include <otf2xx/event/io_acquire_lock.hpp>
+#include <otf2xx/event/io_operation_issued.hpp>
+#include <otf2xx/event/io_operation_test.hpp>
 #include <otf2xx/event/io_release_lock.hpp>
+#include <otf2xx/event/io_seek.hpp>
 #include <otf2xx/event/io_try_lock.hpp>
 
 #include <otf2xx/event/unknown.hpp>

@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2018, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -68,6 +68,8 @@ namespace event
     class parameter_int;
     class parameter_unsigned_int;
 
+    class calling_context_enter;
+    class calling_context_leave;
     class calling_context_sample;
 
 #ifdef OTF2XX_WITH_RMA
@@ -123,7 +125,7 @@ namespace event
     class io_try_lock;
 
     class unknown;
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_FWD_HPP
