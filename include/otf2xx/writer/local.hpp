@@ -305,7 +305,7 @@ namespace writer
         {
             check(OTF2_EvtWriter_CallingContextEnter(
                       evt_wrt_, data.attribute_list().get(), convert(data.timestamp()),
-                      data.calling_context_->ref(), data.unwind_distance()),
+                      data.calling_context_.ref(), data.unwind_distance()),
                   "Couldn't write event to local event writer.");
             location_.event_written();
         }
@@ -314,7 +314,7 @@ namespace writer
         {
             check(OTF2_EvtWriter_CallingContextLeave(evt_wrt_, data.attribute_list().get(),
                                                      convert(data.timestamp()),
-                                                     data.calling_context_->ref()),
+                                                     data.calling_context_.ref()),
                   "Couldn't write event to local event writer.");
             location_.event_written();
         }
