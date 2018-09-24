@@ -46,6 +46,7 @@
 #ifndef INCLUDE_OTF2XX_REFERENCE_GENERATOR_HPP
 #define INCLUDE_OTF2XX_REFERENCE_GENERATOR_HPP
 
+#include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 #include <otf2xx/tmp/typelist.hpp>
 #include <otf2xx/traits/definition.hpp>

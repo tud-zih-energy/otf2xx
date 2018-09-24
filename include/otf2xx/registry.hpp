@@ -75,21 +75,26 @@ public:
     }
 
     template <typename... Args>
-    const Definition& create(Args&&... args)
+    Definition& create(Args&&... args)
     {
         return definitions_.emplace(refs_.next<Definition>(), std::forward<Args>(args)...);
     }
 
     template <typename RefType, typename... Args>
     std::enable_if_t<std::is_convertible<RefType, typename Definition::reference_type>::value,
-                     const Definition&>
+                     Definition&>
     create(RefType ref, Args&&... args)
     {
         // TODO I fucking bet that some day there will be a definition, where this is well-formed in
         // the case you wanted to omit the ref FeelsBadMan
-        const auto& def = definitions_.emplace(ref, std::forward<Args>(args)...);
+        auto& def = definitions_.emplace(ref, std::forward<Args>(args)...);
         refs_.register_definition(def);
         return def;
+    }
+
+    bool has(typename Definition::reference_type ref) const
+    {
+        return definitions_.count(ref) > 0;
     }
 
     const otf2::definition::container<Definition>& data() const
@@ -126,7 +131,7 @@ public:
     }
 
     template <typename... Args>
-    const Property& create(Args&&... args)
+    Property& create(Args&&... args)
     {
         return properties_.emplace(std::forward<Args>(args)...);
     }
@@ -220,12 +225,6 @@ public:
         return get_holder<Definition>();
     }
 
-    template <typename Definition>
-    auto& all()
-    {
-        return get_holder<Definition>();
-    }
-
     template <typename Definition, typename... Args>
     auto& create(Args&&... args)
     {
@@ -236,6 +235,12 @@ public:
     const auto& get(const Key& key) const
     {
         return get_holder<Definition>()[key];
+    }
+
+    template <typename Definition, typename Key>
+    bool has(const Key& key) const
+    {
+        return get_holder<Definition>().has(key);
     }
 
 public:
