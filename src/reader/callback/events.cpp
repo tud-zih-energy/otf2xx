@@ -1053,21 +1053,22 @@ namespace reader
                                             const OTF2_StringRef* programArguments)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                auto& registry = reader->registry();
 
                 std::vector<otf2::definition::detail::weak_ref<otf2::definition::string>> args;
 
                 for (uint32_t i = 0; i < numberOfArguments; i++)
                 {
-                    args.emplace_back(reader->strings()[programArguments[i]]);
+                    args.emplace_back(registry.get<otf2::definition::string>(programArguments[i]));
                 }
 
                 reader->callback().event(
-                    reader->locations()[locationID],
+                    registry.get<otf2::definition::location>(locationID),
                     otf2::event::program_begin(
                         attributeList,
                         otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
                             time - reader->clock_properties().start_time().count())),
-                        reader->strings()[programName], args));
+                        registry.get<otf2::definition::string>(programName), args));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -1077,9 +1078,10 @@ namespace reader
                                           int64_t exitStatus)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                auto& registry = reader->registry();
 
                 reader->callback().event(
-                    reader->locations()[locationID],
+                    registry.get<otf2::definition::location>(locationID),
                     otf2::event::program_end(
                         attributeList,
                         otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
