@@ -98,8 +98,16 @@ namespace reader
         virtual void event(const otf2::definition::location&, const otf2::event::parameter_int&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::parameter_unsigned_int&) {}
 
-        virtual void event(const otf2::definition::location&, const otf2::event::calling_context_enter&) {}
-        virtual void event(const otf2::definition::location&, const otf2::event::calling_context_leave&) {}
+        virtual void event(const otf2::definition::location& loc, const otf2::event::calling_context_enter& evt)
+        {
+            event(loc, otf2::event::enter(evt.timestamp(), evt.attribute_list(), evt.calling_context().region()));
+        }
+
+        virtual void event(const otf2::definition::location& loc, const otf2::event::calling_context_leave& evt)
+        {
+            event(loc, otf2::event::leave(evt.timestamp(), evt.attribute_list(), evt.calling_context().region()));
+        }
+
         virtual void event(const otf2::definition::location&, const otf2::event::calling_context_sample&) {}
 
         virtual void event(const otf2::definition::location&, const otf2::event::thread_fork&) {}
