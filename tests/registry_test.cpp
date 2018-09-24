@@ -47,7 +47,7 @@ bool contains(const std::set<T>& container, const T& el)
 
 TEST_CASE("Add and get strings")
 {
-    otf2::Registry reg;
+    otf2::registry reg;
     SECTION("Use predefined id")
     {
         const std::string value = "The answer.";

@@ -51,7 +51,7 @@ int main()
 
     // This test will produce a sematically equal trace to the writer_test.cpp, but this time we use
     // the registry to generate the definitions
-    otf2::Registry reg;
+    otf2::registry reg;
 
     ar.set_post_flush_callback([]() { return otf2::chrono::convert_time_point(get_time()); });
 

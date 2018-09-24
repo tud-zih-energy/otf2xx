@@ -41,6 +41,8 @@ namespace otf2
 template <typename Definition>
 class reference_generator;
 
+class registry;
+
 class trace_reference_generator;
 
 class attribute_list;

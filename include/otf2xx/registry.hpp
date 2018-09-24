@@ -35,6 +35,7 @@
 #pragma once
 
 #include <otf2xx/definition/definitions.hpp>
+#include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 #include <otf2xx/reference_generator.hpp>
 
@@ -43,7 +44,6 @@
 
 namespace otf2
 {
-class Registry;
 
 template <typename Definition>
 class DefinitionHolder
@@ -167,7 +167,7 @@ struct Holder<Definition,
     using type = DefinitionHolder<Definition>;
 };
 
-class Registry
+class registry
 {
     template <typename Definition>
     struct make_holder
@@ -209,7 +209,7 @@ class Registry
     };
 
 public:
-    Registry() : holders_(construct_holders<holders>()(refs_))
+    registry() : holders_(construct_holders<holders>()(refs_))
     {
     }
 

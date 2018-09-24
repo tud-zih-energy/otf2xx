@@ -812,7 +812,7 @@ namespace writer
         return wrt;
     }
 
-    inline global& operator<<(global& wrt, const otf2::Registry& reg)
+    inline global& operator<<(global& wrt, const otf2::registry& reg)
     {
         tmp::foreach (reg.get_holders(), [&wrt](const auto& holder) {
             for (const auto& def : holder)
