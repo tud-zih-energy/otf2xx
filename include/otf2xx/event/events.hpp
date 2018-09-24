@@ -92,5 +92,8 @@
 #include <otf2xx/event/io_seek.hpp>
 #include <otf2xx/event/io_try_lock.hpp>
 
+#include <otf2xx/event/program_begin.hpp>
+#include <otf2xx/event/program_end.hpp>
+
 #include <otf2xx/event/unknown.hpp>
 #endif // INCLUDE_OTF2XX_EVENT_EVENTS_HPP

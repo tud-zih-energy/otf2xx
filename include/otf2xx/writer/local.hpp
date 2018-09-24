@@ -619,6 +619,32 @@ namespace writer
             location_.event_written();
         }
 
+        void write(const otf2::event::program_begin& data)
+        {
+            auto numberOfArguments = data.arguments().size();
+            std::vector<otf2::reference<otf2::definition::string>::ref_type> args;
+            args.reserve(numberOfArguments);
+
+            for (const auto& arg : data.arguments())
+            {
+                args.push_back(arg.ref());
+            }
+
+            check(OTF2_EvtWriter_ProgramBegin(evt_wrt_, data.attribute_list().get(),
+                                              convert(data.timestamp()), data.name().ref(),
+                                              numberOfArguments, args.data()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::program_end& data)
+        {
+            check(OTF2_EvtWriter_ProgramEnd(evt_wrt_, data.attribute_list().get(),
+                                            convert(data.timestamp()), data.exit_status()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
     public:
         void write(const otf2::definition::mapping_table& def)
         {

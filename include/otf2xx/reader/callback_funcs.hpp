@@ -116,6 +116,9 @@ namespace reader
             OTF2_CallbackCode io_release_lock (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, OTF2_LockType lockType);
             OTF2_CallbackCode io_try_lock (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_IoHandleRef handle, OTF2_LockType lockType);
 
+            OTF2_CallbackCode program_begin (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_StringRef programName, uint32_t numberOfArguments, const OTF2_StringRef *programArguments);
+            OTF2_CallbackCode program_end (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, int64_t exitStatus);
+
             OTF2_CallbackCode unknown  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList);
 
             // clang-format on

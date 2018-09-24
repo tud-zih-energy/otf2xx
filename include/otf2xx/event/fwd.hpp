@@ -124,6 +124,9 @@ namespace event
     class io_release_lock;
     class io_try_lock;
 
+    class program_begin;
+    class program_end;
+
     class unknown;
 } // namespace event
 } // namespace otf2

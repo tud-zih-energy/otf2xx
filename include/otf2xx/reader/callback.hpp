@@ -131,6 +131,9 @@ namespace reader
         virtual void event(const otf2::definition::location&, const otf2::event::io_release_lock&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::io_try_lock&) {}
 
+        virtual void event(const otf2::definition::location&, const otf2::event::program_begin&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::program_end&) {}
+
         virtual void event(const otf2::definition::location&, const otf2::event::unknown&) {}
 
 

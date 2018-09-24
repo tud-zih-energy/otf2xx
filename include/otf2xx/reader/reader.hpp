@@ -214,6 +214,7 @@ namespace reader
             check(OTF2_GlobalEvtReaderCallbacks_SetLeaveCallback(event_callbacks, detail::event::leave), "Couldn't set leave event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetMeasurementOnOffCallback(event_callbacks, detail::event::measurement), "Couldn't set measurement event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetMetricCallback (event_callbacks, detail::event::metric), "Couldn't set metric event callback");
+
             check(OTF2_GlobalEvtReaderCallbacks_SetMpiCollectiveBeginCallback(event_callbacks, detail::event::mpi_collective_begin), "Couldn't set mpi collective begin event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetMpiCollectiveEndCallback(event_callbacks, detail::event::mpi_collective_end), "Couldn't set mpi collective end event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetMpiIrecvCallback(event_callbacks, detail::event::mpi_irecv), "Couldn't set mpi_irecv event callback");
@@ -224,12 +225,14 @@ namespace reader
             check(OTF2_GlobalEvtReaderCallbacks_SetMpiRequestCancelledCallback(event_callbacks, detail::event::mpi_request_cancelled), "Couldn't set mpi_request_cancelled event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetMpiRequestTestCallback(event_callbacks, detail::event::mpi_request_test), "Couldn't set mpi_request_test event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetMpiSendCallback(event_callbacks, detail::event::mpi_send), "Couldn't set mpi_send event callback");
+
             check(OTF2_GlobalEvtReaderCallbacks_SetParameterIntCallback(event_callbacks, detail::event::parameter_int), "Couldn't set parameter_int event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetParameterStringCallback(event_callbacks, detail::event::parameter_string), "Couldn't set parameter_string event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetParameterUnsignedIntCallback(event_callbacks, detail::event::parameter_unsigned_int), "Couldn't set parameter_unsigned_int event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetCallingContextEnterCallback(event_callbacks, detail::event::calling_context_enter), "Couldn't set calling_context_enter event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetCallingContextLeaveCallback(event_callbacks, detail::event::calling_context_leave), "Couldn't set calling_context_leave event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetCallingContextSampleCallback(event_callbacks, detail::event::calling_context_sample), "Couldn't set calling_context_sample event callback");
+
             //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaAcquireLockCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
             //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaAtomicCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
             //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaCollectiveBeginCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
@@ -248,6 +251,7 @@ namespace reader
             //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaWaitChangeCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
             //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaWinCreateCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
             //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaWinDestroyCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
+
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadAcquireLockCallback(event_callbacks, detail::event::thread_acquire_lock), "Couldn't set thread_acquire_lock event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadForkCallback(event_callbacks, detail::event::thread_fork), "Couldn't set thread_fork event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadJoinCallback(event_callbacks, detail::event::thread_join), "Couldn't set thread_join event callback");
@@ -261,6 +265,7 @@ namespace reader
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadBeginCallback(event_callbacks, detail::event::thread_begin), "Couldn't set thread_begin event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadWaitCallback(event_callbacks, detail::event::thread_wait), "Couldn't set thread_wait event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadEndCallback(event_callbacks, detail::event::thread_end), "Couldn't set thread_end event callback");
+
             check(OTF2_GlobalEvtReaderCallbacks_SetIoCreateHandleCallback(event_callbacks, detail::event::io_create_handle), "Couldn't set io_create_handle event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoDestroyHandleCallback(event_callbacks, detail::event::io_destroy_handle), "Couldn't set io_destroy_handle event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoDuplicateHandleCallback(event_callbacks, detail::event::io_duplicate_handle), "Couldn't set io_duplicate_handle event callback");
@@ -275,6 +280,9 @@ namespace reader
             check(OTF2_GlobalEvtReaderCallbacks_SetIoAcquireLockCallback(event_callbacks, detail::event::io_acquire_lock), "Couldn't set io_acquire_lock event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoReleaseLockCallback(event_callbacks, detail::event::io_release_lock), "Couldn't set io_release_lock event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetIoTryLockCallback(event_callbacks, detail::event::io_try_lock), "Couldn't set io_try_lock event callback");
+
+            check(OTF2_GlobalEvtReaderCallbacks_SetProgramBeginCallback(event_callbacks, detail::event::program_begin), "Couldn't set program_begin event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetProgramEndCallback(event_callbacks, detail::event::program_end), "Couldn't set program_end event callback");
 
             check(OTF2_GlobalEvtReaderCallbacks_SetUnknownCallback(event_callbacks, detail::event::unknown), "Couldn't set unknown event callback");
 

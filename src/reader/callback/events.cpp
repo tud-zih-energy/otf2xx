@@ -1047,6 +1047,48 @@ namespace reader
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
 
+            OTF2_CallbackCode program_begin(OTF2_LocationRef locationID, OTF2_TimeStamp time,
+                                            void* userData, OTF2_AttributeList* attributeList,
+                                            OTF2_StringRef programName, uint32_t numberOfArguments,
+                                            const OTF2_StringRef* programArguments)
+            {
+                otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                std::vector<otf2::definition::detail::weak_ref<otf2::definition::string>> args;
+
+                for (uint32_t i = 0; i < numberOfArguments; i++)
+                {
+                    args.emplace_back(reader->strings()[programArguments[i]]);
+                }
+
+                reader->callback().event(
+                    reader->locations()[locationID],
+                    otf2::event::program_begin(
+                        attributeList,
+                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
+                            time - reader->clock_properties().start_time().count())),
+                        reader->strings()[programName], args));
+
+                return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+            }
+
+            OTF2_CallbackCode program_end(OTF2_LocationRef locationID, OTF2_TimeStamp time,
+                                          void* userData, OTF2_AttributeList* attributeList,
+                                          int64_t exitStatus)
+            {
+                otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+
+                reader->callback().event(
+                    reader->locations()[locationID],
+                    otf2::event::program_end(
+                        attributeList,
+                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
+                            time - reader->clock_properties().start_time().count())),
+                        exitStatus));
+
+                return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+            }
+
             OTF2_CallbackCode unknown(OTF2_LocationRef locationID, OTF2_TimeStamp time,
                                       void* userData, OTF2_AttributeList*)
             {
