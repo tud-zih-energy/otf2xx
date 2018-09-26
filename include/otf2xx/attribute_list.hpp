@@ -69,7 +69,7 @@ namespace detail
 
         return result;
     }
-}
+} // namespace detail
 
 namespace detail
 {
@@ -314,7 +314,7 @@ namespace detail
                   "Couldn't add value to attribute list.");
         }
     };
-}
+} // namespace detail
 namespace detail
 {
     using attribute_type = otf2::definition::attribute::attribute_type;
@@ -568,7 +568,7 @@ namespace detail
             static_assert(Test, "Not implemented yet.");
         }
     };
-}
+} // namespace detail
 
 class attribute_list
 {
@@ -636,11 +636,6 @@ public:
             OTF2_AttributeList_Delete(attribute_list_);
     }
 
-    OTF2_AttributeList* get()
-    {
-        return attribute_list_;
-    }
-
     OTF2_AttributeList* get() const
     {
         return attribute_list_;
@@ -675,6 +670,6 @@ private:
     OTF2_AttributeList* attribute_list_;
     bool owned_;
 };
-}
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_ATRTIBUTE_LIST_HPP
