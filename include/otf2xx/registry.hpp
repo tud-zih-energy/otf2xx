@@ -42,6 +42,8 @@
 #include <type_traits>
 #include <utility>
 
+#include <cassert>
+
 namespace otf2
 {
 
@@ -63,12 +65,16 @@ public:
 
     void operator()(const Definition& def)
     {
+        assert(ref.ref() != Definition::reference_type::undefined());
+
         definitions_.add_definition(def);
         refs_.register_definition(def);
     }
 
     void operator()(otf2::definition::detail::weak_ref<Definition> ref)
     {
+        assert(ref.ref() != Definition::reference_type::undefined());
+
         auto def = ref.lock();
         refs_.register_definition(def);
         definitions_.add_definition(std::move(def));
@@ -95,6 +101,12 @@ public:
     bool has(typename Definition::reference_type ref) const
     {
         return definitions_.count(ref) > 0;
+    }
+
+    const Definition& find(typename Definition::reference_type ref) const
+    {
+        auto it = definitions_.find(ref);
+        return it != definitions_.end() ? *it : definitions_[ref.undefined()];
     }
 
     const otf2::definition::container<Definition>& data() const
@@ -241,6 +253,12 @@ public:
     bool has(const Key& key) const
     {
         return get_holder<Definition>().has(key);
+    }
+
+    template <typename Definition, typename Key>
+    const auto& find(const Key& key) const
+    {
+        return get_holder<Definition>().find(key);
     }
 
 public:

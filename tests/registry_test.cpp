@@ -67,6 +67,11 @@ TEST_CASE("Add and get strings")
         auto str = reg.get<otf2::definition::string>(42);
         REQUIRE(str.str() == value);
         REQUIRE(str.ref() == 42);
+
+        REQUIRE(reg.find<otf2::definition::string>(42) == str);
+        REQUIRE(reg.find<otf2::definition::string>(43).ref() ==
+                otf2::definition::string::reference_type::undefined());
+        REQUIRE(!reg.find<otf2::definition::string>(43).is_valid());
     }
     SECTION("Use auto-generated id")
     {
