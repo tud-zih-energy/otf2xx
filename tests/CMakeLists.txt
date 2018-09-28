@@ -77,6 +77,7 @@ otf2xx_add_test(tmp_test otf2xx::Core)
 otf2xx_add_test(intrusive_ptr_test otf2xx::Core)
 otf2xx_add_test(ref_gen_test otf2xx::Core)
 otf2xx_add_test(registry_test otf2xx::Core)
+otf2xx_add_test(lookup_registry_test otf2xx::Core)
 otf2xx_add_test(metric_events otf2xx::Core)
 
 otf2xx_add_test(writer_test otf2xx::Writer)

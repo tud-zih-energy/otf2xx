@@ -32,6 +32,9 @@
  *
  */
 
+#ifndef INCLUDE_OTF2XX_REGISTRY_HPP
+#define INCLUDE_OTF2XX_REGISTRY_HPP
+
 #pragma once
 
 #include <otf2xx/definition/definitions.hpp>
@@ -48,12 +51,12 @@ namespace otf2
 {
 
 template <typename Definition>
-class DefinitionHolder
+class definition_holder
 {
     static_assert(otf2::traits::is_referable_definition<Definition>::value, "Whoopsy.");
 
 public:
-    DefinitionHolder(otf2::trace_reference_generator& refs) : refs_(refs)
+    definition_holder(otf2::trace_reference_generator& refs) : refs_(refs)
     {
     }
 
@@ -80,16 +83,21 @@ public:
         definitions_.add_definition(std::move(def));
     }
 
-    template <typename... Args>
-    Definition& create(Args&&... args)
+    template <typename Arg, typename... Args>
+    std::enable_if_t<!std::is_convertible<Arg, typename Definition::reference_type>::value &&
+                         std::is_constructible<Definition, typename Definition::reference_type, Arg,
+                                               Args...>::value,
+                     Definition&>
+    create(Arg&& arg, Args&&... args)
     {
-        return definitions_.emplace(refs_.next<Definition>(), std::forward<Args>(args)...);
+        return definitions_.emplace(refs_.next<Definition>(), std::forward<Arg>(arg),
+                                    std::forward<Args>(args)...);
     }
 
     template <typename RefType, typename... Args>
     std::enable_if_t<std::is_convertible<RefType, typename Definition::reference_type>::value,
                      Definition&>
-    create(RefType ref, Args&&... args)
+    create(RefType&& ref, Args&&... args)
     {
         // TODO I fucking bet that some day there will be a definition, where this is well-formed in
         // the case you wanted to omit the ref FeelsBadMan
@@ -124,16 +132,146 @@ public:
         return definitions_.end();
     }
 
-private:
+protected:
     otf2::definition::container<Definition> definitions_;
     otf2::trace_reference_generator& refs_;
 };
 
+template <typename Definition, typename... KeyList>
+class lookup_definition_holder : public definition_holder<Definition>
+{
+    template <class T, class Tuple>
+    struct Index;
+
+    template <class T, class... Types>
+    struct Index<T, std::tuple<T, Types...>>
+    {
+        static const std::size_t value = 0;
+    };
+
+    template <class T, class U, class... Types>
+    struct Index<T, std::tuple<U, Types...>>
+    {
+        static const std::size_t value = 1 + Index<T, std::tuple<Types...>>::value;
+    };
+
+    template <typename T, typename Tuple>
+    struct has_type;
+
+    template <typename T>
+    struct has_type<T, std::tuple<>> : std::false_type
+    {
+    };
+
+    template <typename T, typename U, typename... Ts>
+    struct has_type<T, std::tuple<U, Ts...>> : has_type<T, std::tuple<Ts...>>
+    {
+    };
+
+    template <typename T, typename... Ts>
+    struct has_type<T, std::tuple<T, Ts...>> : std::true_type
+    {
+    };
+
+    using key_list = std::tuple<KeyList...>;
+    using base = definition_holder<Definition>;
+
+public:
+    lookup_definition_holder(otf2::trace_reference_generator& refs) : base(refs)
+    {
+    }
+
+    using base::operator[];
+    using base::operator();
+    using base::create;
+    using base::find;
+    using base::has;
+
+    template <typename Key>
+    std::enable_if_t<has_type<Key, key_list>::value, const Definition&> operator[](Key key) const
+    {
+        return std::get<Index<Key, key_list>::value>(lookup_maps_).at(key.key);
+    }
+
+    template <typename Key>
+    std::enable_if_t<has_type<Key, key_list>::value> operator()(Key key, const Definition& def)
+    {
+        assert(def.ref() != Definition::reference_type::undefined());
+
+        std::get<Index<Key, key_list>::value>(lookup_maps_).emplace(key.key, def);
+        this->definitions_.add_definition(def);
+        this->refs_.register_definition(def);
+    }
+
+    template <typename Key>
+    std::enable_if_t<has_type<Key, key_list>::value>
+    operator()(Key key, otf2::definition::detail::weak_ref<Definition> ref)
+    {
+        assert(ref.ref() != Definition::reference_type::undefined());
+
+        auto def = ref.lock();
+        this->refs_.register_definition(def);
+        this->definitions_.add_definition(def);
+        std::get<Index<Key, key_list>::value>(lookup_maps_).emplace(key.key, std::move(def));
+    }
+
+    template <typename Key, typename... Args>
+    std::enable_if_t<has_type<Key, key_list>::value, Definition&> create(Key key, Args&&... args)
+    {
+        auto result = std::get<Index<Key, key_list>::value>(lookup_maps_)
+                          .emplace(std::piecewise_construct, std::forward_as_tuple(key.key),
+                                   std::forward_as_tuple(this->refs_.template next<Definition>(),
+                                                         std::forward<Args>(args)...));
+
+        assert(result.second);
+
+        this->definitions_.add_definition(result.first->second);
+
+        return result.first->second;
+    }
+
+    template <typename Key, typename RefType, typename... Args>
+    std::enable_if_t<has_type<Key, key_list>::value &&
+                         std::is_convertible<RefType, typename Definition::reference_type>::value,
+                     Definition&>
+    create(Key key, RefType ref, Args&&... args)
+    {
+        // TODO I fucking bet that some day there will be a definition, where this is well-formed in
+        // the case you wanted to omit the ref FeelsBadMan
+        auto result = std::get<Index<Key, key_list>::value>(lookup_maps_)
+                          .emplace(std::piecewise_construct, std::forward_as_tuple(key.key),
+                                   std::forward_as_tuple(ref, std::forward<Args>(args)...));
+
+        auto& def = result.first->second;
+
+        this->definitions_.add_definition(def);
+        this->refs_.register_definition(def);
+        return def;
+    }
+
+    template <typename Key>
+    std::enable_if_t<has_type<Key, key_list>::value, bool> has(Key key) const
+    {
+        return std::get<Index<Key, key_list>::value>(lookup_maps_).count(key.key) > 0;
+    }
+
+    template <typename Key>
+    std::enable_if_t<has_type<Key, key_list>::value, const Definition&> find(Key key) const
+    {
+        const auto& definitions = std::get<Index<Key, key_list>::value>(lookup_maps_);
+        auto it = definitions.find(key.key);
+        return it != definitions.end() ? *it : (*this)[otf2::reference<Definition>::undefined()];
+    }
+
+private:
+    std::tuple<std::map<typename KeyList::key_type, Definition>...> lookup_maps_;
+};
+
 template <typename Property>
-class PropertyHolder
+class property_holder
 {
 public:
-    PropertyHolder(otf2::trace_reference_generator&)
+    property_holder(otf2::trace_reference_generator&)
     {
     }
 
@@ -167,38 +305,50 @@ private:
     otf2::definition::container<Property> properties_;
 };
 
-template <typename Definition, typename = void>
-struct Holder;
-
-template <typename Definition>
-struct Holder<Definition,
-              typename std::enable_if<!traits::is_referable_definition<Definition>::value>::type>
+namespace detail
 {
-    using type = PropertyHolder<Definition>;
-};
+    template <typename Definition, template <typename> class DefinitionHolder,
+              template <typename> class PropertyHolder, typename = void>
+    struct holder_selection_helper;
 
-template <typename Definition>
-struct Holder<Definition,
-              typename std::enable_if<traits::is_referable_definition<Definition>::value>::type>
-{
-    using type = DefinitionHolder<Definition>;
-};
-
-class registry
-{
-    template <typename Definition>
-    struct make_holder
+    template <typename Definition, template <typename> class DefinitionHolder,
+              template <typename> class PropertyHolder>
+    struct holder_selection_helper<
+        Definition, DefinitionHolder, PropertyHolder,
+        typename std::enable_if<!traits::is_referable_definition<Definition>::value>::type>
     {
-        using type = typename Holder<Definition>::type;
+        using type = PropertyHolder<Definition>;
     };
 
+    template <typename Definition, template <typename> class DefinitionHolder,
+              template <typename> class PropertyHolder>
+    struct holder_selection_helper<
+        Definition, DefinitionHolder, PropertyHolder,
+        typename std::enable_if<traits::is_referable_definition<Definition>::value>::type>
+    {
+        using type = DefinitionHolder<Definition>;
+    };
+} // namespace detail
+
+template <typename Definition>
+struct get_default_holder
+{
+    using type = typename detail::holder_selection_helper<Definition, definition_holder,
+                                                          property_holder>::type;
+};
+
+template <template <typename> class GetHolderForDefinition>
+class lookup_registry
+{
+
     using holders =
-        tmp::apply_t<tmp::transform_t<traits::usable_definitions, make_holder>, std::tuple>;
+        tmp::apply_t<tmp::transform_t<traits::usable_definitions, GetHolderForDefinition>,
+                     std::tuple>;
 
     template <class Definition>
     auto& get_holder()
     {
-        using holder = typename make_holder<Definition>::type;
+        using holder = typename GetHolderForDefinition<Definition>::type;
         static_assert(tmp::contains<holders, holder>(), "Cannot get a holder for this definition!");
         return std::get<holder>(holders_);
     }
@@ -206,7 +356,7 @@ class registry
     template <class Definition>
     const auto& get_holder() const
     {
-        using holder = typename make_holder<Definition>::type;
+        using holder = typename GetHolderForDefinition<Definition>::type;
         static_assert(tmp::contains<holders, holder>(), "Cannot get a holder for this definition!");
         return std::get<holder>(holders_);
     }
@@ -226,7 +376,7 @@ class registry
     };
 
 public:
-    registry() : holders_(construct_holders<holders>()(refs_))
+    lookup_registry() : holders_(construct_holders<holders>()(refs_))
     {
     }
 
@@ -280,3 +430,5 @@ private:
     holders holders_;
 };
 } // namespace otf2
+
+#endif // INCLUDE_OTF2XX_REGISTRY_HPP
