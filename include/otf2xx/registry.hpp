@@ -65,7 +65,7 @@ public:
 
     void operator()(const Definition& def)
     {
-        assert(ref.ref() != Definition::reference_type::undefined());
+        assert(def.ref() != Definition::reference_type::undefined());
 
         definitions_.add_definition(def);
         refs_.register_definition(def);
