@@ -60,6 +60,9 @@ int main()
         std::cout << test.ref() << " - " << test.str() << std::endl;
     }
 
+    auto def = otf2::definition::string(6, "I'm alien");
+    reg.register_definition(ByProcess(42), std::move(def));
+
     for (auto& def : reg.all<otf2::definition::string>())
     {
         std::cout << def.ref() << " - " << def.str() << std::endl;

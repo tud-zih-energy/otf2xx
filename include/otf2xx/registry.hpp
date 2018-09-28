@@ -412,10 +412,16 @@ public:
     }
 
 public:
-    template <class Definition>
-    void register_definition(const Definition& def)
+    template <typename Definition, typename Key>
+    void register_definition(Key&& key, Definition&& def)
     {
-        get_holder<Definition>()(def);
+        get_holder<Definition>()(std::forward<Key>(key), std::forward<Definition>(def));
+    }
+
+    template <typename Definition>
+    void register_definition(Definition&& def)
+    {
+        get_holder<Definition>()(std::forward<Definition>(def));
     }
 
 public:
