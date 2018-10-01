@@ -149,7 +149,7 @@ namespace writer
 
             // find corresponding group
             otf2::definition::comm_locations_group cgroup;
-            for (auto group : comm_locations_groups_)
+            for (auto group : reg_.all<otf2::definition::comm_locations_group>())
             {
                 if (group.paradigm() == data.paradigm())
                 {
@@ -478,14 +478,14 @@ namespace writer
         }
 
         template <typename Definiton>
-        void store(otf2::definition::container<Definiton>& c)
+        void store(const otf2::definition::container<Definiton>& c)
         {
             for (const auto& def : c)
                 store(def);
         }
 
         template <typename... Definitions>
-        void store(otf2::definition::container<Definitions>&... cs)
+        void store(const otf2::definition::container<Definitions>&... cs)
         {
             auto iters = std::make_tuple(cs.begin()...);
 
@@ -508,195 +508,62 @@ namespace writer
             }
         }
 
+        void store(const otf2::registry& reg)
+        {
+            store(reg.all<otf2::definition::string>().data());
+            store(reg.all<otf2::definition::attribute>().data());
+            store(reg.all<otf2::definition::system_tree_node>().data());
+            store(reg.all<otf2::definition::system_tree_node_property>().data());
+            store(reg.all<otf2::definition::location_group>().data());
+            store(reg.all<otf2::definition::location_group_property>().data());
+            store(reg.all<otf2::definition::location>().data());
+            store(reg.all<otf2::definition::location_property>().data());
+            store(reg.all<otf2::definition::region>().data());
+
+            store(reg.all<otf2::definition::comm_locations_group>().data(),
+                  reg.all<otf2::definition::comm_self_group>().data(),
+                  reg.all<otf2::definition::comm_group>().data(),
+                  reg.all<otf2::definition::locations_group>().data(),
+                  reg.all<otf2::definition::regions_group>().data());
+            // store(metric_groups);
+
+            store(reg.all<otf2::definition::comm>().data());
+
+            store(reg.all<otf2::definition::parameter>().data());
+            // store(reg.all<otf2::definition::callpath>().data());
+            // store(reg.all<otf2::definition::callsite>().data());
+
+            store(reg.all<otf2::definition::source_code_location>().data());
+            store(reg.all<otf2::definition::calling_context>().data());
+            store(reg.all<otf2::definition::calling_context_property>().data());
+            store(reg.all<otf2::definition::interrupt_generator>().data());
+
+            store(reg.all<otf2::definition::metric_member>().data());
+            store(reg.all<otf2::definition::metric_class>().data(),
+                  reg.all<otf2::definition::metric_instance>().data());
+
+            store(reg.all<otf2::definition::io_paradigm>().data());
+            store(reg.all<otf2::definition::io_handle>().data());
+            store(reg.all<otf2::definition::io_pre_created_handle_state>().data());
+            store(reg.all<otf2::definition::io_directory>().data(),
+                  reg.all<otf2::definition::io_regular_file>().data());
+
+            store(reg.all<otf2::definition::marker>().data());
+        }
+
     public:
-        void write(otf2::definition::attribute data)
-        {
-            attributes_.add_definition(std::move(data));
-        }
-
-        // TODO: implement this
-        //         void write(const otf2::definition::callpath& data)
-        //         {
-        //             callpaths_..add_definition(std::move(data));
-        //         }
-        //
-        //         void write(const otf2::definition::callsite& data)
-        //         {
-        //             callsites_.add_definition(std::move(data));
-        //         }
-
-        void write(otf2::definition::comm data)
-        {
-            comms_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::location data)
-        {
-            locations_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::location_group data)
-        {
-            location_groups_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::comm_group data)
-        {
-            comm_groups_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::comm_locations_group data)
-        {
-            comm_locations_groups_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::comm_self_group data)
-        {
-            comm_self_groups_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::regions_group data)
-        {
-            regions_groups_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::locations_group data)
-        {
-            locations_groups_.add_definition(std::move(data));
-        }
-
-        //         void write(otf2::definition::metric_group data)
-        //         {
-        //             metric_groups_.add_definition(std::move(data));
-        //         }
-
-        void write(otf2::definition::metric_class data)
-        {
-            metric_classes_.add_definition(std::move(data));
-        }
-
-        //         void write(const otf2::definition::metric_class_definition&
-        // data)
-        //         {
-        //             metric_definitions_.add_definition(std::move(data));
-        //         }
-
-        void write(otf2::definition::metric_instance data)
-        {
-            metric_instances_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::metric_member data)
-        {
-            metric_members_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::parameter data)
-        {
-            parameters_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::region data)
-        {
-            regions_.add_definition(std::move(data));
-        }
-
-        //         void write(const otf2::definition::rma_win& data)
-        //         {
-        //             rma_wins.add_definition(std::move(data));
-        //         }
-
-        void write(otf2::definition::string data)
-        {
-            strings_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::system_tree_node data)
-        {
-            system_tree_nodes_.add_definition(std::move(data));
-        }
-
         void write(otf2::definition::clock_properties data)
         {
             clock_properties_ = data;
         }
 
-        // TODO: implement this
-        //         void write(const otf2::definition::system_tree_node_domain&
-        // data)
-        //         {
-        //             system_tree_node_domains.add_definition(std::move(data));
-        //         }
-
-        void write(otf2::definition::system_tree_node_property data)
+        template <typename Definition>
+        void write(Definition&& def)
         {
-            system_tree_node_properties_.add_definition(std::move(data));
+            reg_.register_definition(std::forward<std::remove_reference_t<Definition>>(def));
         }
 
-        void write(otf2::definition::location_property data)
-        {
-            location_properties_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::location_group_property data)
-        {
-            location_group_properties_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::source_code_location data)
-        {
-            source_code_locations_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::calling_context data)
-        {
-            calling_contexts_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::calling_context_property data)
-        {
-            calling_context_properties_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::interrupt_generator data)
-        {
-            interrupt_generators_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::marker data)
-        {
-            markers_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::io_handle data)
-        {
-            io_handles_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::io_regular_file data)
-        {
-            io_regular_files_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::io_directory data)
-        {
-            io_directories_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::io_paradigm data)
-        {
-            io_paradigms_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::io_file_property data)
-        {
-            io_file_properties_.add_definition(std::move(data));
-        }
-
-        void write(otf2::definition::io_pre_created_handle_state data)
-        {
-            io_pre_created_handles_.add_definition(std::move(data));
-        }
+        void write(const otf2::registry& reg) = delete;
 
     public:
         void write(otf2::event::marker evt)
@@ -713,93 +580,23 @@ namespace writer
         }
 
     public:
+        otf2::registry& registry()
+        {
+            return reg_;
+        }
+
         ~global()
         {
             // call real writes in correct order
             store(clock_properties_);
-            store(strings_);
-            store(attributes_);
-            store(system_tree_nodes_);
-            store(system_tree_node_properties_);
-            store(location_groups_);
-            store(location_group_properties_);
-            store(locations_);
-            store(location_properties_);
-            store(regions_);
-
-            store(comm_locations_groups_, comm_self_groups_, comm_groups_, locations_groups_,
-                  regions_groups_);
-            //             store(metric_groups);
-
-            store(comms_);
-
-            store(parameters_);
-            //             store(callpaths_);
-            //             store(callsites_);
-
-            store(source_code_locations_);
-            store(calling_contexts_);
-            store(calling_context_properties_);
-            store(interrupt_generators_);
-
-            store(metric_members_);
-            store(metric_classes_, metric_instances_);
-
-            store(io_paradigms_);
-            store(io_handles_);
-            store(io_pre_created_handles_);
-            store(io_directories_, io_regular_files_);
-
-            store(markers_);
+            store(reg_);
         }
 
     private:
         OTF2_GlobalDefWriter* wrt;
         OTF2_MarkerWriter* marker_wrt_;
 
-        otf2::definition::container<otf2::definition::attribute> attributes_;
-        otf2::definition::container<otf2::definition::comm> comms_;
-        otf2::definition::container<otf2::definition::location> locations_;
-        otf2::definition::container<otf2::definition::location_group> location_groups_;
-        otf2::definition::container<otf2::definition::parameter> parameters_;
-        otf2::definition::container<otf2::definition::region> regions_;
-        otf2::definition::container<otf2::definition::string> strings_;
-        otf2::definition::container<otf2::definition::system_tree_node> system_tree_nodes_;
-
-        otf2::definition::container<otf2::definition::source_code_location> source_code_locations_;
-        otf2::definition::container<otf2::definition::calling_context> calling_contexts_;
-        otf2::definition::container<otf2::definition::interrupt_generator> interrupt_generators_;
-
-        otf2::definition::container<otf2::definition::metric_class> metric_classes_;
-        otf2::definition::container<otf2::definition::metric_instance> metric_instances_;
-        otf2::definition::container<otf2::definition::metric_member> metric_members_;
-
-        otf2::definition::container<otf2::definition::locations_group> locations_groups_;
-        otf2::definition::container<otf2::definition::regions_group> regions_groups_;
-        // otf2::definition::container<otf2::definition::metric_group>
-        // metric_groups_;
-        otf2::definition::container<otf2::definition::comm_locations_group> comm_locations_groups_;
-        otf2::definition::container<otf2::definition::comm_group> comm_groups_;
-        otf2::definition::container<otf2::definition::comm_self_group> comm_self_groups_;
-
-        otf2::definition::container<otf2::definition::location_property> location_properties_;
-        otf2::definition::container<otf2::definition::location_group_property>
-            location_group_properties_;
-        otf2::definition::container<otf2::definition::system_tree_node_property>
-            system_tree_node_properties_;
-
-        otf2::definition::container<otf2::definition::calling_context_property>
-            calling_context_properties_;
-
-        otf2::definition::container<otf2::definition::marker> markers_;
-
-        otf2::definition::container<otf2::definition::io_handle> io_handles_;
-        otf2::definition::container<otf2::definition::io_regular_file> io_regular_files_;
-        otf2::definition::container<otf2::definition::io_directory> io_directories_;
-        otf2::definition::container<otf2::definition::io_paradigm> io_paradigms_;
-        otf2::definition::container<otf2::definition::io_pre_created_handle_state>
-            io_pre_created_handles_;
-        otf2::definition::container<otf2::definition::io_file_property> io_file_properties_;
+        otf2::registry reg_;
 
         otf2::definition::clock_properties clock_properties_;
     };
@@ -808,18 +605,6 @@ namespace writer
     inline global& operator<<(global& wrt, Definition def)
     {
         wrt.write(def);
-
-        return wrt;
-    }
-
-    inline global& operator<<(global& wrt, const otf2::registry& reg)
-    {
-        tmp::foreach (reg.get_holders(), [&wrt](const auto& holder) {
-            for (const auto& def : holder)
-            {
-                wrt << def;
-            }
-        });
 
         return wrt;
     }

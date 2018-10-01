@@ -51,7 +51,7 @@ int main()
 
     // This test will produce a sematically equal trace to the writer_test.cpp, but this time we use
     // the registry to generate the definitions
-    otf2::registry reg;
+    auto& reg = ar.registry();
 
     ar.set_post_flush_callback([]() { return otf2::chrono::convert_time_point(get_time()); });
 
@@ -81,20 +81,14 @@ int main()
         otf2::definition::region::paradigm_type::user, otf2::definition::region::flags_type::none,
         strings[7], 0, 0);
 
-    // this writes the CURRENT contents of the registry to the trace
-    ar << reg;
-
-    // this string definition will not be written to the trace
-    reg.create<otf2::definition::string>("This will not be written to the trace");
-
     ar << otf2::definition::clock_properties(otf2::chrono::ticks(1e9), otf2::chrono::ticks(0),
                                              otf2::chrono::ticks(19));
 
-    auto& arl = ar(location);
+    auto& event_writer = ar(location);
 
     for (int i = 0; i < 10; ++i)
-        arl << otf2::event::enter(otf2::chrono::convert_time_point(get_time()), region);
+        event_writer << otf2::event::enter(otf2::chrono::convert_time_point(get_time()), region);
 
     for (int i = 0; i < 10; ++i)
-        arl << otf2::event::leave(otf2::chrono::convert_time_point(get_time()), region);
+        event_writer << otf2::event::leave(otf2::chrono::convert_time_point(get_time()), region);
 }

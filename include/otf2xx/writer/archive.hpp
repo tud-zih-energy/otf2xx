@@ -383,6 +383,11 @@ namespace writer
             post_flush_callback_ = f;
         }
 
+        otf2::registry& registry()
+        {
+            return get_global_writer().registry();
+        }
+
     public:
         writer::local& operator()(const otf2::definition::location& loc)
         {

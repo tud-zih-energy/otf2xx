@@ -45,6 +45,8 @@ int main()
 
     otf2::lookup_registry<MyHolder> reg;
 
+    // otf2::registry_view<otf2::definition::string, ByCPU> cpu_strings(rego);
+
     reg.create<otf2::definition::string>(ByCPU(7), std::string("cpu 7"));
     reg.create<otf2::definition::string>(ByProcess(7435), std::string("process 7435"));
     reg.create<otf2::definition::string>(ByProcess(745), 17, std::string("process 745"));

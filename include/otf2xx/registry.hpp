@@ -97,7 +97,7 @@ public:
     template <typename RefType, typename... Args>
     std::enable_if_t<std::is_convertible<RefType, typename Definition::reference_type>::value,
                      Definition&>
-    create(RefType&& ref, Args&&... args)
+    create(RefType ref, Args&&... args)
     {
         // TODO I fucking bet that some day there will be a definition, where this is well-formed in
         // the case you wanted to omit the ref FeelsBadMan
@@ -421,7 +421,8 @@ public:
     template <typename Definition>
     void register_definition(Definition&& def)
     {
-        get_holder<Definition>()(std::forward<Definition>(def));
+        get_holder<std::remove_reference_t<Definition>>()(
+            std::forward<std::remove_reference_t<Definition>>(def));
     }
 
 public:
@@ -435,6 +436,35 @@ private:
 
     holders holders_;
 };
+
+// template <typename Definition, typename... KeyList>
+// class registry_view
+// {
+// public:
+//     registry_view(otf2::registry& reg) : reg_(reg)
+//     {
+//     }
+//
+// public:
+//     template <typename Key>
+//     bool has(Key&& key) const
+//     {
+//         const auto& definitions = std::get<Index<Key, key_list>::value>(lookup_maps_);
+//         return definitions.count(key);
+//     }
+//
+//     template <typename Key>
+//     bool get(Key&& key) const
+//     {
+//         const auto& definitions = std::get<Index<Key, key_list>::value>(lookup_maps_);
+//         return definitions.at(key);
+//     }
+//
+// private:
+//     otf2::registry& reg_;
+//     std::tuple<std::map<typename KeyList::key_type, Definition>...> lookup_maps_;
+// };
+
 } // namespace otf2
 
 #endif // INCLUDE_OTF2XX_REGISTRY_HPP
