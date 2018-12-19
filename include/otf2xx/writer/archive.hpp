@@ -390,7 +390,7 @@ namespace writer
         }
 
         template <typename Anything>
-        friend global& operator<<(archive& ar, Anything any);
+        friend global& operator<<(archive& ar, Anything&& any);
 
         friend inline global& operator<<(archive& ar, const otf2::event::marker& evt);
 
