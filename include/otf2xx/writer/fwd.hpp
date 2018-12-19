@@ -97,7 +97,7 @@ namespace writer
     template <typename Definition>
     global& operator<<(global& wrt, Definition&& def);
 
-    template <typename Anything>
+    template <typename Anything, typename>
     global& operator<<(archive& ar, Anything&& any);
 }
 } // namespace otf2::writer

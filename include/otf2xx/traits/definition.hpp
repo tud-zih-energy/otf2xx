@@ -86,6 +86,11 @@ namespace traits
     {
     };
 
+    template <>
+    struct is_definition<otf2::definition::clock_properties> : std::true_type
+    {
+    };
+
     template <typename Type>
     struct is_referable_definition : tmp::contains<referable_definitions, Type>
     {

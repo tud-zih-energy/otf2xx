@@ -389,13 +389,15 @@ namespace writer
             return get_local_writer(loc);
         }
 
-        template <typename Anything>
-        friend global& operator<<(archive& ar, Anything&& any);
+        template <typename Anything, typename>
+        friend inline global& operator<<(archive& ar, Anything&& any);
 
         friend inline global& operator<<(archive& ar, const otf2::event::marker& evt);
+        friend inline global& operator<<(archive& ar, const otf2::Registry& reg);
 
         template <typename Definition>
-        friend global& operator<<(archive& ar, const otf2::definition::container<Definition>& c);
+        friend inline global& operator<<(archive& ar,
+                                         const otf2::definition::container<Definition>& c);
 
         friend OTF2_FlushType detail::pre_flush(void*, OTF2_FileType, OTF2_LocationRef, void*,
                                                 bool);
@@ -457,13 +459,22 @@ namespace writer
         std::map<otf2::reference<otf2::definition::location>::ref_type, local> local_writers_;
     };
 
-    template <typename Anything>
-    global& operator<<(archive& ar, Anything&& any)
+    template <typename Anything, typename = typename std::enable_if<
+                                     otf2::traits::is_definition<std::remove_reference_t<Anything>>::value>::type>
+    inline global& operator<<(archive& ar, Anything&& any)
     {
         if (!ar.is_master())
             make_exception(
                 "Archive is in slave mode, so there can't be any global definition writer");
         return ar.get_global_writer() << std::forward<Anything>(any);
+    }
+
+    inline global& operator<<(archive& ar, const otf2::Registry& reg)
+    {
+        if (!ar.is_master())
+            make_exception(
+                "Archive is in slave mode, so there can't be any global definition writer");
+        return ar.get_global_writer() << reg;
     }
 
     inline global& operator<<(archive& ar, const otf2::event::marker& evt)
@@ -475,7 +486,7 @@ namespace writer
     }
 
     template <typename Definition>
-    global& operator<<(archive& ar, const otf2::definition::container<Definition>& c)
+    inline global& operator<<(archive& ar, const otf2::definition::container<Definition>& c)
     {
         if (!ar.is_master())
             make_exception(
