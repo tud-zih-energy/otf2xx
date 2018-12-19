@@ -95,10 +95,10 @@ namespace writer
     local& operator<<(local& wrt, const otf2::definition::container<Definition>& c);
 
     template <typename Definition>
-    global& operator<<(global& wrt, Definition def);
+    global& operator<<(global& wrt, Definition&& def);
 
     template <typename Anything>
-    global& operator<<(archive& ar, Anything any);
+    global& operator<<(archive& ar, Anything&& any);
 }
 } // namespace otf2::writer
 
