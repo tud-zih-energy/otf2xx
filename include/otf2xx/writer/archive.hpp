@@ -454,10 +454,11 @@ namespace writer
         std::unique_ptr<global> global_writer_;
         std::map<otf2::reference<otf2::definition::location>::ref_type, local> local_writers_;
     };
-
-    template <typename Anything, typename = typename std::enable_if<otf2::traits::is_definition<
-                                     std::remove_reference_t<Anything>>::value>::type>
-    inline global& operator<<(archive& ar, Anything&& any)
+    
+    template <typename Anything>
+    inline std::enable_if_t<otf2::traits::is_definition<std::remove_reference_t<Anything>>::value,
+                            global&>
+    operator<<(archive& ar, Anything&& any)
     {
         return ar() << std::forward<Anything>(any);
     }
