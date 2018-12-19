@@ -389,15 +389,10 @@ namespace writer
             return get_local_writer(loc);
         }
 
-        template <typename Anything, typename>
-        friend inline global& operator<<(archive& ar, Anything&& any);
-
-        friend inline global& operator<<(archive& ar, const otf2::event::marker& evt);
-        friend inline global& operator<<(archive& ar, const otf2::Registry& reg);
-
-        template <typename Definition>
-        friend inline global& operator<<(archive& ar,
-                                         const otf2::definition::container<Definition>& c);
+        writer::global& operator()()
+        {
+            return get_global_writer();
+        }
 
         friend OTF2_FlushType detail::pre_flush(void*, OTF2_FileType, OTF2_LocationRef, void*,
                                                 bool);
@@ -410,7 +405,6 @@ namespace writer
         }
 #endif
 
-    private:
         global& get_global_writer()
         {
             if (is_master())
@@ -451,7 +445,9 @@ namespace writer
 #endif
         // OTF2_GlobalDefWriter *wrt;
         OTF2_FlushCallbacks flush_callbacks_;
+#ifdef OTF2XX_HAS_MPI
         OTF2_CollectiveCallbacks collective_callbacks_;
+#endif
         post_flush_func post_flush_callback_;
         pre_flush_func pre_flush_callback_;
 
@@ -459,40 +455,28 @@ namespace writer
         std::map<otf2::reference<otf2::definition::location>::ref_type, local> local_writers_;
     };
 
-    template <typename Anything, typename = typename std::enable_if<
-                                     otf2::traits::is_definition<std::remove_reference_t<Anything>>::value>::type>
+    template <typename Anything, typename = typename std::enable_if<otf2::traits::is_definition<
+                                     std::remove_reference_t<Anything>>::value>::type>
     inline global& operator<<(archive& ar, Anything&& any)
     {
-        if (!ar.is_master())
-            make_exception(
-                "Archive is in slave mode, so there can't be any global definition writer");
-        return ar.get_global_writer() << std::forward<Anything>(any);
+        return ar() << std::forward<Anything>(any);
     }
 
     inline global& operator<<(archive& ar, const otf2::Registry& reg)
     {
-        if (!ar.is_master())
-            make_exception(
-                "Archive is in slave mode, so there can't be any global definition writer");
-        return ar.get_global_writer() << reg;
+        return ar() << reg;
     }
 
     inline global& operator<<(archive& ar, const otf2::event::marker& evt)
     {
-        if (!ar.is_master())
-            make_exception(
-                "Archive is in slave mode, so there can't be any global definition writer");
-        return ar.get_global_writer() << evt;
+        return ar() << evt;
     }
 
     template <typename Definition>
     inline global& operator<<(archive& ar, const otf2::definition::container<Definition>& c)
     {
-        if (!ar.is_master())
-            make_exception(
-                "Archive is in slave mode, so there can't be any global definition writer");
 
-        global& wrt = ar.get_global_writer();
+        global& wrt = ar();
 
         for (auto def : c)
             wrt << def;
