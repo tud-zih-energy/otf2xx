@@ -804,9 +804,9 @@ namespace writer
     };
 
     template <typename Definition>
-    inline global& operator<<(global& wrt, Definition def)
+    inline global& operator<<(global& wrt, Definition&& def)
     {
-        wrt.write(def);
+        wrt.write(std::forward<Definition>(def));
 
         return wrt;
     }

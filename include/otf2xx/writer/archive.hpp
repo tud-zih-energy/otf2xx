@@ -458,12 +458,12 @@ namespace writer
     };
 
     template <typename Anything>
-    global& operator<<(archive& ar, Anything any)
+    global& operator<<(archive& ar, Anything&& any)
     {
         if (!ar.is_master())
             make_exception(
                 "Archive is in slave mode, so there can't be any global definition writer");
-        return ar.get_global_writer() << any;
+        return ar.get_global_writer() << std::forward<Anything>(any);
     }
 
     inline global& operator<<(archive& ar, const otf2::event::marker& evt)
