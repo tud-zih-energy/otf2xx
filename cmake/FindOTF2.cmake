@@ -52,12 +52,20 @@ ELSE()
             IF(${_ARG} STREQUAL "m")
                 continue()
             ENDIF()
+            IF(${_ARG} STREQUAL "pthread")
+                SET(_OTF2_NEEDS_PTHREAD TRUE)
+                continue()
+            ENDIF()
             FIND_LIBRARY(_OTF2_LIB_FROM_ARG NAMES ${_ARG}
                 HINTS ${OTF2_LINK_DIRS} NO_DEFAULT_PATH
             )
-            IF(_OTF2_LIB_FROM_ARG)
-                SET(OTF2_LIBRARIES ${OTF2_LIBRARIES} ${_OTF2_LIB_FROM_ARG})
-            ENDIF(_OTF2_LIB_FROM_ARG)
+            IF(${_ARG} STREQUAL "otf2")
+                SET(OTF2_LIBRARY ${_OTF2_LIB_FROM_ARG})
+            ELSE()
+                IF(_OTF2_LIB_FROM_ARG)
+                    LIST(APPEND OTF2_LIBRARIES ${_OTF2_LIB_FROM_ARG})
+                ENDIF(_OTF2_LIB_FROM_ARG)
+            ENDIF()
             UNSET(_OTF2_LIB_FROM_ARG CACHE)
         ENDIF(${_ARG} MATCHES "^-l")
     ENDFOREACH(_ARG)
@@ -68,7 +76,7 @@ ENDIF()
 include (FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(OTF2
     FOUND_VAR OTF2_FOUND
-    REQUIRED_VARS OTF2_CONFIG OTF2_LIBRARIES OTF2_INCLUDE_DIRS OTF2_PRINT
+    REQUIRED_VARS OTF2_CONFIG OTF2_LIBRARY OTF2_INCLUDE_DIRS OTF2_PRINT
     VERSION_VAR OTF2_VERSION
 )
 
@@ -78,13 +86,22 @@ if(OTF2_FOUND)
     add_library(otf2::otf2 UNKNOWN IMPORTED GLOBAL)
     set_target_properties(otf2::otf2 PROPERTIES
         IMPORTED_LINK_INTERFACE_LANGUAGES "C"
-        IMPORTED_LOCATION "${OTF2_LIBRARIES}"
+        IMPORTED_LOCATION "${OTF2_LIBRARY}"
         INTERFACE_INCLUDE_DIRECTORIES "${OTF2_INCLUDE_DIRS}"
         # Note for MacOS: libm is a symlink to libSystem, so there is no harm to link it anyways, but it isn't required
         INTERFACE_LINK_LIBRARIES "m"
     )
+    target_link_libraries(otf2::otf2 INTERFACE ${OTF2_LIBRARIES})
+
+    if(_OTF2_NEEDS_PTHREAD)
+        UNSET(_OTF2_NEEDS_PTHREAD)
+        find_package(Threads REQUIRED)
+        LIST(APPEND OTF2_LIBRARIES "pthread")
+        target_link_libraries(otf2::otf2 INTERFACE Threads::Threads)
+    endif()
+
     # make sure, if anyone uses the old interface, they still link libm
-    LIST(APPEND OTF2_LIBRARIES "m")
+    LIST(APPEND OTF2_LIBRARIES "m" "${OTF2_LIBRARY}")
 else()
     unset(OTF2_PRINT)
     unset(OTF2_LINK_DIRS)
