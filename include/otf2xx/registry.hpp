@@ -97,7 +97,7 @@ public:
     template <typename RefType, typename... Args>
     std::enable_if_t<std::is_convertible<RefType, typename Definition::reference_type>::value,
                      Definition&>
-    create(RefType ref, Args&&... args)
+    create(RefType&& ref, Args&&... args)
     {
         // TODO I fucking bet that some day there will be a definition, where this is well-formed in
         // the case you wanted to omit the ref FeelsBadMan
