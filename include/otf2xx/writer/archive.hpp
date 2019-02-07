@@ -383,6 +383,11 @@ namespace writer
             post_flush_callback_ = f;
         }
 
+        otf2::registry& registry()
+        {
+            return get_global_writer().registry();
+        }
+
     public:
         writer::local& operator()(const otf2::definition::location& loc)
         {
@@ -462,11 +467,6 @@ namespace writer
     operator<<(archive& ar, Anything&& any)
     {
         return ar() << std::forward<Anything>(any);
-    }
-
-    inline global& operator<<(archive& ar, const otf2::Registry& reg)
-    {
-        return ar() << reg;
     }
 
     inline global& operator<<(archive& ar, const otf2::event::marker& evt)

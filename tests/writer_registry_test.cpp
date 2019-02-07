@@ -51,50 +51,44 @@ int main()
 
     // This test will produce a sematically equal trace to the writer_test.cpp, but this time we use
     // the registry to generate the definitions
-    otf2::Registry reg;
+    auto& reg = ar.registry();
 
     ar.set_post_flush_callback([]() { return otf2::chrono::convert_time_point(get_time()); });
 
-    reg.strings().create("MyHost");
-    reg.strings().create("node");
-    reg.strings().create("Master Process");
-    reg.strings().create("MainThread");
-    reg.strings().create("MyFunction");
-    reg.strings().create("Alternative function name (e.g. mangled one)");
-    reg.strings().create("Computes something");
-    reg.strings().create("");
+    reg.create<otf2::definition::string>("MyHost");
+    reg.create<otf2::definition::string>("node");
+    reg.create<otf2::definition::string>("Master Process");
+    reg.create<otf2::definition::string>("MainThread");
+    reg.create<otf2::definition::string>("MyFunction");
+    reg.create<otf2::definition::string>("Alternative function name (e.g. mangled one)");
+    reg.create<otf2::definition::string>("Computes something");
+    reg.create<otf2::definition::string>("");
 
-    auto& strings = reg.strings();
+    auto& strings = reg.all<otf2::definition::string>();
 
-    auto root_node = reg.system_tree_nodes().create(strings[0], strings[1]);
+    auto root_node = reg.create<otf2::definition::system_tree_node>(strings[0], strings[1]);
 
-    auto lg = reg.location_groups().create(
+    auto lg = reg.create<otf2::definition::location_group>(
         strings[2], otf2::definition::location_group::location_group_type::process, root_node);
 
-    auto location = reg.locations().create(strings[3], lg,
-                                           otf2::definition::location::location_type::cpu_thread);
+    auto location = reg.create<otf2::definition::location>(
+        strings[3], lg, otf2::definition::location::location_type::cpu_thread);
 
     // reference numbers are auto-generated, but you can also define it.
     // for example, this region will get the reference number 23
-    auto region = reg.regions().create(
+    auto region = reg.create<otf2::definition::region>(
         23, strings[4], strings[5], strings[6], otf2::definition::region::role_type::function,
         otf2::definition::region::paradigm_type::user, otf2::definition::region::flags_type::none,
         strings[7], 0, 0);
 
-    // this writes the CURRENT contents of the registry to the trace
-    ar << reg;
-
-    // this string definition will not be written to the trace
-    reg.strings().create("This will not be written to the trace");
-
     ar << otf2::definition::clock_properties(otf2::chrono::ticks(1e9), otf2::chrono::ticks(0),
                                              otf2::chrono::ticks(19));
 
-    auto& arl = ar(location);
+    auto& event_writer = ar(location);
 
     for (int i = 0; i < 10; ++i)
-        arl << otf2::event::enter(otf2::chrono::convert_time_point(get_time()), region);
+        event_writer << otf2::event::enter(otf2::chrono::convert_time_point(get_time()), region);
 
     for (int i = 0; i < 10; ++i)
-        arl << otf2::event::leave(otf2::chrono::convert_time_point(get_time()), region);
+        event_writer << otf2::event::leave(otf2::chrono::convert_time_point(get_time()), region);
 }

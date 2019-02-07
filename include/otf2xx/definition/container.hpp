@@ -134,7 +134,7 @@ namespace definition
         }
 
         template <typename... Args>
-        const value_type& emplace(key_type ref, Args&&... args)
+        value_type& emplace(key_type ref, Args&&... args)
         {
             return data
                 .emplace(std::piecewise_construct, std::forward_as_tuple(ref),
@@ -198,7 +198,7 @@ namespace definition
         typedef iterator const_iterator;
 
         template <typename... Args>
-        const value_type& emplace(Args&&... args)
+        value_type& emplace(Args&&... args)
         {
             data.emplace_back(std::forward<Args>(args)...);
 

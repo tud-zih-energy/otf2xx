@@ -47,7 +47,7 @@ bool contains(const std::set<T>& container, const T& el)
 
 TEST_CASE("Add and get strings")
 {
-    otf2::Registry reg;
+    otf2::registry reg;
     SECTION("Use predefined id")
     {
         const std::string value = "The answer.";
@@ -55,25 +55,30 @@ TEST_CASE("Add and get strings")
         {
             otf2::definition::string str(42, value);
             reg.register_definition(str);
-            REQUIRE(str == reg.strings()[42]);
+            REQUIRE(str == reg.get<otf2::definition::string>(42));
         }
         SECTION("Create with id")
         {
-            auto str = reg.strings().create(42, value);
+            auto str = reg.create<otf2::definition::string>(42, value);
             REQUIRE(str.str() == value);
             REQUIRE(str.ref() == 42);
-            REQUIRE(str == reg.strings()[42]);
+            REQUIRE(str == reg.get<otf2::definition::string>(42));
         }
-        auto str = reg.strings()[42];
+        auto str = reg.get<otf2::definition::string>(42);
         REQUIRE(str.str() == value);
         REQUIRE(str.ref() == 42);
+
+        REQUIRE(reg.find<otf2::definition::string>(42) == str);
+        REQUIRE(reg.find<otf2::definition::string>(43).ref() ==
+                otf2::definition::string::reference_type::undefined());
+        REQUIRE(!reg.find<otf2::definition::string>(43).is_valid());
     }
     SECTION("Use auto-generated id")
     {
         std::set<otf2::reference<otf2::definition::string>> refs;
         SECTION("With manually added string")
         {
-            refs.insert(reg.strings().create(42, "foo").ref());
+            refs.insert(reg.create<otf2::definition::string>(42, "foo").ref());
         }
         SECTION("Without manually added string")
         {
@@ -81,7 +86,7 @@ TEST_CASE("Add and get strings")
         }
         for (int i = 0; i < int(1e5); i++)
         {
-            auto str = reg.strings().create("Value" + std::to_string(i));
+            auto str = reg.create<otf2::definition::string>("Value" + std::to_string(i));
             REQUIRE(!contains(refs, str.ref()));
             refs.insert(str.ref());
         }

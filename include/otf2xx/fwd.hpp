@@ -41,6 +41,20 @@ namespace otf2
 template <typename Definition>
 class reference_generator;
 
+template <typename Definition>
+struct get_default_holder;
+
+template <typename Definition>
+class definition_holder;
+
+template <typename Definition>
+class property_holder;
+
+template <template <typename> class GetHolderForDefinition>
+class lookup_registry;
+
+using registry = lookup_registry<get_default_holder>;
+
 class trace_reference_generator;
 
 class attribute_list;
