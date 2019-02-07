@@ -469,11 +469,6 @@ namespace writer
         return ar() << std::forward<Anything>(any);
     }
 
-    inline global& operator<<(archive& ar, const otf2::Registry& reg)
-    {
-        return ar() << reg;
-    }
-
     inline global& operator<<(archive& ar, const otf2::event::marker& evt)
     {
         return ar() << evt;
