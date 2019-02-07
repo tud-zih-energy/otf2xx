@@ -37,8 +37,14 @@
 
 #include <otf2xx/reader/fwd.hpp>
 
-#include <otf2xx/definition/definitions.hpp>
+#include <otf2xx/definition/fwd.hpp>
 #include <otf2xx/event/fwd.hpp>
+
+#include <otf2xx/definition/calling_context.hpp>
+#include <otf2xx/event/calling_context_enter.hpp>
+#include <otf2xx/event/calling_context_leave.hpp>
+#include <otf2xx/event/enter.hpp>
+#include <otf2xx/event/leave.hpp>
 
 #include <otf2xx/chrono/time_point.hpp>
 #include <otf2xx/common.hpp>
@@ -98,8 +104,16 @@ namespace reader
         virtual void event(const otf2::definition::location&, const otf2::event::parameter_int&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::parameter_unsigned_int&) {}
 
-        virtual void event(const otf2::definition::location&, const otf2::event::calling_context_enter&) {}
-        virtual void event(const otf2::definition::location&, const otf2::event::calling_context_leave&) {}
+        virtual void event(const otf2::definition::location& loc, const otf2::event::calling_context_enter& evt)
+        {
+            event(loc, otf2::event::enter(evt.attribute_list().clone().get(), evt.timestamp(), evt.calling_context().region()));
+        }
+
+        virtual void event(const otf2::definition::location& loc, const otf2::event::calling_context_leave& evt)
+        {
+            event(loc, otf2::event::leave(evt.attribute_list().clone().get(), evt.timestamp(), evt.calling_context().region()));
+        }
+
         virtual void event(const otf2::definition::location&, const otf2::event::calling_context_sample&) {}
 
         virtual void event(const otf2::definition::location&, const otf2::event::thread_fork&) {}
