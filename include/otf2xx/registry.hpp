@@ -421,8 +421,8 @@ public:
     template <typename Definition>
     void register_definition(Definition&& def)
     {
-        get_holder<std::remove_reference_t<Definition>>()(
-            std::forward<std::remove_reference_t<Definition>>(def));
+        get_holder<std::remove_cv_t<std::remove_reference_t<Definition>>>()(
+            std::forward<Definition>(def));
     }
 
 public:
