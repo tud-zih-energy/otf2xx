@@ -265,6 +265,11 @@ namespace event
                 return value_.type();
             }
 
+            otf2::definition::metric_member metric() const
+            {
+                return metric_;
+            }
+
         private:
             typed_value_proxy value_;
             otf2::definition::detail::weak_ref<otf2::definition::metric_member> metric_;

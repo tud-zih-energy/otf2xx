@@ -134,6 +134,18 @@ namespace event
         {
         }
 
+        explicit metric(const otf2::definition::metric_class& metric_c)
+        : base<metric>(otf2::chrono::genesis()), metric_class_(metric_c), metric_instance_(),
+          values_(metric_c)
+        {
+        }
+
+        explicit metric(const otf2::definition::metric_instance& metric_i)
+        : base<metric>(otf2::chrono::genesis()), metric_class_(), metric_instance_(metric_i),
+          values_(metric_i.metric_class())
+        {
+        }
+
         values& raw_values()
         {
             return values_;
@@ -162,6 +174,16 @@ namespace event
             return const_value_proxy(values_[index], (*metric_class)[index]);
         }
 
+        detail::typed_value_proxy operator[](std::size_t index)
+        {
+            return raw_values()[index];
+        }
+
+        detail::const_typed_value_proxy operator[](std::size_t index) const
+        {
+            return raw_values()[index];
+        }
+
         value_proxy get_value_for(const otf2::definition::metric_member& member)
         {
             auto metric_class = resolve_weak_ref_to_metric_class();
@@ -183,6 +205,11 @@ namespace event
 
             auto index = std::distance(metric_class->begin(), it);
             return value_proxy{ values_[index], member };
+        }
+
+        value_proxy operator[](const otf2::definition::metric_member& member)
+        {
+            return get_value_for(member);
         }
 
         bool has_metric_class() const
@@ -223,6 +250,65 @@ namespace event
         }
 
         friend class otf2::writer::local;
+
+        template <bool IsMutable>
+        class iterator
+        {
+        public:
+            iterator(otf2::definition::metric_class::iterator class_it,
+                     detail::metric_values::base_iterator<IsMutable> value_it)
+            : class_it_(class_it), value_it_(value_it)
+            {
+            }
+
+            detail::base_value_proxy<IsMutable> operator*()
+            {
+                return { *value_it_, *class_it_ };
+            }
+
+            iterator operator++(int)
+            {
+                iterator tmp(*this);
+                ++(*this);
+                return tmp;
+            }
+
+            iterator& operator++()
+            {
+                ++class_it_;
+                ++value_it_;
+                return *this;
+            }
+
+            bool operator!=(const iterator& other)
+            {
+                return value_it_ != other.value_it_;
+            }
+
+        private:
+            otf2::definition::metric_class::iterator class_it_;
+            detail::metric_values::base_iterator<IsMutable> value_it_;
+        };
+
+        auto begin()
+        {
+            return iterator<true>(resolve_metric_class().begin(), values_.begin());
+        }
+
+        auto end()
+        {
+            return iterator<true>(resolve_metric_class().end(), values_.end());
+        }
+
+        auto begin() const
+        {
+            return iterator<false>(resolve_metric_class().begin(), values_.begin());
+        }
+
+        auto end() const
+        {
+            return iterator<false>(resolve_metric_class().end(), values_.end());
+        }
 
     private:
         template <typename Definition>
