@@ -175,6 +175,7 @@ namespace writer
 #ifdef OTF2XX_HAS_MPI
             return serial || comm_.rank() == 0;
 #else
+            (void)serial;
             assert(serial);
             return true;
 #endif
