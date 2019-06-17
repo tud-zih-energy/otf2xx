@@ -422,6 +422,18 @@ namespace common
         memory
     };
 
+    enum class rma_atomic_type_type : std::uint8_t
+    {
+        accumulate,
+        increment,
+        test_and_set,
+        compare_and_swap,
+        swap,
+        fetch_and_add,
+        fetch_and_increment,
+        fetch_and_accumulate
+    };
+
     enum class io_paradigm_class_type : std::uint8_t
     {
         serial,

@@ -277,6 +277,16 @@ using namespace otf2::common;
     static_assert(static_cast<int>(rma_sync_level_type::process) == OTF2_RMA_SYNC_LEVEL_PROCESS, "Enum value mismatch");
     static_assert(static_cast<int>(rma_sync_level_type::memory) == OTF2_RMA_SYNC_LEVEL_MEMORY, "Enum value mismatch");
 
+    static_assert(sizeof(rma_atomic_type_type) == sizeof(OTF2_RmaAtomicType), "Enum size mismatch");
+    static_assert(static_cast<int>(rma_atomic_type_type::accumulate) == OTF2_RMA_ATOMIC_TYPE_ACCUMULATE, "Enum value mismatch");
+    static_assert(static_cast<int>(rma_atomic_type_type::increment) == OTF2_RMA_ATOMIC_TYPE_INCREMENT, "Enum value mismatch");
+    static_assert(static_cast<int>(rma_atomic_type_type::test_and_set) == OTF2_RMA_ATOMIC_TYPE_TEST_AND_SET, "Enum value mismatch");
+    static_assert(static_cast<int>(rma_atomic_type_type::compare_and_swap) == OTF2_RMA_ATOMIC_TYPE_COMPARE_AND_SWAP, "Enum value mismatch");
+    static_assert(static_cast<int>(rma_atomic_type_type::swap) == OTF2_RMA_ATOMIC_TYPE_SWAP, "Enum value mismatch");
+    static_assert(static_cast<int>(rma_atomic_type_type::fetch_and_add) == OTF2_RMA_ATOMIC_TYPE_FETCH_AND_ADD, "Enum value mismatch");
+    static_assert(static_cast<int>(rma_atomic_type_type::fetch_and_increment) == OTF2_RMA_ATOMIC_TYPE_FETCH_AND_INCREMENT, "Enum value mismatch");
+    static_assert(static_cast<int>(rma_atomic_type_type::fetch_and_accumulate) == OTF2_RMA_ATOMIC_TYPE_FETCH_AND_ACCUMULATE, "Enum value mismatch");
+
     static_assert(sizeof(io_paradigm_class_type) == sizeof(OTF2_IoParadigmClass), "Enum size mismatch");
     static_assert(static_cast<int>(io_paradigm_class_type::serial) == OTF2_IO_PARADIGM_CLASS_SERIAL, "Enum value mismatch");
     static_assert(static_cast<int>(io_paradigm_class_type::parallel) == OTF2_IO_PARADIGM_CLASS_PARALLEL, "Enum value mismatch");
