@@ -175,6 +175,8 @@ namespace reader
         virtual void definition(const otf2::definition::calling_context&) {}
         virtual void definition(const otf2::definition::interrupt_generator&) {}
 
+        virtual void definition(const otf2::definition::rma_win&) {}
+
         virtual void definition(const otf2::definition::io_regular_file&) {}
         virtual void definition(const otf2::definition::io_directory&) {}
         virtual void definition(const otf2::definition::io_handle&) {}

@@ -144,7 +144,7 @@ namespace reader
                 OTF2_CallbackCode metric_member  (void *userData, OTF2_MetricMemberRef self, OTF2_StringRef name, OTF2_StringRef description, OTF2_MetricType metricType, OTF2_MetricMode metricMode, OTF2_Type valueType, OTF2_Base metricBase, int64_t exponent, OTF2_StringRef unit);
                 OTF2_CallbackCode parameter  (void *userData, OTF2_ParameterRef self, OTF2_StringRef name, OTF2_ParameterType parameterType);
                 OTF2_CallbackCode region  (void *userData, OTF2_RegionRef self, OTF2_StringRef name, OTF2_StringRef canonicalName, OTF2_StringRef description, OTF2_RegionRole regionRole, OTF2_Paradigm paradigm, OTF2_RegionFlag regionFlags, OTF2_StringRef sourceFile, uint32_t beginLineNumber, uint32_t endLineNumber);
-                //OTF2_CallbackCode RmaWin  (void *userData, OTF2_RmaWinRef self, OTF2_StringRef name, OTF2_CommRef comm);
+                OTF2_CallbackCode rma_win  (void *userData, OTF2_RmaWinRef self, OTF2_StringRef name, OTF2_CommRef comm);
                 OTF2_CallbackCode string  (void *userData, OTF2_StringRef self, const char *string);
                 OTF2_CallbackCode system_tree_node  (void *userData, OTF2_SystemTreeNodeRef self, OTF2_StringRef name, OTF2_StringRef className, OTF2_SystemTreeNodeRef parent);
                 OTF2_CallbackCode system_tree_node_domain  (void *userData, OTF2_SystemTreeNodeRef systemTreeNode, OTF2_SystemTreeDomain systemTreeDomain);

@@ -168,7 +168,7 @@ namespace reader
             check(OTF2_GlobalDefReaderCallbacks_SetMetricMemberCallback (global_def_callbacks, detail::definition::global::metric_member), "Couldn't set metric member callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetParameterCallback(global_def_callbacks, detail::definition::global::parameter), "Couldn't set parameter callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetRegionCallback(global_def_callbacks, detail::definition::global::region), "Couldn't set region callback handler");
-            //check(OTF2_GlobalDefReaderCallbacks_SetRmaWinCallback (global_def_callbacks, detail::definition::global::), "Couldn't set attribute callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetRmaWinCallback (global_def_callbacks, detail::definition::global::rma_win), "Couldn't set rma_win callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetStringCallback(global_def_callbacks, detail::definition::global::string), "Couldn't set string callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetSystemTreeNodeCallback(global_def_callbacks, detail::definition::global::system_tree_node), "Couldn't set system_tree_node callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetSystemTreeNodeDomainCallback (global_def_callbacks, detail::definition::global::system_tree_node_domain), "Couldn't set system_tree_node_domain callback handler");

@@ -281,12 +281,12 @@ namespace writer
                   "Couldn't write region to global definitions writer");
         }
 
-        //         void store(const otf2::definition::rma_win& data)
-        //         {
-        //             check(OTF2_GlobalDefWriter_WriteRmaWin(wrt, data.ref(),
-        // data.name().ref(), data.comm().ref()), "Couldn't write RMA window to
-        // global definitions writer");
-        //         }
+        void store(const otf2::definition::rma_win& data)
+        {
+            check(OTF2_GlobalDefWriter_WriteRmaWin(wrt, data.ref(), data.name().ref(),
+                                                   data.comm().ref()),
+                  "Couldn't write RMA window to global definitions writer");
+        }
 
         void store(const otf2::definition::string& data)
         {
@@ -531,6 +531,8 @@ namespace writer
             store(reg.all<otf2::definition::parameter>().data());
             // store(reg.all<otf2::definition::callpath>().data());
             // store(reg.all<otf2::definition::callsite>().data());
+
+            store(reg.all<otf2::definition::rma_win>().data());
 
             store(reg.all<otf2::definition::source_code_location>().data());
             store(reg.all<otf2::definition::calling_context>().data());
