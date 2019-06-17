@@ -415,6 +415,13 @@ namespace common
         count
     };
 
+    enum class rma_sync_type_type : std::uint8_t
+    {
+        memory,
+        notify_in,
+        notify_out
+    };
+
     enum class rma_sync_level_type : std::uint32_t
     {
         none,

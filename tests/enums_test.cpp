@@ -272,6 +272,11 @@ using namespace otf2::common;
     static_assert(static_cast<int>(interrupt_generator_mode_type::time) == OTF2_INTERRUPT_GENERATOR_MODE_TIME, "Enum value mismatch");
     static_assert(static_cast<int>(interrupt_generator_mode_type::count) == OTF2_INTERRUPT_GENERATOR_MODE_COUNT, "Enum value mismatch");
 
+    static_assert(sizeof(rma_sync_type_type) == sizeof(OTF2_RmaSyncType), "Enum size mismatch");
+    static_assert(static_cast<int>(rma_sync_type_type::memory) == OTF2_RMA_SYNC_TYPE_MEMORY, "Enum value mismatch");
+    static_assert(static_cast<int>(rma_sync_type_type::notify_in) == OTF2_RMA_SYNC_TYPE_NOTIFY_IN, "Enum value mismatch");
+    static_assert(static_cast<int>(rma_sync_type_type::notify_out) == OTF2_RMA_SYNC_TYPE_NOTIFY_OUT, "Enum value mismatch");
+
     static_assert(sizeof(rma_sync_level_type) == sizeof(OTF2_RmaSyncLevel), "Enum size mismatch");
     static_assert(static_cast<int>(rma_sync_level_type::none) == OTF2_RMA_SYNC_LEVEL_NONE, "Enum value mismatch");
     static_assert(static_cast<int>(rma_sync_level_type::process) == OTF2_RMA_SYNC_LEVEL_PROCESS, "Enum value mismatch");
