@@ -237,6 +237,12 @@ namespace definition
     {
     };
 
+    template <>
+    class container<otf2::definition::system_tree_node_domain>
+    : public supplement_container<otf2::definition::system_tree_node_domain>
+    {
+    };
+
     template <typename Definition>
     class container<otf2::definition::property<Definition>>
     : public supplement_container<otf2::definition::property<Definition>>

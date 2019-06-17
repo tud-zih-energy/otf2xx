@@ -50,6 +50,7 @@ namespace definition
         class location_impl;
         class location_group_impl;
         class system_tree_node_impl;
+        class system_tree_node_domain_impl;
 
         template <typename T, otf2::common::group_type GroupType>
         class group_impl;
@@ -91,6 +92,7 @@ namespace definition
     class location;
     class location_group;
     class system_tree_node;
+    class system_tree_node_domain;
 
     template <typename T, otf2::common::group_type GroupType>
     class group;

@@ -171,7 +171,7 @@ namespace reader
             //check(OTF2_GlobalDefReaderCallbacks_SetRmaWinCallback (global_def_callbacks, detail::definition::global::), "Couldn't set attribute callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetStringCallback(global_def_callbacks, detail::definition::global::string), "Couldn't set string callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetSystemTreeNodeCallback(global_def_callbacks, detail::definition::global::system_tree_node), "Couldn't set system_tree_node callback handler");
-            //check(OTF2_GlobalDefReaderCallbacks_SetSystemTreeNodeDomainCallback (global_def_callbacks, detail::definition::global::), "Couldn't set attribute callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetSystemTreeNodeDomainCallback (global_def_callbacks, detail::definition::global::system_tree_node_domain), "Couldn't set system_tree_node_domain callback handler");
 
             check(OTF2_GlobalDefReaderCallbacks_SetSystemTreeNodePropertyCallback (global_def_callbacks, detail::definition::global::system_tree_node_property), "Couldn't set attribute callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetLocationPropertyCallback (global_def_callbacks, detail::definition::global::location_property), "Couldn't set attribute callback handler");

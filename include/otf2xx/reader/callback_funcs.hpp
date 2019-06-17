@@ -147,7 +147,7 @@ namespace reader
                 //OTF2_CallbackCode RmaWin  (void *userData, OTF2_RmaWinRef self, OTF2_StringRef name, OTF2_CommRef comm);
                 OTF2_CallbackCode string  (void *userData, OTF2_StringRef self, const char *string);
                 OTF2_CallbackCode system_tree_node  (void *userData, OTF2_SystemTreeNodeRef self, OTF2_StringRef name, OTF2_StringRef className, OTF2_SystemTreeNodeRef parent);
-                //OTF2_CallbackCode SystemTreeNodeDomain  (void *userData, OTF2_SystemTreeNodeRef systemTreeNode, OTF2_SystemTreeDomain systemTreeDomain);
+                OTF2_CallbackCode system_tree_node_domain  (void *userData, OTF2_SystemTreeNodeRef systemTreeNode, OTF2_SystemTreeDomain systemTreeDomain);
                 OTF2_CallbackCode system_tree_node_property  (void *userData, OTF2_SystemTreeNodeRef systemTreeNode, OTF2_StringRef name, OTF2_Type type, OTF2_AttributeValue value);
                 OTF2_CallbackCode location_property  (void *userData, OTF2_LocationRef location, OTF2_StringRef name, OTF2_Type type, OTF2_AttributeValue value);
                 OTF2_CallbackCode location_group_property  (void *userData, OTF2_LocationGroupRef locationGroup, OTF2_StringRef name, OTF2_Type type, OTF2_AttributeValue value);

@@ -47,6 +47,7 @@
 #include <otf2xx/definition/region.hpp>
 #include <otf2xx/definition/string.hpp>
 #include <otf2xx/definition/system_tree_node.hpp>
+#include <otf2xx/definition/system_tree_node_domain.hpp>
 
 #include <otf2xx/definition/calling_context.hpp>
 #include <otf2xx/definition/interrupt_generator.hpp>

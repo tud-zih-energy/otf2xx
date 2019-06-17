@@ -318,13 +318,11 @@ namespace writer
                   "Couldn't write clock properties to global definitions writer");
         }
 
-        // TODO: implement this
-        //         void store(const otf2::definition::system_tree_node_domain&
-        // data)
-        //         {
-        //             check(OTF2_GlobalDefWriter_WriteSystemTreeNodeDomain(wrt,
-        // data.ref()), "Couldn't write to global definitions writer");
-        //         }
+        void store(const otf2::definition::system_tree_node_domain& data)
+        {
+            check(OTF2_GlobalDefWriter_WriteSystemTreeNodeDomain(
+                wrt, data.node().ref(), static_cast<OTF2_SystemTreeDomain>(data.domain())));
+        }
 
         void store(const otf2::definition::system_tree_node_property& data)
         {
@@ -514,6 +512,7 @@ namespace writer
             store(reg.all<otf2::definition::attribute>().data());
             store(reg.all<otf2::definition::system_tree_node>().data());
             store(reg.all<otf2::definition::system_tree_node_property>().data());
+            store(reg.all<otf2::definition::system_tree_node_domain>().data());
             store(reg.all<otf2::definition::location_group>().data());
             store(reg.all<otf2::definition::location_group_property>().data());
             store(reg.all<otf2::definition::location>().data());

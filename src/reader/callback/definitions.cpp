@@ -456,9 +456,22 @@ namespace reader
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
 
-                //  OTF2_CallbackCode SystemTreeNodeDomain  (void *userData,
-                // OTF2_SystemTreeNodeRef systemTreeNode, OTF2_SystemTreeDomain systemTreeDomain){
-                // return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS); }
+                OTF2_CallbackCode system_tree_node_domain(void* userData,
+                                                          OTF2_SystemTreeNodeRef systemTreeNode,
+                                                          OTF2_SystemTreeDomain systemTreeDomain)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                    auto& registry = reader->registry();
+
+                    const auto& stnd = registry.create<otf2::definition::system_tree_node_domain>(
+                        registry.get<otf2::definition::system_tree_node>(systemTreeNode),
+                        static_cast<otf2::definition::system_tree_node_domain::
+                                        system_tree_node_domain_type>(systemTreeDomain));
+
+                    reader->callback().definition(stnd);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
 
                 OTF2_CallbackCode system_tree_node_property(void* userData,
                                                             OTF2_SystemTreeNodeRef systemTreeNode,

@@ -168,6 +168,7 @@ namespace reader
         virtual void definition(const otf2::definition::region&) {}
         virtual void definition(const otf2::definition::string&) {}
         virtual void definition(const otf2::definition::system_tree_node&) {}
+        virtual void definition(const otf2::definition::system_tree_node_domain&) {}
         virtual void definition(const otf2::definition::clock_properties&) {}
 
         virtual void definition(const otf2::definition::source_code_location&) {}
