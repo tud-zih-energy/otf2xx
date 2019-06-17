@@ -188,7 +188,12 @@ TEST_CASE("test lifetime", "[intrusive_ptr]")
         {
             {
                 auto calls = debug_ptr::calls;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wself-assign-overloaded"
+                // Note: We actually want to test the behavior of self-assignment here, so tHiS iS
+                // fInE!
                 ptr = ptr;
+#pragma GCC diagnostic pop
                 REQUIRE(ptr.get() == raw_ptr);
                 REQUIRE(debug_ptr::refCts[raw_ptr] == 1);
                 REQUIRE(debug_ptr::calls.retain == calls.retain);
