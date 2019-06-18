@@ -25,6 +25,15 @@ matrix:
             - cmake
           sources: *sources
     - os: linux
+      env: CXX="g++-8" CC="gcc-8"
+      compiler: gcc
+      addons:
+        apt:
+          packages:
+            - g++-8
+            - cmake
+          sources: *sources
+    - os: linux
       env: CXX="clang++-4.0" CC="clang-4.0"
       compiler: clang
       addons:
@@ -48,15 +57,26 @@ matrix:
           sources:
             - llvm-toolchain-trusty-5.0
             - ubuntu-toolchain-r-test
-    - os: osx
-      osx_image: xcode7.3
-      before_install:
-        - brew update # Workaround for travis issue https://github.com/travis-ci/travis-ci/issues/9913
-        - brew upgrade cmake # Installed is only 3.6.2
+    - os: linux
+      env: CXX="clang++-6.0" CC="clang-6.0"
+      compiler: clang
+      addons:
+        apt:
+          packages:
+            - clang-6.0
+            - g++-8
+            - cmake
+          sources:
+            - llvm-toolchain-xenial-6.0
+            - ubuntu-toolchain-r-test
     - os: osx
       osx_image: xcode8.3
     - os: osx
       osx_image: xcode9.3
+    - os: osx
+      osx_image: xcode10
+    - os: osx
+      osx_image: xcode10.1
 
 cache:
   directories:
