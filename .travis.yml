@@ -99,7 +99,7 @@ matrix:
             - g++-8
             - cmake
           sources:
-            - llvm-toolchain-xenial-7
+            - llvm-toolchain-xenial-8
             - ubuntu-toolchain-r-test
     - os: osx
       osx_image: xcode8.3
