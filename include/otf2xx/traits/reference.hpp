@@ -87,6 +87,11 @@ namespace traits
     };
 
     template <>
+    struct reference_type<definition::rma_win> : identity<OTF2_RmaWinRef>
+    {
+    };
+
+    template <>
     struct reference_type<definition::attribute> : identity<OTF2_AttributeRef>
     {
     };

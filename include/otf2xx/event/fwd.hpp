@@ -72,26 +72,24 @@ namespace event
     class calling_context_leave;
     class calling_context_sample;
 
-#ifdef OTF2XX_WITH_RMA
-    class rma_win_create;
-    class rma_win_destroy;
+    class rma_acquire_lock;
+    class rma_atomic;
     class rma_collective_begin;
     class rma_collective_end;
-    class rma_group_sync;
-    class rma_request_lock;
-    class rma_acquire_lock;
-    class rma_try_lock;
-    class rma_release_lock;
-    class rma_sync;
-    class rma_wait_change;
-    class rma_put;
     class rma_get;
-    class rma_atomic;
-    class rma_blocking_operation_complete;
-    class rma_non_blocking_operation_complete;
-    class rma_operation_test;
-    class rma_remote_operation_complete;
-#endif
+    class rma_group_sync;
+    class rma_op_complete_blocking;
+    class rma_op_complete_non_blocking;
+    class rma_op_test;
+    class rma_op_complete_remote;
+    class rma_put;
+    class rma_release_lock;
+    class rma_request_lock;
+    class rma_sync;
+    class rma_try_lock;
+    class rma_wait_change;
+    class rma_win_create;
+    class rma_win_destroy;
 
     class thread_fork;
     class thread_join;

@@ -415,6 +415,32 @@ namespace common
         count
     };
 
+    enum class rma_sync_type_type : std::uint8_t
+    {
+        memory,
+        notify_in,
+        notify_out
+    };
+
+    enum class rma_sync_level_type : std::uint32_t
+    {
+        none,
+        process,
+        memory
+    };
+
+    enum class rma_atomic_type_type : std::uint8_t
+    {
+        accumulate,
+        increment,
+        test_and_set,
+        compare_and_swap,
+        swap,
+        fetch_and_add,
+        fetch_and_increment,
+        fetch_and_accumulate
+    };
+
     enum class io_paradigm_class_type : std::uint8_t
     {
         serial,
@@ -537,8 +563,8 @@ namespace common
         group,
         comm
     };
-}
+} // namespace common
 using namespace common;
-}
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_COMMON_HPP

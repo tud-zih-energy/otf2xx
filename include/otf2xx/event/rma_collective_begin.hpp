@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2019, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,45 +32,39 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP
+#ifndef INCLUDE_OTF2XX_EVENT_RMA_COLLECTIVE_BEGIN_HPP
+#define INCLUDE_OTF2XX_EVENT_RMA_COLLECTIVE_BEGIN_HPP
 
-#include <otf2xx/definition/container.hpp>
+#include <otf2xx/common.hpp>
+#include <otf2xx/event/base.hpp>
 
-#include <otf2xx/definition/attribute.hpp>
-#include <otf2xx/definition/clock_properties.hpp>
-#include <otf2xx/definition/comm.hpp>
-#include <otf2xx/definition/group.hpp>
-#include <otf2xx/definition/location.hpp>
-#include <otf2xx/definition/location_group.hpp>
-#include <otf2xx/definition/parameter.hpp>
-#include <otf2xx/definition/region.hpp>
-#include <otf2xx/definition/string.hpp>
-#include <otf2xx/definition/system_tree_node.hpp>
-#include <otf2xx/definition/system_tree_node_domain.hpp>
+#include <otf2xx/chrono/chrono.hpp>
 
-#include <otf2xx/definition/calling_context.hpp>
-#include <otf2xx/definition/interrupt_generator.hpp>
-#include <otf2xx/definition/source_code_location.hpp>
+namespace otf2
+{
+namespace event
+{
+    class rma_collective_begin : public base<rma_collective_begin>
+    {
+    public:
+        rma_collective_begin(otf2::chrono::time_point timestamp)
+        : base<rma_collective_begin>(timestamp)
+        {
+        }
 
-#include <otf2xx/definition/rma_win.hpp>
+        rma_collective_begin(OTF2_AttributeList* al, otf2::chrono::time_point timestamp)
+        : base<rma_collective_begin>(al, timestamp)
+        {
+        }
 
-#include <otf2xx/definition/io_directory.hpp>
-#include <otf2xx/definition/io_handle.hpp>
-#include <otf2xx/definition/io_paradigm.hpp>
-#include <otf2xx/definition/io_pre_created_handle_state.hpp>
-#include <otf2xx/definition/io_regular_file.hpp>
+        // copy constructor with new timestamp
+        rma_collective_begin(const otf2::event::rma_collective_begin&,
+                             otf2::chrono::time_point timestamp)
+        : base<rma_collective_begin>(timestamp)
+        {
+        }
+    };
+} // namespace event
+} // namespace otf2
 
-#include <otf2xx/definition/mapping_table.hpp>
-
-#include <otf2xx/definition/metric_class.hpp>
-#include <otf2xx/definition/metric_instance.hpp>
-#include <otf2xx/definition/metric_member.hpp>
-
-#include <otf2xx/definition/unknown.hpp>
-
-#include <otf2xx/definition/property.hpp>
-
-#include <otf2xx/definition/marker.hpp>
-
-#endif // INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP
+#endif // INCLUDE_OTF2XX_EVENT_RMA_COLLECTIVE_BEGIN_HPP

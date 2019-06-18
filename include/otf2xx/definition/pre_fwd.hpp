@@ -66,6 +66,8 @@ namespace definition
         class calling_context_impl;
         class interrupt_generator_impl;
 
+        class rma_win_impl;
+
         class io_file_base;
         class io_file_impl;
         class io_handle_impl;
@@ -107,6 +109,8 @@ namespace definition
     class source_code_location;
     class calling_context;
     class interrupt_generator;
+
+    class rma_win;
 
     class io_file;
     class io_regular_file;

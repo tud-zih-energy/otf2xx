@@ -489,6 +489,171 @@ namespace writer
             location_.event_written();
         }
 
+        void write(const otf2::event::rma_acquire_lock& data)
+        {
+            check(OTF2_EvtWriter_RmaAcquireLock(evt_wrt_, data.attribute_list().get(),
+                                                convert(data.timestamp()), data.win().ref(),
+                                                data.remote(), data.lock(),
+                                                static_cast<OTF2_LockType>(data.lock_type())),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_atomic& data)
+        {
+            check(OTF2_EvtWriter_RmaAtomic(
+                      evt_wrt_, data.attribute_list().get(), convert(data.timestamp()),
+                      data.win().ref(), data.remote(), static_cast<OTF2_RmaAtomicType>(data.type()),
+                      data.sent(), data.received(), data.matching_id()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_collective_begin& data)
+        {
+            check(OTF2_EvtWriter_RmaCollectiveBegin(evt_wrt_, data.attribute_list().get(),
+                                                    convert(data.timestamp())),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_collective_end& data)
+        {
+            check(OTF2_EvtWriter_RmaCollectiveEnd(
+                      evt_wrt_, data.attribute_list().get(), convert(data.timestamp()),
+                      static_cast<OTF2_CollectiveOp>(data.type()),
+                      static_cast<OTF2_RmaSyncLevel>(data.level()), data.win().ref(), data.root(),
+                      data.sent(), data.received()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_get& data)
+        {
+            check(OTF2_EvtWriter_RmaGet(evt_wrt_, data.attribute_list().get(),
+                                        convert(data.timestamp()), data.win().ref(), data.remote(),
+                                        data.bytes(), data.matching_id()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_group_sync& data)
+        {
+            check(OTF2_EvtWriter_RmaGroupSync(evt_wrt_, data.attribute_list().get(),
+                                              convert(data.timestamp()),
+                                              static_cast<OTF2_RmaSyncLevel>(data.level()),
+                                              data.win().ref(), data.group().ref()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_op_complete_blocking& data)
+        {
+            check(OTF2_EvtWriter_RmaOpCompleteBlocking(evt_wrt_, data.attribute_list().get(),
+                                                       convert(data.timestamp()), data.win().ref(),
+                                                       data.matching_id()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_op_complete_non_blocking& data)
+        {
+            check(OTF2_EvtWriter_RmaOpCompleteNonBlocking(evt_wrt_, data.attribute_list().get(),
+                                                          convert(data.timestamp()),
+                                                          data.win().ref(), data.matching_id()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_op_test& data)
+        {
+            check(OTF2_EvtWriter_RmaOpTest(evt_wrt_, data.attribute_list().get(),
+                                           convert(data.timestamp()), data.win().ref(),
+                                           data.matching_id()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_op_complete_remote& data)
+        {
+            check(OTF2_EvtWriter_RmaOpCompleteRemote(evt_wrt_, data.attribute_list().get(),
+                                                     convert(data.timestamp()), data.win().ref(),
+                                                     data.matching_id()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_put& data)
+        {
+            check(OTF2_EvtWriter_RmaPut(evt_wrt_, data.attribute_list().get(),
+                                        convert(data.timestamp()), data.win().ref(), data.remote(),
+                                        data.bytes(), data.matching_id()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_release_lock& data)
+        {
+            check(OTF2_EvtWriter_RmaReleaseLock(evt_wrt_, data.attribute_list().get(),
+                                                convert(data.timestamp()), data.win().ref(),
+                                                data.remote(), data.lock()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_request_lock& data)
+        {
+            check(OTF2_EvtWriter_RmaRequestLock(evt_wrt_, data.attribute_list().get(),
+                                                convert(data.timestamp()), data.win().ref(),
+                                                data.remote(), data.lock(),
+                                                static_cast<OTF2_LockType>(data.lock_type())),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_sync& data)
+        {
+            check(OTF2_EvtWriter_RmaSync(evt_wrt_, data.attribute_list().get(),
+                                         convert(data.timestamp()), data.win().ref(), data.remote(),
+                                         static_cast<OTF2_RmaSyncType>(data.sync_type())),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_try_lock& data)
+        {
+            check(OTF2_EvtWriter_RmaTryLock(evt_wrt_, data.attribute_list().get(),
+                                            convert(data.timestamp()), data.win().ref(),
+                                            data.remote(), data.lock(),
+                                            static_cast<OTF2_LockType>(data.lock_type())),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_wait_change& data)
+        {
+            check(OTF2_EvtWriter_RmaWaitChange(evt_wrt_, data.attribute_list().get(),
+                                               convert(data.timestamp()), data.win().ref()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_win_create& data)
+        {
+            check(OTF2_EvtWriter_RmaWinCreate(evt_wrt_, data.attribute_list().get(),
+                                              convert(data.timestamp()), data.win().ref()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::rma_win_destroy& data)
+        {
+            check(OTF2_EvtWriter_RmaWinDestroy(evt_wrt_, data.attribute_list().get(),
+                                               convert(data.timestamp()), data.win().ref()),
+                  "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
         void write(const otf2::event::io_create_handle& data)
         {
             check(OTF2_EvtWriter_IoCreateHandle(

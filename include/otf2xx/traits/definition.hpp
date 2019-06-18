@@ -49,7 +49,7 @@ namespace traits
         tmp::typelist<otf2::definition::attribute, otf2::definition::comm,
                       otf2::definition::detail::group_base, otf2::definition::location,
                       otf2::definition::location_group, otf2::definition::parameter,
-                      otf2::definition::region, otf2::definition::string,
+                      otf2::definition::region, otf2::definition::string, otf2::definition::rma_win,
                       otf2::definition::system_tree_node, otf2::definition::detail::metric_base,
                       otf2::definition::metric_member, otf2::definition::source_code_location,
                       otf2::definition::calling_context, otf2::definition::interrupt_generator,
@@ -80,9 +80,10 @@ namespace traits
         otf2::definition::io_directory, otf2::definition::io_pre_created_handle_state,
         otf2::definition::location_property, otf2::definition::location_group_property,
         otf2::definition::system_tree_node_property, otf2::definition::calling_context_property,
-        otf2::definition::io_file_property, otf2::definition::locations_group,
-        otf2::definition::regions_group, otf2::definition::comm_locations_group,
-        otf2::definition::comm_group, otf2::definition::comm_self_group>;
+        otf2::definition::rma_win, otf2::definition::io_file_property,
+        otf2::definition::locations_group, otf2::definition::regions_group,
+        otf2::definition::comm_locations_group, otf2::definition::comm_group,
+        otf2::definition::comm_self_group>;
 
     using referable_definitions =
         tmp::concat_t<referable_definitions_base, referable_definitions_ext>;

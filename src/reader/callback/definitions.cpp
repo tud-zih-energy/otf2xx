@@ -422,9 +422,20 @@ namespace reader
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
 
-                //  OTF2_CallbackCode RmaWin  (void *userData, OTF2_RmaWinRef self,
-                // OTF2_StringRef name, OTF2_CommRef comm){ return
-                // static_cast<OTF2_CallbackCode>(OTF2_SUCCESS); }
+                OTF2_CallbackCode rma_win(void* userData, OTF2_RmaWinRef self, OTF2_StringRef name,
+                                          OTF2_CommRef comm)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                    auto& registry = reader->registry();
+
+                    const auto& rw = registry.create<otf2::definition::rma_win>(
+                        self, registry.get<otf2::definition::string>(name),
+                        registry.get<otf2::definition::comm>(comm));
+
+                    reader->callback().definition(rw);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
 
                 OTF2_CallbackCode string(void* userData, OTF2_StringRef self, const char* string)
                 {

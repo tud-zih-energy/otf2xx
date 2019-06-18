@@ -77,6 +77,25 @@
 
 #include <otf2xx/event/marker.hpp>
 
+#include <otf2xx/event/rma_acquire_lock.hpp>
+#include <otf2xx/event/rma_atomic.hpp>
+#include <otf2xx/event/rma_collective_begin.hpp>
+#include <otf2xx/event/rma_collective_end.hpp>
+#include <otf2xx/event/rma_get.hpp>
+#include <otf2xx/event/rma_group_sync.hpp>
+#include <otf2xx/event/rma_op_complete_blocking.hpp>
+#include <otf2xx/event/rma_op_complete_non_blocking.hpp>
+#include <otf2xx/event/rma_op_complete_remote.hpp>
+#include <otf2xx/event/rma_op_test.hpp>
+#include <otf2xx/event/rma_put.hpp>
+#include <otf2xx/event/rma_release_lock.hpp>
+#include <otf2xx/event/rma_request_lock.hpp>
+#include <otf2xx/event/rma_sync.hpp>
+#include <otf2xx/event/rma_try_lock.hpp>
+#include <otf2xx/event/rma_wait_change.hpp>
+#include <otf2xx/event/rma_win_create.hpp>
+#include <otf2xx/event/rma_win_destroy.hpp>
+
 #include <otf2xx/event/io_acquire_lock.hpp>
 #include <otf2xx/event/io_change_status_flag.hpp>
 #include <otf2xx/event/io_create_handle.hpp>
