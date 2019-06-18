@@ -130,6 +130,25 @@ namespace reader
         virtual void event(const otf2::definition::location&, const otf2::event::thread_wait&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::thread_end&) {}
 
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_acquire_lock&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_atomic&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_collective_begin&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_collective_end&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_get&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_group_sync&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_op_complete_blocking&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_op_complete_non_blocking&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_op_complete_remote&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_op_test&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_put&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_release_lock&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_request_lock&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_sync&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_try_lock&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_wait_change&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_win_create&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::rma_win_destroy&) {}
+
         virtual void event(const otf2::definition::location&, const otf2::event::io_create_handle&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::io_destroy_handle&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::io_duplicate_handle&) {}

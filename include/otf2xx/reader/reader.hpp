@@ -233,24 +233,24 @@ namespace reader
             check(OTF2_GlobalEvtReaderCallbacks_SetCallingContextLeaveCallback(event_callbacks, detail::event::calling_context_leave), "Couldn't set calling_context_leave event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetCallingContextSampleCallback(event_callbacks, detail::event::calling_context_sample), "Couldn't set calling_context_sample event callback");
 
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaAcquireLockCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaAtomicCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaCollectiveBeginCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaCollectiveEndCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaGetCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaGroupSyncCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaOpCompleteBlockingCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaOpCompleteNonBlockingCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaOpCompleteRemoteCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaOpTestCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaPutCallback (event_callbacks, detail::event::);, "Couldn't set buffer_flush event callback")
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaReleaseLockCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaRequestLockCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaSyncCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaTryLockCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaWaitChangeCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaWinCreateCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
-            //             check(OTF2_GlobalEvtReaderCallbacks_SetRmaWinDestroyCallback (event_callbacks, detail::event::), "Couldn't set buffer_flush event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaAcquireLockCallback (event_callbacks, detail::event::rma_acquire_lock), "Couldn't set rma_acquire_lock event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaAtomicCallback (event_callbacks, detail::event::rma_atomic), "Couldn't set rma_atomic event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaCollectiveBeginCallback (event_callbacks, detail::event::rma_collective_begin), "Couldn't set rma_collective_begin event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaCollectiveEndCallback (event_callbacks, detail::event::rma_collective_end), "Couldn't set rma_collective_end event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaGetCallback (event_callbacks, detail::event::rma_get), "Couldn't set rma_get event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaGroupSyncCallback (event_callbacks, detail::event::rma_group_sync), "Couldn't set rma_group_sync event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaOpCompleteBlockingCallback (event_callbacks, detail::event::rma_op_complete_blocking), "Couldn't set rma_op_complete_blocking event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaOpCompleteNonBlockingCallback (event_callbacks, detail::event::rma_op_complete_non_blocking), "Couldn't set rma_op_complete_non_blocking event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaOpCompleteRemoteCallback (event_callbacks, detail::event::rma_op_complete_remote), "Couldn't set rma_op_complete_remote event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaOpTestCallback (event_callbacks, detail::event::rma_op_test), "Couldn't set rma_op_test event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaPutCallback (event_callbacks, detail::event::rma_put), "Couldn't set rma_put event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaReleaseLockCallback (event_callbacks, detail::event::rma_release_lock), "Couldn't set rma_release_lock event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaRequestLockCallback (event_callbacks, detail::event::rma_request_lock), "Couldn't set rma_request_lock event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaSyncCallback (event_callbacks, detail::event::rma_sync), "Couldn't set rma_sync event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaTryLockCallback (event_callbacks, detail::event::rma_try_lock), "Couldn't set rma_try_lock event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaWaitChangeCallback (event_callbacks, detail::event::rma_wait_change), "Couldn't set rma_wait_change event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaWinCreateCallback (event_callbacks, detail::event::rma_win_create), "Couldn't set rma_win_create event callback");
+            check(OTF2_GlobalEvtReaderCallbacks_SetRmaWinDestroyCallback (event_callbacks, detail::event::rma_win_destroy), "Couldn't set rma_win_destroy event callback");
 
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadAcquireLockCallback(event_callbacks, detail::event::thread_acquire_lock), "Couldn't set thread_acquire_lock event callback");
             check(OTF2_GlobalEvtReaderCallbacks_SetThreadForkCallback(event_callbacks, detail::event::thread_fork), "Couldn't set thread_fork event callback");
