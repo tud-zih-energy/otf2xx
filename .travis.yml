@@ -1,20 +1,9 @@
 language: generic
 
-sudo: false
-dist: trusty
+dist: xenial
 
 matrix:
   include:
-    - os: linux
-      env: CXX="g++-7" CC="gcc-7"
-      compiler: gcc
-      addons:
-        apt:
-          packages:
-            - g++-7
-            - cmake
-          sources: &sources
-            - ubuntu-toolchain-r-test
     - os: linux
       env: CXX="g++-6" CC="gcc-6"
       compiler: gcc
@@ -22,6 +11,16 @@ matrix:
         apt:
           packages:
             - g++-6
+            - cmake
+          sources: &sources
+            - ubuntu-toolchain-r-test
+    - os: linux
+      env: CXX="g++-7" CC="gcc-7"
+      compiler: gcc
+      addons:
+        apt:
+          packages:
+            - g++-7
             - cmake
           sources: *sources
     - os: linux
@@ -43,7 +42,7 @@ matrix:
             - g++-5
             - cmake
           sources:
-            - llvm-toolchain-trusty-4.0
+            - llvm-toolchain-xenial-4.0
             - ubuntu-toolchain-r-test
     - os: linux
       env: CXX="clang++-5.0" CC="clang-5.0"
@@ -55,7 +54,7 @@ matrix:
             - g++-5
             - cmake
           sources:
-            - llvm-toolchain-trusty-5.0
+            - llvm-toolchain-xenial-5.0
             - ubuntu-toolchain-r-test
     - os: linux
       env: CXX="clang++-6.0" CC="clang-6.0"
@@ -68,6 +67,18 @@ matrix:
             - cmake
           sources:
             - llvm-toolchain-xenial-6.0
+            - ubuntu-toolchain-r-test
+    - os: linux
+      env: CXX="clang++-7.0" CC="clang-7.0"
+      compiler: clang
+      addons:
+        apt:
+          packages:
+            - clang-7.0
+            - g++-8
+            - cmake
+          sources:
+            - llvm-toolchain-xenial-7
             - ubuntu-toolchain-r-test
     - os: osx
       osx_image: xcode8.3
