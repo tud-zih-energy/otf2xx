@@ -45,9 +45,7 @@ namespace reader
     {
         namespace event
         {
-
             // clang-format off
-
             OTF2_CallbackCode buffer_flush  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_TimeStamp stopTime);
             OTF2_CallbackCode enter  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_RegionRef region);
             OTF2_CallbackCode leave  (OTF2_LocationRef locationID, OTF2_TimeStamp time, void *userData, OTF2_AttributeList *attributeList, OTF2_RegionRef region);
@@ -131,8 +129,8 @@ namespace reader
                 // clang-format off
 
                 OTF2_CallbackCode attribute  (void *userData, OTF2_AttributeRef self, OTF2_StringRef name, OTF2_StringRef description, OTF2_Type type);
-                //OTF2_CallbackCode Callpath  (void *userData, OTF2_CallpathRef self, OTF2_CallpathRef parent, OTF2_RegionRef region);
-                //OTF2_CallbackCode Callsite  (void *userData, OTF2_CallsiteRef self, OTF2_StringRef sourceFile, uint32_t lineNumber, OTF2_RegionRef enteredRegion, OTF2_RegionRef leftRegion);
+                OTF2_CallbackCode call_path  (void *userData, OTF2_CallpathRef self, OTF2_CallpathRef parent, OTF2_RegionRef region);
+                OTF2_CallbackCode call_site  (void *userData, OTF2_CallsiteRef self, OTF2_StringRef sourceFile, uint32_t lineNumber, OTF2_RegionRef enteredRegion, OTF2_RegionRef leftRegion);
                 OTF2_CallbackCode clock_properties  (void *userData, uint64_t timerResolution, uint64_t globalOffset, uint64_t traceLength);
                 OTF2_CallbackCode comm  (void *userData, OTF2_CommRef self, OTF2_StringRef name, OTF2_GroupRef group, OTF2_CommRef parent);
                 OTF2_CallbackCode group  (void *userData, OTF2_GroupRef self, OTF2_StringRef name, OTF2_GroupType groupType, OTF2_Paradigm paradigm, OTF2_GroupFlag groupFlags, uint32_t numberOfMembers, const uint64_t *members);

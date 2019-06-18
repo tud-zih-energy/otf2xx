@@ -76,10 +76,38 @@ namespace reader
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
 
-                // clang-format off
-                // OTF2_CallbackCode Callpath(void *userData, OTF2_CallpathRef self, OTF2_CallpathRef parent, OTF2_RegionRef region);
-                // OTF2_CallbackCode Callsite(void *userData, OTF2_CallsiteRef self, OTF2_StringRef sourceFile, uint32_t lineNumber, OTF2_RegionRef enteredRegion, OTF2_RegionRef leftRegion);
-                // clang-format on
+                OTF2_CallbackCode call_path(void* userData, OTF2_CallpathRef self,
+                                            OTF2_CallpathRef parent, OTF2_RegionRef region)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                    auto& registry = reader->registry();
+
+                    // This *should* even work for UNDEFINED parents
+                    const auto& def = registry.create<otf2::definition::call_path>(
+                        self, registry.get<otf2::definition::region>(region),
+                        registry.get<otf2::definition::call_path>(parent));
+
+                    reader->callback().definition(def);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
+                OTF2_CallbackCode call_site(void* userData, OTF2_CallsiteRef self,
+                                            OTF2_StringRef sourceFile, uint32_t lineNumber,
+                                            OTF2_RegionRef enteredRegion, OTF2_RegionRef leftRegion)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                    auto& registry = reader->registry();
+
+                    const auto& def = registry.create<otf2::definition::call_site>(
+                        self, registry.get<otf2::definition::string>(sourceFile), lineNumber,
+                        registry.get<otf2::definition::region>(enteredRegion),
+                        registry.get<otf2::definition::region>(leftRegion));
+
+                    reader->callback().definition(def);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
 
                 OTF2_CallbackCode clock_properties(void* userData, uint64_t timerResolution,
                                                    uint64_t globalOffset, uint64_t traceLength)

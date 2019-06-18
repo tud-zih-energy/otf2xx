@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2019, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,20 +32,18 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_CALLING_CONTEXT_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_CALLING_CONTEXT_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_CALL_PATH_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_CALL_PATH_HPP
 
-#include <otf2xx/common.hpp>
+#include <otf2xx/exception.hpp>
+
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/region.hpp>
-#include <otf2xx/definition/source_code_location.hpp>
 
-#include <otf2xx/definition/detail/calling_context_impl.hpp>
+#include <otf2xx/definition/detail/call_path_impl.hpp>
 #include <otf2xx/definition/detail/referable_base.hpp>
-
-#include <memory>
 
 namespace otf2
 {
@@ -53,33 +51,32 @@ namespace definition
 {
 
     /**
-     * \brief class for representing a calling context definition
+     * \brief class for representing call path definitions
      */
-    class calling_context
-    : public detail::referable_base<calling_context, detail::calling_context_impl>
+    class call_path : public detail::referable_base<call_path, detail::call_path_impl>
     {
-        using base = detail::referable_base<calling_context, detail::calling_context_impl>;
+        using base = detail::referable_base<call_path, detail::call_path_impl>;
         using base::base;
 
     public:
-        calling_context(reference_type ref, const otf2::definition::region& region,
-                        const otf2::definition::source_code_location& source_code_location,
-                        const otf2::definition::calling_context& parent)
-        : base(ref, new impl_type(region, source_code_location, parent.get(), parent.ref()))
+        call_path(reference<call_path> ref, const otf2::definition::region& region,
+                  const otf2::definition::call_path& parent)
+        : base(ref, new impl_type(region, parent.get(), parent.ref()))
         {
         }
 
-        calling_context(reference_type ref, const otf2::definition::region& region,
-                        const otf2::definition::source_code_location& source_code_location)
-        : base(ref, new impl_type(region, source_code_location))
+        call_path(reference<call_path> ref, const otf2::definition::region& region)
+        : base(ref, new impl_type(region))
         {
         }
 
-        calling_context() = default;
+        call_path() = default;
 
         /**
-         * \brief returns the region
-         * \returns otf2::definition::region
+         * \brief returns the region of the call path
+         *
+         * \returns a region definiton
+         *
          */
         const otf2::definition::region& region() const
         {
@@ -88,18 +85,7 @@ namespace definition
         }
 
         /**
-         * \brief returns the source_code_location
-         * \returns otf2::definition::source_code_location
-         */
-        const otf2::definition::source_code_location& source_code_location() const
-        {
-            assert(this->is_valid());
-            return data_->source_code_location();
-        }
-
-        /**
-         * \brief returns if the calling context has a parent
-         * \returns bool
+         * \brief returns whether the definition has got a parent or not
          */
         bool has_parent() const
         {
@@ -109,17 +95,19 @@ namespace definition
 
         /**
          * \brief returns the parent
-         * \returns otf2::definition::calling_context
+         * \returns otf2::definition::call_path
          * \throws if there is no parent
          */
-        otf2::definition::calling_context parent() const
+        otf2::definition::call_path parent() const
         {
             assert(this->is_valid());
             auto p = data_->parent();
-            return otf2::definition::calling_context{ p.second, p.first };
+            return otf2::definition::call_path{ p.second, p.first };
         }
     };
+
 } // namespace definition
+
 } // namespace otf2
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_CALLING_CONTEXT_HPP
+#endif // INCLUDE_OTF2XX_DEFINITIONS_CALL_PATH_HPP

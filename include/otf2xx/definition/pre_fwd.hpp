@@ -62,6 +62,8 @@ namespace definition
         class string_impl;
         class clock_properties_impl;
 
+        class call_path_impl;
+        class call_site_impl;
         class source_code_location_impl;
         class calling_context_impl;
         class interrupt_generator_impl;
@@ -106,6 +108,8 @@ namespace definition
     class string;
     class clock_properties;
 
+    class call_path;
+    class call_site;
     class source_code_location;
     class calling_context;
     class interrupt_generator;

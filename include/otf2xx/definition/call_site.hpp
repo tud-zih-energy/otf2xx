@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2019, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,17 +32,17 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_DEFINITIONS_CALLING_CONTEXT_HPP
-#define INCLUDE_OTF2XX_DEFINITIONS_CALLING_CONTEXT_HPP
+#ifndef INCLUDE_OTF2XX_DEFINITIONS_CALL_SITE_HPP
+#define INCLUDE_OTF2XX_DEFINITIONS_CALL_SITE_HPP
 
 #include <otf2xx/common.hpp>
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
 #include <otf2xx/definition/region.hpp>
-#include <otf2xx/definition/source_code_location.hpp>
+#include <otf2xx/definition/string.hpp>
 
-#include <otf2xx/definition/detail/calling_context_impl.hpp>
+#include <otf2xx/definition/detail/call_site_impl.hpp>
 #include <otf2xx/definition/detail/referable_base.hpp>
 
 #include <memory>
@@ -53,73 +53,64 @@ namespace definition
 {
 
     /**
-     * \brief class for representing a calling context definition
+     * \brief class for representing a call site definition
      */
-    class calling_context
-    : public detail::referable_base<calling_context, detail::calling_context_impl>
+    class call_site : public detail::referable_base<call_site, detail::call_site_impl>
     {
-        using base = detail::referable_base<calling_context, detail::calling_context_impl>;
+        using base = detail::referable_base<call_site, detail::call_site_impl>;
         using base::base;
 
     public:
-        calling_context(reference_type ref, const otf2::definition::region& region,
-                        const otf2::definition::source_code_location& source_code_location,
-                        const otf2::definition::calling_context& parent)
-        : base(ref, new impl_type(region, source_code_location, parent.get(), parent.ref()))
+        call_site(reference_type ref, const otf2::definition::string& source_file,
+                  uint32_t line_number, const otf2::definition::region& entered_region,
+                  const otf2::definition::region& left_region)
+        : base(ref, new impl_type(source_file, line_number, entered_region, left_region))
         {
         }
 
-        calling_context(reference_type ref, const otf2::definition::region& region,
-                        const otf2::definition::source_code_location& source_code_location)
-        : base(ref, new impl_type(region, source_code_location))
-        {
-        }
-
-        calling_context() = default;
+        call_site() = default;
 
         /**
-         * \brief returns the region
+         * \brief returns the region which was called.
          * \returns otf2::definition::region
          */
-        const otf2::definition::region& region() const
+        const otf2::definition::region& entered_region() const
         {
             assert(this->is_valid());
-            return data_->region();
+            return data_->entered_region();
         }
 
         /**
-         * \brief returns the source_code_location
+         * \brief returns the region which made the call.
+         * \returns otf2::definition::region
+         */
+        const otf2::definition::region& left_region() const
+        {
+            assert(this->is_valid());
+            return data_->left_region();
+        }
+
+        /**
+         * \brief returns the source file where this call was made
          * \returns otf2::definition::source_code_location
          */
-        const otf2::definition::source_code_location& source_code_location() const
+        const otf2::definition::string& source_file() const
         {
             assert(this->is_valid());
-            return data_->source_code_location();
+            return data_->source_file();
         }
 
         /**
-         * \brief returns if the calling context has a parent
-         * \returns bool
+         * \brief returns the line number in the source file where this call was made
+         * \returns uint32_t
          */
-        bool has_parent() const
+        std::uint32_t line_number() const
         {
             assert(this->is_valid());
-            return data_->has_parent();
-        }
-
-        /**
-         * \brief returns the parent
-         * \returns otf2::definition::calling_context
-         * \throws if there is no parent
-         */
-        otf2::definition::calling_context parent() const
-        {
-            assert(this->is_valid());
-            auto p = data_->parent();
-            return otf2::definition::calling_context{ p.second, p.first };
+            return data_->line_number();
         }
     };
 } // namespace definition
 } // namespace otf2
 
-#endif // INCLUDE_OTF2XX_DEFINITIONS_CALLING_CONTEXT_HPP
+#endif // INCLUDE_OTF2XX_DEFINITIONS_CALL_SITE_HPP

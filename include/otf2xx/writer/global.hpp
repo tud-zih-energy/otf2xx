@@ -96,21 +96,20 @@ namespace writer
                   "Couldn't write attribute to global definitions writer");
         }
 
-        // TODO: implement this
-        //         void store(const otf2::definition::callpath& data)
-        //         {
-        //             check(OTF2_GlobalDefWriter_WriteCallpath(wrt, data.ref(),
-        // data.parent().ref(), data.region().ref()), "Couldn't write callpath
-        // to global definitions writer");
-        //         }
-        //
-        //         void store(const otf2::definition::callsite& data)
-        //         {
-        //             check(OTF2_GlobalDefWriter_WriteCallsite(wrt, data.ref(),
-        // data.source_file().ref(), data.line(), data.entered().ref(),
-        // data.leaved().ref()), "Couldn't write callsite to global definitions
-        // writer");
-        //         }
+        void store(const otf2::definition::call_path& data)
+        {
+            check(OTF2_GlobalDefWriter_WriteCallpath(wrt, data.ref(), data.parent().ref(),
+                                                     data.region().ref()),
+                  "Couldn't write callpath to global definitions writer");
+        }
+
+        void store(const otf2::definition::call_site& data)
+        {
+            check(OTF2_GlobalDefWriter_WriteCallsite(
+                      wrt, data.ref(), data.source_file().ref(), data.line_number(),
+                      data.entered_region().ref(), data.left_region().ref()),
+                  "Couldn't write callsite to global definitions writer");
+        }
 
         void store(const otf2::definition::comm& data)
         {

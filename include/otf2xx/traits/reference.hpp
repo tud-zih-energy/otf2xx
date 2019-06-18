@@ -107,6 +107,16 @@ namespace traits
     };
 
     template <>
+    struct reference_type<definition::call_path> : identity<OTF2_CallpathRef>
+    {
+    };
+
+    template <>
+    struct reference_type<definition::call_site> : identity<OTF2_CallsiteRef>
+    {
+    };
+
+    template <>
     struct reference_type<definition::calling_context> : identity<OTF2_CallingContextRef>
     {
     };

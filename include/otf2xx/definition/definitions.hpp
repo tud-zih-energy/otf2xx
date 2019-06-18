@@ -49,6 +49,8 @@
 #include <otf2xx/definition/system_tree_node.hpp>
 #include <otf2xx/definition/system_tree_node_domain.hpp>
 
+#include <otf2xx/definition/call_path.hpp>
+#include <otf2xx/definition/call_site.hpp>
 #include <otf2xx/definition/calling_context.hpp>
 #include <otf2xx/definition/interrupt_generator.hpp>
 #include <otf2xx/definition/source_code_location.hpp>

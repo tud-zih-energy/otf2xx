@@ -190,6 +190,8 @@ namespace reader
         virtual void definition(const otf2::definition::system_tree_node_domain&) {}
         virtual void definition(const otf2::definition::clock_properties&) {}
 
+        virtual void definition(const otf2::definition::call_path&) {}
+        virtual void definition(const otf2::definition::call_site&) {}
         virtual void definition(const otf2::definition::source_code_location&) {}
         virtual void definition(const otf2::definition::calling_context&) {}
         virtual void definition(const otf2::definition::interrupt_generator&) {}

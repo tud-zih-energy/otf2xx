@@ -155,8 +155,8 @@ namespace reader
             // clang-format off
 
             check(OTF2_GlobalDefReaderCallbacks_SetAttributeCallback(global_def_callbacks, detail::definition::global::attribute), "Couldn't set attribute callback handler");
-            //OTF2_GlobalDefReaderCallbacks_SetCallpathCallback (global_def_callbacks, detail::definition::global::), "Couldn't set attribute callback handler");
-            //OTF2_GlobalDefReaderCallbacks_SetCallsiteCallback (global_def_callbacks, detail::definition::global::), "Couldn't set attribute callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetCallpathCallback(global_def_callbacks, detail::definition::global::call_path), "Couldn't set call_path callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetCallsiteCallback(global_def_callbacks, detail::definition::global::call_site), "Couldn't set call_site callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetClockPropertiesCallback(global_def_callbacks, detail::definition::global::clock_properties), "Couldn't set clock_properties callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetCommCallback(global_def_callbacks, detail::definition::global::comm), "Couldn't set comm callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetGroupCallback(global_def_callbacks, detail::definition::global::group), "Couldn't set group callback handler");
