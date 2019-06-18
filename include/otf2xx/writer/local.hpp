@@ -329,6 +329,7 @@ namespace writer
             location_.event_written();
         }
 
+    public:
         // TODO find a better solution to allow high-performance writing of this event without
         // using shread ptrs
         void write_calling_context_enter(otf2::chrono::time_point timestamp,

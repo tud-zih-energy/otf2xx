@@ -131,9 +131,7 @@ namespace definition
     class metric_class;
     class metric_instance;
 
-    // TODO: which class of metric foo?
-    // using metric_group = group<otf2::definition::metric,
-    // otf2::common::group_type::metric>;
+    // using metric_group = group<otf2::definition::metric, otf2::common::group_type::metric>;
 
     template <typename Definition>
     class container;
