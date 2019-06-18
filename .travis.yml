@@ -33,6 +33,15 @@ matrix:
             - cmake
           sources: *sources
     - os: linux
+      env: CXX="g++-9" CC="gcc-9"
+      compiler: gcc
+      addons:
+        apt:
+          packages:
+            - g++-9
+            - cmake
+          sources: *sources
+    - os: linux
       env: CXX="clang++-4.0" CC="clang-4.0"
       compiler: clang
       addons:
@@ -69,12 +78,24 @@ matrix:
             - llvm-toolchain-xenial-6.0
             - ubuntu-toolchain-r-test
     - os: linux
-      env: CXX="clang++-7.0" CC="clang-7.0"
+      env: CXX="clang++-7" CC="clang-7"
       compiler: clang
       addons:
         apt:
           packages:
-            - clang-7.0
+            - clang-7
+            - g++-8
+            - cmake
+          sources:
+            - llvm-toolchain-xenial-7
+            - ubuntu-toolchain-r-test
+    - os: linux
+      env: CXX="clang++-8" CC="clang-8"
+      compiler: clang
+      addons:
+        apt:
+          packages:
+            - clang-8
             - g++-8
             - cmake
           sources:
