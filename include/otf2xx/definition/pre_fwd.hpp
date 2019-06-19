@@ -80,6 +80,7 @@ namespace definition
 
         /** Dummy class to have metric instances and metric classes in the same id space */
         class metric_base;
+        class metric_class_recorder_impl;
         class metric_class_impl;
         class metric_instance_impl;
         class metric_member_impl;
@@ -137,6 +138,7 @@ namespace definition
 
     class metric_member;
     class metric_class;
+    class metric_class_recorder;
     class metric_instance;
 
     // using metric_group = group<otf2::definition::metric, otf2::common::group_type::metric>;

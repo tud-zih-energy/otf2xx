@@ -137,7 +137,7 @@ namespace reader
                 OTF2_CallbackCode location  (void *userData, OTF2_LocationRef self, OTF2_StringRef name, OTF2_LocationType locationType, uint64_t numberOfEvents, OTF2_LocationGroupRef locationGroup);
                 OTF2_CallbackCode location_group  (void *userData, OTF2_LocationGroupRef self, OTF2_StringRef name, OTF2_LocationGroupType locationGroupType, OTF2_SystemTreeNodeRef systemTreeParent);
                 OTF2_CallbackCode metric_class  (void *userData, OTF2_MetricRef self, uint8_t numberOfMetrics, const OTF2_MetricMemberRef *metricMembers, OTF2_MetricOccurrence metricOccurrence, OTF2_RecorderKind recorderKind);
-                //OTF2_CallbackCode MetricClassRecorder  (void *userData, OTF2_MetricRef metricClass, OTF2_LocationRef recorder);
+                OTF2_CallbackCode metric_class_recorder  (void *userData, OTF2_MetricRef metric, OTF2_LocationRef recorder);
                 OTF2_CallbackCode metric_instance  (void *userData, OTF2_MetricRef self, OTF2_MetricRef metricClass, OTF2_LocationRef recorder, OTF2_MetricScope metricScope, uint64_t scope);
                 OTF2_CallbackCode metric_member  (void *userData, OTF2_MetricMemberRef self, OTF2_StringRef name, OTF2_StringRef description, OTF2_MetricType metricType, OTF2_MetricMode metricMode, OTF2_Type valueType, OTF2_Base metricBase, int64_t exponent, OTF2_StringRef unit);
                 OTF2_CallbackCode parameter  (void *userData, OTF2_ParameterRef self, OTF2_StringRef name, OTF2_ParameterType parameterType);

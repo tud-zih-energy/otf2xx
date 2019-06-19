@@ -342,8 +342,32 @@ namespace reader
 
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
-                //  OTF2_CallbackCode MetricClassRecorder  (void *userData, OTF2_MetricRef
-                // metricClass, OTF2_LocationRef recorder);
+
+                OTF2_CallbackCode metric_class_recorder(void* userData, OTF2_MetricRef metric,
+                                                        OTF2_LocationRef recorder)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                    auto& registry = reader->registry();
+
+                    if (registry.has<otf2::definition::metric_class>(metric))
+                    {
+                        const auto& def = registry.create<otf2::definition::metric_class_recorder>(
+                            registry.get<otf2::definition::metric_class>(metric),
+                            registry.get<otf2::definition::location>(recorder));
+
+                        reader->callback().definition(def);
+                    }
+                    else
+                    {
+                        const auto& def = registry.create<otf2::definition::metric_class_recorder>(
+                            registry.get<otf2::definition::metric_instance>(metric),
+                            registry.get<otf2::definition::location>(recorder));
+
+                        reader->callback().definition(def);
+                    }
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
 
                 OTF2_CallbackCode metric_instance(void* userData, OTF2_MetricRef self,
                                                   OTF2_MetricRef metricClass,

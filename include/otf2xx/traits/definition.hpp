@@ -85,7 +85,8 @@ namespace traits
     using unreferable_definitions = tmp::typelist<
         otf2::definition::mapping_table,
         otf2::definition::io_pre_created_handle_state,
-        otf2::definition::system_tree_node_domain
+        otf2::definition::system_tree_node_domain,
+        otf2::definition::metric_class_recorder
     >;
 
     using all_definitions = tmp::concat_t<
@@ -115,6 +116,7 @@ namespace traits
         otf2::definition::io_handle,
         otf2::definition::io_paradigm,
         otf2::definition::metric_class,
+        otf2::definition::metric_class_recorder,
         otf2::definition::metric_instance,
         otf2::definition::io_regular_file,
         otf2::definition::io_directory,

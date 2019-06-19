@@ -66,6 +66,7 @@
 #include <otf2xx/definition/mapping_table.hpp>
 
 #include <otf2xx/definition/metric_class.hpp>
+#include <otf2xx/definition/metric_class_recorder.hpp>
 #include <otf2xx/definition/metric_instance.hpp>
 #include <otf2xx/definition/metric_member.hpp>
 

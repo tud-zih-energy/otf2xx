@@ -216,6 +216,23 @@ namespace writer
                   "Couldn't write metric class to global definitions writer");
         }
 
+        void store(const otf2::definition::metric_class_recorder& data)
+        {
+            auto ref = otf2::reference<otf2::definition::detail::metric_base>::undefined();
+
+            if (data.has_metric_class())
+            {
+                ref = data.metric_class().ref();
+            }
+            else
+            {
+                ref = data.metric_instance().ref();
+            }
+
+            check(OTF2_GlobalDefWriter_WriteMetricClassRecorder(wrt, ref, data.recorder().ref()),
+                  "Couldn't write metric class recorder to global definitions writer");
+        }
+
         void store(const otf2::definition::metric_instance& data)
         {
             uint64_t scope;

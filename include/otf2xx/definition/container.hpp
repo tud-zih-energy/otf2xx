@@ -243,6 +243,12 @@ namespace definition
     {
     };
 
+    template <>
+    class container<otf2::definition::metric_class_recorder>
+    : public supplement_container<otf2::definition::metric_class_recorder>
+    {
+    };
+
     template <typename Definition>
     class container<otf2::definition::property<Definition>>
     : public supplement_container<otf2::definition::property<Definition>>
