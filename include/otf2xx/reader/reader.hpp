@@ -163,7 +163,7 @@ namespace reader
             check(OTF2_GlobalDefReaderCallbacks_SetLocationCallback(global_def_callbacks, otf2::reader::detail::definition::global::location), "Couldn't set location callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetLocationGroupCallback(global_def_callbacks, detail::definition::global::location_group), "Couldn't set location_group callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetMetricClassCallback (global_def_callbacks, detail::definition::global::metric_class), "Couldn't set metric class callback handler");
-            //check(OTF2_GlobalDefReaderCallbacks_SetMetricClassRecorderCallback (global_def_callbacks, detail::definition::global::), "Couldn't set attribute callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetMetricClassRecorderCallback (global_def_callbacks, detail::definition::global::metric_class_recorder), "Couldn't set metric class recorder callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetMetricInstanceCallback (global_def_callbacks, detail::definition::global::metric_instance), "Couldn't set metric instance callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetMetricMemberCallback (global_def_callbacks, detail::definition::global::metric_member), "Couldn't set metric member callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetParameterCallback(global_def_callbacks, detail::definition::global::parameter), "Couldn't set parameter callback handler");
