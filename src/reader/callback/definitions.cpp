@@ -815,6 +815,62 @@ namespace reader
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
 
+                OTF2_CallbackCode cart_dimension(void* userData, OTF2_CartDimensionRef self,
+                                                 OTF2_StringRef name, uint32_t size,
+                                                 OTF2_CartPeriodicity cartPeriodicity)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                    auto& registry = reader->registry();
+
+                    const auto& def = registry.create<otf2::definition::cart_dimension>(
+                        self, registry.get<otf2::definition::string>(name), size,
+                        static_cast<bool>(cartPeriodicity));
+
+                    reader->callback().definition(def);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
+                OTF2_CallbackCode cart_topology(void* userData, OTF2_CartTopologyRef self,
+                                                OTF2_StringRef name, OTF2_CommRef communicator,
+                                                uint8_t numberOfDimensions,
+                                                const OTF2_CartDimensionRef* cartDimensions)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                    auto& registry = reader->registry();
+
+                    auto& def = registry.create<otf2::definition::cart_topology>(
+                        self, registry.get<otf2::definition::string>(name),
+                        registry.get<otf2::definition::comm>(communicator));
+
+                    for (uint8_t i = 0; i < numberOfDimensions; ++i)
+                    {
+                        def.add_dimension(
+                            registry.get<otf2::definition::cart_dimension>(cartDimensions[i]));
+                    }
+
+                    reader->callback().definition(def);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
+                OTF2_CallbackCode cart_coordinate(void* userData, OTF2_CartTopologyRef cartTopology,
+                                                  uint32_t rank, uint8_t numberOfDimensions,
+                                                  const uint32_t* coordinates)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                    auto& registry = reader->registry();
+
+                    const auto& def = registry.create<otf2::definition::cart_coordinate>(
+                        registry.get<otf2::definition::cart_topology>(cartTopology), rank,
+                        std::vector<std::uint32_t>{ coordinates,
+                                                    coordinates + numberOfDimensions });
+
+                    reader->callback().definition(def);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
                 OTF2_CallbackCode unknown(void* userData)
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);

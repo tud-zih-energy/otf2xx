@@ -209,6 +209,10 @@ namespace reader
         virtual void definition(const otf2::definition::metric_member&) {}
         virtual void definition(const otf2::definition::metric_instance&) {}
 
+        virtual void definition(const otf2::definition::cart_dimension&) {}
+        virtual void definition(const otf2::definition::cart_topology&) {}
+        virtual void definition(const otf2::definition::cart_coordinate&) {}
+
         virtual void definition(const otf2::definition::location_property&) {}
         virtual void definition(const otf2::definition::location_group_property&) {}
         virtual void definition(const otf2::definition::system_tree_node_property&) {}

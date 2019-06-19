@@ -162,6 +162,10 @@ namespace reader
                 OTF2_CallbackCode io_file_property (void *userData, OTF2_IoFileRef ioFile, OTF2_StringRef name, OTF2_Type type, OTF2_AttributeValue value);
                 OTF2_CallbackCode io_pre_created_handle_state (void *userData, OTF2_IoHandleRef ioHandle, OTF2_IoAccessMode mode, OTF2_IoStatusFlag statusFlags);
 
+                OTF2_CallbackCode cart_dimension (void *userData, OTF2_CartDimensionRef self, OTF2_StringRef name, uint32_t size, OTF2_CartPeriodicity cartPeriodicity );
+                OTF2_CallbackCode cart_topology (void *userData, OTF2_CartTopologyRef sef, OTF2_StringRef name, OTF2_CommRef communicator, uint8_t numberOfDimensions, const OTF2_CartDimensionRef * cartDimensions);
+                OTF2_CallbackCode cart_coordinate (void *userData, OTF2_CartTopologyRef cartTopology, uint32_t rank, uint8_t numberOfDimensions, const uint32_t * coordinates);
+
                 OTF2_CallbackCode unknown  (void *userData);
 
                 // clang-format on

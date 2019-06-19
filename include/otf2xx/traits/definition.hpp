@@ -65,6 +65,8 @@ namespace traits
         otf2::definition::call_site,
         otf2::definition::calling_context,
         otf2::definition::interrupt_generator,
+        otf2::definition::cart_topology,
+        otf2::definition::cart_dimension,
         otf2::definition::marker,
         otf2::definition::detail::io_file_base,
         otf2::definition::io_handle,
@@ -86,7 +88,8 @@ namespace traits
         otf2::definition::mapping_table,
         otf2::definition::io_pre_created_handle_state,
         otf2::definition::system_tree_node_domain,
-        otf2::definition::metric_class_recorder
+        otf2::definition::metric_class_recorder,
+        otf2::definition::cart_coordinate
     >;
 
     using all_definitions = tmp::concat_t<
@@ -126,6 +129,9 @@ namespace traits
         otf2::definition::system_tree_node_property,
         otf2::definition::calling_context_property,
         otf2::definition::rma_win,
+        otf2::definition::cart_topology,
+        otf2::definition::cart_dimension,
+        otf2::definition::cart_coordinate,
         otf2::definition::io_file_property,
         otf2::definition::locations_group,
         otf2::definition::regions_group,

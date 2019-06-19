@@ -74,6 +74,10 @@
 
 #include <otf2xx/definition/property.hpp>
 
+#include <otf2xx/definition/cart_coordinate.hpp>
+#include <otf2xx/definition/cart_dimension.hpp>
+#include <otf2xx/definition/cart_topology.hpp>
+
 #include <otf2xx/definition/marker.hpp>
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_DEFINITIONS_HPP

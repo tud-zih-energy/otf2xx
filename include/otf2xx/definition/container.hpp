@@ -249,6 +249,12 @@ namespace definition
     {
     };
 
+    template <>
+    class container<otf2::definition::cart_coordinate>
+    : public supplement_container<otf2::definition::cart_coordinate>
+    {
+    };
+
     template <typename Definition>
     class container<otf2::definition::property<Definition>>
     : public supplement_container<otf2::definition::property<Definition>>

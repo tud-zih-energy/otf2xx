@@ -88,6 +88,10 @@ namespace definition
         template <typename Definition>
         class property_impl;
 
+        class cart_topology_impl;
+        class cart_coordinate_impl;
+        class cart_dimension_impl;
+
         class marker_impl;
 
         template <typename Definition, typename = void>
@@ -154,6 +158,10 @@ namespace definition
     using system_tree_node_property = property<system_tree_node>;
     using calling_context_property = property<calling_context>;
     using io_file_property = property<io_file>;
+
+    class cart_topology;
+    class cart_coordinate;
+    class cart_dimension;
 
     class marker;
 

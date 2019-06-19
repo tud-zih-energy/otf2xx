@@ -189,6 +189,9 @@ namespace reader
             check(OTF2_GlobalDefReaderCallbacks_SetIoFilePropertyCallback (global_def_callbacks, detail::definition::global::io_file_property), "Couldn't set io file properties callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetIoPreCreatedHandleStateCallback (global_def_callbacks, detail::definition::global::io_pre_created_handle_state), "Couldn't set io pre created handle state callback handler");
 
+            check(OTF2_GlobalDefReaderCallbacks_SetCartTopologyCallback (global_def_callbacks, detail::definition::global::cart_topology), "Couldn't set cart topology callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetCartDimensionCallback (global_def_callbacks, detail::definition::global::cart_dimension), "Couldn't set cart dimension callback handler");
+
             check(OTF2_GlobalDefReaderCallbacks_SetUnknownCallback(global_def_callbacks, detail::definition::global::unknown), "Couldn't set unknown callback handler");
 
             // clang-format on

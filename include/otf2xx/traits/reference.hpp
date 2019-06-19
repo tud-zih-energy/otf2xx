@@ -117,6 +117,16 @@ namespace traits
     };
 
     template <>
+    struct reference_type<definition::cart_dimension> : identity<OTF2_CartDimensionRef>
+    {
+    };
+
+    template <>
+    struct reference_type<definition::cart_topology> : identity<OTF2_CartTopologyRef>
+    {
+    };
+
+    template <>
     struct reference_type<definition::calling_context> : identity<OTF2_CallingContextRef>
     {
     };

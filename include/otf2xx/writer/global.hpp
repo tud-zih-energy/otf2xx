@@ -407,6 +407,39 @@ namespace writer
                   "Couldn't write to global definitions writer");
         }
 
+        void store(const otf2::definition::cart_dimension& data)
+        {
+            check(OTF2_GlobalDefWriter_WriteCartDimension(
+                      wrt, data.ref(), data.name().ref(), data.size(),
+                      static_cast<OTF2_CartPeriodicity>(data.periodic())),
+                  "Couldn't write to global definitions writer");
+        }
+
+        void store(const otf2::definition::cart_topology& data)
+        {
+            std::vector<OTF2_CartDimensionRef> dimensions;
+
+            dimensions.reserve(data.size());
+
+            for (const auto& dim : data)
+            {
+                dimensions.push_back(dim.ref());
+            }
+
+            check(OTF2_GlobalDefWriter_WriteCartTopology(
+                      wrt, data.ref(), data.name().ref(), data.comm().ref(),
+                      static_cast<uint8_t>(dimensions.size()), dimensions.data()),
+                  "Couldn't write to global definitions writer");
+        }
+
+        void store(const otf2::definition::cart_coordinate& data)
+        {
+            check(OTF2_GlobalDefWriter_WriteCartCoordinate(
+                      wrt, data.topology().ref(), data.rank(),
+                      static_cast<uint8_t>(data.coordinates().size()), data.coordinates().data()),
+                  "Couldn't write to global definitions writer");
+        }
+
         void store(const otf2::definition::marker& data)
         {
             check(OTF2_MarkerWriter_WriteDefMarker(
