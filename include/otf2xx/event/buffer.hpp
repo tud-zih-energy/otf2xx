@@ -522,7 +522,7 @@ namespace event
                 }
             }
         };
-    }
+    } // namespace detail
 
     /**
      * \brief This class isn't an event, but a buffer for events
@@ -1135,7 +1135,7 @@ namespace event
         std::deque<detail::buffer_node> nodes_;
         otf2::reader::callback& callback_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_BUFFER_HPP

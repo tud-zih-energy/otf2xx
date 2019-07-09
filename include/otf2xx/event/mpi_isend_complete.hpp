@@ -74,7 +74,7 @@ namespace event
     private:
         uint64_t request_id_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_MPI_ISEND_COMPLETE_HPPfile:///home/mario/projects/otf2xx/include/otf2xx/event/mpi_send.hpp

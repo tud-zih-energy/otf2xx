@@ -90,7 +90,7 @@ namespace event
         otf2::definition::detail::weak_ref<otf2::definition::comm> thread_contingent_;
         std::uint64_t sequence_number_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_THREAD_WAIT_HPP

@@ -486,9 +486,9 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_acquire_lock(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                             void* userData, OTF2_AttributeList* attributeList,
-                                             OTF2_RmaWinRef win, uint32_t remote, uint64_t lockId,
-                                             OTF2_LockType lockType)
+                                               void* userData, OTF2_AttributeList* attributeList,
+                                               OTF2_RmaWinRef win, uint32_t remote, uint64_t lockId,
+                                               OTF2_LockType lockType)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -506,10 +506,10 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_atomic(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                        void* userData, OTF2_AttributeList* attributeList,
-                                        OTF2_RmaWinRef win, uint32_t remote,
-                                        OTF2_RmaAtomicType type, uint64_t bytesSent,
-                                        uint64_t bytesReceived, uint64_t matchingId)
+                                         void* userData, OTF2_AttributeList* attributeList,
+                                         OTF2_RmaWinRef win, uint32_t remote,
+                                         OTF2_RmaAtomicType type, uint64_t bytesSent,
+                                         uint64_t bytesReceived, uint64_t matchingId)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -528,7 +528,8 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_collective_begin(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                                 void* userData, OTF2_AttributeList* attributeList)
+                                                   void* userData,
+                                                   OTF2_AttributeList* attributeList)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -544,11 +545,11 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_collective_end(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                               void* userData, OTF2_AttributeList* attributeList,
-                                               OTF2_CollectiveOp collectiveOp,
-                                               OTF2_RmaSyncLevel syncLevel, OTF2_RmaWinRef win,
-                                               uint32_t root, uint64_t bytesSent,
-                                               uint64_t bytesReceived)
+                                                 void* userData, OTF2_AttributeList* attributeList,
+                                                 OTF2_CollectiveOp collectiveOp,
+                                                 OTF2_RmaSyncLevel syncLevel, OTF2_RmaWinRef win,
+                                                 uint32_t root, uint64_t bytesSent,
+                                                 uint64_t bytesReceived)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -568,9 +569,9 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_get(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                     void* userData, OTF2_AttributeList* attributeList,
-                                     OTF2_RmaWinRef win, uint32_t remote, uint64_t bytes,
-                                     uint64_t matchingId)
+                                      void* userData, OTF2_AttributeList* attributeList,
+                                      OTF2_RmaWinRef win, uint32_t remote, uint64_t bytes,
+                                      uint64_t matchingId)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -587,9 +588,9 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_group_sync(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                           void* userData, OTF2_AttributeList* attributeList,
-                                           OTF2_RmaSyncLevel syncLevel, OTF2_RmaWinRef win,
-                                           OTF2_GroupRef group)
+                                             void* userData, OTF2_AttributeList* attributeList,
+                                             OTF2_RmaSyncLevel syncLevel, OTF2_RmaWinRef win,
+                                             OTF2_GroupRef group)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -608,9 +609,9 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_op_complete_blocking(OTF2_LocationRef locationID,
-                                                    OTF2_TimeStamp time, void* userData,
-                                                    OTF2_AttributeList* attributeList,
-                                                    OTF2_RmaWinRef win, uint64_t matchingId)
+                                                       OTF2_TimeStamp time, void* userData,
+                                                       OTF2_AttributeList* attributeList,
+                                                       OTF2_RmaWinRef win, uint64_t matchingId)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -627,9 +628,9 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_op_complete_non_blocking(OTF2_LocationRef locationID,
-                                                       OTF2_TimeStamp time, void* userData,
-                                                       OTF2_AttributeList* attributeList,
-                                                       OTF2_RmaWinRef win, uint64_t matchingId)
+                                                           OTF2_TimeStamp time, void* userData,
+                                                           OTF2_AttributeList* attributeList,
+                                                           OTF2_RmaWinRef win, uint64_t matchingId)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -645,9 +646,10 @@ namespace reader
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
 
-            OTF2_CallbackCode rma_op_complete_remote(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                                  void* userData, OTF2_AttributeList* attributeList,
-                                                  OTF2_RmaWinRef win, uint64_t matchingId)
+            OTF2_CallbackCode rma_op_complete_remote(OTF2_LocationRef locationID,
+                                                     OTF2_TimeStamp time, void* userData,
+                                                     OTF2_AttributeList* attributeList,
+                                                     OTF2_RmaWinRef win, uint64_t matchingId)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -664,8 +666,8 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_op_test(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                        void* userData, OTF2_AttributeList* attributeList,
-                                        OTF2_RmaWinRef win, uint64_t matchingId)
+                                          void* userData, OTF2_AttributeList* attributeList,
+                                          OTF2_RmaWinRef win, uint64_t matchingId)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -682,9 +684,9 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_put(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                     void* userData, OTF2_AttributeList* attributeList,
-                                     OTF2_RmaWinRef win, uint32_t remote, uint64_t bytes,
-                                     uint64_t matchingId)
+                                      void* userData, OTF2_AttributeList* attributeList,
+                                      OTF2_RmaWinRef win, uint32_t remote, uint64_t bytes,
+                                      uint64_t matchingId)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -701,8 +703,8 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_release_lock(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                             void* userData, OTF2_AttributeList* attributeList,
-                                             OTF2_RmaWinRef win, uint32_t remote, uint64_t lockId)
+                                               void* userData, OTF2_AttributeList* attributeList,
+                                               OTF2_RmaWinRef win, uint32_t remote, uint64_t lockId)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -719,9 +721,9 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_request_lock(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                             void* userData, OTF2_AttributeList* attributeList,
-                                             OTF2_RmaWinRef win, uint32_t remote, uint64_t lockId,
-                                             OTF2_LockType lockType)
+                                               void* userData, OTF2_AttributeList* attributeList,
+                                               OTF2_RmaWinRef win, uint32_t remote, uint64_t lockId,
+                                               OTF2_LockType lockType)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -739,9 +741,9 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_sync(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                      void* userData, OTF2_AttributeList* attributeList,
-                                      OTF2_RmaWinRef win, uint32_t remote,
-                                      OTF2_RmaSyncType syncType)
+                                       void* userData, OTF2_AttributeList* attributeList,
+                                       OTF2_RmaWinRef win, uint32_t remote,
+                                       OTF2_RmaSyncType syncType)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -759,9 +761,9 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_try_lock(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                         void* userData, OTF2_AttributeList* attributeList,
-                                         OTF2_RmaWinRef win, uint32_t remote, uint64_t lockId,
-                                         OTF2_LockType lockType)
+                                           void* userData, OTF2_AttributeList* attributeList,
+                                           OTF2_RmaWinRef win, uint32_t remote, uint64_t lockId,
+                                           OTF2_LockType lockType)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -779,8 +781,8 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_wait_change(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                            void* userData, OTF2_AttributeList* attributeList,
-                                            OTF2_RmaWinRef win)
+                                              void* userData, OTF2_AttributeList* attributeList,
+                                              OTF2_RmaWinRef win)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
@@ -797,8 +799,8 @@ namespace reader
             }
 
             OTF2_CallbackCode rma_win_create(OTF2_LocationRef locationID, OTF2_TimeStamp time,
-                                           void* userData, OTF2_AttributeList* attributeList,
-                                           OTF2_RmaWinRef win)
+                                             void* userData, OTF2_AttributeList* attributeList,
+                                             OTF2_RmaWinRef win)
             {
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();

@@ -32,7 +32,6 @@
  *
  */
 
-
 #ifndef INCLUDE_OTF2XX_EVENT_IO_CREATE_HANDLE_HPP
 #define INCLUDE_OTF2XX_EVENT_IO_CREATE_HANDLE_HPP
 
@@ -56,29 +55,27 @@ namespace event
         using io_status_flag_type = otf2::common::io_status_flag_type;
 
         io_create_handle(otf2::chrono::time_point timestamp,
-                         const otf2::definition::io_handle& handle,
-                         io_access_mode_type mode,
-                         io_creation_flag_type creationFlags,
-                         io_status_flag_type statusFlags)
+                         const otf2::definition::io_handle& handle, io_access_mode_type mode,
+                         io_creation_flag_type creationFlags, io_status_flag_type statusFlags)
         : base<io_create_handle>(timestamp), handle_(handle), access_mode_(mode),
           creation_flag_(creationFlags), status_flag_(statusFlags)
         {
         }
 
         io_create_handle(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                         const otf2::definition::io_handle& handle,
-                         io_access_mode_type mode,
-                         io_creation_flag_type creationFlags,
-                         io_status_flag_type statusFlags)
+                         const otf2::definition::io_handle& handle, io_access_mode_type mode,
+                         io_creation_flag_type creationFlags, io_status_flag_type statusFlags)
         : base<io_create_handle>(al, timestamp), handle_(handle), access_mode_(mode),
           creation_flag_(creationFlags), status_flag_(statusFlags)
         {
         }
 
         // copy constructor with new timestamp
-        io_create_handle(const otf2::event::io_create_handle& other, otf2::chrono::time_point timestamp)
-        : base<io_create_handle>(timestamp), handle_(other.handle()), access_mode_(other.access_mode()),
-            creation_flag_(other.creation_flags()), status_flag_(other.status_flags())
+        io_create_handle(const otf2::event::io_create_handle& other,
+                         otf2::chrono::time_point timestamp)
+        : base<io_create_handle>(timestamp), handle_(other.handle()),
+          access_mode_(other.access_mode()), creation_flag_(other.creation_flags()),
+          status_flag_(other.status_flags())
         {
         }
 
@@ -108,7 +105,7 @@ namespace event
         io_creation_flag_type creation_flag_;
         io_status_flag_type status_flag_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_IO_CREATE_HANDLE_HPP

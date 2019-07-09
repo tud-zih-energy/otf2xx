@@ -90,7 +90,7 @@ namespace event
         uint32_t lock_id_;
         uint32_t order_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_THREAD_RELEASE_LOCK_HPP

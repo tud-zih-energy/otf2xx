@@ -32,7 +32,6 @@
  *
  */
 
-
 #ifndef INCLUDE_OTF2XX_EVENT_IO_TRY_LOCK_HPP
 #define INCLUDE_OTF2XX_EVENT_IO_TRY_LOCK_HPP
 
@@ -51,44 +50,42 @@ namespace event
     class io_try_lock : public base<io_try_lock>
     {
     public:
-       using lock_type_type = otf2::common::lock_type;
+        using lock_type_type = otf2::common::lock_type;
 
-       io_try_lock(otf2::chrono::time_point timestamp,
-                   const otf2::definition::io_handle& handle,
-                   lock_type_type lockType)
-       : base<io_try_lock>(timestamp), handle_(handle), lock_type_(lockType)
-       {
-       }
+        io_try_lock(otf2::chrono::time_point timestamp, const otf2::definition::io_handle& handle,
+                    lock_type_type lockType)
+        : base<io_try_lock>(timestamp), handle_(handle), lock_type_(lockType)
+        {
+        }
 
-       io_try_lock(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                   const otf2::definition::io_handle& handle,
-                   lock_type_type lockType)
-       : base<io_try_lock>(al, timestamp), handle_(handle), lock_type_(lockType)
-       {
-       }
+        io_try_lock(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+                    const otf2::definition::io_handle& handle, lock_type_type lockType)
+        : base<io_try_lock>(al, timestamp), handle_(handle), lock_type_(lockType)
+        {
+        }
 
-       // copy constructor with new timestamp
-       io_try_lock(const otf2::event::io_try_lock& other, otf2::chrono::time_point timestamp)
-       : base<io_try_lock>(timestamp), handle_(other.handle()), lock_type_(other.lock_type())
-       {
-       }
+        // copy constructor with new timestamp
+        io_try_lock(const otf2::event::io_try_lock& other, otf2::chrono::time_point timestamp)
+        : base<io_try_lock>(timestamp), handle_(other.handle()), lock_type_(other.lock_type())
+        {
+        }
 
-       otf2::definition::io_handle handle() const
-       {
-           return handle_;
-       }
+        otf2::definition::io_handle handle() const
+        {
+            return handle_;
+        }
 
-       lock_type_type lock_type() const
-       {
-           return lock_type_;
-       }
+        lock_type_type lock_type() const
+        {
+            return lock_type_;
+        }
 
     private:
-       otf2::definition::detail::weak_ref<otf2::definition::io_handle> handle_;
-       lock_type_type lock_type_;
+        otf2::definition::detail::weak_ref<otf2::definition::io_handle> handle_;
+        lock_type_type lock_type_;
     };
 
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_IO_TRY_LOCK_HPP

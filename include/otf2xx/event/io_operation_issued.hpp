@@ -50,42 +50,41 @@ namespace event
     class io_operation_issued : public base<io_operation_issued>
     {
     public:
+        io_operation_issued(otf2::chrono::time_point timestamp,
+                            const otf2::definition::io_handle& handle, std::uint64_t matchingId)
+        : base<io_operation_issued>(timestamp), handle_(handle), matching_id_(matchingId)
+        {
+        }
 
-       io_operation_issued(otf2::chrono::time_point timestamp,
-                            const otf2::definition::io_handle& handle,
-                            std::uint64_t matchingId)
-       : base<io_operation_issued>(timestamp), handle_(handle), matching_id_(matchingId)
-       {
-       }
+        io_operation_issued(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+                            const otf2::definition::io_handle& handle, std::uint64_t matchingId)
+        : base<io_operation_issued>(al, timestamp), handle_(handle), matching_id_(matchingId)
+        {
+        }
 
-       io_operation_issued(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                           const otf2::definition::io_handle& handle,
-                           std::uint64_t matchingId)
-       : base<io_operation_issued>(al, timestamp), handle_(handle), matching_id_(matchingId)
-       {
-       }
+        // copy constructor with new timestamp
+        io_operation_issued(const otf2::event::io_operation_issued& other,
+                            otf2::chrono::time_point timestamp)
+        : base<io_operation_issued>(timestamp), handle_(other.handle()),
+          matching_id_(other.matching_id())
+        {
+        }
 
-       // copy constructor with new timestamp
-       io_operation_issued(const otf2::event::io_operation_issued& other, otf2::chrono::time_point timestamp)
-       : base<io_operation_issued>(timestamp), handle_(other.handle()), matching_id_(other.matching_id())
-       {
-       }
+        otf2::definition::io_handle handle() const
+        {
+            return handle_;
+        }
 
-       otf2::definition::io_handle handle() const
-       {
-           return handle_;
-       }
-
-       std::uint64_t matching_id() const
-       {
-           return matching_id_;
-       }
+        std::uint64_t matching_id() const
+        {
+            return matching_id_;
+        }
 
     private:
-       otf2::definition::detail::weak_ref<otf2::definition::io_handle> handle_;
-       std::uint64_t matching_id_;
+        otf2::definition::detail::weak_ref<otf2::definition::io_handle> handle_;
+        std::uint64_t matching_id_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_IO_OPERATION_ISSUED_HPP

@@ -94,7 +94,7 @@ namespace event
         uint32_t thread_;
         uint32_t generation_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_THREAD_TASK_SWITCH_HPP

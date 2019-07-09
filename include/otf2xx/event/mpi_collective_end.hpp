@@ -105,7 +105,7 @@ namespace event
         std::uint64_t sent_;
         std::uint64_t received_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_MPI_COLLECTIVE_END_HPP

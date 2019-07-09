@@ -59,7 +59,7 @@ namespace event
         {
         }
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_UNKNOWN_HPP

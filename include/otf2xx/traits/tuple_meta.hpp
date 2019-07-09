@@ -99,7 +99,7 @@ namespace traits
                                   std::tuple_size<std::tuple<TupleArgs...>>::value - 1, 0>()(a, f,
                                                                                              t);
     }
-}
-}
+} // namespace traits
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_TRAITS_TUPLE_META_HPP

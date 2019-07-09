@@ -82,7 +82,7 @@ namespace tmp
                 do_apply(std::forward<ActSeq>(seq), std::forward<F>(f), indices{});
             }
         };
-    }
+    } // namespace detail
 
     template <class Seq, typename F>
     void foreach (Seq&& seq, F && f)

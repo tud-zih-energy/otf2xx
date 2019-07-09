@@ -51,7 +51,7 @@ namespace traits
          */
         typedef Type type;
     };
-}
-} // namespace otf2::traits
+} // namespace traits
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_TRAITS_TRAITS_HPP

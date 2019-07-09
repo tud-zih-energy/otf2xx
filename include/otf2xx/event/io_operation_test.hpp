@@ -50,24 +50,23 @@ namespace event
     class io_operation_test : public base<io_operation_test>
     {
     public:
-
         io_operation_test(otf2::chrono::time_point timestamp,
-                          const otf2::definition::io_handle& handle,
-                          std::uint64_t matchingId)
+                          const otf2::definition::io_handle& handle, std::uint64_t matchingId)
         : base<io_operation_test>(timestamp), handle_(handle), matching_id_(matchingId)
         {
         }
 
         io_operation_test(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                          const otf2::definition::io_handle& handle,
-                          std::uint64_t matchingId)
+                          const otf2::definition::io_handle& handle, std::uint64_t matchingId)
         : base<io_operation_test>(al, timestamp), handle_(handle), matching_id_(matchingId)
         {
         }
 
         // copy constructor with new timestamp
-        io_operation_test(const otf2::event::io_operation_test& other, otf2::chrono::time_point timestamp)
-        : base<io_operation_test>(timestamp), handle_(other.handle()), matching_id_(other.matching_id())
+        io_operation_test(const otf2::event::io_operation_test& other,
+                          otf2::chrono::time_point timestamp)
+        : base<io_operation_test>(timestamp), handle_(other.handle()),
+          matching_id_(other.matching_id())
         {
         }
 
@@ -85,7 +84,7 @@ namespace event
         otf2::definition::detail::weak_ref<otf2::definition::io_handle> handle_;
         std::uint64_t matching_id_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_IO_OPERATION_TEST_HPP

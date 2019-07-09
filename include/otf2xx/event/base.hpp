@@ -109,7 +109,7 @@ namespace event
         otf2::chrono::time_point timestamp_;
         otf2::attribute_list attribute_list_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_BASE_HPP

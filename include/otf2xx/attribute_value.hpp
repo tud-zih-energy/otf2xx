@@ -185,8 +185,7 @@ public:
         value_.ioFileRef = def.ref();
     }
 
-    attribute_value(const otf2::definition::io_handle& def)
-    : type_(type_type::io_handle)
+    attribute_value(const otf2::definition::io_handle& def) : type_(type_type::io_handle)
     {
         value_.ioHandleRef = def.ref();
     }
@@ -400,6 +399,6 @@ private:
     OTF2_AttributeValue value_;
     type_type type_;
 };
-}
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_ATTRIBUTE_VALUE_HPP

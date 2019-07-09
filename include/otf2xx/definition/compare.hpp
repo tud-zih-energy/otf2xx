@@ -52,7 +52,7 @@ namespace definition
         typedef Definition second_argument_type;
         typedef bool result_type;
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_COMPARE_HPP

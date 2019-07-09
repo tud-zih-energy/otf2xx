@@ -67,7 +67,7 @@ namespace chrono
         // we do not provide operators because we want to convert it to duration and point as soon
         // as possible
     };
-}
-} // namespace otf2::chrono
+} // namespace chrono
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_CHRONO_TICKS_HPP

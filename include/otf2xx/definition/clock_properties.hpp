@@ -119,7 +119,7 @@ namespace definition
         otf2::chrono::ticks start_time_;
         otf2::chrono::ticks length_;
     };
-}
-} // namespace otf2::definition
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_CLOCK_PROPERTIES_HPP

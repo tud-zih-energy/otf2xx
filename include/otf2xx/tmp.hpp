@@ -40,4 +40,3 @@
 #include <otf2xx/tmp/typelist.hpp>
 
 #endif // INCLUDE_OTF2XX_TMP_HPP
-

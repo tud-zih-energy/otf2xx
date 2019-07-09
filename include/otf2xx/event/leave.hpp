@@ -94,7 +94,7 @@ namespace event
     private:
         otf2::definition::detail::weak_ref<otf2::definition::region> region_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_LEAVE_HPP

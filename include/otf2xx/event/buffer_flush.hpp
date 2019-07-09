@@ -71,7 +71,7 @@ namespace event
     private:
         otf2::chrono::time_point finish_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_BUFFER_FLUSH_HPP

@@ -89,7 +89,7 @@ namespace event
         otf2::definition::detail::weak_ref<otf2::definition::parameter> parameter_;
         otf2::definition::detail::weak_ref<otf2::definition::string> value_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_PARAMETER_STRING_HPP

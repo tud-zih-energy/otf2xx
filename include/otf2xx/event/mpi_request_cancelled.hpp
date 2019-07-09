@@ -74,7 +74,7 @@ namespace event
     private:
         uint64_t request_id_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_MPI_REQUEST_CANCELLED_HPP

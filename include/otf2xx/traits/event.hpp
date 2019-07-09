@@ -60,7 +60,7 @@ namespace traits
     struct is_event<otf2::event::leave> : std::true_type
     {
     };
-}
-} // namespace otf2::traits
+} // namespace traits
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_TRAITS_EVENT_HPP

@@ -109,7 +109,7 @@ namespace event
         uint64_t msg_length_;
         uint64_t request_id_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_MPI_ISEND_HPP

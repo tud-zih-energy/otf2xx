@@ -73,7 +73,7 @@ namespace chrono
          */
         static const bool is_steady = true;
     };
-}
-} // namespace otf2::chrono
+} // namespace chrono
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_CHRONO_CLOCK_HPP

@@ -101,7 +101,8 @@ namespace chrono
      *
      * \return duration to which is casted
      */
-    template <typename ToDuration = otf2::chrono::duration, typename FromDuration = otf2::chrono::duration>
+    template <typename ToDuration = otf2::chrono::duration,
+              typename FromDuration = otf2::chrono::duration>
     constexpr ToDuration duration_cast(const FromDuration& dtn)
     {
         return std::chrono::duration_cast<ToDuration>(dtn);

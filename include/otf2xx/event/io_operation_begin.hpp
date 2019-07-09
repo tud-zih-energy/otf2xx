@@ -55,29 +55,31 @@ namespace event
         io_operation_begin(otf2::chrono::time_point timestamp,
                            const otf2::definition::io_handle& handle,
                            io_operation_mode_type io_operation_mode,
-                           io_operation_flag_type io_operation_flag,
-                           std::uint64_t bytes_request,
+                           io_operation_flag_type io_operation_flag, std::uint64_t bytes_request,
                            std::uint64_t matching_id)
         : base<io_operation_begin>(timestamp), handle_(handle), operation_mode_(io_operation_mode),
-          operation_flag_(io_operation_flag), bytes_request_(bytes_request), matching_id_(matching_id)
+          operation_flag_(io_operation_flag), bytes_request_(bytes_request),
+          matching_id_(matching_id)
         {
         }
 
         io_operation_begin(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
                            const otf2::definition::io_handle& handle,
                            io_operation_mode_type io_operation_mode,
-                           io_operation_flag_type io_operation_flag,
-                           std::uint64_t bytes_request,
+                           io_operation_flag_type io_operation_flag, std::uint64_t bytes_request,
                            std::uint64_t matching_id)
-        : base<io_operation_begin>(al, timestamp), handle_(handle), operation_mode_(io_operation_mode),
-          operation_flag_(io_operation_flag), bytes_request_(bytes_request), matching_id_(matching_id)
+        : base<io_operation_begin>(al, timestamp), handle_(handle),
+          operation_mode_(io_operation_mode), operation_flag_(io_operation_flag),
+          bytes_request_(bytes_request), matching_id_(matching_id)
         {
         }
 
         // copy constructor with new timestamp
-        io_operation_begin(const otf2::event::io_operation_begin& other, otf2::chrono::time_point timestamp)
-        : base<io_operation_begin>(timestamp), handle_(other.handle()), operation_mode_(other.operation_mode()),
-            operation_flag_(other.operation_flag()), bytes_request_(other.bytes_request()), matching_id_(other.matching_id())
+        io_operation_begin(const otf2::event::io_operation_begin& other,
+                           otf2::chrono::time_point timestamp)
+        : base<io_operation_begin>(timestamp), handle_(other.handle()),
+          operation_mode_(other.operation_mode()), operation_flag_(other.operation_flag()),
+          bytes_request_(other.bytes_request()), matching_id_(other.matching_id())
         {
         }
 
@@ -113,7 +115,7 @@ namespace event
         std::uint64_t bytes_request_;
         std::uint64_t matching_id_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_IO_OPERATION_BEGIN_HPP

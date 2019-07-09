@@ -73,7 +73,7 @@ namespace event
     private:
         otf2::common::paradigm_type paradigm_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_THREAD_JOIN_HPP

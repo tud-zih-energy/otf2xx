@@ -66,8 +66,10 @@ namespace event
         }
 
         // copy constructor with new timestamp
-        io_change_status_flag(const otf2::event::io_change_status_flag& other, otf2::chrono::time_point timestamp)
-        : base<io_change_status_flag>(timestamp), handle_(other.handle()), status_flags_(other.status_flags())
+        io_change_status_flag(const otf2::event::io_change_status_flag& other,
+                              otf2::chrono::time_point timestamp)
+        : base<io_change_status_flag>(timestamp), handle_(other.handle()),
+          status_flags_(other.status_flags())
         {
         }
 
@@ -85,7 +87,7 @@ namespace event
         otf2::definition::detail::weak_ref<otf2::definition::io_handle> handle_;
         io_status_flag_type status_flags_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_IO_CHANGE_STATUS_FLAG_HPP

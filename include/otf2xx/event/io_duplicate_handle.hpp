@@ -32,7 +32,6 @@
  *
  */
 
-
 #ifndef INCLUDE_OTF2XX_EVENT_IO_DUPLICATE_HANDLE_HPP
 #define INCLUDE_OTF2XX_EVENT_IO_DUPLICATE_HANDLE_HPP
 
@@ -57,7 +56,8 @@ namespace event
                             const otf2::definition::io_handle& old_handle,
                             const otf2::definition::io_handle& new_handle,
                             io_status_flag_type statusFlags)
-        : base<io_duplicate_handle>(timestamp), old_handle_(old_handle), new_handle_(new_handle), status_flag_(statusFlags)
+        : base<io_duplicate_handle>(timestamp), old_handle_(old_handle), new_handle_(new_handle),
+          status_flag_(statusFlags)
         {
         }
 
@@ -65,13 +65,16 @@ namespace event
                             const otf2::definition::io_handle& old_handle,
                             const otf2::definition::io_handle& new_handle,
                             io_status_flag_type statusFlags)
-        : base<io_duplicate_handle>(al, timestamp), old_handle_(old_handle), new_handle_(new_handle), status_flag_(statusFlags)
+        : base<io_duplicate_handle>(al, timestamp), old_handle_(old_handle),
+          new_handle_(new_handle), status_flag_(statusFlags)
         {
         }
 
         // copy constructor with new timestamp
-        io_duplicate_handle(const otf2::event::io_duplicate_handle& other, otf2::chrono::time_point timestamp)
-        : base<io_duplicate_handle>(timestamp), old_handle_(other.old_handle()), new_handle_(other.new_handle()), status_flag_(other.status_flags())
+        io_duplicate_handle(const otf2::event::io_duplicate_handle& other,
+                            otf2::chrono::time_point timestamp)
+        : base<io_duplicate_handle>(timestamp), old_handle_(other.old_handle()),
+          new_handle_(other.new_handle()), status_flag_(other.status_flags())
         {
         }
 
@@ -91,12 +94,12 @@ namespace event
         }
 
     private:
-          otf2::definition::detail::weak_ref<otf2::definition::io_handle> old_handle_;
-          otf2::definition::detail::weak_ref<otf2::definition::io_handle> new_handle_;
-          io_status_flag_type status_flag_;
+        otf2::definition::detail::weak_ref<otf2::definition::io_handle> old_handle_;
+        otf2::definition::detail::weak_ref<otf2::definition::io_handle> new_handle_;
+        io_status_flag_type status_flag_;
     };
 
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_IO_DUPLICATE_HANDLE_HPP

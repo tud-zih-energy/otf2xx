@@ -132,11 +132,10 @@ namespace writer
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
 
-                inline OTF2_CallbackCode gather(void* userData, __attribute__((unused))
-                                                                OTF2_CollectiveContext* commContext,
-                                                const void* inData, void* outData,
-                                                uint32_t numberElements, OTF2_Type type,
-                                                uint32_t root)
+                inline OTF2_CallbackCode
+                gather(void* userData, __attribute__((unused)) OTF2_CollectiveContext* commContext,
+                       const void* inData, void* outData, uint32_t numberElements, OTF2_Type type,
+                       uint32_t root)
                 {
                     otf2::writer::archive& ar = *static_cast<otf2::writer::archive*>(userData);
                     MPI_Gather(const_cast<void*>(inData), numberElements, runtime_type_cast(type),
@@ -252,10 +251,10 @@ namespace writer
 
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
-            }
-        }
-    }
-}
-} // namespace otf2::writer::detail::callbacks::collective
+            } // namespace collective
+        }     // namespace callbacks
+    }         // namespace detail
+} // namespace writer
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_WRITER_DETAIL_CALLBACKS_COLLECTIVE_HPP

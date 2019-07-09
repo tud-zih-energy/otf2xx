@@ -83,7 +83,7 @@ namespace event
         otf2::common::paradigm_type paradigm_;
         uint32_t num_threads_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_THREAD_FORK_HPP

@@ -44,7 +44,7 @@ namespace reader
 
     class reader;
     class callback;
-}
-} // namespace otf2::reader
+} // namespace reader
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_READER_FWD_HPP

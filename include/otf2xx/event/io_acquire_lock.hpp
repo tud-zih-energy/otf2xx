@@ -32,7 +32,6 @@
  *
  */
 
-
 #ifndef INCLUDE_OTF2XX_EVENT_IO_ACQUIRE_LOCK_HPP
 #define INCLUDE_OTF2XX_EVENT_IO_ACQUIRE_LOCK_HPP
 
@@ -54,21 +53,20 @@ namespace event
         using lock_type_type = otf2::common::lock_type;
 
         io_acquire_lock(otf2::chrono::time_point timestamp,
-                        const otf2::definition::io_handle& handle,
-                        lock_type_type lockType)
+                        const otf2::definition::io_handle& handle, lock_type_type lockType)
         : base<io_acquire_lock>(timestamp), handle_(handle), lock_type_(lockType)
         {
         }
 
         io_acquire_lock(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                        const otf2::definition::io_handle& handle,
-                        lock_type_type lockType)
+                        const otf2::definition::io_handle& handle, lock_type_type lockType)
         : base<io_acquire_lock>(al, timestamp), handle_(handle), lock_type_(lockType)
         {
         }
 
         // copy constructor with new timestamp
-        io_acquire_lock(const otf2::event::io_acquire_lock& other, otf2::chrono::time_point timestamp)
+        io_acquire_lock(const otf2::event::io_acquire_lock& other,
+                        otf2::chrono::time_point timestamp)
         : base<io_acquire_lock>(timestamp), handle_(other.handle()), lock_type_(other.lock_type())
         {
         }
@@ -87,7 +85,7 @@ namespace event
         otf2::definition::detail::weak_ref<otf2::definition::io_handle> handle_;
         lock_type_type lock_type_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_IO_ACQUIRE_LOCK_HPP

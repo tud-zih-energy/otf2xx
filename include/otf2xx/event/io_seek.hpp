@@ -52,30 +52,26 @@ namespace event
     public:
         using io_seek_option_type = otf2::common::io_seek_option_type;
 
-        io_seek(otf2::chrono::time_point timestamp,
-                const otf2::definition::io_handle& handle,
-                std::uint64_t offsetRequest,
-                io_seek_option_type whence,
-                std::uint64_t offsetResult)
-        : base<io_seek>(timestamp), handle_(handle), offset_request_(offsetRequest), whence_(whence),
-            offset_result_(offsetResult)
+        io_seek(otf2::chrono::time_point timestamp, const otf2::definition::io_handle& handle,
+                std::uint64_t offsetRequest, io_seek_option_type whence, std::uint64_t offsetResult)
+        : base<io_seek>(timestamp), handle_(handle), offset_request_(offsetRequest),
+          whence_(whence), offset_result_(offsetResult)
         {
         }
 
         io_seek(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                const otf2::definition::io_handle& handle,
-                std::int64_t offsetRequest,
-                io_seek_option_type whence,
-                std::uint64_t offsetResult)
-        : base<io_seek>(al, timestamp), handle_(handle), offset_request_(offsetRequest), whence_(whence),
-            offset_result_(offsetResult)
+                const otf2::definition::io_handle& handle, std::int64_t offsetRequest,
+                io_seek_option_type whence, std::uint64_t offsetResult)
+        : base<io_seek>(al, timestamp), handle_(handle), offset_request_(offsetRequest),
+          whence_(whence), offset_result_(offsetResult)
         {
         }
 
         // copy constructor with new timestamp
         io_seek(const otf2::event::io_seek& other, otf2::chrono::time_point timestamp)
-        : base<io_seek>(timestamp), handle_(other.handle()), offset_request_(other.offset_request()),
-            whence_(other.seek_option()), offset_result_(other.offset_result())
+        : base<io_seek>(timestamp), handle_(other.handle()),
+          offset_request_(other.offset_request()), whence_(other.seek_option()),
+          offset_result_(other.offset_result())
         {
         }
 
@@ -83,7 +79,6 @@ namespace event
         {
             return handle_;
         }
-
 
         std::int64_t offset_request() const
         {
@@ -106,7 +101,7 @@ namespace event
         io_seek_option_type whence_;
         std::uint64_t offset_result_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_IO_SEEK_HPP

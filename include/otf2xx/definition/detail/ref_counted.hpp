@@ -39,8 +39,8 @@
 
 namespace otf2
 {
-    template <class T>
-    class intrusive_ptr;
+template <class T>
+class intrusive_ptr;
 namespace definition
 {
     namespace detail
@@ -59,7 +59,6 @@ namespace definition
             ref_counted& operator=(ref_counted&&) = delete;
 
         private:
-
             void retain()
             {
                 ref_count_.fetch_add(1, std::memory_order_relaxed);
@@ -72,13 +71,13 @@ namespace definition
                 return ref_count_.fetch_sub(1, std::memory_order_acq_rel) - 1;
             }
 
-            template<class T>
+            template <class T>
             friend class ::otf2::intrusive_ptr;
 
             std::atomic<int64_t> ref_count_;
         };
-    }
-}
-}
+    } // namespace detail
+} // namespace definition
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_DEFINITIONS_REF_COUNTED_HPP

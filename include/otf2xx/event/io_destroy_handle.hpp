@@ -32,7 +32,6 @@
  *
  */
 
-
 #ifndef INCLUDE_OTF2XX_EVENT_IO_DESTROY_HANDLE_HPP
 #define INCLUDE_OTF2XX_EVENT_IO_DESTROY_HANDLE_HPP
 
@@ -51,7 +50,6 @@ namespace event
     class io_destroy_handle : public base<io_destroy_handle>
     {
     public:
-
         io_destroy_handle(otf2::chrono::time_point timestamp,
                           const otf2::definition::io_handle& handle)
         : base<io_destroy_handle>(timestamp), handle_(handle)
@@ -65,7 +63,8 @@ namespace event
         }
 
         // copy constructor with new timestamp
-        io_destroy_handle(const otf2::event::io_destroy_handle& other, otf2::chrono::time_point timestamp)
+        io_destroy_handle(const otf2::event::io_destroy_handle& other,
+                          otf2::chrono::time_point timestamp)
         : base<io_destroy_handle>(timestamp), handle_(other.handle())
         {
         }
@@ -79,7 +78,7 @@ namespace event
         otf2::definition::detail::weak_ref<otf2::definition::io_handle> handle_;
     };
 
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_IO_DESTROY_HANDLE_HPP

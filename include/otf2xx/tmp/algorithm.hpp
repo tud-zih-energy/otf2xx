@@ -106,7 +106,7 @@ namespace tmp
         /** @brief Return true, when any value is true */
         template <bool... bools>
         using any = std::integral_constant<bool, !all<(!bools)...>::value>;
-    }
+    } // namespace detail
 
     template <typename ToSearch, template <typename...> class Seq, typename... Ts>
     struct contains<Seq<Ts...>, ToSearch> : detail::any<std::is_same<Ts, ToSearch>::value...>
@@ -163,7 +163,7 @@ namespace tmp
             template <typename T>
             using type = typelist<>;
         };
-    }
+    } // namespace detail
 
     template <template <typename...> class Cond, typename... Ts>
     struct filter<typelist<Ts...>, Cond>

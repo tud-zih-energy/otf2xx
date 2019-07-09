@@ -80,9 +80,9 @@ namespace writer
                                            const void* inData, const uint32_t* inElements,
                                            void* outData, uint32_t outElements, OTF2_Type type,
                                            uint32_t root);
-            }
-        } // namespace callbacks::collective
-    }     // namespace detail
+            } // namespace collective
+        }     // namespace callbacks
+    }         // namespace detail
 
     class archive;
     class global;
@@ -96,7 +96,7 @@ namespace writer
 
     template <typename Definition>
     global& operator<<(global& wrt, Definition&& def);
-}
-} // namespace otf2::writer
+} // namespace writer
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_WRITER_FWD_HPP

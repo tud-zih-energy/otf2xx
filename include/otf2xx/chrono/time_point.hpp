@@ -76,7 +76,7 @@ namespace chrono
     {
         return time_point(duration(std::numeric_limits<typename duration::rep>::min()));
     }
-}
+} // namespace chrono
 } // namespace otf2
 
 // make it posible to serialize otf2::chrono::time_point
@@ -88,7 +88,7 @@ namespace serialization
     template <class Archive>
     inline void save(Archive& ar, const otf2::chrono::time_point& tp,
                      const unsigned int /* file_version */
-                     )
+    )
     {
         auto duration = tp.time_since_epoch();
         ar& duration;
@@ -96,7 +96,7 @@ namespace serialization
 
     template <class Archive>
     inline void load(Archive& ar, otf2::chrono::time_point& tp, const unsigned int /*file_version*/
-                     )
+    )
     {
         otf2::chrono::duration dur;
 

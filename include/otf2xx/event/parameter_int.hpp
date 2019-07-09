@@ -109,7 +109,7 @@ namespace event
         otf2::definition::detail::weak_ref<otf2::definition::parameter> parameter_;
         std::int64_t value_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_PARAMETER_INT_HPP

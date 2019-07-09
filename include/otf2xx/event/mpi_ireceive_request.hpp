@@ -137,7 +137,7 @@ namespace event
         uint32_t msg_tag_;
         uint64_t msg_length_;
     };
-}
-} // namespace otf2::event
+} // namespace event
+} // namespace otf2
 
 #endif // INCLUDE_OTF2XX_EVENT_MPI_IRECEIVE_REQUEST_HPP
