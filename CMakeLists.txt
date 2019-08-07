@@ -34,11 +34,11 @@ cmake_minimum_required(VERSION 3.8)
 project(otf2xx VERSION 1.0.0)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
-find_package(OTF2 8.0.1 EXACT)
+find_package(OTF2 9.0.2 EXACT)
 
 if (NOT OTF2_FOUND)
-    message(FATAL_ERROR "Please download and install OTF2 2.1.\n"
-    "Available from: http://www.vi-hps.org/upload/packages/otf2/otf2-2.1.tar.gz")
+    message(FATAL_ERROR "Please download and install OTF2 2.2.\n"
+    "Available from: http://www.vi-hps.org/upload/packages/otf2/otf2-2.2.tar.gz")
 endif()
 
 set(OTF2XX_CHRONO_DURATION_TYPE "picoseconds" CACHE STRING "The used underlying type for otf2::chrono::duration.")
@@ -85,7 +85,7 @@ if(OTF2XX_WITH_MPI)
     find_package(MPI REQUIRED COMPONENTS CXX)
     if(NOT TARGET MPI::MPI_CXX)
         message(FATAL_ERROR "MPI support requires CMake >= 3.9 or a properly defined MPI::MPI_CXX target")
-    endif()      
+    endif()
     target_link_libraries(otf2xx-core INTERFACE Boost::mpi MPI::MPI_CXX)
 endif()
 
