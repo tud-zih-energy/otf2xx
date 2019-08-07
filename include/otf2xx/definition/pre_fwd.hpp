@@ -63,6 +63,7 @@ namespace definition
         class clock_properties_impl;
 
         class call_path_impl;
+        class call_path_parameter_impl;
         class call_site_impl;
         class source_code_location_impl;
         class calling_context_impl;
@@ -114,6 +115,7 @@ namespace definition
     class clock_properties;
 
     class call_path;
+    class call_path_parameter;
     class call_site;
     class source_code_location;
     class calling_context;

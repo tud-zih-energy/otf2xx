@@ -97,6 +97,15 @@ namespace writer
                   "Couldn't write callpath to global definitions writer");
         }
 
+        void store(const otf2::definition::call_path_parameter& data)
+        {
+            check(OTF2_GlobalDefWriter_WriteCallpathParameter(
+                      wrt, data.call_path().ref(), data.parameter().ref(),
+                      static_cast<OTF2_Type>(data.type()),
+                      static_cast<OTF2_AttributeValue>(data.value())),
+                  "Couldn't write callpath parameter to global definitions writer");
+        }
+
         void store(const otf2::definition::call_site& data)
         {
             check(OTF2_GlobalDefWriter_WriteCallsite(

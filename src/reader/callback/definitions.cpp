@@ -92,6 +92,24 @@ namespace reader
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
 
+                OTF2_CallbackCode call_path_parameter(void* userData, OTF2_CallpathRef callpath,
+                                                      OTF2_ParameterRef parameter, OTF2_Type type,
+                                                      OTF2_AttributeValue value)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                    auto& registry = reader->registry();
+
+                    const auto& def = registry.create<otf2::definition::call_path_parameter>(
+                        registry.get<otf2::definition::call_path>(callpath),
+                        registry.get<otf2::definition::parameter>(parameter),
+                        static_cast<otf2::definition::call_path_parameter::type_type>(type),
+                        static_cast<otf2::definition::call_path_parameter::value_type>(value));
+
+                    reader->callback().definition(def);
+
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
                 OTF2_CallbackCode call_site(void* userData, OTF2_CallsiteRef self,
                                             OTF2_StringRef sourceFile, uint32_t lineNumber,
                                             OTF2_RegionRef enteredRegion, OTF2_RegionRef leftRegion)

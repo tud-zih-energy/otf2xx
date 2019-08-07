@@ -89,7 +89,8 @@ namespace traits
         otf2::definition::io_pre_created_handle_state,
         otf2::definition::system_tree_node_domain,
         otf2::definition::metric_class_recorder,
-        otf2::definition::cart_coordinate
+        otf2::definition::cart_coordinate,
+        otf2::definition::call_path_parameter
     >;
 
     using all_definitions = tmp::concat_t<
@@ -112,6 +113,7 @@ namespace traits
         otf2::definition::metric_member,
         otf2::definition::source_code_location,
         otf2::definition::call_path,
+        otf2::definition::call_path_parameter,
         otf2::definition::call_site,
         otf2::definition::calling_context,
         otf2::definition::interrupt_generator,

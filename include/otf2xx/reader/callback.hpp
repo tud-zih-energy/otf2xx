@@ -191,6 +191,7 @@ namespace reader
         virtual void definition(const otf2::definition::clock_properties&) {}
 
         virtual void definition(const otf2::definition::call_path&) {}
+        virtual void definition(const otf2::definition::call_path_parameter&) {}
         virtual void definition(const otf2::definition::call_site&) {}
         virtual void definition(const otf2::definition::source_code_location&) {}
         virtual void definition(const otf2::definition::calling_context&) {}

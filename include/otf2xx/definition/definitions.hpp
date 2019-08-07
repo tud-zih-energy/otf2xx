@@ -72,6 +72,7 @@
 
 #include <otf2xx/definition/unknown.hpp>
 
+#include <otf2xx/definition/call_path_parameter.hpp>
 #include <otf2xx/definition/property.hpp>
 
 #include <otf2xx/definition/cart_coordinate.hpp>

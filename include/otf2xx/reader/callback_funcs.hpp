@@ -130,6 +130,7 @@ namespace reader
 
                 OTF2_CallbackCode attribute  (void *userData, OTF2_AttributeRef self, OTF2_StringRef name, OTF2_StringRef description, OTF2_Type type);
                 OTF2_CallbackCode call_path  (void *userData, OTF2_CallpathRef self, OTF2_CallpathRef parent, OTF2_RegionRef region);
+                OTF2_CallbackCode call_path_parameter  (void *userData, OTF2_CallpathRef callpath, OTF2_ParameterRef parameter, OTF2_Type type, OTF2_AttributeValue value);
                 OTF2_CallbackCode call_site  (void *userData, OTF2_CallsiteRef self, OTF2_StringRef sourceFile, uint32_t lineNumber, OTF2_RegionRef enteredRegion, OTF2_RegionRef leftRegion);
                 OTF2_CallbackCode clock_properties  (void *userData, uint64_t timerResolution, uint64_t globalOffset, uint64_t traceLength);
                 OTF2_CallbackCode comm  (void *userData, OTF2_CommRef self, OTF2_StringRef name, OTF2_GroupRef group, OTF2_CommRef parent);
