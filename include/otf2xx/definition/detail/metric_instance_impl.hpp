@@ -104,13 +104,6 @@ namespace definition
             {
             }
 
-            // no implicit copy, see duplicate()
-            metric_instance_impl(const metric_instance_impl&) = delete;
-            metric_instance_impl& operator=(const metric_instance_impl&) = delete;
-
-            metric_instance_impl(metric_instance_impl&&) = default;
-            metric_instance_impl& operator=(metric_instance_impl&&) = default;
-
             metric_occurence occurence() const
             {
                 return metric_occurence::async;

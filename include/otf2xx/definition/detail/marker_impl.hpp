@@ -62,13 +62,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            marker_impl(const marker_impl&) = delete;
-            marker_impl& operator=(const marker_impl&) = delete;
-
-            marker_impl(marker_impl&&) = default;
-            marker_impl& operator=(marker_impl&&) = default;
-
             const std::string& group() const
             {
                 return group_;

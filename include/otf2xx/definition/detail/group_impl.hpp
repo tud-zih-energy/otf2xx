@@ -77,13 +77,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            group_impl(const group_impl&) = delete;
-            group_impl& operator=(const group_impl&) = delete;
-
-            group_impl(group_impl&&) = default;
-            group_impl& operator=(group_impl&&) = default;
-
             otf2::definition::string& name()
             {
                 return name_;

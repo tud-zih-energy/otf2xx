@@ -60,13 +60,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            cart_coordinate_impl(const cart_coordinate_impl&) = delete;
-            cart_coordinate_impl& operator=(const cart_coordinate_impl&) = delete;
-
-            cart_coordinate_impl(cart_coordinate_impl&&) = default;
-            cart_coordinate_impl& operator=(cart_coordinate_impl&&) = default;
-
             const otf2::definition::cart_topology& topology() const
             {
                 return topology_;

@@ -63,13 +63,6 @@ namespace definition
             {
             }
 
-            // no implicit copy, see duplicate()
-            attribute_impl(const attribute_impl&) = delete;
-            attribute_impl& operator=(const attribute_impl&) = delete;
-
-            attribute_impl(attribute_impl&&) = default;
-            attribute_impl& operator=(attribute_impl&&) = default;
-
             const otf2::definition::string& name() const
             {
                 return name_;

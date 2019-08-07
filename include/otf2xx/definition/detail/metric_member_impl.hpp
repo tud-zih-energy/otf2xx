@@ -72,13 +72,6 @@ namespace definition
             {
             }
 
-            // no implicit copy, see duplicate()
-            metric_member_impl(const metric_member_impl&) = delete;
-            metric_member_impl& operator=(const metric_member_impl&) = delete;
-
-            metric_member_impl(metric_member_impl&&) = default;
-            metric_member_impl& operator=(metric_member_impl&&) = default;
-
             const otf2::definition::string& name() const
             {
                 return name_;

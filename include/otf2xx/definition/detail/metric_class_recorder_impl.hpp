@@ -66,13 +66,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            metric_class_recorder_impl(const metric_class_recorder_impl&) = delete;
-            metric_class_recorder_impl& operator=(const metric_class_recorder_impl&) = delete;
-
-            metric_class_recorder_impl(metric_class_recorder_impl&&) = default;
-            metric_class_recorder_impl& operator=(metric_class_recorder_impl&&) = default;
-
             bool has_metric_class() const
             {
                 return metric_class_.is_valid();

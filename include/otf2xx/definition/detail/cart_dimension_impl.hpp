@@ -60,13 +60,6 @@ namespace definition
             {
             }
 
-            // no implicit copy, see duplicate()
-            cart_dimension_impl(const cart_dimension_impl&) = delete;
-            cart_dimension_impl& operator=(const cart_dimension_impl&) = delete;
-
-            cart_dimension_impl(cart_dimension_impl&&) = default;
-            cart_dimension_impl& operator=(cart_dimension_impl&&) = default;
-
             const otf2::definition::string& name() const
             {
                 return name_;

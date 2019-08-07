@@ -61,8 +61,6 @@ namespace event
         using value_proxy = detail::value_proxy;
         using const_value_proxy = detail::const_value_proxy;
 
-        metric() = default;
-
         // construct with values
         metric(otf2::chrono::time_point timestamp, const otf2::definition::metric_class& metric_c,
                values&& values)

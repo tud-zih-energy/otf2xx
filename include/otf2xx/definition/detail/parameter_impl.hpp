@@ -62,13 +62,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            parameter_impl(const parameter_impl&) = delete;
-            parameter_impl& operator=(const parameter_impl&) = delete;
-
-            parameter_impl(parameter_impl&&) = default;
-            parameter_impl& operator=(parameter_impl&&) = default;
-
             const otf2::definition::string& name() const
             {
                 return name_;

@@ -61,13 +61,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            source_code_location_impl(const source_code_location_impl&) = delete;
-            source_code_location_impl& operator=(const source_code_location_impl&) = delete;
-
-            source_code_location_impl(source_code_location_impl&&) = default;
-            source_code_location_impl& operator=(source_code_location_impl&&) = default;
-
             const otf2::definition::string& file() const
             {
                 return file_;

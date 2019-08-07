@@ -63,13 +63,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            rma_win_impl(const rma_win_impl&) = delete;
-            rma_win_impl& operator=(const rma_win_impl&) = delete;
-
-            rma_win_impl(rma_win_impl&&) = default;
-            rma_win_impl& operator=(rma_win_impl&&) = default;
-
             const otf2::definition::string& name() const
             {
                 return name_;

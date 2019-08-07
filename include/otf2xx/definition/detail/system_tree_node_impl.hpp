@@ -78,13 +78,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            system_tree_node_impl(const system_tree_node_impl&) = delete;
-            system_tree_node_impl& operator=(const system_tree_node_impl&) = delete;
-
-            system_tree_node_impl(system_tree_node_impl&&) = default;
-            system_tree_node_impl& operator=(system_tree_node_impl&&) = default;
-
             const otf2::definition::string& name() const
             {
                 return name_;

@@ -61,13 +61,6 @@ namespace definition
             {
             }
 
-            // no implicit copy, see duplicate()
-            io_file_impl(const io_file_impl&) = delete;
-            io_file_impl& operator=(const io_file_impl&) = delete;
-
-            io_file_impl(io_file_impl&&) = default;
-            io_file_impl& operator=(io_file_impl&&) = default;
-
             const otf2::definition::string& name() const
             {
                 return name_;

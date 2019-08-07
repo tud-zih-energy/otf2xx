@@ -73,13 +73,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            call_path_impl(const call_path_impl&) = delete;
-            call_path_impl& operator=(const call_path_impl&) = delete;
-
-            call_path_impl(call_path_impl&&) = default;
-            call_path_impl& operator=(call_path_impl&&) = default;
-
             const otf2::definition::region& region() const
             {
                 return region_;

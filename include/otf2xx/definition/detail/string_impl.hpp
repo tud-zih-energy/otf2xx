@@ -56,13 +56,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            string_impl(const string_impl&) = delete;
-            string_impl& operator=(const string_impl&) = delete;
-
-            string_impl(string_impl&&) = default;
-            string_impl& operator=(string_impl&&) = default;
-
             const std::string& str() const
             {
                 return str_;

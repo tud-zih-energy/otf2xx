@@ -72,13 +72,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            io_paradigm_impl(const io_paradigm_impl&) = delete;
-            io_paradigm_impl& operator=(const io_paradigm_impl&) = delete;
-
-            io_paradigm_impl(io_paradigm_impl&&) = default;
-            io_paradigm_impl& operator=(io_paradigm_impl&&) = default;
-
             const otf2::definition::string& identification() const
             {
                 return identification_;

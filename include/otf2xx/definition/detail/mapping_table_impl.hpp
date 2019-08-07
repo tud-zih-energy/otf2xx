@@ -96,13 +96,6 @@ namespace definition
                 }
             }
 
-            // no implicit copy allowed, see duplicate()
-            mapping_table_impl(const mapping_table_impl&) = delete;
-            mapping_table_impl& operator=(const mapping_table_impl&) = delete;
-
-            mapping_table_impl(mapping_table_impl&&) = default;
-            mapping_table_impl& operator=(mapping_table_impl&&) = default;
-
             static mapping_table_impl* undefined()
             {
                 static mapping_table_impl undef(mapping_type_type::max, OTF2_ID_MAP_SPARSE, 64, 1);

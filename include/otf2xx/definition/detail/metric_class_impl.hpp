@@ -69,13 +69,6 @@ namespace definition
             {
             }
 
-            // no implicit copy, see duplicate()
-            metric_class_impl(const metric_class_impl&) = delete;
-            metric_class_impl& operator=(const metric_class_impl&) = delete;
-
-            metric_class_impl(metric_class_impl&&) = default;
-            metric_class_impl& operator=(metric_class_impl&&) = default;
-
             std::size_t size() const
             {
                 return members_.size();

@@ -80,13 +80,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            calling_context_impl(const calling_context_impl&) = delete;
-            calling_context_impl& operator=(const calling_context_impl&) = delete;
-
-            calling_context_impl(calling_context_impl&&) = default;
-            calling_context_impl& operator=(calling_context_impl&&) = default;
-
             const otf2::definition::region& region() const
             {
                 return region_;

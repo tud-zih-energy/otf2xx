@@ -71,13 +71,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            property_impl(const property_impl&) = delete;
-            property_impl& operator=(const property_impl&) = delete;
-
-            property_impl(property_impl&&) = default;
-            property_impl& operator=(property_impl&&) = default;
-
             const otf2::definition::string& name() const
             {
                 return name_;

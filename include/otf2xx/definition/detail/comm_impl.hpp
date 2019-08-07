@@ -94,13 +94,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            comm_impl(const comm_impl&) = delete;
-            comm_impl& operator=(const comm_impl&) = delete;
-
-            comm_impl(comm_impl&&) = default;
-            comm_impl& operator=(comm_impl&&) = default;
-
             otf2::definition::string& name()
             {
                 return name_;

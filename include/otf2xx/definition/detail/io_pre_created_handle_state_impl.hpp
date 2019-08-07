@@ -62,15 +62,6 @@ namespace definition
             {
             }
 
-            // no implicit copy, see duplicate()
-            io_pre_created_handle_state_impl(const io_pre_created_handle_state_impl&) = delete;
-            io_pre_created_handle_state_impl&
-            operator=(const io_pre_created_handle_state_impl&) = delete;
-
-            io_pre_created_handle_state_impl(io_pre_created_handle_state_impl&&) = default;
-            io_pre_created_handle_state_impl&
-            operator=(io_pre_created_handle_state_impl&&) = default;
-
             const otf2::definition::io_handle& handle() const
             {
                 return handle_;

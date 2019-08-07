@@ -63,13 +63,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            system_tree_node_domain_impl(const system_tree_node_domain_impl&) = delete;
-            system_tree_node_domain_impl& operator=(const system_tree_node_domain_impl&) = delete;
-
-            system_tree_node_domain_impl(system_tree_node_domain_impl&&) = default;
-            system_tree_node_domain_impl& operator=(system_tree_node_domain_impl&&) = default;
-
             const otf2::definition::system_tree_node& node() const
             {
                 return node_;

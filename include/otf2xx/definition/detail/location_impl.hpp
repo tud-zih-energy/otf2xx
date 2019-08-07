@@ -66,13 +66,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            location_impl(const location_impl&) = delete;
-            location_impl& operator=(const location_impl&) = delete;
-
-            location_impl(location_impl&&) = default;
-            location_impl& operator=(location_impl&&) = default;
-
             const otf2::definition::string& name() const
             {
                 return name_;

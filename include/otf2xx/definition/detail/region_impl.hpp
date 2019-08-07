@@ -70,13 +70,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            region_impl(const region_impl&) = delete;
-            region_impl& operator=(const region_impl&) = delete;
-
-            region_impl(region_impl&&) = default;
-            region_impl& operator=(region_impl&&) = default;
-
             const otf2::definition::string& name() const
             {
                 return name_;

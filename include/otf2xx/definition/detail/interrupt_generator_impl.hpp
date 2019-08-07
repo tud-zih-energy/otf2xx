@@ -71,13 +71,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            interrupt_generator_impl(const interrupt_generator_impl&) = delete;
-            interrupt_generator_impl& operator=(const interrupt_generator_impl&) = delete;
-
-            interrupt_generator_impl(interrupt_generator_impl&&) = default;
-            interrupt_generator_impl& operator=(interrupt_generator_impl&&) = default;
-
             const otf2::definition::string& name() const
             {
                 return name_;

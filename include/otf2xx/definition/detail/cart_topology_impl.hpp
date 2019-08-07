@@ -63,13 +63,6 @@ namespace definition
             {
             }
 
-            // no implicit copy, see duplicate()
-            cart_topology_impl(const cart_topology_impl&) = delete;
-            cart_topology_impl& operator=(const cart_topology_impl&) = delete;
-
-            cart_topology_impl(cart_topology_impl&&) = default;
-            cart_topology_impl& operator=(cart_topology_impl&&) = default;
-
             const otf2::definition::string& name() const
             {
                 return name_;

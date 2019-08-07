@@ -60,12 +60,6 @@ namespace writer
         {
         }
 
-        global(global&) = default;
-        global& operator=(global&) = default;
-
-        global(global&&) = default;
-        global& operator=(global&&) = default;
-
     public:
         std::uint64_t num_definitions() const
         {

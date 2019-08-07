@@ -71,13 +71,6 @@ namespace definition
             {
             }
 
-            // no implicit copy allowed, see duplicate()
-            call_site_impl(const call_site_impl&) = delete;
-            call_site_impl& operator=(const call_site_impl&) = delete;
-
-            call_site_impl(call_site_impl&&) = default;
-            call_site_impl& operator=(call_site_impl&&) = default;
-
             const otf2::definition::string& source_file() const
             {
                 return source_file_;
