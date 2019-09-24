@@ -558,6 +558,7 @@ namespace writer
             }
         }
 
+    public:
         void store(const otf2::registry& reg)
         {
             store(reg.all<otf2::definition::string>().data());
@@ -581,8 +582,13 @@ namespace writer
             store(reg.all<otf2::definition::comm>().data());
 
             store(reg.all<otf2::definition::parameter>().data());
-            // store(reg.all<otf2::definition::callpath>().data());
-            // store(reg.all<otf2::definition::callsite>().data());
+            store(reg.all<otf2::definition::call_path>().data());
+            store(reg.all<otf2::definition::call_path_parameter>().data());
+            store(reg.all<otf2::definition::call_site>().data());
+
+            store(reg.all<otf2::definition::cart_topology>().data());
+            store(reg.all<otf2::definition::cart_dimension>().data());
+            store(reg.all<otf2::definition::cart_coordinate>().data());
 
             store(reg.all<otf2::definition::rma_win>().data());
 
@@ -600,6 +606,7 @@ namespace writer
             store(reg.all<otf2::definition::io_pre_created_handle_state>().data());
             store(reg.all<otf2::definition::io_directory>().data(),
                   reg.all<otf2::definition::io_regular_file>().data());
+            store(reg.all<otf2::definition::io_file_property>().data());
 
             store(reg.all<otf2::definition::marker>().data());
         }
