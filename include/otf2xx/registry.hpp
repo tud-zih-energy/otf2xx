@@ -400,6 +400,12 @@ public:
     }
 
     template <typename Definition, typename Key>
+    auto& get(const Key& key)
+    {
+        return get_holder<Definition>()[key];
+    }
+
+    template <typename Definition, typename Key>
     bool has(const Key& key) const
     {
         return get_holder<Definition>().has(key);

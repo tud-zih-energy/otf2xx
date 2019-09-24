@@ -74,4 +74,14 @@ int main()
               << reg.has<otf2::definition::string>(ByCPU(6)) << " "
               << reg.has<otf2::definition::string>(ByCPU(7)) << " "
               << reg.has<otf2::definition::string>(ByProcess(6)) << std::endl;
+
+    auto& mutable_def = reg.create<otf2::definition::system_tree_node>(
+        reg.get<otf2::definition::string>(ByProcess(42)),
+        reg.create<otf2::definition::string>("some class"));
+
+    std::cout << mutable_def.name() << std::endl;
+
+    mutable_def.name(reg.create<otf2::definition::string>("New stn name"));
+
+    std::cout << mutable_def.name() << std::endl;
 }
