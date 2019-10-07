@@ -40,6 +40,7 @@
 #include <otf2xx/chrono/time_point.hpp>
 
 #include <cassert>
+#include <cmath>
 #include <limits>
 
 namespace otf2
@@ -86,6 +87,10 @@ namespace chrono
          */
         otf2::chrono::time_point operator()(otf2::chrono::ticks ticks) const
         {
+            if (ticks_per_second == clock::period::den)
+            {
+                return time_point(otf2::chrono::duration(static_cast<int64_t>(ticks.count())));
+            }
             // WARNING: Be careful, when changing clock::period::den.
             // You will have to think about every calculations twice, as there
             // might be narrowing and rounding anywhere.
@@ -94,7 +99,7 @@ namespace chrono
             // picoseconds.
             // These assumptions have to be double checked!
 
-            double factor = static_cast<double>(clock::period::den) / ticks_per_second;
+            const double factor = static_cast<double>(clock::period::den) / ticks_per_second;
 
             assert(ticks_per_second <= clock::period::den);
 
@@ -113,9 +118,15 @@ namespace chrono
          */
         otf2::chrono::ticks operator()(time_point t) const
         {
-            assert(ticks_per_second == clock::period::den);
+            if (ticks_per_second == clock::period::den)
+            {
+                return ticks(
+                    otf2::chrono::duration_cast<otf2::chrono::duration>(t.time_since_epoch()).count());
+            }
+
+            const double factor = static_cast<double>(clock::period::den) / ticks_per_second;
             return ticks(
-                otf2::chrono::duration_cast<otf2::chrono::duration>(t.time_since_epoch()).count());
+                std::ceil(otf2::chrono::duration_cast<otf2::chrono::duration>(t.time_since_epoch()).count() / factor));
         }
     };
 
