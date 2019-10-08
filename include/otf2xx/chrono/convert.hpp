@@ -108,7 +108,7 @@ namespace chrono
 
             auto tp = ticks.count() - offset_;
 
-            assert(tp < static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) / factor_);
+            assert(tp <= static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) / factor_);
 
             return time_point(otf2::chrono::duration(static_cast<int64_t>(tp * factor_)));
         }
