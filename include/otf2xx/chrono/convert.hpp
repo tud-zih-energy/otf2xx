@@ -87,6 +87,12 @@ namespace chrono
         {
         }
 
+        convert(const convert&) = default;
+        convert& operator=(const convert&) = default;
+
+        convert(convert&&) = default;
+        convert& operator=(convert&&) = default;
+
         /**
          * \brief converts from ticks to time point
          *
@@ -135,7 +141,7 @@ namespace chrono
         }
 
     private:
-        const uint64_t offset_;
+        uint64_t offset_;
 
         double factor_;
         double inverse_factor_;

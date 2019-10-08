@@ -412,7 +412,7 @@ namespace reader
         void set_clock_properties(std::unique_ptr<otf2::definition::clock_properties>&& cp)
         {
             clock_properties_ = std::move(cp);
-            clock_convert_ = std::make_unique<otf2::chrono::convert>(clock_properties());
+            clock_convert_ = otf2::chrono::convert{ clock_properties() };
         }
 
         /**
@@ -428,13 +428,10 @@ namespace reader
 
         /**
          * \brief returns the chrono convert for this trace
-         * You should check with \ref has_clock_properties() if there was a clock properties
-         * definition before you rely on this.
          */
         const otf2::chrono::convert& clock_convert() const
         {
-            assert(has_clock_properties());
-            return *clock_convert_;
+            return clock_convert_;
         }
 
     private:
@@ -445,7 +442,7 @@ namespace reader
         otf2::registry reg_;
 
         std::unique_ptr<otf2::definition::clock_properties> clock_properties_;
-        std::unique_ptr<otf2::chrono::convert> clock_convert_;
+        otf2::chrono::convert clock_convert_;
 
         std::unique_ptr<otf2::reader::callback> buffer_;
         otf2::reader::callback* callback_;
