@@ -64,9 +64,9 @@ namespace chrono
         static_assert(clock::period::num == 1, "Don't mess around with chrono!");
 
     public:
-        convert(otf2::chrono::ticks ticks_per_second =
-                    otf2::chrono::ticks(otf2::chrono::clock::period::den),
-                otf2::chrono::ticks offset = otf2::chrono::ticks(0))
+        explicit convert(otf2::chrono::ticks ticks_per_second =
+                             otf2::chrono::ticks(otf2::chrono::clock::period::den),
+                         otf2::chrono::ticks offset = otf2::chrono::ticks(0))
         : offset_(offset.count()),
           factor_(static_cast<double>(clock::period::den) / ticks_per_second.count()),
           inverse_factor_(ticks_per_second.count() / static_cast<double>(clock::period::den))
@@ -82,7 +82,7 @@ namespace chrono
             assert(ticks_per_second.count() <= clock::period::den);
         }
 
-        convert(const otf2::definition::clock_properties& cp)
+        explicit convert(const otf2::definition::clock_properties& cp)
         : convert(cp.ticks_per_second(), cp.start_time())
         {
         }
