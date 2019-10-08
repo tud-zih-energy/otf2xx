@@ -35,6 +35,7 @@
 #ifndef INCLUDE_OTF2XX_READER_READER_HPP
 #define INCLUDE_OTF2XX_READER_READER_HPP
 
+#include <otf2xx/chrono/convert.hpp>
 #include <otf2xx/definition/definitions.hpp>
 #include <otf2xx/event/buffer.hpp>
 #include <otf2xx/exception.hpp>
@@ -384,15 +385,14 @@ namespace reader
          * \brief returns the ticks per second
          *
          * You should check with \ref has_clock_properties() if there was a clock properties
-         *definition before
-         * you rely on this. Otherwise you will get the default of 10^9 ticks per second.
+         * definition before you rely on this. Otherwise you will get the default ticks per second.
          */
         otf2::chrono::ticks ticks_per_second() const
         {
             if (has_clock_properties())
                 return clock_properties_->ticks_per_second();
             else
-                return otf2::chrono::ticks(1e9);
+                return otf2::chrono::ticks(otf2::chrono::clock::period::den);
         }
 
         /**
@@ -411,17 +411,30 @@ namespace reader
          */
         void set_clock_properties(std::unique_ptr<otf2::definition::clock_properties>&& cp)
         {
-            clock_properties_.release();
             clock_properties_ = std::move(cp);
+            clock_convert_ = std::make_unique<otf2::chrono::convert>(clock_properties());
         }
 
         /**
          * \brief returns clock properties definition
+         * You should check with \ref has_clock_properties() if there was a clock properties
+         * definition before you rely on this.
          */
         const otf2::definition::clock_properties& clock_properties() const
         {
             assert(has_clock_properties());
             return *clock_properties_;
+        }
+
+        /**
+         * \brief returns the chrono convert for this trace
+         * You should check with \ref has_clock_properties() if there was a clock properties
+         * definition before you rely on this.
+         */
+        const otf2::chrono::convert& clock_convert() const
+        {
+            assert(has_clock_properties());
+            return *clock_convert_;
         }
 
     private:
@@ -432,6 +445,7 @@ namespace reader
         otf2::registry reg_;
 
         std::unique_ptr<otf2::definition::clock_properties> clock_properties_;
+        std::unique_ptr<otf2::chrono::convert> clock_convert_;
 
         std::unique_ptr<otf2::reader::callback> buffer_;
         otf2::reader::callback* callback_;

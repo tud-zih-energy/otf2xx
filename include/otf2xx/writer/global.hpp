@@ -37,6 +37,7 @@
 
 #include <otf2/OTF2_GlobalDefWriter.h>
 
+#include <otf2xx/chrono/convert.hpp>
 #include <otf2xx/definition/definitions.hpp>
 #include <otf2xx/event/marker.hpp>
 #include <otf2xx/exception.hpp>
@@ -628,7 +629,8 @@ namespace writer
     public:
         void write(otf2::event::marker evt)
         {
-            static otf2::chrono::convert cvrt(otf2::chrono::clock::period::den);
+            static otf2::chrono::convert cvrt;
+
             static_assert(otf2::chrono::clock::period::num == 1,
                           "Don't mess around with the chrono stuff!");
 

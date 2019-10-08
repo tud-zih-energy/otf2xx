@@ -67,11 +67,8 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::buffer_flush(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            stopTime - reader->clock_properties().start_time().count()))));
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
+                        reader->clock_convert()(otf2::chrono::ticks(stopTime))));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -85,11 +82,9 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::enter(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::region>(regionID)));
+                    otf2::event::enter(attributeList,
+                                       reader->clock_convert()(otf2::chrono::ticks(time)),
+                                       registry.get<otf2::definition::region>(regionID)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -103,11 +98,9 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::leave(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::region>(regionID)));
+                    otf2::event::leave(attributeList,
+                                       reader->clock_convert()(otf2::chrono::ticks(time)),
+                                       registry.get<otf2::definition::region>(regionID)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -122,9 +115,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::measurement(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         static_cast<otf2::event::measurement::mode_type>(measurementMode)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -145,8 +136,7 @@ namespace reader
                 }
 
                 otf2::chrono::time_point timestamp =
-                    otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                        time - reader->clock_properties().start_time().count()));
+                    reader->clock_convert()(otf2::chrono::ticks(time));
 
                 otf2::event::metric::values metric_values{
                     std::vector<OTF2_Type>{ typeIDs, typeIDs + numberOfMetrics },
@@ -184,9 +174,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::mpi_collective_begin(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count()))));
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time))));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -203,9 +191,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::mpi_collective_end(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         static_cast<otf2::event::mpi_collective_end::collective_type>(collectiveOp),
                         registry.get<otf2::definition::comm>(communicator), root, sizeSent,
                         sizeReceived));
@@ -224,11 +210,9 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::mpi_ireceive(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        sender, registry.get<otf2::definition::comm>(communicator), msgTag,
-                        msgLength, requestID));
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)), sender,
+                        registry.get<otf2::definition::comm>(communicator), msgTag, msgLength,
+                        requestID));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -240,13 +224,11 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(
-                    registry.get<otf2::definition::location>(locationID),
-                    otf2::event::mpi_ireceive_request(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        requestID));
+                reader->callback().event(registry.get<otf2::definition::location>(locationID),
+                                         otf2::event::mpi_ireceive_request(
+                                             attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             requestID));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -262,11 +244,9 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::mpi_isend(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        receiver, registry.get<otf2::definition::comm>(communicator), msgTag,
-                        msgLength, requestID));
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)), receiver,
+                        registry.get<otf2::definition::comm>(communicator), msgTag, msgLength,
+                        requestID));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -278,13 +258,11 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(
-                    registry.get<otf2::definition::location>(locationID),
-                    otf2::event::mpi_isend_complete(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        requestID));
+                reader->callback().event(registry.get<otf2::definition::location>(locationID),
+                                         otf2::event::mpi_isend_complete(
+                                             attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             requestID));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -300,11 +278,8 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::mpi_receive(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        sender, registry.get<otf2::definition::comm>(communicator), msgTag,
-                        msgLength));
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)), sender,
+                        registry.get<otf2::definition::comm>(communicator), msgTag, msgLength));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -317,13 +292,11 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(
-                    registry.get<otf2::definition::location>(locationID),
-                    otf2::event::mpi_request_cancelled(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        requestID));
+                reader->callback().event(registry.get<otf2::definition::location>(locationID),
+                                         otf2::event::mpi_request_cancelled(
+                                             attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             requestID));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -335,13 +308,11 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(
-                    registry.get<otf2::definition::location>(locationID),
-                    otf2::event::mpi_request_test(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        requestID));
+                reader->callback().event(registry.get<otf2::definition::location>(locationID),
+                                         otf2::event::mpi_request_test(
+                                             attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             requestID));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -357,11 +328,8 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::mpi_send(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        receiver, registry.get<otf2::definition::comm>(communicator), msgTag,
-                        msgLength));
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)), receiver,
+                        registry.get<otf2::definition::comm>(communicator), msgTag, msgLength));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -376,9 +344,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::parameter_int(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::parameter>(parameter), value));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -391,14 +357,12 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(
-                    registry.get<otf2::definition::location>(locationID),
-                    otf2::event::parameter_string(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::parameter>(parameter),
-                        registry.get<otf2::definition::string>(string)));
+                reader->callback().event(registry.get<otf2::definition::location>(locationID),
+                                         otf2::event::parameter_string(
+                                             attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             registry.get<otf2::definition::parameter>(parameter),
+                                             registry.get<otf2::definition::string>(string)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -414,9 +378,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::parameter_unsigned_int(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::parameter>(parameter), value));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -434,9 +396,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::calling_context_enter(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::calling_context>(callingContext),
                         unwindDistance));
 
@@ -454,9 +414,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::calling_context_leave(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::calling_context>(callingContext)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -475,9 +433,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::calling_context_sample(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::calling_context>(callingContext),
                         unwindDistance,
                         registry.get<otf2::definition::interrupt_generator>(interruptGenerator)));
@@ -496,9 +452,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_acquire_lock(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::rma_win>(win), remote, lockId,
                         static_cast<otf2::event::rma_acquire_lock::lock_type_type>(lockType)));
 
@@ -516,13 +470,11 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::rma_atomic(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::rma_win>(win), remote,
-                        static_cast<otf2::event::rma_atomic::atomic_type>(type), bytesSent,
-                        bytesReceived, matchingId));
+                    otf2::event::rma_atomic(attributeList,
+                                            reader->clock_convert()(otf2::chrono::ticks(time)),
+                                            registry.get<otf2::definition::rma_win>(win), remote,
+                                            static_cast<otf2::event::rma_atomic::atomic_type>(type),
+                                            bytesSent, bytesReceived, matchingId));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -537,9 +489,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_collective_begin(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count()))));
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time))));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -557,9 +507,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_collective_end(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         static_cast<otf2::event::rma_collective_end::collective_type>(collectiveOp),
                         static_cast<otf2::event::rma_collective_end::sync_level_type>(syncLevel),
                         registry.get<otf2::definition::rma_win>(win), root, bytesSent,
@@ -579,9 +527,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_get(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::rma_win>(win), remote, bytes, matchingId));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -598,9 +544,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_group_sync(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         static_cast<otf2::event::rma_group_sync::sync_level_type>(syncLevel),
                         registry.get<otf2::definition::rma_win>(win),
                         registry.get<otf2::definition::comm_group>(group)));
@@ -619,9 +563,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_op_complete_blocking(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::rma_win>(win), matchingId));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -638,9 +580,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_op_complete_non_blocking(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::rma_win>(win), matchingId));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -657,9 +597,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_op_complete_remote(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::rma_win>(win), matchingId));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -675,9 +613,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_op_test(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::rma_win>(win), matchingId));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -694,9 +630,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_put(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::rma_win>(win), remote, bytes, matchingId));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -712,9 +646,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_release_lock(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::rma_win>(win), remote, lockId));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -731,9 +663,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_request_lock(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::rma_win>(win), remote, lockId,
                         static_cast<otf2::event::rma_request_lock::lock_type_type>(lockType)));
 
@@ -751,9 +681,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_sync(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::rma_win>(win), remote,
                         static_cast<otf2::event::rma_sync::sync_type_type>(syncType)));
 
@@ -771,9 +699,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::rma_try_lock(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::rma_win>(win), remote, lockId,
                         static_cast<otf2::event::rma_try_lock::lock_type_type>(lockType)));
 
@@ -789,11 +715,9 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::rma_wait_change(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::rma_win>(win)));
+                    otf2::event::rma_wait_change(attributeList,
+                                                 reader->clock_convert()(otf2::chrono::ticks(time)),
+                                                 registry.get<otf2::definition::rma_win>(win)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -807,11 +731,9 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::rma_win_create(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::rma_win>(win)));
+                    otf2::event::rma_win_create(attributeList,
+                                                reader->clock_convert()(otf2::chrono::ticks(time)),
+                                                registry.get<otf2::definition::rma_win>(win)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -825,11 +747,9 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::rma_win_destroy(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::rma_win>(win)));
+                    otf2::event::rma_win_destroy(attributeList,
+                                                 reader->clock_convert()(otf2::chrono::ticks(time)),
+                                                 registry.get<otf2::definition::rma_win>(win)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -845,9 +765,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::thread_acquire_lock(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         static_cast<otf2::common::paradigm_type>(model), lockID, acquisitionOrder));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -863,9 +781,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::thread_fork(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         static_cast<otf2::common::paradigm_type>(model), numberOfRequestedThreads));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -880,11 +796,9 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::thread_join(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        static_cast<otf2::common::paradigm_type>(model)));
+                    otf2::event::thread_join(attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             static_cast<otf2::common::paradigm_type>(model)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -900,9 +814,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::thread_release_lock(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         static_cast<otf2::common::paradigm_type>(model), lockID, acquisitionOrder));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -917,14 +829,12 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(
-                    registry.get<otf2::definition::location>(locationID),
-                    otf2::event::thread_task_complete(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::comm>(threadTeam), creatingThread,
-                        generationNumber));
+                reader->callback().event(registry.get<otf2::definition::location>(locationID),
+                                         otf2::event::thread_task_complete(
+                                             attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             registry.get<otf2::definition::comm>(threadTeam),
+                                             creatingThread, generationNumber));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -937,14 +847,12 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(
-                    registry.get<otf2::definition::location>(locationID),
-                    otf2::event::thread_task_create(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::comm>(threadTeam), creatingThread,
-                        generationNumber));
+                reader->callback().event(registry.get<otf2::definition::location>(locationID),
+                                         otf2::event::thread_task_create(
+                                             attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             registry.get<otf2::definition::comm>(threadTeam),
+                                             creatingThread, generationNumber));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -957,14 +865,12 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(
-                    registry.get<otf2::definition::location>(locationID),
-                    otf2::event::thread_task_switch(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::comm>(threadTeam), creatingThread,
-                        generationNumber));
+                reader->callback().event(registry.get<otf2::definition::location>(locationID),
+                                         otf2::event::thread_task_switch(
+                                             attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             registry.get<otf2::definition::comm>(threadTeam),
+                                             creatingThread, generationNumber));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -976,13 +882,11 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(
-                    registry.get<otf2::definition::location>(locationID),
-                    otf2::event::thread_team_begin(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::comm>(threadTeam)));
+                reader->callback().event(registry.get<otf2::definition::location>(locationID),
+                                         otf2::event::thread_team_begin(
+                                             attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             registry.get<otf2::definition::comm>(threadTeam)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -996,11 +900,9 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::thread_team_end(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::comm>(threadTeam)));
+                    otf2::event::thread_team_end(attributeList,
+                                                 reader->clock_convert()(otf2::chrono::ticks(time)),
+                                                 registry.get<otf2::definition::comm>(threadTeam)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -1016,9 +918,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::thread_create(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::comm>(threadContingent), sequenceCount));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -1035,9 +935,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::thread_begin(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::comm>(threadContingent), sequenceCount));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -1054,9 +952,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::thread_wait(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::comm>(threadContingent), sequenceCount));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -1072,9 +968,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::thread_end(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::comm>(threadContingent), sequenceCount));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -1092,9 +986,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::io_create_handle(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::io_handle>(handle),
                         static_cast<otf2::common::io_access_mode_type>(mode),
                         static_cast<otf2::common::io_creation_flag_type>(creationFlags),
@@ -1110,13 +1002,11 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(
-                    registry.get<otf2::definition::location>(locationID),
-                    otf2::event::io_destroy_handle(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::io_handle>(handle)));
+                reader->callback().event(registry.get<otf2::definition::location>(locationID),
+                                         otf2::event::io_destroy_handle(
+                                             attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             registry.get<otf2::definition::io_handle>(handle)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -1133,9 +1023,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::io_duplicate_handle(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::io_handle>(oldHandle),
                         registry.get<otf2::definition::io_handle>(newHandle),
                         static_cast<otf2::common::io_status_flag_type>(statusFlags)));
@@ -1154,9 +1042,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::io_seek(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::io_handle>(handle), offsetRequest,
                         static_cast<otf2::common::io_seek_option_type>(whence), offsetResult));
 
@@ -1175,9 +1061,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::io_change_status_flag(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::io_handle>(handle),
                         static_cast<otf2::common::io_status_flag_type>(statusFlags)));
 
@@ -1196,9 +1080,7 @@ namespace reader
                     reader->callback().event(
                         registry.get<otf2::definition::location>(locationID),
                         otf2::event::io_delete_file(
-                            attributeList,
-                            otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                                time - reader->clock_properties().start_time().count())),
+                            attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                             registry.get<otf2::definition::io_paradigm>(ioParadigm),
                             registry.get<otf2::definition::io_regular_file>(file)));
                 }
@@ -1207,9 +1089,7 @@ namespace reader
                     reader->callback().event(
                         registry.get<otf2::definition::location>(locationID),
                         otf2::event::io_delete_file(
-                            attributeList,
-                            otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                                time - reader->clock_properties().start_time().count())),
+                            attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                             registry.get<otf2::definition::io_paradigm>(ioParadigm),
                             registry.get<otf2::definition::io_directory>(file)));
                 }
@@ -1229,9 +1109,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::io_operation_begin(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::io_handle>(handle),
                         static_cast<otf2::common::io_operation_mode_type>(mode),
                         static_cast<otf2::common::io_operation_flag_type>(operationFlags),
@@ -1250,9 +1128,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::io_operation_test(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::io_handle>(handle), matchingId));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -1268,9 +1144,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::io_operation_issued(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::io_handle>(handle), matchingId));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -1287,9 +1161,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::io_operation_cancelled(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::io_handle>(handle), matchingId));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -1304,14 +1176,12 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(
-                    registry.get<otf2::definition::location>(locationID),
-                    otf2::event::io_operation_complete(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::io_handle>(handle), bytesRequest,
-                        matchingId));
+                reader->callback().event(registry.get<otf2::definition::location>(locationID),
+                                         otf2::event::io_operation_complete(
+                                             attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             registry.get<otf2::definition::io_handle>(handle),
+                                             bytesRequest, matchingId));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -1325,12 +1195,10 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::io_acquire_lock(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::io_handle>(handle),
-                        static_cast<otf2::common::lock_type>(lockType)));
+                    otf2::event::io_acquire_lock(attributeList,
+                                                 reader->clock_convert()(otf2::chrono::ticks(time)),
+                                                 registry.get<otf2::definition::io_handle>(handle),
+                                                 static_cast<otf2::common::lock_type>(lockType)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -1344,12 +1212,10 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::io_release_lock(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::io_handle>(handle),
-                        static_cast<otf2::common::lock_type>(lockType)));
+                    otf2::event::io_release_lock(attributeList,
+                                                 reader->clock_convert()(otf2::chrono::ticks(time)),
+                                                 registry.get<otf2::definition::io_handle>(handle),
+                                                 static_cast<otf2::common::lock_type>(lockType)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -1363,12 +1229,10 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::io_try_lock(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        registry.get<otf2::definition::io_handle>(handle),
-                        static_cast<otf2::common::lock_type>(lockType)));
+                    otf2::event::io_try_lock(attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             registry.get<otf2::definition::io_handle>(handle),
+                                             static_cast<otf2::common::lock_type>(lockType)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -1391,9 +1255,7 @@ namespace reader
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::program_begin(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         registry.get<otf2::definition::string>(programName), args));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
@@ -1408,11 +1270,9 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::program_end(
-                        attributeList,
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count())),
-                        exitStatus));
+                    otf2::event::program_end(attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             exitStatus));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -1425,9 +1285,7 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::unknown(
-                        otf2::chrono::convert(reader->ticks_per_second())(otf2::chrono::ticks(
-                            time - reader->clock_properties().start_time().count()))));
+                    otf2::event::unknown(reader->clock_convert()(otf2::chrono::ticks(time))));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }

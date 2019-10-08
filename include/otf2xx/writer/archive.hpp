@@ -509,9 +509,9 @@ namespace writer
             static_assert(otf2::chrono::clock::period::num == 1,
                           "Don't mess around with the chrono stuff!");
 
-            return otf2::chrono::convert(otf2::chrono::clock::period::den)(
-                       ar->post_flush_callback_())
-                .count();
+            static otf2::chrono::convert convert;
+
+            return convert(ar->post_flush_callback_()).count();
         }
     } // namespace detail
 } // namespace writer
