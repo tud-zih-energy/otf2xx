@@ -509,7 +509,7 @@ namespace writer
             static_assert(otf2::chrono::clock::period::num == 1,
                           "Don't mess around with the chrono stuff!");
 
-            static otf2::chrono::convert convert;
+            otf2::chrono::convert convert;
 
             return convert(ar->post_flush_callback_()).count();
         }

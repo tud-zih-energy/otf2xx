@@ -629,7 +629,7 @@ namespace writer
     public:
         void write(otf2::event::marker evt)
         {
-            static otf2::chrono::convert cvrt;
+            otf2::chrono::convert cvrt;
 
             static_assert(otf2::chrono::clock::period::num == 1,
                           "Don't mess around with the chrono stuff!");
