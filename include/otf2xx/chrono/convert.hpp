@@ -135,7 +135,7 @@ namespace chrono
             // operations would result in lower rounding errors.
             auto tpi = static_cast<uint64_t>(std::ceil(tp * inverse_factor_));
 
-            assert(tpi >= -offset_);
+            assert(tpi <= std::numeric_limits<std::uint64_t>::max() - offset_);
 
             return ticks(tpi + offset_);
         }
