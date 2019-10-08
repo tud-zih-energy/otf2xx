@@ -40,6 +40,7 @@
 #include <otf2xx/chrono/time_point.hpp>
 
 #include <otf2xx/definition/clock_properties.hpp>
+#include <otf2xx/exception.hpp>
 
 #include <cassert>
 #include <cmath>
@@ -71,6 +72,11 @@ namespace chrono
           factor_(static_cast<double>(clock::period::den) / ticks_per_second.count()),
           inverse_factor_(ticks_per_second.count() / static_cast<double>(clock::period::den))
         {
+        }
+
+        explicit convert(const otf2::definition::clock_properties& cp)
+        : convert(cp.ticks_per_second(), cp.start_time())
+        {
             // WARNING: Be careful, when changing clock::period::den.
             // You will have to think about every calculations twice, as there
             // might be narrowing and rounding anywhere.
@@ -79,12 +85,18 @@ namespace chrono
             // picoseconds.
             // These assumptions have to be double checked!
 
-            assert(ticks_per_second.count() <= clock::period::den);
-        }
+            // The real question here is, whether we can represent the largest timestamp of the
+            // trace with a time_point in our clock
+            if (cp.length().count() >
+                static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) / factor_)
+            {
+                otf2::make_exception("This traces' timepoints cannot be represented in the "
+                                     "selected otf2::chrono::time_point. Recompile with "
+                                     "nanoseconds for OTF2XX_CHRONO_DURATION_TYPE.");
+            }
 
-        explicit convert(const otf2::definition::clock_properties& cp)
-        : convert(cp.ticks_per_second(), cp.start_time())
-        {
+            // Note: Due to rounding errors and depending on the OTF2XX_CHRONO_DURATION_TYPE, some
+            // OTF2_TimeStamp values might be mapped to the same otf2::chrono::time_point.
         }
 
         convert(const convert&) = default;
