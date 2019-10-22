@@ -66,6 +66,11 @@ public:
         return definitions_[ref];
     }
 
+    Definition& operator[](typename Definition::reference_type ref)
+    {
+        return definitions_[ref];
+    }
+
     void operator()(const Definition& def)
     {
         assert(def.ref() != Definition::reference_type::undefined());

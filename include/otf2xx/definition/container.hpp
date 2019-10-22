@@ -133,6 +133,14 @@ namespace definition
             return data.at(key);
         }
 
+        value_type& operator[](key_type key)
+        {
+            if (key == otf2::reference<Definition>::undefined())
+                return undefined_;
+
+            return data.at(key);
+        }
+
         template <typename... Args>
         value_type& emplace(key_type ref, Args&&... args)
         {
