@@ -199,6 +199,12 @@ public:
     }
 
     template <typename Key>
+    std::enable_if_t<has_type<Key, key_list>::value, Definition&> operator[](Key key)
+    {
+        return std::get<Index<Key, key_list>::value>(lookup_maps_).at(key.key);
+    }
+
+    template <typename Key>
     std::enable_if_t<has_type<Key, key_list>::value> operator()(Key key, const Definition& def)
     {
         assert(def.ref() != Definition::reference_type::undefined());
