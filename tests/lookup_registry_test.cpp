@@ -36,6 +36,12 @@ struct MyHolder<otf2::definition::string>
 {
     using type = otf2::lookup_definition_holder<otf2::definition::string, ByCPU, ByProcess>;
 };
+template <>
+struct MyHolder<otf2::definition::system_tree_node>
+{
+    using type =
+        otf2::lookup_definition_holder<otf2::definition::system_tree_node, ByCPU, ByProcess>;
+};
 
 int main()
 {
@@ -47,11 +53,17 @@ int main()
 
     // otf2::registry_view<otf2::definition::string, ByCPU> cpu_strings(rego);
 
-    reg.create<otf2::definition::string>(ByCPU(7), std::string("cpu 7"));
-    reg.create<otf2::definition::string>(ByProcess(7435), std::string("process 7435"));
-    reg.create<otf2::definition::string>(ByProcess(745), 17, std::string("process 745"));
+    const auto& str1 = reg.create<otf2::definition::string>(ByCPU(7), std::string("cpu 7"));
+    const auto& str2 =
+        reg.create<otf2::definition::string>(ByProcess(7435), std::string("process 7435"));
+    const auto& str3 =
+        reg.create<otf2::definition::string>(ByProcess(745), 17, std::string("process 745"));
     reg.create<otf2::definition::string>(2, std::string("horst"));
     reg.create<otf2::definition::string>(std::string("regenbogen"));
+
+    reg.create<otf2::definition::system_tree_node>(ByCPU(42), str1, str2);
+    otf2::definition::system_tree_node& node = reg.get<otf2::definition::system_tree_node>(ByCPU(42));
+    node.name(str3);
 
     {
         auto test = reg.get<otf2::definition::string>(ByCPU(7));
