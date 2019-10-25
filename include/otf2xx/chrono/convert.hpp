@@ -39,7 +39,11 @@
 #include <otf2xx/chrono/ticks.hpp>
 #include <otf2xx/chrono/time_point.hpp>
 
+#include <otf2xx/definition/clock_properties.hpp>
+#include <otf2xx/exception.hpp>
+
 #include <cassert>
+#include <cmath>
 #include <limits>
 
 namespace otf2
@@ -58,33 +62,20 @@ namespace chrono
      */
     class convert
     {
-        const uint64_t ticks_per_second;
-
         static_assert(clock::period::num == 1, "Don't mess around with chrono!");
 
     public:
-        /**
-         * \param[in] ticks_per_second Number of ticks per second
-         */
-        convert(uint64_t ticks_per_second) : ticks_per_second(ticks_per_second)
+        explicit convert(otf2::chrono::ticks ticks_per_second =
+                             otf2::chrono::ticks(otf2::chrono::clock::period::den),
+                         otf2::chrono::ticks offset = otf2::chrono::ticks(0))
+        : offset_(offset.count()),
+          factor_(static_cast<double>(clock::period::den) / ticks_per_second.count()),
+          inverse_factor_(ticks_per_second.count() / static_cast<double>(clock::period::den))
         {
         }
 
-        /**
-         * \param[in] ticks Number of ticks per second
-         */
-        convert(otf2::chrono::ticks ticks) : ticks_per_second(ticks.count())
-        {
-        }
-
-        /**
-         * \brief converts from ticks to time point
-         *
-         * \param[in] ticks ticks since epoch
-         * \return time_point with a duration equal to the passed time
-         *         since the epoch.
-         */
-        otf2::chrono::time_point operator()(otf2::chrono::ticks ticks) const
+        explicit convert(const otf2::definition::clock_properties& cp)
+        : convert(cp.ticks_per_second(), cp.start_time())
         {
             // WARNING: Be careful, when changing clock::period::den.
             // You will have to think about every calculations twice, as there
@@ -94,14 +85,44 @@ namespace chrono
             // picoseconds.
             // These assumptions have to be double checked!
 
-            double factor = static_cast<double>(clock::period::den) / ticks_per_second;
+            // The real question here is, whether we can represent the largest timestamp of the
+            // trace with a time_point in our clock
+            if (cp.length().count() >
+                static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) / factor_)
+            {
+                otf2::make_exception("This traces' timepoints cannot be represented in the "
+                                     "selected otf2::chrono::time_point. Recompile with "
+                                     "nanoseconds for OTF2XX_CHRONO_DURATION_TYPE.");
+            }
 
-            assert(ticks_per_second <= clock::period::den);
+            // Note: Due to rounding errors and depending on the OTF2XX_CHRONO_DURATION_TYPE, some
+            // OTF2_TimeStamp values might be mapped to the same otf2::chrono::time_point.
+        }
 
-            assert(ticks.count() <
-                   static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) / factor);
+        convert(const convert&) = default;
+        convert& operator=(const convert&) = default;
 
-            return time_point(otf2::chrono::duration(static_cast<int64_t>(ticks.count() * factor)));
+        convert(convert&&) = default;
+        convert& operator=(convert&&) = default;
+
+        /**
+         * \brief converts from ticks to time point
+         *
+         * \param[in] ticks since epoch
+         * \return time_point with a duration equal to the passed time
+         *         since the epoch.
+         */
+        otf2::chrono::time_point operator()(otf2::chrono::ticks ticks) const
+        {
+            // VTTI please remember that those two inputs are uint64_t and then look at the next
+            // line
+            assert(ticks.count() >= offset_);
+
+            auto tp = ticks.count() - offset_;
+
+            assert(tp <= static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) / factor_);
+
+            return time_point(otf2::chrono::duration(static_cast<int64_t>(tp * factor_)));
         }
 
         /**
@@ -113,10 +134,29 @@ namespace chrono
          */
         otf2::chrono::ticks operator()(time_point t) const
         {
-            assert(ticks_per_second == clock::period::den);
-            return ticks(
-                otf2::chrono::duration_cast<otf2::chrono::duration>(t.time_since_epoch()).count());
+            auto tp = t.time_since_epoch().count();
+
+            assert(tp <
+                   static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) / inverse_factor_);
+
+            // Note 1: Using ceil here has its origins in the observation that casting from double
+            // to int in the other conversion above leads to an implicit round down. Thus, we
+            // counter that here with an explicit round up.
+            // Note 2: Using an multiplication with the inverse yields a better performance. Though,
+            // there might be cases, where a different sequence of multiplication or division
+            // operations would result in lower rounding errors.
+            auto tpi = static_cast<uint64_t>(std::ceil(tp * inverse_factor_));
+
+            assert(tpi <= std::numeric_limits<std::uint64_t>::max() - offset_);
+
+            return ticks(tpi + offset_);
         }
+
+    private:
+        uint64_t offset_;
+
+        double factor_;
+        double inverse_factor_;
     };
 
     /**

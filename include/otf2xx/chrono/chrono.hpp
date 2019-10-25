@@ -36,7 +36,6 @@
 #define INCLUDE_OTF2XX_CHRONO_CHRONO_HPP
 
 #include <otf2xx/chrono/clock.hpp>
-#include <otf2xx/chrono/convert.hpp>
 #include <otf2xx/chrono/duration.hpp>
 #include <otf2xx/chrono/ticks.hpp>
 #include <otf2xx/chrono/time_point.hpp>
