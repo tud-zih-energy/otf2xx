@@ -66,6 +66,11 @@ public:
         return definitions_[ref];
     }
 
+    Definition& operator[](typename Definition::reference_type ref)
+    {
+        return definitions_[ref];
+    }
+
     void operator()(const Definition& def)
     {
         assert(def.ref() != Definition::reference_type::undefined());
@@ -189,6 +194,12 @@ public:
 
     template <typename Key>
     std::enable_if_t<has_type<Key, key_list>::value, const Definition&> operator[](Key key) const
+    {
+        return std::get<Index<Key, key_list>::value>(lookup_maps_).at(key.key);
+    }
+
+    template <typename Key>
+    std::enable_if_t<has_type<Key, key_list>::value, Definition&> operator[](Key key)
     {
         return std::get<Index<Key, key_list>::value>(lookup_maps_).at(key.key);
     }
