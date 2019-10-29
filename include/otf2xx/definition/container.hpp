@@ -70,7 +70,7 @@ namespace definition
         class iterator
         {
         public:
-            iterator(typename map_type::const_iterator it, typename map_type::const_iterator end)
+            iterator(typename map_type::iterator it, typename map_type::iterator end)
             : it(it), end(end)
             {
             }
@@ -90,14 +90,14 @@ namespace definition
                 return iterator(it++, end);
             }
 
-            const value_type& operator*() const
+            value_type& operator*()
             {
                 assert(it != end);
 
                 return it->second;
             }
 
-            const value_type* operator->() const
+            value_type* operator->()
             {
                 assert(it != end);
 
@@ -120,10 +120,66 @@ namespace definition
             }
 
         private:
+            typename map_type::iterator it;
+            typename map_type::iterator end;
+        };
+        class const_iterator
+        {
+        public:
+            const_iterator(typename map_type::const_iterator it,
+                           typename map_type::const_iterator end)
+            : it(it), end(end)
+            {
+            }
+
+            const_iterator& operator++()
+            {
+                assert(it != end);
+
+                ++it;
+                return *this;
+            }
+
+            const_iterator operator++(int) // postfix ++
+            {
+                assert(it != end);
+
+                return const_iterator(it++, end);
+            }
+
+            const value_type& operator*() const
+            {
+                assert(it != end);
+
+                return it->second;
+            }
+
+            const value_type* operator->() const
+            {
+                assert(it != end);
+
+                return &(it->second);
+            }
+
+            bool operator==(const const_iterator& other) const
+            {
+                return it == other.it;
+            }
+
+            bool operator!=(const const_iterator& other) const
+            {
+                return !(*this == other);
+            }
+
+            explicit operator bool() const
+            {
+                return it != end;
+            }
+
+        private:
             typename map_type::const_iterator it;
             typename map_type::const_iterator end;
         };
-        typedef iterator const_iterator;
 
         const value_type& operator[](key_type key) const
         {
@@ -166,19 +222,33 @@ namespace definition
             return data.size();
         }
 
-        const_iterator find(key_type key) const
+        iterator find(key_type key)
         {
             return iterator(data.find(key), data.end());
         }
 
-        const_iterator begin() const
+        iterator begin()
         {
             return iterator(data.begin(), data.end());
         }
 
-        const_iterator end() const
+        iterator end()
         {
             return iterator(data.end(), data.end());
+        }
+        const_iterator find(key_type key) const
+        {
+            return const_iterator(data.find(key), data.end());
+        }
+
+        const_iterator begin() const
+        {
+            return const_iterator(data.begin(), data.end());
+        }
+
+        const_iterator end() const
+        {
+            return const_iterator(data.end(), data.end());
         }
 
     private:

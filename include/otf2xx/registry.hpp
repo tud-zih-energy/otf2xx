@@ -116,6 +116,12 @@ public:
         return definitions_.count(ref) > 0;
     }
 
+    Definition& find(typename Definition::reference_type ref)
+    {
+        auto it = definitions_.find(ref);
+        return it != definitions_.end() ? *it : definitions_[ref.undefined()];
+    }
+
     const Definition& find(typename Definition::reference_type ref) const
     {
         auto it = definitions_.find(ref);
@@ -274,6 +280,14 @@ public:
         return it != definitions.end() ? *it : (*this)[otf2::reference<Definition>::undefined()];
     }
 
+    template <typename Key>
+    std::enable_if_t<has_type<Key, key_list>::value, Definition&> find(Key key)
+    {
+        auto& definitions = std::get<Index<Key, key_list>::value>(lookup_maps_);
+        auto it = definitions.find(key.key);
+        return it != definitions.end() ? *it : (*this)[otf2::reference<Definition>::undefined()];
+    }
+
 private:
     std::tuple<std::map<typename KeyList::key_type, Definition>...> lookup_maps_;
 };
@@ -422,6 +436,11 @@ public:
         return get_holder<Definition>().has(key);
     }
 
+    template <typename Definition, typename Key>
+    auto& find(const Key& key)
+    {
+        return get_holder<Definition>().find(key);
+    }
     template <typename Definition, typename Key>
     const auto& find(const Key& key) const
     {
