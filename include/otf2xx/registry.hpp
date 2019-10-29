@@ -277,7 +277,8 @@ public:
     {
         const auto& definitions = std::get<Index<Key, key_list>::value>(lookup_maps_);
         auto it = definitions.find(key.key);
-        return it != definitions.end() ? *it : (*this)[otf2::reference<Definition>::undefined()];
+        return it != definitions.end() ? it->second :
+                                         (*this)[otf2::reference<Definition>::undefined()];
     }
 
     template <typename Key>
@@ -285,7 +286,8 @@ public:
     {
         auto& definitions = std::get<Index<Key, key_list>::value>(lookup_maps_);
         auto it = definitions.find(key.key);
-        return it != definitions.end() ? *it : (*this)[otf2::reference<Definition>::undefined()];
+        return it != definitions.end() ? it->second :
+                                         (*this)[otf2::reference<Definition>::undefined()];
     }
 
 private:
