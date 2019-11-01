@@ -46,10 +46,11 @@ namespace writer
 
     namespace detail
     {
-
+        template <typename Registry>
         OTF2_FlushType pre_flush(void* userData, OTF2_FileType fileType, OTF2_LocationRef location,
                                  void* callerData, bool final);
 
+        template <typename Registry>
         OTF2_TimeStamp post_flush(void* userData, OTF2_FileType fileType,
                                   OTF2_LocationRef location);
 
@@ -84,8 +85,14 @@ namespace writer
         }     // namespace callbacks
     }         // namespace detail
 
-    class archive;
+    template <typename Registry>
+    class Archive;
+
+    using archive = Archive<otf2::registry>;
+
+    template <typename Registry>
     class global;
+
     class local;
 
     template <typename Record>
@@ -94,8 +101,8 @@ namespace writer
     template <typename Definition>
     local& operator<<(local& wrt, const otf2::definition::container<Definition>& c);
 
-    template <typename Definition>
-    global& operator<<(global& wrt, Definition&& def);
+    template <typename Definition, typename Registry>
+    global<Registry>& operator<<(global<Registry>& wrt, Definition&& def);
 } // namespace writer
 } // namespace otf2
 

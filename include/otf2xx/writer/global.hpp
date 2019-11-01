@@ -53,6 +53,7 @@ namespace otf2
 namespace writer
 {
 
+    template <typename Registry>
     class global
     {
     public:
@@ -152,7 +153,7 @@ namespace writer
 
             // find corresponding group
             otf2::definition::comm_locations_group cgroup;
-            for (auto group : reg_.all<otf2::definition::comm_locations_group>())
+            for (auto group : reg_.template all<otf2::definition::comm_locations_group>())
             {
                 if (group.paradigm() == data.paradigm())
                 {
@@ -559,57 +560,56 @@ namespace writer
             }
         }
 
-    public:
-        void store(const otf2::registry& reg)
+        void store(const Registry& reg)
         {
-            store(reg.all<otf2::definition::string>().data());
-            store(reg.all<otf2::definition::attribute>().data());
-            store(reg.all<otf2::definition::system_tree_node>().data());
-            store(reg.all<otf2::definition::system_tree_node_property>().data());
-            store(reg.all<otf2::definition::system_tree_node_domain>().data());
-            store(reg.all<otf2::definition::location_group>().data());
-            store(reg.all<otf2::definition::location_group_property>().data());
-            store(reg.all<otf2::definition::location>().data());
-            store(reg.all<otf2::definition::location_property>().data());
-            store(reg.all<otf2::definition::region>().data());
+            store(reg.template all<otf2::definition::string>().data());
+            store(reg.template all<otf2::definition::attribute>().data());
+            store(reg.template all<otf2::definition::system_tree_node>().data());
+            store(reg.template all<otf2::definition::system_tree_node_property>().data());
+            store(reg.template all<otf2::definition::system_tree_node_domain>().data());
+            store(reg.template all<otf2::definition::location_group>().data());
+            store(reg.template all<otf2::definition::location_group_property>().data());
+            store(reg.template all<otf2::definition::location>().data());
+            store(reg.template all<otf2::definition::location_property>().data());
+            store(reg.template all<otf2::definition::region>().data());
 
-            store(reg.all<otf2::definition::comm_locations_group>().data(),
-                  reg.all<otf2::definition::comm_self_group>().data(),
-                  reg.all<otf2::definition::comm_group>().data(),
-                  reg.all<otf2::definition::locations_group>().data(),
-                  reg.all<otf2::definition::regions_group>().data());
+            store(reg.template all<otf2::definition::comm_locations_group>().data(),
+                  reg.template all<otf2::definition::comm_self_group>().data(),
+                  reg.template all<otf2::definition::comm_group>().data(),
+                  reg.template all<otf2::definition::locations_group>().data(),
+                  reg.template all<otf2::definition::regions_group>().data());
             // store(metric_groups);
 
-            store(reg.all<otf2::definition::comm>().data());
+            store(reg.template all<otf2::definition::comm>().data());
 
-            store(reg.all<otf2::definition::parameter>().data());
-            store(reg.all<otf2::definition::call_path>().data());
-            store(reg.all<otf2::definition::call_path_parameter>().data());
-            store(reg.all<otf2::definition::call_site>().data());
+            store(reg.template all<otf2::definition::parameter>().data());
+            store(reg.template all<otf2::definition::call_path>().data());
+            store(reg.template all<otf2::definition::call_path_parameter>().data());
+            store(reg.template all<otf2::definition::call_site>().data());
 
-            store(reg.all<otf2::definition::cart_topology>().data());
-            store(reg.all<otf2::definition::cart_dimension>().data());
-            store(reg.all<otf2::definition::cart_coordinate>().data());
+            store(reg.template all<otf2::definition::cart_topology>().data());
+            store(reg.template all<otf2::definition::cart_dimension>().data());
+            store(reg.template all<otf2::definition::cart_coordinate>().data());
 
-            store(reg.all<otf2::definition::rma_win>().data());
+            store(reg.template all<otf2::definition::rma_win>().data());
 
-            store(reg.all<otf2::definition::source_code_location>().data());
-            store(reg.all<otf2::definition::calling_context>().data());
-            store(reg.all<otf2::definition::calling_context_property>().data());
-            store(reg.all<otf2::definition::interrupt_generator>().data());
+            store(reg.template all<otf2::definition::source_code_location>().data());
+            store(reg.template all<otf2::definition::calling_context>().data());
+            store(reg.template all<otf2::definition::calling_context_property>().data());
+            store(reg.template all<otf2::definition::interrupt_generator>().data());
 
-            store(reg.all<otf2::definition::metric_member>().data());
-            store(reg.all<otf2::definition::metric_class>().data(),
-                  reg.all<otf2::definition::metric_instance>().data());
+            store(reg.template all<otf2::definition::metric_member>().data());
+            store(reg.template all<otf2::definition::metric_class>().data(),
+                  reg.template all<otf2::definition::metric_instance>().data());
 
-            store(reg.all<otf2::definition::io_paradigm>().data());
-            store(reg.all<otf2::definition::io_handle>().data());
-            store(reg.all<otf2::definition::io_pre_created_handle_state>().data());
-            store(reg.all<otf2::definition::io_directory>().data(),
-                  reg.all<otf2::definition::io_regular_file>().data());
-            store(reg.all<otf2::definition::io_file_property>().data());
+            store(reg.template all<otf2::definition::io_paradigm>().data());
+            store(reg.template all<otf2::definition::io_handle>().data());
+            store(reg.template all<otf2::definition::io_pre_created_handle_state>().data());
+            store(reg.template all<otf2::definition::io_directory>().data(),
+                  reg.template all<otf2::definition::io_regular_file>().data());
+            store(reg.template all<otf2::definition::io_file_property>().data());
 
-            store(reg.all<otf2::definition::marker>().data());
+            store(reg.template all<otf2::definition::marker>().data());
         }
 
     public:
@@ -642,7 +642,7 @@ namespace writer
         }
 
     public:
-        otf2::registry& registry()
+        Registry& registry()
         {
             return reg_;
         }
@@ -658,13 +658,13 @@ namespace writer
         OTF2_GlobalDefWriter* wrt;
         OTF2_MarkerWriter* marker_wrt_;
 
-        otf2::registry reg_;
+        Registry reg_;
 
         otf2::definition::clock_properties clock_properties_;
     };
 
-    template <typename Definition>
-    inline global& operator<<(global& wrt, Definition&& def)
+    template <typename Definition, typename Registry>
+    inline global<Registry>& operator<<(global<Registry>& wrt, Definition&& def)
     {
         wrt.write(std::forward<Definition>(def));
 
