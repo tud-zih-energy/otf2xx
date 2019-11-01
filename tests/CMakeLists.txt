@@ -86,6 +86,9 @@ set_property(TEST writer_test PROPERTY FIXTURES_SETUP writer_trace)
 otf2xx_add_test(writer_registry_test otf2xx::Writer)
 set_property(TEST writer_registry_test PROPERTY FIXTURES_SETUP writer_registry_trace)
 
+otf2xx_add_test(writer_registry_to_archive_test otf2xx::Writer)
+set_property(TEST writer_registry_to_archive_test PROPERTY FIXTURES_SETUP writer_registry_to_archive_trace)
+
 otf2xx_add_test(reader_test otf2xx::Reader ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_trace/traces.otf2)
 set_property(TEST reader_test PROPERTY FIXTURES_REQUIRED writer_trace)
 
@@ -103,3 +106,5 @@ add_test(NAME writer_test_cleanup COMMAND cmake -E remove_directory ${CMAKE_CURR
 set_property(TEST writer_test_cleanup PROPERTY FIXTURES_CLEANUP writer_trace)
 add_test(NAME writer_test_registry_cleanup COMMAND cmake -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_registry_trace)
 set_property(TEST writer_test_registry_cleanup PROPERTY FIXTURES_CLEANUP writer_registry_trace)
+add_test(NAME writer_test_registry_to_archive_cleanup COMMAND cmake -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/otf2xx_writer_registry_to_archive_trace)
+set_property(TEST writer_test_registry_to_archive_cleanup PROPERTY FIXTURES_CLEANUP writer_registry_to_archive_trace)

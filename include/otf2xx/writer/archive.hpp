@@ -56,12 +56,12 @@ namespace otf2
 {
 namespace writer
 {
-
-    class archive
+    template <typename Registry>
+    class Archive
     {
     public:
 #ifdef OTF2XX_HAS_MPI
-        archive(const std::string& path, const std::string& name, boost::mpi::communicator& comm,
+        Archive(const std::string& path, const std::string& name, boost::mpi::communicator& comm,
                 OTF2_FileMode_enum mode = OTF2_FILEMODE_WRITE,
                 std::size_t event_chunk_size = 1024 * 1024,
                 std::size_t definition_chunk_size = 4 * 1024 * 1024,
@@ -81,7 +81,7 @@ namespace writer
             check(OTF2_Archive_OpenEvtFiles(ar), "Couldn't open event files");
         }
 #endif
-        archive(const std::string& path, const std::string& name,
+        Archive(const std::string& path, const std::string& name,
                 OTF2_FileMode_enum mode = OTF2_FILEMODE_WRITE,
                 std::size_t event_chunk_size = 1024 * 1024,
                 std::size_t definition_chunk_size = 4 * 1024 * 1024,
@@ -101,7 +101,7 @@ namespace writer
             check(OTF2_Archive_OpenEvtFiles(ar), "Couldn't open event files");
         }
 
-        ~archive()
+        ~Archive()
         {
             // close all local writer
             local_writers_.clear();
@@ -117,14 +117,14 @@ namespace writer
 
 #ifdef OTF2XX_HAS_MPI
         /* Takes ownership !*/
-        explicit archive(OTF2_Archive* ar, boost::mpi::communicator& comm)
+        explicit Archive(OTF2_Archive* ar, boost::mpi::communicator& comm)
         : ar(ar), serial(false), comm_(comm)
         {
         }
 #endif
 
         /* Takes ownership !*/
-        explicit archive(OTF2_Archive* ar) : ar(ar), serial(true)
+        explicit Archive(OTF2_Archive* ar) : ar(ar), serial(true)
         {
         }
 
@@ -158,7 +158,7 @@ namespace writer
         {
             // setting post_flush to nullptr omits writting of the buffer flush event
             flush_callbacks_.otf2_post_flush = nullptr;
-            flush_callbacks_.otf2_pre_flush = detail::pre_flush;
+            flush_callbacks_.otf2_pre_flush = detail::pre_flush<Registry>;
             OTF2_Archive_SetFlushCallbacks(ar, &flush_callbacks_, static_cast<void*>(this));
 
             pre_flush_callback_ = [](__attribute__((unused)) bool final) { return OTF2_FLUSH; };
@@ -368,10 +368,8 @@ namespace writer
                   "Couldn't set property");
         }
 
-        typedef std::function<otf2::chrono::time_point(/*const otf2::definition::location&*/)>
-            post_flush_func;
-        typedef std::function<OTF2_FlushType(/*const otf2::definition::location&,*/ bool)>
-            pre_flush_func;
+        using post_flush_func = std::function<otf2::chrono::time_point()>;
+        using pre_flush_func = std::function<OTF2_FlushType(bool)>;
 
         void set_pre_flush_callback(pre_flush_func f)
         {
@@ -380,7 +378,7 @@ namespace writer
 
         void set_post_flush_callback(post_flush_func f)
         {
-            flush_callbacks_.otf2_post_flush = detail::post_flush;
+            flush_callbacks_.otf2_post_flush = detail::post_flush<Registry>;
             post_flush_callback_ = f;
         }
 
@@ -395,14 +393,14 @@ namespace writer
             return get_local_writer(loc);
         }
 
-        writer::global& operator()()
+        writer::global<Registry>& operator()()
         {
             return get_global_writer();
         }
 
-        friend OTF2_FlushType detail::pre_flush(void*, OTF2_FileType, OTF2_LocationRef, void*,
-                                                bool);
-        friend OTF2_TimeStamp detail::post_flush(void*, OTF2_FileType, OTF2_LocationRef);
+        friend OTF2_FlushType detail::pre_flush<Registry>(void*, OTF2_FileType, OTF2_LocationRef,
+                                                          void*, bool);
+        friend OTF2_TimeStamp detail::post_flush<Registry>(void*, OTF2_FileType, OTF2_LocationRef);
 
 #ifdef OTF2XX_HAS_MPI
         boost::mpi::communicator& comm()
@@ -411,13 +409,13 @@ namespace writer
         }
 #endif
 
-        global& get_global_writer()
+        global<Registry>& get_global_writer()
         {
             if (is_master())
             {
                 if (!global_writer_)
-                    global_writer_.reset(new global(OTF2_Archive_GetGlobalDefWriter(ar),
-                                                    OTF2_Archive_GetMarkerWriter(ar)));
+                    global_writer_.reset(new global<Registry>(OTF2_Archive_GetGlobalDefWriter(ar),
+                                                              OTF2_Archive_GetMarkerWriter(ar)));
             }
             else
             {
@@ -448,38 +446,37 @@ namespace writer
         bool serial;
 #ifdef OTF2XX_HAS_MPI
         boost::mpi::communicator comm_;
-#endif
-        // OTF2_GlobalDefWriter *wrt;
-        OTF2_FlushCallbacks flush_callbacks_;
-#ifdef OTF2XX_HAS_MPI
         OTF2_CollectiveCallbacks collective_callbacks_;
 #endif
+        OTF2_FlushCallbacks flush_callbacks_;
         post_flush_func post_flush_callback_;
         pre_flush_func pre_flush_callback_;
 
-        std::unique_ptr<global> global_writer_;
+        std::unique_ptr<global<Registry>> global_writer_;
         std::map<otf2::reference<otf2::definition::location>::ref_type, local> local_writers_;
     };
 
-    template <typename Anything>
+    template <typename Anything, typename Registry>
     inline std::enable_if_t<
         otf2::traits::is_definition<std::remove_cv_t<std::remove_reference_t<Anything>>>::value,
-        global&>
-    operator<<(archive& ar, Anything&& any)
+        global<Registry>&>
+    operator<<(Archive<Registry>& ar, Anything&& any)
     {
         return ar() << std::forward<Anything>(any);
     }
 
-    inline global& operator<<(archive& ar, const otf2::event::marker& evt)
+    template <typename Registry>
+    inline global<Registry>& operator<<(Archive<Registry>& ar, const otf2::event::marker& evt)
     {
         return ar() << evt;
     }
 
-    template <typename Definition>
-    inline global& operator<<(archive& ar, const otf2::definition::container<Definition>& c)
+    template <typename Definition, typename Registry>
+    inline global<Registry>& operator<<(Archive<Registry>& ar,
+                                        const otf2::definition::container<Definition>& c)
     {
 
-        global& wrt = ar();
+        global<Registry>& wrt = ar();
 
         for (auto def : c)
             wrt << def;
@@ -490,21 +487,23 @@ namespace writer
     namespace detail
     {
 
+        template <typename Registry>
         inline OTF2_FlushType pre_flush(void* userData,
                                         __attribute__((unused)) OTF2_FileType fileType,
                                         __attribute__((unused)) OTF2_LocationRef location,
                                         __attribute__((unused)) void* callerData, bool final)
         {
-            archive* ar = static_cast<archive*>(userData);
+            Archive<Registry>* ar = static_cast<Archive<Registry>*>(userData);
 
             return ar->pre_flush_callback_(final);
         }
 
+        template <typename Registry>
         inline OTF2_TimeStamp post_flush(void* userData,
                                          __attribute__((unused)) OTF2_FileType fileType,
                                          __attribute__((unused)) OTF2_LocationRef location)
         {
-            archive* ar = static_cast<archive*>(userData);
+            Archive<Registry>* ar = static_cast<Archive<Registry>*>(userData);
 
             static_assert(otf2::chrono::clock::period::num == 1,
                           "Don't mess around with the chrono stuff!");
