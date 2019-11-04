@@ -67,15 +67,20 @@ namespace definition
         typedef std::map<key_type, value_type> map_type;
 
     public:
-        class iterator
+        template <bool IsMutable>
+        class base_iterator
         {
         public:
-            iterator(typename map_type::iterator it, typename map_type::iterator end)
-            : it(it), end(end)
+            using map_iterator = typename std::conditional<IsMutable, typename map_type::iterator,
+                                                           typename map_type::const_iterator>::type;
+            using it_value_type =
+                typename std::conditional<IsMutable, value_type, const value_type>::type;
+
+            base_iterator(map_iterator it, map_iterator end) : it(it), end(end)
             {
             }
 
-            iterator& operator++()
+            base_iterator& operator++()
             {
                 assert(it != end);
 
@@ -83,33 +88,33 @@ namespace definition
                 return *this;
             }
 
-            iterator operator++(int) // postfix ++
+            base_iterator operator++(int) // postfix ++
             {
                 assert(it != end);
 
                 return iterator(it++, end);
             }
 
-            value_type& operator*()
+            it_value_type& operator*()
             {
                 assert(it != end);
 
                 return it->second;
             }
 
-            value_type* operator->()
+            it_value_type* operator->()
             {
                 assert(it != end);
 
                 return &(it->second);
             }
 
-            bool operator==(const iterator& other) const
+            bool operator==(const base_iterator& other) const
             {
                 return it == other.it;
             }
 
-            bool operator!=(const iterator& other) const
+            bool operator!=(const base_iterator& other) const
             {
                 return !(*this == other);
             }
@@ -120,66 +125,12 @@ namespace definition
             }
 
         private:
-            typename map_type::iterator it;
-            typename map_type::iterator end;
+            map_iterator it;
+            map_iterator end;
         };
-        class const_iterator
-        {
-        public:
-            const_iterator(typename map_type::const_iterator it,
-                           typename map_type::const_iterator end)
-            : it(it), end(end)
-            {
-            }
 
-            const_iterator& operator++()
-            {
-                assert(it != end);
-
-                ++it;
-                return *this;
-            }
-
-            const_iterator operator++(int) // postfix ++
-            {
-                assert(it != end);
-
-                return const_iterator(it++, end);
-            }
-
-            const value_type& operator*() const
-            {
-                assert(it != end);
-
-                return it->second;
-            }
-
-            const value_type* operator->() const
-            {
-                assert(it != end);
-
-                return &(it->second);
-            }
-
-            bool operator==(const const_iterator& other) const
-            {
-                return it == other.it;
-            }
-
-            bool operator!=(const const_iterator& other) const
-            {
-                return !(*this == other);
-            }
-
-            explicit operator bool() const
-            {
-                return it != end;
-            }
-
-        private:
-            typename map_type::const_iterator it;
-            typename map_type::const_iterator end;
-        };
+        using iterator = base_iterator<true>;
+        using const_iterator = base_iterator<false>;
 
         const value_type& operator[](key_type key) const
         {
