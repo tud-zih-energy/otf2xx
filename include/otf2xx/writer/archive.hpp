@@ -382,7 +382,7 @@ namespace writer
             post_flush_callback_ = f;
         }
 
-        otf2::registry& registry()
+        Registry& registry()
         {
             return get_global_writer().registry();
         }
