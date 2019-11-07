@@ -196,6 +196,8 @@ namespace event
                 case value_base_type::decimal:
                     base = 10;
                     break;
+                default:
+                    make_exception("Unexpected base given in metric member");
                 }
                 return x * std::pow(base, metric_->value_exponent());
             }
