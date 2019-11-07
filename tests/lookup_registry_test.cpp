@@ -9,7 +9,7 @@ struct ByCPU
 
     key_type key;
 
-    ByCPU(key_type key) : key(key)
+    explicit ByCPU(key_type key) : key(key)
     {
     }
 };
@@ -20,7 +20,7 @@ struct ByProcess
 
     key_type key;
 
-    ByProcess(key_type key) : key(key)
+    explicit ByProcess(key_type key) : key(key)
     {
     }
 };
