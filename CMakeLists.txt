@@ -38,7 +38,7 @@ find_package(OTF2 9.0.2 EXACT)
 
 if (NOT OTF2_FOUND)
     message(FATAL_ERROR "Please download and install OTF2 2.2.\n"
-    "Available from: http://www.vi-hps.org/upload/packages/otf2/otf2-2.2.tar.gz")
+    "Available from: https://www.vi-hps.org/cms/upload/packages/otf2/otf2-2.2.tar.gz")
 endif()
 
 set(OTF2XX_CHRONO_DURATION_TYPE "picoseconds" CACHE STRING "The used underlying type for otf2::chrono::duration.")
