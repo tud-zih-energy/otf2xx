@@ -441,6 +441,24 @@ namespace writer
             return it->second;
         }
 
+        /** Closes the local writer for the given location
+         *
+         * Attention:
+         *  - All references to the writer are invalid after this operation
+         *  - Calling get_local_writer() for the same location after this is undefined behavior
+         */
+        void close_local_writer(const otf2::definition::location& loc)
+        {
+            auto it = local_writers_.find(loc.ref());
+
+            if (it == local_writers_.end())
+            {
+                make_exception("Cannot close not existing writer for location #", loc.ref());
+            }
+
+            local_writers_.erase(it);
+        }
+
     private:
         OTF2_Archive* ar;
         bool serial;

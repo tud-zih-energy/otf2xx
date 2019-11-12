@@ -126,6 +126,27 @@ namespace writer
             return tmp;
         }
 
+        void close_definition_writer()
+        {
+            if (def_wrt_ != nullptr)
+            {
+                check(OTF2_Archive_CloseDefWriter(ar_, def_wrt_),
+                      "Couldn't close definition writer");
+
+                def_wrt_ = nullptr;
+            }
+        }
+
+        void close_event_writer()
+        {
+            if (evt_wrt_ != nullptr)
+            {
+                check(OTF2_Archive_CloseEvtWriter(ar_, evt_wrt_), "Couldn't close event writer");
+
+                evt_wrt_ = nullptr;
+            }
+        }
+
     public:
         void write(const otf2::event::buffer_flush& data)
         {
