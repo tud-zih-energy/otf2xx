@@ -161,7 +161,9 @@ namespace writer
             flush_callbacks_.otf2_pre_flush = detail::pre_flush<Registry>;
             OTF2_Archive_SetFlushCallbacks(ar, &flush_callbacks_, static_cast<void*>(this));
 
-            pre_flush_callback_ = [](__attribute__((unused)) bool final) { return OTF2_FLUSH; };
+            pre_flush_callback_ =
+                [](__attribute__((unused)) otf2::reference<otf2::definition::location> ref,
+                   __attribute__((unused)) bool final) { return OTF2_FLUSH; };
         }
 
     public:
@@ -368,8 +370,10 @@ namespace writer
                   "Couldn't set property");
         }
 
-        using post_flush_func = std::function<otf2::chrono::time_point()>;
-        using pre_flush_func = std::function<OTF2_FlushType(bool)>;
+        using post_flush_func =
+            std::function<otf2::chrono::time_point(otf2::reference<otf2::definition::location>)>;
+        using pre_flush_func =
+            std::function<OTF2_FlushType(otf2::reference<otf2::definition::location>, bool)>;
 
         void set_pre_flush_callback(pre_flush_func f)
         {
@@ -506,20 +510,19 @@ namespace writer
     {
 
         template <typename Registry>
-        inline OTF2_FlushType pre_flush(void* userData,
-                                        __attribute__((unused)) OTF2_FileType fileType,
-                                        __attribute__((unused)) OTF2_LocationRef location,
-                                        __attribute__((unused)) void* callerData, bool final)
+        inline OTF2_FlushType
+        pre_flush(void* userData, __attribute__((unused)) OTF2_FileType fileType,
+                  OTF2_LocationRef location, __attribute__((unused)) void* callerData, bool final)
         {
             Archive<Registry>* ar = static_cast<Archive<Registry>*>(userData);
 
-            return ar->pre_flush_callback_(final);
+            return ar->pre_flush_callback_(location, final);
         }
 
         template <typename Registry>
         inline OTF2_TimeStamp post_flush(void* userData,
                                          __attribute__((unused)) OTF2_FileType fileType,
-                                         __attribute__((unused)) OTF2_LocationRef location)
+                                         OTF2_LocationRef location)
         {
             Archive<Registry>* ar = static_cast<Archive<Registry>*>(userData);
 
@@ -528,7 +531,7 @@ namespace writer
 
             otf2::chrono::convert convert;
 
-            return convert(ar->post_flush_callback_()).count();
+            return convert(ar->post_flush_callback_(location)).count();
         }
     } // namespace detail
 } // namespace writer

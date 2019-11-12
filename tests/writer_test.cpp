@@ -48,7 +48,10 @@ int main()
 {
     otf2::writer::archive ar("otf2xx_writer_trace", "traces");
 
-    ar.set_post_flush_callback([]() { return otf2::chrono::convert_time_point(get_time()); });
+    ar.set_post_flush_callback([](otf2::reference<otf2::definition::location> loc) {
+        std::cout << "Buffer flush event on location #" << loc << std::endl;
+        return otf2::chrono::convert_time_point(get_time());
+    });
 
     otf2::definition::container<otf2::definition::string> strings;
 

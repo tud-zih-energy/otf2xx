@@ -86,7 +86,10 @@ int main()
 
     auto& reg = ar().registry();
 
-    ar.set_post_flush_callback([]() { return otf2::chrono::convert_time_point(get_time()); });
+    ar.set_post_flush_callback([](otf2::reference<otf2::definition::location> loc) {
+        std::cout << "Buffer flush event on location #" << loc << std::endl;
+        return otf2::chrono::convert_time_point(get_time());
+    });
 
     reg.create<otf2::definition::string>("MyHost");
     reg.create<otf2::definition::string>("node");
