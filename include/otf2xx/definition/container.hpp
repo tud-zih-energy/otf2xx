@@ -163,6 +163,11 @@ namespace definition
             data.emplace(ref, std::move(def));
         }
 
+        void remove_definition(const Definition& def)
+        {
+            data.erase(def.ref());
+        }
+
         std::size_t count(key_type key) const
         {
             return data.count(key);
