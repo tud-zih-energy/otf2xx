@@ -75,6 +75,11 @@ namespace definition
                 return name_;
             }
 
+            void name(const otf2::definition::string& str)
+            {
+                name_ = str;
+            }
+
             const otf2::definition::string& canonical_name() const
             {
                 return canonical_name_;

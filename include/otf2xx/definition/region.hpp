@@ -86,6 +86,12 @@ namespace definition
             return data_->name();
         }
 
+        void name(const otf2::definition::string& str)
+        {
+            assert(this->is_valid());
+            return data_->name(str);
+        }
+
         /**
          * \brief returns the canonical name of the region definition as a string definition
          * e.g. demangled function name
