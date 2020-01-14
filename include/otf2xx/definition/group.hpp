@@ -203,6 +203,12 @@ namespace definition
             assert(this->is_valid());
             this->data_->add_member(member);
         }
+
+        void remove_member(const value_type& member)
+        {
+            assert(this->is_valid());
+            this->data_->remove_member(member);
+        }
     };
 
 } // namespace definition

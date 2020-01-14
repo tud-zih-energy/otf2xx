@@ -129,6 +129,21 @@ namespace definition
                 members_.push_back(member);
             }
 
+            void remove_member(const value_type& def)
+            {
+                for (auto it = members_.begin(); it != members_.end();)
+                {
+                    if (it->ref() == def.ref())
+                    {
+                        it = members_.erase(it);
+                    }
+                    else
+                    {
+                        ++it;
+                    }
+                }
+            }
+
         private:
             otf2::definition::string name_;
             members_type members_;
