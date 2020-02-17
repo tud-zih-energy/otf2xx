@@ -114,6 +114,14 @@ public:
         return ++old_max;
     }
 
+    template <typename RefType2 = ref_type>
+    RefType2 peak()
+    {
+        static_assert(std::is_constructible<RefType2, ref_type>::value,
+                      "Trying to get a reference for a definition with a different id space");
+        return old_max + 1;
+    }
+
 private:
     typename ref_type::ref_type old_max = -1;
 };
@@ -157,6 +165,13 @@ public:
     {
         // TMP-code-obfuscator was here
         return get_generator<Definition>().template next<typename Definition::reference_type>();
+    }
+
+    template <typename Definition>
+    typename Definition::reference_type peak()
+    {
+        // TMP-code-obfuscator was here
+        return get_generator<Definition>().template peak<typename Definition::reference_type>();
     }
 
 private:
