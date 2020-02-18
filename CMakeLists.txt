@@ -81,12 +81,11 @@ if(OTF2XX_WITH_MPI)
         INTERFACE
             OTF2XX_HAS_MPI
     )
-    find_package(Boost REQUIRED COMPONENTS mpi)
     find_package(MPI REQUIRED COMPONENTS CXX)
     if(NOT TARGET MPI::MPI_CXX)
         message(FATAL_ERROR "MPI support requires CMake >= 3.9 or a properly defined MPI::MPI_CXX target")
     endif()
-    target_link_libraries(otf2xx-core INTERFACE Boost::mpi MPI::MPI_CXX)
+    target_link_libraries(otf2xx-core INTERFACE MPI::MPI_CXX)
 endif()
 
 add_library(otf2xx-reader src/reader/callback/definitions.cpp src/reader/callback/events.cpp)

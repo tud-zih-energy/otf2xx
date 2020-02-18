@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2018, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2020, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,6 +47,11 @@
 #include <otf2/OTF2_GlobalEvtReader.h>
 #include <otf2/OTF2_Reader.h>
 
+#ifdef OTF2XX_HAS_MPI
+#include <mpi.h>
+#include <otf2/OTF2_MPI_Collectives.h>
+#endif
+
 #include <map>
 #include <memory>
 #include <string>
@@ -76,7 +81,22 @@ namespace reader
         {
             if (rdr == nullptr)
                 make_exception("Couldn't open the trace file: ", name);
+
+            check(OTF2_Reader_SetSerialCollectiveCallbacks(rdr), "Couldn't set serial callbacks");
         }
+
+#ifdef OTF2XX_HAS_MPI
+        reader(const std::string& name, MPI_Comm comm)
+        : rdr(OTF2_Reader_Open(name.c_str())), definition_files_(rdr), event_files_(rdr),
+          callback_(nullptr)
+        {
+            if (rdr == nullptr)
+                make_exception("Couldn't open the trace file: ", name);
+
+            check(OTF2_MPI_Reader_SetCollectiveCallbacks(rdr, comm),
+                  "Couldn't set collective callbacks");
+        }
+#endif
 
         /**
          * \brief triggers the read of all definition records

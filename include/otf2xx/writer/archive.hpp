@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2020, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,8 @@
 #include <otf2xx/writer/local.hpp>
 
 #ifdef OTF2XX_HAS_MPI
-#include <boost/mpi.hpp>
+#include <mpi.h>
+#include <otf2/OTF2_MPI_Collectives.h>
 #endif
 
 #include <functional>
@@ -61,7 +62,7 @@ namespace writer
     {
     public:
 #ifdef OTF2XX_HAS_MPI
-        Archive(const std::string& path, const std::string& name, boost::mpi::communicator& comm,
+        Archive(const std::string& path, const std::string& name, MPI_Comm comm,
                 OTF2_FileMode_enum mode = OTF2_FILEMODE_WRITE,
                 std::size_t event_chunk_size = 1024 * 1024,
                 std::size_t definition_chunk_size = 4 * 1024 * 1024,
@@ -69,13 +70,19 @@ namespace writer
                 OTF2_Compression_enum compression = OTF2_COMPRESSION_NONE)
         : ar(OTF2_Archive_Open(path.c_str(), name.c_str(), mode, event_chunk_size,
                                definition_chunk_size, file_substrate, compression)),
-          serial(false), comm_(comm)
+          serial(false)
         {
             if (ar == nullptr)
                 make_exception("Couldn't open the archive '", name, "'");
 
             set_flush_callbacks();
-            set_collective_callbacks();
+
+            check(OTF2_MPI_Archive_SetCollectiveCallbacks(ar, comm, MPI_COMM_NULL),
+                  "Couldn't set collective callbacks");
+
+            int rank;
+            MPI_Comm_rank(comm, &rank);
+            is_master_ = rank == 0;
 
             check(OTF2_Archive_OpenDefFiles(ar), "Couldn't open definition files");
             check(OTF2_Archive_OpenEvtFiles(ar), "Couldn't open event files");
@@ -105,8 +112,8 @@ namespace writer
         {
             // close all local writer
             local_writers_.clear();
-            check(OTF2_Archive_CloseEvtFiles(ar), "Couldn't close event files");
-            check(OTF2_Archive_CloseDefFiles(ar), "Couldn't close definition files");
+            OTF2_Archive_CloseEvtFiles(ar);
+            OTF2_Archive_CloseDefFiles(ar);
 
             // close global writer
             global_writer_.reset(0);
@@ -114,14 +121,6 @@ namespace writer
             // close archive
             OTF2_Archive_Close(ar);
         }
-
-#ifdef OTF2XX_HAS_MPI
-        /* Takes ownership !*/
-        explicit Archive(OTF2_Archive* ar, boost::mpi::communicator& comm)
-        : ar(ar), serial(false), comm_(comm)
-        {
-        }
-#endif
 
         /* Takes ownership !*/
         explicit Archive(OTF2_Archive* ar) : ar(ar), serial(true)
@@ -134,26 +133,6 @@ namespace writer
         }
 
     private:
-#ifdef OTF2XX_HAS_MPI
-        void set_collective_callbacks()
-        {
-            collective_callbacks_.otf2_barrier = &detail::callbacks::collective::barrier;
-            collective_callbacks_.otf2_bcast = &detail::callbacks::collective::broadcast;
-            collective_callbacks_.otf2_create_local_comm = nullptr;
-            collective_callbacks_.otf2_free_local_comm = nullptr;
-            collective_callbacks_.otf2_gather = &detail::callbacks::collective::gather;
-            collective_callbacks_.otf2_gatherv = &detail::callbacks::collective::gatherv;
-            collective_callbacks_.otf2_get_rank = &detail::callbacks::collective::get_rank;
-            collective_callbacks_.otf2_get_size = &detail::callbacks::collective::get_size;
-            collective_callbacks_.otf2_release = nullptr;
-            collective_callbacks_.otf2_scatter = &detail::callbacks::collective::scatter;
-            collective_callbacks_.otf2_scatterv = &detail::callbacks::collective::scatterv;
-
-            OTF2_Archive_SetCollectiveCallbacks(ar, &collective_callbacks_,
-                                                static_cast<void*>(this), nullptr, nullptr);
-        }
-#endif
-
         void set_flush_callbacks()
         {
             // setting post_flush to nullptr omits writting of the buffer flush event
@@ -175,9 +154,8 @@ namespace writer
         bool is_master() const
         {
 #ifdef OTF2XX_HAS_MPI
-            return serial || comm_.rank() == 0;
+            return serial || is_master_;
 #else
-            (void)serial;
             assert(serial);
             return true;
 #endif
@@ -406,13 +384,6 @@ namespace writer
                                                           void*, bool);
         friend OTF2_TimeStamp detail::post_flush<Registry>(void*, OTF2_FileType, OTF2_LocationRef);
 
-#ifdef OTF2XX_HAS_MPI
-        boost::mpi::communicator& comm()
-        {
-            return comm_;
-        }
-#endif
-
         global<Registry>& get_global_writer()
         {
             if (is_master())
@@ -467,8 +438,7 @@ namespace writer
         OTF2_Archive* ar;
         bool serial;
 #ifdef OTF2XX_HAS_MPI
-        boost::mpi::communicator comm_;
-        OTF2_CollectiveCallbacks collective_callbacks_;
+        bool is_master_;
 #endif
         OTF2_FlushCallbacks flush_callbacks_;
         post_flush_func post_flush_callback_;
@@ -536,10 +506,5 @@ namespace writer
     } // namespace detail
 } // namespace writer
 } // namespace otf2
-
-#ifdef OTF2XX_HAS_MPI
-// FIXME @bmario NEVER EVER INCLUDE ANYTHING BELOW SOMETHING THAT IS NOT AN INCLUDE
-#include <otf2xx/writer/detail/collective.hpp>
-#endif
 
 #endif // INCLUDE_OTF2XX_ARCHIVE_HPP

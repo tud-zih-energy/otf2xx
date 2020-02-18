@@ -53,37 +53,7 @@ namespace writer
         template <typename Registry>
         OTF2_TimeStamp post_flush(void* userData, OTF2_FileType fileType,
                                   OTF2_LocationRef location);
-
-        namespace callbacks
-        {
-            namespace collective
-            {
-
-                OTF2_CallbackCode barrier(void* userData, OTF2_CollectiveContext* commContext);
-                OTF2_CallbackCode broadcast(void* userData, OTF2_CollectiveContext* commContext,
-                                            void* data, uint32_t numberElements, OTF2_Type type,
-                                            uint32_t root);
-                OTF2_CallbackCode gather(void* userData, OTF2_CollectiveContext* commContext,
-                                         const void* inData, void* outData, uint32_t numberElements,
-                                         OTF2_Type type, uint32_t root);
-                OTF2_CallbackCode gatherv(void* userData, OTF2_CollectiveContext* commContext,
-                                          const void* inData, uint32_t inElements, void* outData,
-                                          const uint32_t* outElements, OTF2_Type type,
-                                          uint32_t root);
-                OTF2_CallbackCode get_rank(void* userData, OTF2_CollectiveContext* commContext,
-                                           uint32_t* rank);
-                OTF2_CallbackCode get_size(void* userData, OTF2_CollectiveContext* commContext,
-                                           uint32_t* size);
-                OTF2_CallbackCode scatter(void* userData, OTF2_CollectiveContext* commContext,
-                                          const void* inData, void* outData,
-                                          uint32_t numberElements, OTF2_Type type, uint32_t root);
-                OTF2_CallbackCode scatterv(void* userData, OTF2_CollectiveContext* commContext,
-                                           const void* inData, const uint32_t* inElements,
-                                           void* outData, uint32_t outElements, OTF2_Type type,
-                                           uint32_t root);
-            } // namespace collective
-        }     // namespace callbacks
-    }         // namespace detail
+    } // namespace detail
 
     template <typename Registry>
     class Archive;
