@@ -41,6 +41,7 @@
 #include <otf2xx/exception.hpp>
 #include <otf2xx/reader/callback.hpp>
 #include <otf2xx/reader/fwd.hpp>
+#include <otf2xx/reader/util.hpp>
 #include <otf2xx/registry.hpp>
 
 #include <otf2/OTF2_GlobalDefReader.h>
@@ -77,7 +78,9 @@ namespace reader
          * \param name the path to the otf2 anchor file. Usually traces.otf2 in a score-p trace
          * \throws if it can't open the trace file
          */
-        reader(const std::string& name) : rdr(OTF2_Reader_Open(name.c_str())), callback_(nullptr)
+        reader(const std::string& name)
+        : rdr(OTF2_Reader_Open(name.c_str())), definition_files_(rdr), event_files_(rdr),
+          callback_(nullptr)
         {
             if (rdr == nullptr)
                 make_exception("Couldn't open the trace file: ", name);
@@ -115,6 +118,9 @@ namespace reader
             uint64_t definitions_read = 0;
             OTF2_Reader_ReadAllGlobalDefinitions(rdr, def_rdr, &definitions_read);
 
+            event_files_.open();
+            definition_files_.open();
+
             callback().definitions_done(*this);
         }
 
@@ -127,17 +133,26 @@ namespace reader
          *
          * \param [in] location the location, for which the events should be read
          */
-        void register_location(otf2::definition::location location) const
+        void register_location(const otf2::definition::location& location) const
         {
             has_locations = true;
 
+            check(OTF2_Reader_SelectLocation(rdr, location.ref()), "Couldn't select location",
+                  location, " for reading events.");
+
             OTF2_Reader_GetEvtReader(rdr, location.ref());
 
-            OTF2_DefReader* def_reader = OTF2_Reader_GetDefReader(rdr, location.ref());
+            // read definition files, if they are present
+            if (definition_files_.are_open())
+            {
 
-            uint64_t definitions_read = 0;
-            check(OTF2_Reader_ReadAllLocalDefinitions(rdr, def_reader, &definitions_read),
-                  "Couldn't read local definitions for location ", location, " from trace file");
+                OTF2_DefReader* def_reader = OTF2_Reader_GetDefReader(rdr, location.ref());
+
+                uint64_t definitions_read = 0;
+                check(OTF2_Reader_ReadAllLocalDefinitions(rdr, def_reader, &definitions_read),
+                      "Couldn't read local definitions for location ", location,
+                      " from trace file");
+            }
         }
 
         /**
@@ -150,6 +165,8 @@ namespace reader
          */
         void read_events()
         {
+            definition_files_.close();
+
             if (has_locations)
             {
                 evt_rdr = OTF2_Reader_GetGlobalEvtReader(rdr);
@@ -159,6 +176,12 @@ namespace reader
                 check(OTF2_Reader_ReadAllGlobalEvents(rdr, evt_rdr, &events_read),
                       "Couldn't read events from trace file");
             }
+
+            check(OTF2_Reader_CloseGlobalEvtReader(rdr, evt_rdr),
+                  "Couldn't close global event reader");
+
+            event_files_.close();
+
             callback().events_done(*this);
         }
 
@@ -456,6 +479,10 @@ namespace reader
 
     private:
         OTF2_Reader* rdr;
+
+        definition_files definition_files_;
+        event_files event_files_;
+
         OTF2_GlobalDefReader* def_rdr;
         OTF2_GlobalEvtReader* evt_rdr;
 
