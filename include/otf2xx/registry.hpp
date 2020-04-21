@@ -111,6 +111,39 @@ public:
         return def;
     }
 
+    template <typename Arg, typename... Args>
+    std::enable_if_t<!std::is_convertible<Arg, typename Definition::reference_type>::value &&
+                         std::is_constructible<Definition, typename Definition::reference_type, Arg,
+                                               Args...>::value,
+                     Definition&>
+    emplace(Arg&& arg, Args&&... args)
+    {
+        return definitions_.emplace(refs_.next<Definition>(), std::forward<Arg>(arg),
+                                    std::forward<Args>(args)...);
+    }
+
+    template <typename RefType, typename... Args>
+    std::enable_if_t<std::is_convertible<RefType, typename Definition::reference_type>::value,
+                     Definition&>
+    emplace(RefType&& ref, Args&&... args)
+    {
+        // TODO I fucking bet that some day there will be a definition, where this is well-formed in
+        // the case you wanted to omit the ref FeelsBadMan
+
+        if (!definitions_.count(ref))
+        {
+            auto& def = definitions_.emplace(ref, std::forward<Args>(args)...);
+            refs_.register_definition(def);
+
+            return def;
+        }
+        else
+        {
+            return definitions_[ref];
+        }
+    }
+
+
     bool has(typename Definition::reference_type ref) const
     {
         return definitions_.count(ref) > 0;
@@ -220,15 +253,6 @@ public:
         this->refs_.register_definition(def);
     }
 
-    template <typename Key, typename... Args>
-    std::enable_if_t<has_type<Key, key_list>::value,
-                     std::pair<typename std::map<typename Key::key_type, Definition>::iterator, bool>>
-    emplace(Key key, Args&&... args)
-    {
-        return std::get<Index<Key, key_list>::value>(lookup_maps_)
-            .emplace(key.key, std::forward<Args>(args)...);
-    }
-
     template <typename Key>
     std::enable_if_t<has_type<Key, key_list>::value>
     operator()(Key key, otf2::definition::detail::weak_ref<Definition> ref)
@@ -239,6 +263,18 @@ public:
         this->refs_.register_definition(def);
         this->definitions_.add_definition(def);
         std::get<Index<Key, key_list>::value>(lookup_maps_).emplace(key.key, std::move(def));
+    }
+
+    template <typename Key, typename... Args>
+    std::enable_if_t<has_type<Key, key_list>::value, Definition&>
+    emplace(Key key, Args&&... args)
+    {
+        if(!has(key))
+        {
+            return create(key, std::forward<Args>(args)...);
+        }
+
+        return find(key);
     }
 
     template <typename Key, typename... Args>
@@ -435,10 +471,10 @@ public:
         return get_holder<Definition>()[key];
     }
 
-    template <typename Definition, typename Key, typename... Args>
-    auto emplace(Key key, Args&&... args)
+    template <typename Definition, typename... Args>
+    auto emplace(Args&&... args)
     {
-        return get_holder<Definition>().emplace(key, std::forward<Args>(args)...);
+        return get_holder<Definition>().emplace(std::forward<Args>(args)...);
     }
 
     template <typename Definition, typename Key>

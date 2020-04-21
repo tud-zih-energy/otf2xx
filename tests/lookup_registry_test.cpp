@@ -62,6 +62,7 @@ int main()
     reg.create<otf2::definition::string>(std::string("regenbogen"));
 
     reg.create<otf2::definition::system_tree_node>(ByCPU(42), str1, str2);
+    reg.emplace<otf2::definition::system_tree_node>(ByCPU(42), str1, str2);
     otf2::definition::system_tree_node& node =
         reg.get<otf2::definition::system_tree_node>(ByCPU(42));
     node.name(str3);
