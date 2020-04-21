@@ -223,10 +223,10 @@ public:
     template <typename Key, typename... Args>
     std::enable_if_t<has_type<Key, key_list>::value,
                      std::pair<typename std::map<Key, Definition>::iterator, bool>>
-    emplace(Args&&... args)
+    emplace(Key key, Args&&... args)
     {
         return std::get<Index<Key, key_list>::value>(lookup_maps_)
-            .emplace(std::forward<Args>(args)...);
+            .emplace(key.key, std::forward<Args>(args)...);
     }
 
     template <typename Key>
@@ -435,10 +435,10 @@ public:
         return get_holder<Definition>()[key];
     }
 
-    template <typename Definition, typename... Args>
-    auto emplace(Args&&... args)
+    template <typename Definition, typename Key, typename... Args>
+    auto emplace(Key key, Args&&... args)
     {
-        return get_holder<Definition>().emplace(std::forward<Args>(args)...);
+        return get_holder<Definition>().emplace(key, std::forward<Args>(args)...);
     }
 
     template <typename Definition, typename Key>
