@@ -220,6 +220,15 @@ public:
         this->refs_.register_definition(def);
     }
 
+    template <typename Key, typename... Args>
+    std::enable_if_t<has_type<Key, key_list>::value,
+                     std::pair<typename std::map<Key, Definition>::iterator, bool>>
+    emplace(Args&&... args)
+    {
+        return std::get<Index<Key, key_list>::value>(lookup_maps_)
+            .emplace(std::forward<Args>(args)...);
+    }
+
     template <typename Key>
     std::enable_if_t<has_type<Key, key_list>::value>
     operator()(Key key, otf2::definition::detail::weak_ref<Definition> ref)
@@ -424,6 +433,12 @@ public:
     const auto& get(const Key& key) const
     {
         return get_holder<Definition>()[key];
+    }
+
+    template <typename Definition, typename... Args>
+    auto emplace(Args&&... args)
+    {
+        return get_holder<Definition>().emplace(std::forward<Args>(args)...);
     }
 
     template <typename Definition, typename Key>
