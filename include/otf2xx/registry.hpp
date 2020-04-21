@@ -222,7 +222,7 @@ public:
 
     template <typename Key, typename... Args>
     std::enable_if_t<has_type<Key, key_list>::value,
-                     std::pair<typename std::map<Key::key_type, Definition>::iterator, bool>>
+                     std::pair<typename std::map<typename Key::key_type, Definition>::iterator, bool>>
     emplace(Key key, Args&&... args)
     {
         return std::get<Index<Key, key_list>::value>(lookup_maps_)
