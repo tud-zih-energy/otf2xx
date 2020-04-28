@@ -143,7 +143,6 @@ public:
         }
     }
 
-
     bool has(typename Definition::reference_type ref) const
     {
         return definitions_.count(ref) > 0;
@@ -266,10 +265,9 @@ public:
     }
 
     template <typename Key, typename... Args>
-    std::enable_if_t<has_type<Key, key_list>::value, Definition&>
-    emplace(Key key, Args&&... args)
+    std::enable_if_t<has_type<Key, key_list>::value, Definition&> emplace(Key key, Args&&... args)
     {
-        if(!has(key))
+        if (!has(key))
         {
             return create(key, std::forward<Args>(args)...);
         }
