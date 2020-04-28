@@ -63,6 +63,11 @@ TEST_CASE("Add and get strings")
             REQUIRE(str.str() == value);
             REQUIRE(str.ref() == 42);
             REQUIRE(str == reg.get<otf2::definition::string>(42));
+
+            auto res = reg.emplace<otf2::definition::string>(42, value);
+            REQUIRE(res.str() == value);
+            REQUIRE(res.ref() == 42);
+            REQUIRE(res == str);
         }
         auto str = reg.get<otf2::definition::string>(42);
         REQUIRE(str.str() == value);
@@ -90,5 +95,7 @@ TEST_CASE("Add and get strings")
             REQUIRE(!contains(refs, str.ref()));
             refs.insert(str.ref());
         }
+        auto str = reg.emplace<otf2::definition::string>("Value last");
+        REQUIRE(!contains(refs, str.ref()));
     }
 }
