@@ -474,6 +474,12 @@ public:
     {
         return get_holder<Definition>().emplace(std::forward<Args>(args)...);
     }
+    
+    template <typename Definition, typename... Args>
+    auto& emplace(Args&&... args)
+    {
+        return get_holder<Definition>().emplace(std::forward<Args>(args)...);
+    }
 
     template <typename Definition, typename Key>
     auto& get(const Key& key)
