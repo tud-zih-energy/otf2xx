@@ -64,14 +64,18 @@ namespace reader
         {
             if (!are_open())
             {
-                are_open_ = OTF2_Reader_OpenDefFiles(rdr_);
+                are_open_ = (OTF2_Reader_OpenDefFiles(rdr_) == OTF2_SUCCESS);
             }
         }
 
         void close()
         {
-            check(OTF2_Reader_CloseDefFiles(rdr_), "Couldn't close definition files of the trace.");
-            are_open_ = false;
+            if (are_open())
+            {
+                check(OTF2_Reader_CloseDefFiles(rdr_),
+                      "Couldn't close definition files of the trace.");
+                are_open_ = false;
+            }
         }
 
         bool are_open() const
