@@ -85,10 +85,7 @@ namespace reader
 
         ~definition_files()
         {
-            if (are_open())
-            {
-                close();
-            }
+            close();
         }
     };
 
