@@ -85,9 +85,19 @@ namespace definition
                 return canonical_name_;
             }
 
+            void canonical_name(const otf2::definition::string& str)
+            {
+                canonical_name_ = str;
+            }
+
             const otf2::definition::string& description() const
             {
                 return description_;
+            }
+
+            void description(const otf2::definition::string& str)
+            {
+                description_ = str;
             }
 
             role_type role() const
@@ -108,6 +118,11 @@ namespace definition
             const otf2::definition::string& source_file() const
             {
                 return source_file_;
+            }
+
+            void source_file(const otf2::definition::string& str)
+            {
+                source_file_ = str;
             }
 
             uint32_t begin_line() const
