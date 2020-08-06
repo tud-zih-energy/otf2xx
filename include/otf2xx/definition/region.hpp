@@ -103,6 +103,12 @@ namespace definition
             return data_->canonical_name();
         }
 
+        void canonical_name(const otf2::definition::string& str)
+        {
+            assert(this->is_valid());
+            return data_->canonical_name(str);
+        }
+
         /**
          * \brief returns the description of the region definion as a string definition
          *
@@ -113,6 +119,12 @@ namespace definition
         {
             assert(this->is_valid());
             return data_->description();
+        }
+
+        void description(const otf2::definition::string& str)
+        {
+            assert(this->is_valid());
+            return data_->description(str);
         }
 
         /**
@@ -155,6 +167,12 @@ namespace definition
         {
             assert(this->is_valid());
             return data_->source_file();
+        }
+
+        void source_file(const otf2::definition::string& str)
+        {
+            assert(this->is_valid());
+            return data_->source_file(str);
         }
 
         /**
