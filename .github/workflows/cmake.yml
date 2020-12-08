@@ -95,7 +95,8 @@ jobs:
         tar -xf otf2-${OTF2_VERSION}.tar.gz
         cd otf2-${OTF2_VERSION}
         ./configure --prefix=/opt/otf2
-        make -j2 install
+        make -j2
+        sudo make install
     - name: Select XCode
       run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
       if: matrix.xcode != 'default'
