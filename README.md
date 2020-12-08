@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/tud-zih-energy/otf2xx.svg?branch=master)](https://travis-ci.org/tud-zih-energy/otf2xx)
+![Build and Test](https://github.com/tud-zih-energy/otf2xx/workflows/Build%20and%20Test/badge.svg)
 
 # otf2xx
 C++ wrapper for the Open Trace Format 2
