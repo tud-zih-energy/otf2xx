@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        compiler: [g++-5, g++-7, clang++-5.0]
+        compiler: [g++-5, g++-7, clang++-5]
 
     steps:
     - uses: actions/checkout@v2
@@ -49,6 +49,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Cache OTF2
+      id: cache-otf2
+      uses: actions/cache@v2
+      with:
+        path: /opt/otf2/
+        key: ${{ runner.os }}-otf2
+    - name: Install OTF2
+      if: steps.cache-otf2.outputs.cache-hit != 'true'
+      run: | 
+        wget https://www.vi-hps.org/cms/upload/packages/otf2/otf2-${OTF2_VERSION}.tar.gz
+        tar -xf otf2-${OTF2_VERSION}.tar.gz
+        cd otf2-${OTF2_VERSION}
+        ./configure --prefix=/opt/otf2
+        make -j2 install
     - name: Run CMake configure
       env:
         CXX: ${{ matrix.compiler }}
@@ -68,6 +82,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Cache OTF2
+      id: cache-otf2
+      uses: actions/cache@v2
+      with:
+        path: /opt/otf2/
+        key: ${{ runner.os }}-otf2
+    - name: Install OTF2
+      if: steps.cache-otf2.outputs.cache-hit != 'true'
+      run: | 
+        wget https://www.vi-hps.org/cms/upload/packages/otf2/otf2-${OTF2_VERSION}.tar.gz
+        tar -xf otf2-${OTF2_VERSION}.tar.gz
+        cd otf2-${OTF2_VERSION}
+        ./configure --prefix=/opt/otf2
+        make -j2 install
     - name: Select XCode
       run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
       if: matrix.xcode != 'default'
