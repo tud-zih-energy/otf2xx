@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2020, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2021, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,6 +56,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace otf2
 {
@@ -118,9 +119,6 @@ namespace reader
             uint64_t definitions_read = 0;
             OTF2_Reader_ReadAllGlobalDefinitions(rdr, def_rdr, &definitions_read);
 
-            event_files_.open();
-            definition_files_.open();
-
             callback().definitions_done(*this);
         }
 
@@ -133,26 +131,9 @@ namespace reader
          *
          * \param [in] location the location, for which the events should be read
          */
-        void register_location(const otf2::definition::location& location) const
+        void register_location(const otf2::definition::location& location)
         {
-            has_locations = true;
-
-            check(OTF2_Reader_SelectLocation(rdr, location.ref()), "Couldn't select location",
-                  location, " for reading events.");
-
-            OTF2_Reader_GetEvtReader(rdr, location.ref());
-
-            // read definition files, if they are present
-            if (definition_files_.are_open())
-            {
-
-                OTF2_DefReader* def_reader = OTF2_Reader_GetDefReader(rdr, location.ref());
-
-                uint64_t definitions_read = 0;
-                check(OTF2_Reader_ReadAllLocalDefinitions(rdr, def_reader, &definitions_read),
-                      "Couldn't read local definitions for location ", location,
-                      " from trace file");
-            }
+            registered_locations_.emplace_back(location);
         }
 
         /**
@@ -165,9 +146,36 @@ namespace reader
          */
         void read_events()
         {
+            for (auto& location : registered_locations_)
+            {
+                check(OTF2_Reader_SelectLocation(rdr, location.ref()), "Couldn't select location ",
+                      location, " for reading events.");
+            }
+
+            definition_files_.open();
+            event_files_.open();
+
+            for (auto& location : registered_locations_)
+            {
+                // read definition files, if they are present
+                if (definition_files_.are_open())
+                {
+                    OTF2_DefReader* def_reader = OTF2_Reader_GetDefReader(rdr, location.ref());
+
+                    uint64_t definitions_read = 0;
+                    check(OTF2_Reader_ReadAllLocalDefinitions(rdr, def_reader, &definitions_read),
+                          "Couldn't read local definitions for location ", location,
+                          " from trace file");
+
+                    OTF2_Reader_CloseDefReader(rdr, def_reader);
+                }
+
+                OTF2_Reader_GetEvtReader(rdr, location.ref());
+            }
+
             definition_files_.close();
 
-            if (has_locations)
+            if (!registered_locations_.empty())
             {
                 evt_rdr = OTF2_Reader_GetGlobalEvtReader(rdr);
                 register_event_callbacks();
@@ -483,6 +491,8 @@ namespace reader
         definition_files definition_files_;
         event_files event_files_;
 
+        std::vector<otf2::definition::location> registered_locations_;
+
         OTF2_GlobalDefReader* def_rdr;
         OTF2_GlobalEvtReader* evt_rdr;
 
@@ -493,8 +503,6 @@ namespace reader
 
         std::unique_ptr<otf2::reader::callback> buffer_;
         otf2::reader::callback* callback_;
-
-        mutable bool has_locations = false;
     };
 
 } // namespace reader
