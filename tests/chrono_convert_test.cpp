@@ -70,12 +70,12 @@ TEST_CASE("chrono conversions work")
 
             THEN("the intermediate is what one would expect")
             {
-                REQUIRE(res.count() == otf2::chrono::ticks(1042).count());
+                REQUIRE(res.count() == otf2::chrono::ticks(1043).count());
             }
 
             THEN("it stays null")
             {
-                REQUIRE(c(res) == tp(1'000'000'000'000));
+                REQUIRE(c(res) == tp(1'001'000'000'000));
             }
         }
 
@@ -90,7 +90,7 @@ TEST_CASE("chrono conversions work")
 
             THEN("it stays null")
             {
-                REQUIRE(c(res).count() == otf2::chrono::ticks(1042).count());
+                REQUIRE(c(res).count() == otf2::chrono::ticks(1043).count());
             }
         }
     }
@@ -237,13 +237,13 @@ TEST_CASE("chrono conversions work")
 
             THEN("the intermediate is what one would expect")
             {
-                REQUIRE(res.count() == otf2::chrono::ticks(5240675528174110).count());
+                REQUIRE(res.count() == otf2::chrono::ticks(5240675528174111).count());
             }
 
             THEN("it stays the same")
             {
                 // rounding errors are a beautiful
-                REQUIRE(c(res) == tp(15202756409534456));
+                REQUIRE(c(res) == tp(15202756409534856));
             }
         }
     }
