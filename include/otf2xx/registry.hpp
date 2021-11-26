@@ -283,7 +283,10 @@ public:
                                    std::forward_as_tuple(this->refs_.template next<Definition>(),
                                                          std::forward<Args>(args)...));
 
-        assert(result.second);
+        if (!result.second)
+        {
+            make_exception("Tried to create an already existing definition");
+        }
 
         this->definitions_.add_definition(result.first->second);
 
