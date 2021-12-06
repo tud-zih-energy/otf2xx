@@ -137,7 +137,7 @@ namespace chrono
          */
         otf2::chrono::ticks operator()(time_point t) const
         {
-            auto tp = t.time_since_epoch().count();
+            auto tp = static_cast<uint64_t>(t.time_since_epoch().count());
 
             assert(tp <
                    static_cast<uint64_t>(static_cast<double>(std::numeric_limits<int64_t>::max())) /

@@ -79,6 +79,7 @@ otf2xx_add_test(ref_gen_test otf2xx::Core)
 otf2xx_add_test(registry_test otf2xx::Core)
 otf2xx_add_test(lookup_registry_test otf2xx::Core)
 otf2xx_add_test(metric_events otf2xx::Core)
+otf2xx_add_test(chrono_convert_test otf2xx::Core)
 
 otf2xx_add_test(writer_test otf2xx::Writer)
 set_property(TEST writer_test PROPERTY FIXTURES_SETUP writer_trace)
