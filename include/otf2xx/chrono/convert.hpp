@@ -88,7 +88,8 @@ namespace chrono
             // The real question here is, whether we can represent the largest timestamp of the
             // trace with a time_point in our clock
             if (cp.length().count() >
-                static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) / factor_)
+                static_cast<uint64_t>(static_cast<double>(std::numeric_limits<int64_t>::max())) /
+                    factor_)
             {
                 otf2::make_exception("This traces' timepoints cannot be represented in the "
                                      "selected otf2::chrono::time_point. Recompile with "
@@ -120,7 +121,9 @@ namespace chrono
 
             auto tp = ticks.count() - offset_;
 
-            assert(tp <= static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) / factor_);
+            assert(tp <=
+                   static_cast<uint64_t>(static_cast<double>(std::numeric_limits<int64_t>::max())) /
+                       factor_);
 
             return time_point(otf2::chrono::duration(static_cast<int64_t>(tp * factor_)));
         }
@@ -137,7 +140,8 @@ namespace chrono
             auto tp = static_cast<uint64_t>(t.time_since_epoch().count());
 
             assert(tp <
-                   static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) / inverse_factor_);
+                   static_cast<uint64_t>(static_cast<double>(std::numeric_limits<int64_t>::max())) /
+                       inverse_factor_);
 
             // Note 1: Using ceil here has its origins in the observation that casting from double
             // to int in the other conversion above leads to an implicit round down. Thus, we
