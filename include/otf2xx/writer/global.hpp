@@ -549,10 +549,10 @@ namespace writer
                                               [](bool a, bool b) { return a || b; }, iters))
             {
                 otf2::traits::apply_to_tuple_min(
-                    [max_ref](auto& it) {
-                        return static_cast<bool>(it) ? it->ref().get() : max_ref;
-                    },
-                    [this](auto& it) {
+                    [max_ref](auto& it)
+                    { return static_cast<bool>(it) ? it->ref().get() : max_ref; },
+                    [this](auto& it)
+                    {
                         this->store(*it);
                         ++it;
                     },
@@ -603,11 +603,11 @@ namespace writer
                   reg.template all<otf2::definition::metric_instance>().data());
 
             store(reg.template all<otf2::definition::io_paradigm>().data());
-            store(reg.template all<otf2::definition::io_handle>().data());
-            store(reg.template all<otf2::definition::io_pre_created_handle_state>().data());
             store(reg.template all<otf2::definition::io_directory>().data(),
                   reg.template all<otf2::definition::io_regular_file>().data());
             store(reg.template all<otf2::definition::io_file_property>().data());
+            store(reg.template all<otf2::definition::io_handle>().data());
+            store(reg.template all<otf2::definition::io_pre_created_handle_state>().data());
 
             store(reg.template all<otf2::definition::marker>().data());
         }
