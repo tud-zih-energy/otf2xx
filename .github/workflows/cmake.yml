@@ -7,7 +7,7 @@ on:
     - cron: "0 4 * * *"
 
 env:
-  OTF2_VERSION: 3.0
+  OTF2_VERSION: "3.0"
 
 jobs: 
   build-ubuntu:
