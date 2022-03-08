@@ -25,7 +25,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: /opt/otf2/
-        key: ${{ runner.os }}-otf2
+        key: ${{ runner.os }}-otf2-${OTF2_VERSION}
     - name: Install OTF2
       if: steps.cache-otf2.outputs.cache-hit != 'true'
       run: | 
@@ -58,7 +58,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: /opt/otf2/
-        key: ${{ runner.os }}-otf2
+        key: ${{ runner.os }}-otf2-${OTF2_VERSION}
     - name: Install OTF2
       if: steps.cache-otf2.outputs.cache-hit != 'true'
       run: | 
