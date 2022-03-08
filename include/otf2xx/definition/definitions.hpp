@@ -41,6 +41,7 @@
 #include <otf2xx/definition/clock_properties.hpp>
 #include <otf2xx/definition/comm.hpp>
 #include <otf2xx/definition/group.hpp>
+#include <otf2xx/definition/inter_comm.hpp>
 #include <otf2xx/definition/location.hpp>
 #include <otf2xx/definition/location_group.hpp>
 #include <otf2xx/definition/parameter.hpp>
@@ -50,7 +51,6 @@
 #include <otf2xx/definition/system_tree_node_domain.hpp>
 
 #include <otf2xx/definition/call_path.hpp>
-#include <otf2xx/definition/call_site.hpp>
 #include <otf2xx/definition/calling_context.hpp>
 #include <otf2xx/definition/interrupt_generator.hpp>
 #include <otf2xx/definition/source_code_location.hpp>

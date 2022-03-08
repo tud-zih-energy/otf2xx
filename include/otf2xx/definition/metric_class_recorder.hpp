@@ -60,13 +60,8 @@ namespace definition
         using base::base;
 
     public:
-        metric_class_recorder(const otf2::definition::metric_class& metric,
-                              const otf2::definition::location& recorder)
-        : base(new impl_type(metric, recorder))
-        {
-        }
-
-        metric_class_recorder(const otf2::definition::metric_instance& metric,
+        metric_class_recorder(const std::variant<otf2::definition::metric_class,
+                                                 otf2::definition::metric_instance>& metric,
                               const otf2::definition::location& recorder)
         : base(new impl_type(metric, recorder))
         {
@@ -74,38 +69,15 @@ namespace definition
 
         metric_class_recorder() = default;
 
-        bool has_metric_class() const
-        {
-
-            assert(this->is_valid());
-            return data_->has_metric_class();
-        }
-
         /**
-         * \brief returns the node
-         * \returns otf2::definition::system_tree_node
+         * \brief returns the associated metric
+         * \returns a variant of metric_class or metric_instance
          */
-        const otf2::definition::metric_class& metric_class() const
+        const std::variant<otf2::definition::metric_class, otf2::definition::metric_instance>&
+        metric() const
         {
             assert(this->is_valid());
-            return data_->metric_class();
-        }
-
-        bool has_metric_instance() const
-        {
-
-            assert(this->is_valid());
-            return data_->has_metric_instance();
-        }
-
-        /**
-         * \brief returns the node
-         * \returns otf2::definition::system_tree_node
-         */
-        const otf2::definition::metric_instance& metric_instance() const
-        {
-            assert(this->is_valid());
-            return data_->metric_instance();
+            return data_->metric();
         }
 
         /**

@@ -52,16 +52,23 @@ namespace event
     class thread_task_complete : public base<thread_task_complete>
     {
     public:
-        thread_task_complete(otf2::chrono::time_point timestamp, const otf2::definition::comm& team,
-                             uint32_t thread, uint32_t generation)
+        thread_task_complete(
+            otf2::chrono::time_point timestamp,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                team,
+            uint32_t thread, uint32_t generation)
         : base<thread_task_complete>(timestamp), team_(team), thread_(thread),
           generation_(generation)
         {
         }
 
-        thread_task_complete(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                             const otf2::definition::comm& team, uint32_t thread,
-                             uint32_t generation)
+        thread_task_complete(
+            OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                team,
+            uint32_t thread, uint32_t generation)
         : base<thread_task_complete>(al, timestamp), team_(team), thread_(thread),
           generation_(generation)
         {
@@ -69,14 +76,14 @@ namespace event
 
         thread_task_complete(const otf2::event::thread_task_complete& other,
                              otf2::chrono::time_point timestamp)
-        : base<thread_task_complete>(other, timestamp), team_(other.team()),
-          thread_(other.thread()), generation_(other.generation())
+        : base<thread_task_complete>(other, timestamp), team_(other.team_), thread_(other.thread()),
+          generation_(other.generation())
         {
         }
 
-        otf2::definition::comm team() const
+        auto team() const
         {
-            return team_;
+            return otf2::definition::variants_from_weak(team_);
         }
 
         uint32_t generation() const
@@ -92,7 +99,9 @@ namespace event
         friend class otf2::writer::local;
 
     private:
-        otf2::definition::detail::weak_ref<otf2::definition::comm> team_;
+        std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                     otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>
+            team_;
         uint32_t thread_;
         uint32_t generation_;
     };

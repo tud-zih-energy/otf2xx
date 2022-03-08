@@ -85,24 +85,22 @@ namespace definition
         }
 
         /**
-         * \brief returns whether the definition has got a parent or not
-         */
-        bool has_parent() const
-        {
-            assert(this->is_valid());
-            return data_->has_parent();
-        }
-
-        /**
          * \brief returns the parent
-         * \returns otf2::definition::call_path
-         * \throws if there is no parent
+         * \returns an optional containing the parent call_path, or notihng
          */
         otf2::definition::call_path parent() const
         {
             assert(this->is_valid());
             auto p = data_->parent();
-            return otf2::definition::call_path{ p.second, p.first };
+
+            if (p.first != nullptr)
+            {
+                return otf2::definition::call_path{ p.second, p.first };
+            }
+            else
+            {
+                return {};
+            }
         }
     };
 

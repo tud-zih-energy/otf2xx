@@ -40,6 +40,7 @@
 
 #include <otf2xx/definition/detail/ref_counted.hpp>
 
+#include <otf2xx/definition/location_group.hpp>
 #include <otf2xx/definition/string.hpp>
 #include <otf2xx/definition/system_tree_node.hpp>
 
@@ -57,10 +58,24 @@ namespace definition
 
             typedef otf2::common::location_group_type location_group_type;
 
+        private:
+            using reference_type = otf2::reference_impl<location_group, tag_type>;
+
+        public:
+            location_group_impl(const otf2::definition::string& name, location_group_type type,
+                                const otf2::definition::system_tree_node& stm,
+                                location_group_impl* creating_location_group, reference_type cref,
+                                std::int64_t retain_count = 0)
+            : ref_counted(retain_count), name_(name), type_(type), stm_(stm),
+              creating_location_group_(creating_location_group), cref_(cref)
+            {
+            }
+
             location_group_impl(const otf2::definition::string& name, location_group_type type,
                                 const otf2::definition::system_tree_node& stm,
                                 std::int64_t retain_count = 0)
-            : ref_counted(retain_count), name_(name), type_(type), stm_(stm)
+            : ref_counted(retain_count), name_(name), type_(type), stm_(stm),
+              creating_location_group_(nullptr), cref_(reference_type::undefined())
             {
             }
 
@@ -84,10 +99,17 @@ namespace definition
                 return stm_;
             }
 
+            auto creating_location_group() const
+            {
+                return std::make_pair(creating_location_group_.get(), cref_);
+            }
+
         private:
             otf2::definition::string name_;
             location_group_type type_;
             otf2::definition::system_tree_node stm_;
+            otf2::intrusive_ptr<location_group_impl> creating_location_group_;
+            reference_type cref_;
         };
     } // namespace detail
 } // namespace definition

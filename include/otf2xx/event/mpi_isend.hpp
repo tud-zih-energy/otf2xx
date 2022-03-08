@@ -52,24 +52,30 @@ namespace event
     class mpi_isend : public base<mpi_isend>
     {
     public:
-        mpi_isend(otf2::chrono::time_point timestamp, uint32_t receiver,
-                  const otf2::definition::comm& comm, uint32_t msg_tag, uint64_t msg_length,
-                  uint64_t request_id)
+        mpi_isend(
+            otf2::chrono::time_point timestamp, uint32_t receiver,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                comm,
+            uint32_t msg_tag, uint64_t msg_length, uint64_t request_id)
         : base<mpi_isend>(timestamp), receiver_(receiver), comm_(comm), msg_tag_(msg_tag),
           msg_length_(msg_length), request_id_(request_id)
         {
         }
 
-        mpi_isend(OTF2_AttributeList* al, otf2::chrono::time_point timestamp, uint32_t receiver,
-                  const otf2::definition::comm& comm, uint32_t msg_tag, uint64_t msg_length,
-                  uint64_t request_id)
+        mpi_isend(
+            OTF2_AttributeList* al, otf2::chrono::time_point timestamp, uint32_t receiver,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                comm,
+            uint32_t msg_tag, uint64_t msg_length, uint64_t request_id)
         : base<mpi_isend>(al, timestamp), receiver_(receiver), comm_(comm), msg_tag_(msg_tag),
           msg_length_(msg_length), request_id_(request_id)
         {
         }
 
         mpi_isend(const otf2::event::mpi_isend& other, otf2::chrono::time_point timestamp)
-        : base<mpi_isend>(other, timestamp), receiver_(other.receiver()), comm_(other.comm()),
+        : base<mpi_isend>(other, timestamp), receiver_(other.receiver()), comm_(other.comm_),
           msg_tag_(other.msg_tag()), msg_length_(other.msg_length()),
           request_id_(other.request_id())
         {
@@ -80,9 +86,9 @@ namespace event
             return receiver_;
         }
 
-        otf2::definition::comm comm() const
+        auto comm() const
         {
-            return comm_;
+            return otf2::definition::variants_from_weak(comm_);
         }
 
         uint32_t msg_tag() const
@@ -104,7 +110,9 @@ namespace event
 
     private:
         uint32_t receiver_;
-        otf2::definition::detail::weak_ref<otf2::definition::comm> comm_;
+        std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                     otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>
+            comm_;
         uint32_t msg_tag_;
         uint64_t msg_length_;
         uint64_t request_id_;

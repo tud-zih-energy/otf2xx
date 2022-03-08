@@ -68,8 +68,7 @@ TEST_CASE("test metric events")
 
     otf2::event::metric ev(otf2::chrono::genesis(), mInstance);
 
-    REQUIRE(!ev.has_metric_class());
-    REQUIRE(ev.metric_class() != mClass);
-    REQUIRE(ev.has_metric_instance());
-    REQUIRE(ev.metric_instance() == mInstance);
+    REQUIRE(!std::holds_alternative<otf2::definition::metric_class>(ev.metric_def()));
+    REQUIRE(std::holds_alternative<otf2::definition::metric_instance>(ev.metric_def()));
+    REQUIRE(std::get<otf2::definition::metric_class>(ev.metric_def()) == mInstance);
 }

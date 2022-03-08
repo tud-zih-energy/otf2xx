@@ -133,24 +133,21 @@ namespace definition
         }
 
         /**
-         * \brief returns whether the definition has got a parent or not
-         */
-        bool has_parent() const
-        {
-            assert(this->is_valid());
-            return data_->has_parent();
-        }
-
-        /**
          * \brief returns the parent of the io_handle definition
-         * \returns otf2::definition::io_handle
-         * \throws if there is no parent
+         * \returns an optional containing the parent io_handle or nothing
          */
         otf2::definition::io_handle parent() const
         {
             assert(this->is_valid());
             auto p = data_->parent();
-            return otf2::definition::io_handle{ p.second, p.first };
+            if (p.first != nullptr)
+            {
+                return otf2::definition::io_handle{ p.second, p.first };
+            }
+            else
+            {
+                return {};
+            }
         }
     };
 } // namespace definition

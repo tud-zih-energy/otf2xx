@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2022, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,8 +32,7 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_EVENT_THREAD_BEGIN_HPP
-#define INCLUDE_OTF2XX_EVENT_THREAD_BEGIN_HPP
+#pragma once
 
 #include <otf2xx/definition/comm.hpp>
 
@@ -49,47 +48,37 @@ namespace otf2
 namespace event
 {
 
-    class thread_begin : public base<thread_begin>
+    class comm_create : public base<comm_create>
     {
     public:
         // construct with values
-        thread_begin(
+        comm_create(
             otf2::chrono::time_point timestamp,
             const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
                                otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
-                thread_contingent,
-            std::uint64_t sequence_number)
-        : base<thread_begin>(timestamp), thread_contingent_(thread_contingent),
-          sequence_number_(sequence_number)
+                comm)
+        : base<comm_create>(timestamp), comm_(comm)
         {
         }
 
-        thread_begin(
+        comm_create(
             OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
             const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
                                otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
-                thread_contingent,
-            std::uint64_t sequence_number)
-        : base<thread_begin>(al, timestamp), thread_contingent_(thread_contingent),
-          sequence_number_(sequence_number)
+                comm)
+        : base<comm_create>(al, timestamp), comm_(comm)
         {
         }
 
         // copy constructor with new timestamp
-        thread_begin(const otf2::event::thread_begin& other, otf2::chrono::time_point timestamp)
-        : base<thread_begin>(other, timestamp), thread_contingent_(other.thread_contingent_),
-          sequence_number_(other.sequence_number_)
+        comm_create(const otf2::event::comm_create& other, otf2::chrono::time_point timestamp)
+        : base<comm_create>(other, timestamp), comm_(other.comm_)
         {
         }
 
-        auto thread_contingent() const
+        auto comm() const
         {
-            return otf2::definition::variants_from_weak(thread_contingent_);
-        }
-
-        std::uint64_t sequence_number() const
-        {
-            return sequence_number_;
+            return otf2::definition::variants_from_weak(comm_);
         }
 
         friend class otf2::writer::local;
@@ -97,10 +86,7 @@ namespace event
     private:
         std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
                      otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>
-            thread_contingent_;
-        std::uint64_t sequence_number_;
+            comm_;
     };
 } // namespace event
 } // namespace otf2
-
-#endif // INCLUDE_OTF2XX_EVENT_THREAD_BEGIN_HPP

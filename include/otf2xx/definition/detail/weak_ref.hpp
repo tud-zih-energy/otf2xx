@@ -37,6 +37,7 @@
 #include <otf2xx/traits/definition.hpp>
 
 #include <memory>
+#include <variant>
 
 namespace otf2
 {
@@ -216,6 +217,13 @@ namespace definition
     detail::weak_ref<Definition> make_weak_ref(const Definition& def)
     {
         return { def };
+    }
+
+    template <typename... Variants>
+    std::variant<Variants...>
+    variants_from_weak(const std::variant<detail::weak_ref<Variants>...>& refs)
+    {
+        return std::visit([](auto&& ref) { return std::variant<Variants...>(ref); }, refs);
     }
 } // namespace definition
 } // namespace otf2

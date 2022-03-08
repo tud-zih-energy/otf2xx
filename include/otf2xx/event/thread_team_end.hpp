@@ -52,32 +52,41 @@ namespace event
     class thread_team_end : public base<thread_team_end>
     {
     public:
-        thread_team_end(otf2::chrono::time_point timestamp, const otf2::definition::comm& comm)
+        thread_team_end(
+            otf2::chrono::time_point timestamp,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                comm)
         : base<thread_team_end>(timestamp), comm_(comm)
         {
         }
 
-        thread_team_end(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                        const otf2::definition::comm& comm)
+        thread_team_end(
+            OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                comm)
         : base<thread_team_end>(al, timestamp), comm_(comm)
         {
         }
 
         thread_team_end(const otf2::event::thread_team_end& other,
                         otf2::chrono::time_point timestamp)
-        : base<thread_team_end>(other, timestamp), comm_(other.team())
+        : base<thread_team_end>(other, timestamp), comm_(other.comm_)
         {
         }
 
-        otf2::definition::comm team() const
+        auto team() const
         {
-            return comm_;
+            return otf2::definition::variants_from_weak(comm_);
         }
 
         friend class otf2::writer::local;
 
     private:
-        otf2::definition::detail::weak_ref<otf2::definition::comm> comm_;
+        std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                     otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>
+            comm_;
     };
 } // namespace event
 } // namespace otf2

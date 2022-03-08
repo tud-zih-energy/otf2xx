@@ -45,8 +45,6 @@
 #include <otf2xx/definition/detail/calling_context_impl.hpp>
 #include <otf2xx/definition/detail/referable_base.hpp>
 
-#include <memory>
-
 namespace otf2
 {
 namespace definition
@@ -98,25 +96,21 @@ namespace definition
         }
 
         /**
-         * \brief returns if the calling context has a parent
-         * \returns bool
-         */
-        bool has_parent() const
-        {
-            assert(this->is_valid());
-            return data_->has_parent();
-        }
-
-        /**
          * \brief returns the parent
-         * \returns otf2::definition::calling_context
-         * \throws if there is no parent
+         * \returns an optinal containing the parent calling_context or nothing
          */
         otf2::definition::calling_context parent() const
         {
             assert(this->is_valid());
             auto p = data_->parent();
-            return otf2::definition::calling_context{ p.second, p.first };
+            if (p.first != nullptr)
+            {
+                return otf2::definition::calling_context{ p.second, p.first };
+            }
+            else
+            {
+                return {};
+            }
         }
     };
 } // namespace definition

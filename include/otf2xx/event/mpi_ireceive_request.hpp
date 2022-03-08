@@ -72,7 +72,7 @@ namespace event
             if (other.has_attached_data())
             {
                 sender_ = other.sender();
-                comm_ = other.comm();
+                comm_ = other.comm_;
                 msg_tag_ = other.msg_tag();
                 msg_length_ = other.msg_length();
                 attached_data_ = true;
@@ -91,10 +91,10 @@ namespace event
             return sender_;
         }
 
-        otf2::definition::comm comm() const
+        auto comm() const
         {
             assert(has_attached_data());
-            return comm_;
+            return otf2::definition::variants_from_weak(comm_);
         }
 
         uint32_t msg_tag() const
@@ -115,8 +115,12 @@ namespace event
         }
 
     private:
-        void attach_data(uint32_t sender, const otf2::definition::comm& comm, uint32_t msg_tag,
-                         uint64_t msg_length)
+        void attach_data(
+            uint32_t sender,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                comm,
+            uint32_t msg_tag, uint64_t msg_length)
         {
             sender_ = sender;
             comm_ = comm;
@@ -133,7 +137,9 @@ namespace event
         bool attached_data_ = false;
 
         uint32_t sender_;
-        otf2::definition::detail::weak_ref<otf2::definition::comm> comm_;
+        std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                     otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>
+            comm_;
         uint32_t msg_tag_;
         uint64_t msg_length_;
     };

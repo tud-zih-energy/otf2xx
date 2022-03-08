@@ -50,6 +50,8 @@
 #include <otf2xx/definition/detail/weak_ref.hpp>
 #include <otf2xx/writer/fwd.hpp>
 
+#include <variant>
+
 namespace otf2
 {
 namespace event
@@ -62,85 +64,70 @@ namespace event
         using const_value_proxy = detail::const_value_proxy;
 
         // construct with values
-        metric(otf2::chrono::time_point timestamp, const otf2::definition::metric_class& metric_c,
+        metric(otf2::chrono::time_point timestamp,
+               const std::variant<otf2::definition::weak_ref<otf2::definition::metric_class>,
+                                  otf2::definition::weak_ref<otf2::definition::metric_instance>>&
+                   metric_ref,
                values&& values)
-        : base<metric>(timestamp), metric_class_(metric_c), metric_instance_(),
-          values_(std::move(values))
+        : base<metric>(timestamp), values_(std::move(values))
         {
-        }
-
-        metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-               const otf2::definition::metric_class& metric_c, values&& values)
-        : base<metric>(al, timestamp), metric_class_(metric_c), metric_instance_(),
-          values_(std::move(values))
-        {
+            std::visit([this](auto&& ref) { metric_ = ref; }, metric_ref);
         }
 
         // construct with values
-        metric(otf2::chrono::time_point timestamp,
-               const otf2::definition::metric_instance& metric_c, values&& values)
-        : base<metric>(timestamp), metric_class_(), metric_instance_(metric_c),
-          values_(std::move(values))
-        {
-        }
-
         metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-               const otf2::definition::metric_instance& metric_c, values&& values)
-        : base<metric>(al, timestamp), metric_class_(), metric_instance_(metric_c),
-          values_(std::move(values))
+               const std::variant<otf2::definition::weak_ref<otf2::definition::metric_class>,
+                                  otf2::definition::weak_ref<otf2::definition::metric_instance>>&
+                   metric_ref,
+               values&& values)
+        : base<metric>(al, timestamp), values_(std::move(values))
         {
+            std::visit([this](auto&& ref) { metric_ = ref; }, metric_ref);
         }
 
         // construct without values, but reserve memory for them
         metric(otf2::chrono::time_point timestamp, const otf2::definition::metric_class& metric_c)
-        : base<metric>(timestamp), metric_class_(metric_c), metric_instance_(), values_(metric_c)
+        : base<metric>(timestamp), metric_(metric_c), values_(metric_c)
         {
         }
 
         metric(otf2::chrono::time_point timestamp,
                const otf2::definition::metric_instance& metric_i)
-        : base<metric>(timestamp), metric_class_(), metric_instance_(metric_i),
-          values_(metric_i.metric_class())
+        : base<metric>(timestamp), metric_(metric_i), values_(metric_i.metric_class())
         {
         }
 
         metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
                const otf2::definition::metric_class& metric_c)
-        : base<metric>(al, timestamp), metric_class_(metric_c), metric_instance_(),
-          values_(metric_c)
+        : base<metric>(al, timestamp), metric_(metric_c), values_(metric_c)
         {
         }
 
         metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
                const otf2::definition::metric_instance& metric_i)
-        : base<metric>(al, timestamp), metric_class_(), metric_instance_(metric_i),
-          values_(metric_i.metric_class())
+        : base<metric>(al, timestamp), metric_(metric_i), values_(metric_i.metric_class())
         {
         }
 
         // copy constructor with new timestamp
         metric(const otf2::event::metric& other, otf2::chrono::time_point timestamp)
-        : base<metric>(other, timestamp), metric_class_(other.metric_class()),
-          metric_instance_(other.metric_instance()), values_(other.raw_values())
+        : base<metric>(other, timestamp), metric_(other.metric_), values_(other.raw_values())
         {
         }
 
         /// construct without referencing a metric class or a metric instance
         metric(OTF2_AttributeList* al, otf2::chrono::time_point timestamp, values&& values)
-        : base<metric>(al, timestamp), metric_class_(), metric_instance_(),
-          values_(std::move(values))
+        : base<metric>(al, timestamp), metric_(), values_(std::move(values))
         {
         }
 
         explicit metric(const otf2::definition::metric_class& metric_c)
-        : base<metric>(otf2::chrono::genesis()), metric_class_(metric_c), metric_instance_(),
-          values_(metric_c)
+        : base<metric>(otf2::chrono::genesis()), metric_(metric_c), values_(metric_c)
         {
         }
 
         explicit metric(const otf2::definition::metric_instance& metric_i)
-        : base<metric>(otf2::chrono::genesis()), metric_class_(), metric_instance_(metric_i),
-          values_(metric_i.metric_class())
+        : base<metric>(otf2::chrono::genesis()), metric_(metric_i), values_(metric_i.metric_class())
         {
         }
 
@@ -210,36 +197,9 @@ namespace event
             return get_value_for(member);
         }
 
-        bool has_metric_class() const
+        auto metric_def() const
         {
-            return static_cast<bool>(metric_class_);
-        }
-
-        otf2::definition::metric_class metric_class() const
-        {
-            return metric_class_;
-        }
-
-        void metric_class(const otf2::definition::metric_class& mc)
-        {
-            metric_instance_ = otf2::definition::metric_instance();
-            metric_class_ = mc;
-        }
-
-        bool has_metric_instance() const
-        {
-            return static_cast<bool>(metric_instance_);
-        }
-
-        otf2::definition::metric_instance metric_instance() const
-        {
-            return metric_instance_;
-        }
-
-        void metric_instance(const otf2::definition::metric_instance& mi)
-        {
-            metric_class_ = otf2::definition::metric_class();
-            metric_instance_ = mi;
+            return otf2::definition::variants_from_weak(metric_);
         }
 
         otf2::definition::metric_class resolve_metric_class() const
@@ -310,23 +270,25 @@ namespace event
 
     private:
         template <typename Definition>
-        using weak_ref = otf2::definition::detail::weak_ref<Definition>;
+        using weak_ref = otf2::definition::weak_ref<Definition>;
 
         weak_ref<otf2::definition::metric_class> resolve_weak_ref_to_metric_class() const
         {
-            if (has_metric_instance())
+            if (std::holds_alternative<weak_ref<otf2::definition::metric_instance>>(metric_))
             {
-                return otf2::definition::make_weak_ref(metric_instance_->metric_class());
+                return otf2::definition::make_weak_ref(
+                    std::get<weak_ref<otf2::definition::metric_instance>>(metric_)->metric_class());
             }
             else
             {
-                return metric_class_;
+                return std::get<weak_ref<otf2::definition::metric_class>>(metric_);
             }
         }
 
     private:
-        weak_ref<otf2::definition::metric_class> metric_class_;
-        weak_ref<otf2::definition::metric_instance> metric_instance_;
+        std::variant<weak_ref<otf2::definition::metric_class>,
+                     weak_ref<otf2::definition::metric_instance>>
+            metric_;
         values values_;
     };
 } // namespace event

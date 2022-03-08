@@ -53,15 +53,15 @@ namespace event
 
         // construct with values
         marker(otf2::chrono::time_point timestamp, otf2::chrono::duration duration,
-               otf2::definition::marker def_marker, scope_type scope, std::uint64_t scope_ref,
-               std::string text)
+               const otf2::definition::marker& def_marker, scope_type scope,
+               std::uint64_t scope_ref, std::string text)
         : base<event::marker>(timestamp), duration_(duration), def_marker_(def_marker),
           scope_(scope), scope_ref_(scope_ref), text_(text)
         {
         }
 
         marker(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-               otf2::chrono::duration duration, otf2::definition::marker def_marker,
+               otf2::chrono::duration duration, const otf2::definition::marker& def_marker,
                scope_type scope, std::uint64_t scope_ref, std::string text)
         : base<event::marker>(al, timestamp), duration_(duration), def_marker_(def_marker),
           scope_(scope), scope_ref_(scope_ref), text_(text)
@@ -104,7 +104,7 @@ namespace event
 
     private:
         otf2::chrono::duration duration_;
-        otf2::definition::marker def_marker_;
+        otf2::definition::detail::weak_ref<otf2::definition::marker> def_marker_;
         scope_type scope_;
         std::uint64_t scope_ref_;
         std::string text_;

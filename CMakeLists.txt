@@ -31,14 +31,14 @@
 
 cmake_minimum_required(VERSION 3.8)
 
-project(otf2xx VERSION 1.0.0)
+project(otf2xx VERSION 2.0.0)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
-find_package(OTF2 9.0.2 EXACT)
+find_package(OTF2 10.0.0 EXACT)
 
 if (NOT OTF2_FOUND)
-    message(FATAL_ERROR "Please download and install OTF2 2.2.\n"
-    "Available from: https://www.vi-hps.org/cms/upload/packages/otf2/otf2-2.2.tar.gz")
+    message(FATAL_ERROR "Please download and install OTF2 3.0.\n"
+    "Available from: https://perftools.pages.jsc.fz-juelich.de/cicd/otf2/tags/otf2-3.0/otf2-3.0.tar.gz")
 endif()
 
 set(OTF2XX_CHRONO_DURATION_TYPE "picoseconds" CACHE STRING "The used underlying type for otf2::chrono::duration.")
@@ -69,7 +69,7 @@ target_link_libraries(otf2xx-core
     INTERFACE
         otf2::otf2
 )
-target_compile_features(otf2xx-core INTERFACE cxx_std_14)
+target_compile_features(otf2xx-core INTERFACE cxx_std_17)
 target_compile_definitions(otf2xx-core
     INTERFACE
         OTF2XX_CHRONO_DURATION_TYPE=${OTF2XX_CHRONO_DURATION_TYPE}

@@ -209,9 +209,9 @@ namespace reader
             check(OTF2_GlobalDefReaderCallbacks_SetAttributeCallback(global_def_callbacks, detail::definition::global::attribute), "Couldn't set attribute callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetCallpathCallback(global_def_callbacks, detail::definition::global::call_path), "Couldn't set call_path callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetCallpathParameterCallback(global_def_callbacks, detail::definition::global::call_path_parameter), "Couldn't set call_path_parameter callback handler");
-            check(OTF2_GlobalDefReaderCallbacks_SetCallsiteCallback(global_def_callbacks, detail::definition::global::call_site), "Couldn't set call_site callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetClockPropertiesCallback(global_def_callbacks, detail::definition::global::clock_properties), "Couldn't set clock_properties callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetCommCallback(global_def_callbacks, detail::definition::global::comm), "Couldn't set comm callback handler");
+            check(OTF2_GlobalDefReaderCallbacks_SetInterCommCallback(global_def_callbacks, detail::definition::global::inter_comm), "Couldn't set inter_comm callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetGroupCallback(global_def_callbacks, detail::definition::global::group), "Couldn't set group callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetLocationCallback(global_def_callbacks, otf2::reader::detail::definition::global::location), "Couldn't set location callback handler");
             check(OTF2_GlobalDefReaderCallbacks_SetLocationGroupCallback(global_def_callbacks, detail::definition::global::location_group), "Couldn't set location_group callback handler");

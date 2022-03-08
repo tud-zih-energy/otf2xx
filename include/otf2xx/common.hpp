@@ -123,7 +123,7 @@ namespace common
         /** a cpu thread */
         cpu_thread,
         /** on gpu */
-        gpu,
+        accelerator_stream,
         /** a metric - acts as recorder for metric instances */
         metric
     };
@@ -543,6 +543,7 @@ namespace common
         interrupt_generator,
         io_file,
         io_handle,
+        location_group,
         max
     };
 
@@ -562,6 +563,25 @@ namespace common
         system_tree_node,
         group,
         comm
+    };
+
+    enum class comm_flag_type : std::uint32_t
+    {
+        none,
+        create_destroy_events
+    };
+
+    enum class rma_win_flag_type : std::uint32_t
+    {
+        none,
+        create_destroy_events
+    };
+
+    enum class collective_root_type : std::uint32_t
+    {
+        none = static_cast<std::uint32_t>(-1),
+        self = static_cast<std::uint32_t>(-2),
+        this_group = static_cast<std::uint32_t>(-3)
     };
 } // namespace common
 using namespace common;

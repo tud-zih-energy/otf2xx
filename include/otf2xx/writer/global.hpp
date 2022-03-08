@@ -108,32 +108,35 @@ namespace writer
                   "Couldn't write callpath parameter to global definitions writer");
         }
 
-        void store(const otf2::definition::call_site& data)
-        {
-            check(OTF2_GlobalDefWriter_WriteCallsite(
-                      wrt, data.ref(), data.source_file().ref(), data.line_number(),
-                      data.entered_region().ref(), data.left_region().ref()),
-                  "Couldn't write callsite to global definitions writer");
-        }
-
         void store(const otf2::definition::comm& data)
         {
             otf2::reference<otf2::definition::detail::group_base>::ref_type group_ref;
 
-            if (data.has_self_group())
-                group_ref = data.self_group().ref();
-            else
-                group_ref = data.group().ref();
+            group_ref = std::visit([](auto&& group) { return group.ref().get(); }, data.group());
 
-            if (data.has_parent())
-                check(OTF2_GlobalDefWriter_WriteComm(wrt, data.ref(), data.name().ref(), group_ref,
-                                                     data.parent().ref()),
-                      "Couldn't write comm to global definitions writer");
-            else
-                check(OTF2_GlobalDefWriter_WriteComm(
-                          wrt, data.ref(), data.name().ref(), group_ref,
-                          otf2::reference<otf2::definition::comm>::undefined()),
-                      "Couldn't write comm to global definitions writer");
+            check(OTF2_GlobalDefWriter_WriteComm(wrt, data.ref(), data.name().ref(), group_ref,
+                                                 data.parent().ref(),
+                                                 static_cast<OTF2_CommFlag>(data.flags())),
+                  "Couldn't write comm to global definitions writer");
+        }
+
+        void store(const otf2::definition::inter_comm& data)
+        {
+            otf2::reference<otf2::definition::detail::group_base>::ref_type groupA_ref;
+            otf2::reference<otf2::definition::detail::group_base>::ref_type groupB_ref;
+
+            groupA_ref = std::visit([](auto&& group) { return group.ref().get(); }, data.groupA());
+            groupB_ref = std::visit([](auto&& group) { return group.ref().get(); }, data.groupB());
+
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_GlobalDefWriter_WriteInterComm(
+                              wrt, data.ref(), data.name().ref(), groupA_ref, groupB_ref,
+                              comm.ref(), static_cast<OTF2_CommFlag>(data.flags())),
+                          "Couldn't write comm to global definitions writer");
+                },
+                data.common_communicator());
         }
 
         template <typename T, otf2::common::group_type GroupType>
@@ -199,7 +202,8 @@ namespace writer
         {
             check(OTF2_GlobalDefWriter_WriteLocationGroup(
                       wrt, data.ref(), data.name().ref(),
-                      static_cast<OTF2_LocationGroupType>(data.type()), data.parent().ref()),
+                      static_cast<OTF2_LocationGroupType>(data.type()), data.parent().ref(),
+                      data.creating_location_group().ref()),
                   "Couldn't write location group to global definitions writer");
         }
 
@@ -223,19 +227,14 @@ namespace writer
 
         void store(const otf2::definition::metric_class_recorder& data)
         {
-            auto ref = otf2::reference<otf2::definition::detail::metric_base>::undefined();
-
-            if (data.has_metric_class())
-            {
-                ref = data.metric_class().ref();
-            }
-            else
-            {
-                ref = data.metric_instance().ref();
-            }
-
-            check(OTF2_GlobalDefWriter_WriteMetricClassRecorder(wrt, ref, data.recorder().ref()),
-                  "Couldn't write metric class recorder to global definitions writer");
+            std::visit(
+                [&](auto&& metric)
+                {
+                    check(OTF2_GlobalDefWriter_WriteMetricClassRecorder(wrt, metric.ref(),
+                                                                        data.recorder().ref()),
+                          "Couldn't write metric class recorder to global definitions writer");
+                },
+                data.metric());
         }
 
         void store(const otf2::definition::metric_instance& data)
@@ -305,7 +304,8 @@ namespace writer
         void store(const otf2::definition::rma_win& data)
         {
             check(OTF2_GlobalDefWriter_WriteRmaWin(wrt, data.ref(), data.name().ref(),
-                                                   data.comm().ref()),
+                                                   data.comm().ref(),
+                                                   static_cast<OTF2_CommFlag>(data.flags())),
                   "Couldn't write RMA window to global definitions writer");
         }
 
@@ -317,25 +317,18 @@ namespace writer
 
         void store(const otf2::definition::system_tree_node& data)
         {
-            if (data.has_parent())
-                check(OTF2_GlobalDefWriter_WriteSystemTreeNode(wrt, data.ref(), data.name().ref(),
-                                                               data.class_name().ref(),
-                                                               data.parent().ref()),
-                      "Couldn't write system tree node to global definitions "
-                      "writer");
-            else
-                check(OTF2_GlobalDefWriter_WriteSystemTreeNode(
-                          wrt, data.ref(), data.name().ref(), data.class_name().ref(),
-                          otf2::reference<otf2::definition::system_tree_node>::undefined()),
-                      "Couldn't write system tree node to global definitions "
-                      "writer");
+            check(OTF2_GlobalDefWriter_WriteSystemTreeNode(wrt, data.ref(), data.name().ref(),
+                                                           data.class_name().ref(),
+                                                           data.parent().ref()),
+                  "Couldn't write system tree node to global definitions "
+                  "writer");
         }
 
         void store(const otf2::definition::clock_properties& data)
         {
-            check(OTF2_GlobalDefWriter_WriteClockProperties(wrt, data.ticks_per_second().count(),
-                                                            data.start_time().count(),
-                                                            data.length().count()),
+            check(OTF2_GlobalDefWriter_WriteClockProperties(
+                      wrt, data.ticks_per_second().count(), data.start_time().count(),
+                      data.length().count(), data.realtime_timestamp().count()),
                   "Couldn't write clock properties to global definitions writer");
         }
 
@@ -378,20 +371,10 @@ namespace writer
 
         void store(const otf2::definition::calling_context& data)
         {
-            if (data.has_parent())
-            {
-                check(OTF2_GlobalDefWriter_WriteCallingContext(wrt, data.ref(), data.region().ref(),
-                                                               data.source_code_location().ref(),
-                                                               data.parent().ref()),
-                      "Couldn't write to global definitions writer");
-            }
-            else
-            {
-                check(OTF2_GlobalDefWriter_WriteCallingContext(
-                          wrt, data.ref(), data.region().ref(), data.source_code_location().ref(),
-                          otf2::reference<otf2::definition::calling_context>::undefined()),
-                      "Couldn't write to global definitions writer");
-            }
+            check(OTF2_GlobalDefWriter_WriteCallingContext(wrt, data.ref(), data.region().ref(),
+                                                           data.source_code_location().ref(),
+                                                           data.parent().ref()),
+                  "Couldn't write to global definitions writer");
         }
 
         void store(const otf2::definition::calling_context_property& data)
@@ -455,24 +438,11 @@ namespace writer
 
         void store(const otf2::definition::io_handle& data)
         {
-            if (data.has_parent())
-            {
-                check(OTF2_GlobalDefWriter_WriteIoHandle(
-                          wrt, data.ref(), data.name().ref(), data.file().ref(),
-                          data.paradigm().ref(),
-                          static_cast<OTF2_IoHandleFlag>(data.io_handle_flag()), data.comm().ref(),
-                          data.parent().ref()),
-                      "Couldn't write to global definitions writer");
-            }
-            else
-            {
-                check(OTF2_GlobalDefWriter_WriteIoHandle(
-                          wrt, data.ref(), data.name().ref(), data.file().ref(),
-                          data.paradigm().ref(),
-                          static_cast<OTF2_IoHandleFlag>(data.io_handle_flag()), data.comm().ref(),
-                          otf2::reference<otf2::definition::io_handle>::undefined()),
-                      "Couldn't write to global definitions writer");
-            }
+            check(OTF2_GlobalDefWriter_WriteIoHandle(
+                      wrt, data.ref(), data.name().ref(), data.file().ref(), data.paradigm().ref(),
+                      static_cast<OTF2_IoHandleFlag>(data.io_handle_flag()), data.comm().ref(),
+                      data.parent().ref()),
+                  "Couldn't write to global definitions writer");
         }
 
         void store(const otf2::definition::io_paradigm& data)
@@ -580,12 +550,12 @@ namespace writer
                   reg.template all<otf2::definition::regions_group>().data());
             // store(metric_groups);
 
-            store(reg.template all<otf2::definition::comm>().data());
+            store(reg.template all<otf2::definition::comm>().data(),
+                  reg.template all<otf2::definition::inter_comm>().data());
 
             store(reg.template all<otf2::definition::parameter>().data());
             store(reg.template all<otf2::definition::call_path>().data());
             store(reg.template all<otf2::definition::call_path_parameter>().data());
-            store(reg.template all<otf2::definition::call_site>().data());
 
             store(reg.template all<otf2::definition::cart_topology>().data());
             store(reg.template all<otf2::definition::cart_dimension>().data());

@@ -55,7 +55,11 @@ namespace definition
         template <typename T, otf2::common::group_type GroupType>
         class group_impl;
 
+        /** Dummy class to have metric instances and metric classes in the same id space */
+        class comm_base;
         class comm_impl;
+        class inter_comm_impl;
+
         class region_impl;
         class attribute_impl;
         class parameter_impl;
@@ -64,7 +68,6 @@ namespace definition
 
         class call_path_impl;
         class call_path_parameter_impl;
-        class call_site_impl;
         class source_code_location_impl;
         class calling_context_impl;
         class interrupt_generator_impl;
@@ -108,6 +111,7 @@ namespace definition
     class group;
 
     class comm;
+    class inter_comm;
     class region;
     class attribute;
     class parameter;
@@ -116,7 +120,6 @@ namespace definition
 
     class call_path;
     class call_path_parameter;
-    class call_site;
     class source_code_location;
     class calling_context;
     class interrupt_generator;
