@@ -70,5 +70,5 @@ TEST_CASE("test metric events")
 
     REQUIRE(!std::holds_alternative<otf2::definition::metric_class>(ev.metric_def()));
     REQUIRE(std::holds_alternative<otf2::definition::metric_instance>(ev.metric_def()));
-    REQUIRE(std::get<otf2::definition::metric_class>(ev.metric_def()) == mInstance);
+    REQUIRE(std::get<otf2::definition::metric_instance>(ev.metric_def()) == mInstance);
 }
