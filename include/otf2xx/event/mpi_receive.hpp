@@ -52,22 +52,30 @@ namespace event
     class mpi_receive : public base<mpi_receive>
     {
     public:
-        mpi_receive(otf2::chrono::time_point timestamp, uint32_t sender,
-                    const otf2::definition::comm& comm, uint32_t msg_tag, uint64_t msg_length)
+        mpi_receive(
+            otf2::chrono::time_point timestamp, uint32_t sender,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                comm,
+            uint32_t msg_tag, uint64_t msg_length)
         : base<mpi_receive>(timestamp), sender_(sender), comm_(comm), msg_tag_(msg_tag),
           msg_length_(msg_length)
         {
         }
 
-        mpi_receive(OTF2_AttributeList* al, otf2::chrono::time_point timestamp, uint32_t sender,
-                    const otf2::definition::comm& comm, uint32_t msg_tag, uint64_t msg_length)
+        mpi_receive(
+            OTF2_AttributeList* al, otf2::chrono::time_point timestamp, uint32_t sender,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                comm,
+            uint32_t msg_tag, uint64_t msg_length)
         : base<mpi_receive>(al, timestamp), sender_(sender), comm_(comm), msg_tag_(msg_tag),
           msg_length_(msg_length)
         {
         }
 
         mpi_receive(const otf2::event::mpi_receive& other, otf2::chrono::time_point timestamp)
-        : base<mpi_receive>(other, timestamp), sender_(other.sender()), comm_(other.comm()),
+        : base<mpi_receive>(other, timestamp), sender_(other.sender()), comm_(other.comm_),
           msg_tag_(other.msg_tag()), msg_length_(other.msg_length())
         {
         }
@@ -77,9 +85,9 @@ namespace event
             return sender_;
         }
 
-        otf2::definition::comm comm() const
+        auto comm() const
         {
-            return comm_;
+            return otf2::definition::variants_from_weak(comm_);
         }
 
         uint32_t msg_tag() const
@@ -96,7 +104,9 @@ namespace event
 
     private:
         uint32_t sender_;
-        otf2::definition::detail::weak_ref<otf2::definition::comm> comm_;
+        std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                     otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>
+            comm_;
         uint32_t msg_tag_;
         uint64_t msg_length_;
     };

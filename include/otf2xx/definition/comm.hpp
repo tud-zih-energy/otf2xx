@@ -46,12 +46,22 @@
 #include <otf2xx/definition/detail/comm_impl.hpp>
 #include <otf2xx/definition/detail/referable_base.hpp>
 
+#include <optional>
 #include <sstream>
 
 namespace otf2
 {
 namespace definition
 {
+
+    namespace detail
+    {
+        class comm_base
+        {
+        public:
+            using tag_type = comm_base;
+        };
+    } // namespace detail
 
     /**
      * \brief class for representing a comm definition
@@ -62,27 +72,18 @@ namespace definition
         using base::base;
 
     public:
-        comm(reference_type ref, const otf2::definition::string& name,
-             const otf2::definition::comm_group& group, const otf2::definition::comm& parent)
-        : base(ref, new impl_type(name, group, parent.get(), parent.ref()))
+        using comm_flag_type = impl_type::comm_flag_type;
+        using group_type = impl_type::group_type;
+
+        comm(reference_type ref, const otf2::definition::string& name, const group_type& group,
+             const otf2::definition::comm& parent, comm_flag_type flags)
+        : base(ref, new impl_type(name, group, parent.get(), parent.ref(), flags))
         {
         }
 
-        comm(reference_type ref, const otf2::definition::string& name,
-             const otf2::definition::comm_group& group)
-        : base(ref, new impl_type(name, group))
-        {
-        }
-
-        comm(reference_type ref, const otf2::definition::string& name,
-             const otf2::definition::comm_self_group& group, const otf2::definition::comm& parent)
-        : base(ref, new impl_type(name, group, parent.get(), parent.ref()))
-        {
-        }
-
-        comm(reference_type ref, const otf2::definition::string& name,
-             const otf2::definition::comm_self_group& group)
-        : base(ref, new impl_type(name, group))
+        comm(reference_type ref, const otf2::definition::string& name, const group_type& group,
+             comm_flag_type flags)
+        : base(ref, new impl_type(name, group, flags))
         {
         }
 
@@ -115,49 +116,12 @@ namespace definition
         /**
          * \brief returns the comm group of this comm
          *
-         * \returns a comm group
-         * \attention before call, check that there is a comm group
-         * \throws otf::exception if thee is no comm group
+         * \returns a std::variant of a comm group or a comm_self group
          */
-        const otf2::definition::comm_group& group() const
+        const group_type& group() const
         {
             assert(this->is_valid());
             return data_->group();
-        }
-
-        /**
-         * \brief returns the comm self group of this comm
-         *
-         * \returns a comm self group
-         * \attention before call, check that there is a comm self group
-         * \throws otf::exception if thee is no comm self group
-         */
-        const otf2::definition::comm_self_group& self_group() const
-        {
-            assert(this->is_valid());
-            return data_->self_group();
-        }
-
-        /**
-         * \brief returns if there is a comm self group
-         * If return is true, then it has got a comm self group
-         * Otherwise it has got a comm group
-         * \return bool
-         */
-        bool has_self_group() const
-        {
-            assert(this->is_valid());
-            return data_->has_self_group();
-        }
-
-        /**
-         * \brief returns the comm has got a parent
-         * \return bool
-         */
-        bool has_parent() const
-        {
-            assert(this->is_valid());
-            return data_->has_parent();
         }
 
         /**
@@ -169,7 +133,26 @@ namespace definition
         {
             assert(this->is_valid());
             auto p = data_->parent();
-            return otf2::definition::comm{ p.second, p.first };
+            if (p.first != nullptr)
+            {
+                return otf2::definition::comm{ p.second, p.first };
+            }
+            else
+            {
+                return {};
+            }
+        }
+
+        /**
+         * \brief returns the flags of the comm definition
+         *
+         * \returns returns the flags of the comm definition
+         *
+         */
+        comm_flag_type flags() const
+        {
+            assert(this->is_valid());
+            return data_->flags();
         }
     };
 

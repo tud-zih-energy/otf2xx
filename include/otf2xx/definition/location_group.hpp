@@ -39,6 +39,7 @@
 #include <otf2xx/fwd.hpp>
 #include <otf2xx/reference.hpp>
 
+#include <otf2xx/definition/location_group.hpp>
 #include <otf2xx/definition/string.hpp>
 #include <otf2xx/definition/system_tree_node.hpp>
 
@@ -64,6 +65,14 @@ namespace definition
 
     public:
         typedef otf2::common::location_group_type location_group_type;
+
+        location_group(reference_type ref, const otf2::definition::string& name,
+                       location_group_type type, const otf2::definition::system_tree_node& stm,
+                       const otf2::definition::location_group& creating_location_group)
+        : base(ref, new impl_type(name, type, stm, creating_location_group.get(),
+                                  creating_location_group.ref()))
+        {
+        }
 
         location_group(reference_type ref, const otf2::definition::string& name,
                        location_group_type type, const otf2::definition::system_tree_node& stm)
@@ -103,12 +112,30 @@ namespace definition
 
         /**
          * \brief returns the parentof the location group definition
-         * \returns otf2::definition_system_tree_node
+         * \returns otf2::definition::system_tree_node
          */
         const otf2::definition::system_tree_node& parent() const
         {
             assert(this->is_valid());
             return data_->parent();
+        }
+
+        /**
+         * \brief returns the creating location group of this location group
+         * definition \returns otf2::definition::location_group
+         */
+        otf2::definition::location_group creating_location_group() const
+        {
+            assert(this->is_valid());
+            auto p = data_->creating_location_group();
+            if (p.first != nullptr)
+            {
+                return otf2::definition::location_group{ p.second, p.first };
+            }
+            else
+            {
+                return {};
+            }
         }
     };
 } // namespace definition

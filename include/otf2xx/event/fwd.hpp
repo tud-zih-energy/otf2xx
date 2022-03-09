@@ -39,6 +39,7 @@ namespace otf2
 {
 namespace event
 {
+    class buffer;
 
     template <typename Event>
     class base;
@@ -61,6 +62,12 @@ namespace event
 
     typedef mpi_ireceive mpi_ireceive_complete;
     typedef mpi_isend mpi_isend_request;
+
+    class non_blocking_collective_request;
+    class non_blocking_collective_complete;
+
+    class comm_create;
+    class comm_destroy;
 
     class metric;
 

@@ -99,6 +99,11 @@ namespace reader
         virtual void event(const otf2::definition::location&, const otf2::event::mpi_request_cancelled&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::mpi_collective_begin&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::mpi_collective_end&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::non_blocking_collective_request&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::non_blocking_collective_complete&) {}
+        
+        virtual void event(const otf2::definition::location&, const otf2::event::comm_create&) {}
+        virtual void event(const otf2::definition::location&, const otf2::event::comm_destroy&) {}
 
         virtual void event(const otf2::definition::location&, const otf2::event::parameter_string&) {}
         virtual void event(const otf2::definition::location&, const otf2::event::parameter_int&) {}
@@ -173,6 +178,7 @@ namespace reader
         // Global definitions
         virtual void definition(const otf2::definition::attribute&) {}
         virtual void definition(const otf2::definition::comm&) {}
+        virtual void definition(const otf2::definition::inter_comm&) {}
 
         virtual void definition(const otf2::definition::locations_group&) {}
         virtual void definition(const otf2::definition::regions_group&) {}
@@ -192,7 +198,6 @@ namespace reader
 
         virtual void definition(const otf2::definition::call_path&) {}
         virtual void definition(const otf2::definition::call_path_parameter&) {}
-        virtual void definition(const otf2::definition::call_site&) {}
         virtual void definition(const otf2::definition::source_code_location&) {}
         virtual void definition(const otf2::definition::calling_context&) {}
         virtual void definition(const otf2::definition::interrupt_generator&) {}

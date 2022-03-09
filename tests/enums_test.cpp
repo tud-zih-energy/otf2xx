@@ -93,7 +93,7 @@ using namespace otf2::common;
     static_assert(sizeof(location_type) == sizeof(OTF2_LocationType), "Enum size mismatch");
     static_assert(static_cast<int>(location_type::unknown) == OTF2_LOCATION_TYPE_UNKNOWN, "Enum value mismatch");
     static_assert(static_cast<int>(location_type::cpu_thread) == OTF2_LOCATION_TYPE_CPU_THREAD, "Enum value mismatch");
-    static_assert(static_cast<int>(location_type::gpu) == OTF2_LOCATION_TYPE_GPU, "Enum value mismatch");
+    static_assert(static_cast<int>(location_type::accelerator_stream) == OTF2_LOCATION_TYPE_ACCELERATOR_STREAM, "Enum value mismatch");
     static_assert(static_cast<int>(location_type::metric) == OTF2_LOCATION_TYPE_METRIC, "Enum value mismatch");
 
     static_assert(sizeof(parameter_type) == sizeof(OTF2_ParameterType), "Enum size mismatch");
@@ -372,6 +372,7 @@ using namespace otf2::common;
     static_assert(static_cast<int>(mapping_type_type::interrupt_generator) == OTF2_MAPPING_INTERRUPT_GENERATOR, "Enum value mismatch");
     static_assert(static_cast<int>(mapping_type_type::io_file) == OTF2_MAPPING_IO_FILE, "Enum value mismatch");
     static_assert(static_cast<int>(mapping_type_type::io_handle) == OTF2_MAPPING_IO_HANDLE, "Enum value mismatch");
+    static_assert(static_cast<int>(mapping_type_type::location_group) == OTF2_MAPPING_LOCATION_GROUP, "Enum value mismatch");
     static_assert(static_cast<int>(mapping_type_type::max) == OTF2_MAPPING_MAX, "Enum value mismatch");
 
     static_assert(sizeof(marker_severity_type) == sizeof(OTF2_MarkerSeverity), "Enum size mismatch");
@@ -387,6 +388,19 @@ using namespace otf2::common;
     static_assert(static_cast<int>(marker_scope_type::system_tree_node) == OTF2_MARKER_SCOPE_SYSTEM_TREE_NODE, "Enum value mismatch");
     static_assert(static_cast<int>(marker_scope_type::group) == OTF2_MARKER_SCOPE_GROUP, "Enum value mismatch");
     static_assert(static_cast<int>(marker_scope_type::comm) == OTF2_MARKER_SCOPE_COMM, "Enum value mismatch");
+
+    static_assert(sizeof(comm_flag_type) == sizeof(OTF2_CommFlag), "Enum size mismatch");
+    static_assert(static_cast<int>(comm_flag_type::none) == OTF2_COMM_FLAG_NONE, "Enum value mismatch");
+    static_assert(static_cast<int>(comm_flag_type::create_destroy_events) == OTF2_COMM_FLAG_CREATE_DESTROY_EVENTS, "Enum value mismatch");
+
+    static_assert(sizeof(rma_win_flag_type) == sizeof(OTF2_RmaWinFlag), "Enum size mismatch");
+    static_assert(static_cast<int>(rma_win_flag_type::none) == OTF2_RMA_WIN_FLAG_NONE, "Enum value mismatch");
+    static_assert(static_cast<int>(rma_win_flag_type::create_destroy_events) == OTF2_RMA_WIN_FLAG_CREATE_DESTROY_EVENTS, "Enum value mismatch");
+
+    static_assert(sizeof(collective_root_type) == sizeof(OTF2_CollectiveRoot), "Enum size mismatch");
+    static_assert(static_cast<int>(collective_root_type::none) == OTF2_COLLECTIVE_ROOT_NONE, "Enum value mismatch");
+    static_assert(static_cast<int>(collective_root_type::self) == OTF2_COLLECTIVE_ROOT_SELF, "Enum value mismatch");
+    static_assert(static_cast<int>(collective_root_type::this_group) == OTF2_COLLECTIVE_ROOT_THIS_GROUP, "Enum value mismatch");
 
 void silence_no_symbols_warning()
 {

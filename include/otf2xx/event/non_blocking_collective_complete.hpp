@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2022, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,75 +32,104 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_EVENT_THREAD_BEGIN_HPP
-#define INCLUDE_OTF2XX_EVENT_THREAD_BEGIN_HPP
+#pragma once
 
 #include <otf2xx/definition/comm.hpp>
-
-#include <otf2xx/event/base.hpp>
+#include <otf2xx/definition/fwd.hpp>
+#include <otf2xx/definition/inter_comm.hpp>
 
 #include <otf2xx/chrono/chrono.hpp>
 
+#include <otf2xx/event/base.hpp>
+
 #include <otf2xx/definition/detail/weak_ref.hpp>
 #include <otf2xx/writer/fwd.hpp>
+
+#include <otf2xx/common.hpp>
 
 namespace otf2
 {
 namespace event
 {
 
-    class thread_begin : public base<thread_begin>
+    class non_blocking_collective_complete : public base<non_blocking_collective_complete>
     {
     public:
-        // construct with values
-        thread_begin(
-            otf2::chrono::time_point timestamp,
+        typedef otf2::common::collective_type collective_type;
+
+        non_blocking_collective_complete(
+            otf2::chrono::time_point timestamp, collective_type type,
             const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
                                otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
-                thread_contingent,
-            std::uint64_t sequence_number)
-        : base<thread_begin>(timestamp), thread_contingent_(thread_contingent),
-          sequence_number_(sequence_number)
+                comm,
+            std::uint32_t root, std::uint64_t sent, std::uint64_t received,
+            std::uint64_t request_id)
+        : base<non_blocking_collective_complete>(timestamp), type_(type), comm_(comm), root_(root),
+          sent_(sent), received_(received), request_id_(request_id)
         {
         }
 
-        thread_begin(
-            OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+        non_blocking_collective_complete(
+            OTF2_AttributeList* al, otf2::chrono::time_point timestamp, collective_type type,
             const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
                                otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
-                thread_contingent,
-            std::uint64_t sequence_number)
-        : base<thread_begin>(al, timestamp), thread_contingent_(thread_contingent),
-          sequence_number_(sequence_number)
+                comm,
+            std::uint32_t root, std::uint64_t sent, std::uint64_t received,
+            std::uint64_t request_id)
+        : base<non_blocking_collective_complete>(al, timestamp), type_(type), comm_(comm),
+          root_(root), sent_(sent), received_(received), request_id_(request_id)
         {
         }
 
-        // copy constructor with new timestamp
-        thread_begin(const otf2::event::thread_begin& other, otf2::chrono::time_point timestamp)
-        : base<thread_begin>(other, timestamp), thread_contingent_(other.thread_contingent_),
-          sequence_number_(other.sequence_number_)
+        non_blocking_collective_complete(const non_blocking_collective_complete& other,
+                                         otf2::chrono::time_point timestamp)
+        : base<non_blocking_collective_complete>(other, timestamp), type_(other.type()),
+          comm_(other.comm_), root_(other.root()), sent_(other.sent()), received_(other.received()),
+          request_id_(other.request_id())
         {
         }
 
-        auto thread_contingent() const
+        collective_type type() const
         {
-            return otf2::definition::variants_from_weak(thread_contingent_);
+            return type_;
         }
 
-        std::uint64_t sequence_number() const
+        auto comm() const
         {
-            return sequence_number_;
+            return otf2::definition::variants_from_weak(comm_);
+        }
+
+        std::uint32_t root() const
+        {
+            return root_;
+        }
+
+        std::uint64_t sent() const
+        {
+            return sent_;
+        }
+
+        std::uint64_t received() const
+        {
+            return received_;
+        }
+
+        uint64_t request_id() const
+        {
+            return request_id_;
         }
 
         friend class otf2::writer::local;
 
     private:
+        collective_type type_;
         std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
                      otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>
-            thread_contingent_;
-        std::uint64_t sequence_number_;
+            comm_;
+        std::uint32_t root_;
+        std::uint64_t sent_;
+        std::uint64_t received_;
+        uint64_t request_id_;
     };
 } // namespace event
 } // namespace otf2
-
-#endif // INCLUDE_OTF2XX_EVENT_THREAD_BEGIN_HPP

@@ -53,15 +53,23 @@ namespace event
     {
     public:
         // construct with values
-        thread_end(otf2::chrono::time_point timestamp,
-                   const otf2::definition::comm& thread_contingent, std::uint64_t sequence_number)
+        thread_end(
+            otf2::chrono::time_point timestamp,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                thread_contingent,
+            std::uint64_t sequence_number)
         : base<thread_end>(timestamp), thread_contingent_(thread_contingent),
           sequence_number_(sequence_number)
         {
         }
 
-        thread_end(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                   const otf2::definition::comm& thread_contingent, std::uint64_t sequence_number)
+        thread_end(
+            OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                thread_contingent,
+            std::uint64_t sequence_number)
         : base<thread_end>(al, timestamp), thread_contingent_(thread_contingent),
           sequence_number_(sequence_number)
         {
@@ -74,9 +82,9 @@ namespace event
         {
         }
 
-        otf2::definition::comm thread_contingent() const
+        auto thread_contingent() const
         {
-            return thread_contingent_;
+            return otf2::definition::variants_from_weak(thread_contingent_);
         }
 
         std::uint64_t sequence_number() const
@@ -87,7 +95,9 @@ namespace event
         friend class otf2::writer::local;
 
     private:
-        otf2::definition::detail::weak_ref<otf2::definition::comm> thread_contingent_;
+        std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                     otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>
+            thread_contingent_;
         std::uint64_t sequence_number_;
     };
 } // namespace event

@@ -110,32 +110,17 @@ namespace reader
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
 
-                OTF2_CallbackCode call_site(void* userData, OTF2_CallsiteRef self,
-                                            OTF2_StringRef sourceFile, uint32_t lineNumber,
-                                            OTF2_RegionRef enteredRegion, OTF2_RegionRef leftRegion)
-                {
-                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
-                    auto& registry = reader->registry();
-
-                    const auto& def = registry.create<otf2::definition::call_site>(
-                        self, registry.get<otf2::definition::string>(sourceFile), lineNumber,
-                        registry.get<otf2::definition::region>(enteredRegion),
-                        registry.get<otf2::definition::region>(leftRegion));
-
-                    reader->callback().definition(def);
-
-                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
-                }
-
                 OTF2_CallbackCode clock_properties(void* userData, uint64_t timerResolution,
-                                                   uint64_t globalOffset, uint64_t traceLength)
+                                                   uint64_t globalOffset, uint64_t traceLength,
+                                                   uint64_t realtimeTimestamp)
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
 
                     std::unique_ptr<otf2::definition::clock_properties> cp(
-                        new otf2::definition::clock_properties(otf2::chrono::ticks(timerResolution),
-                                                               otf2::chrono::ticks(globalOffset),
-                                                               otf2::chrono::ticks(traceLength)));
+                        new otf2::definition::clock_properties(
+                            otf2::chrono::ticks(timerResolution), otf2::chrono::ticks(globalOffset),
+                            otf2::chrono::ticks(traceLength),
+                            otf2::chrono::ticks(realtimeTimestamp)));
 
                     reader->set_clock_properties(std::move(cp));
 
@@ -145,28 +130,42 @@ namespace reader
                 }
 
                 OTF2_CallbackCode comm(void* userData, OTF2_CommRef self, OTF2_StringRef name,
-                                       OTF2_GroupRef group, OTF2_CommRef parent)
+                                       OTF2_GroupRef group, OTF2_CommRef parent,
+                                       OTF2_CommFlag flags)
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                     auto& registry = reader->registry();
 
-                    // Fuck it yeah, C++14 lambda paramter auto deduction for da prezz
-                    auto process = [&](const auto& group) {
-                        const auto& c = registry.create<otf2::definition::comm>(
-                            self, registry.get<otf2::definition::string>(name), group,
-                            registry.get<otf2::definition::comm>(parent));
+                    const auto& c = registry.create<otf2::definition::comm>(
+                        self, registry.get<otf2::definition::string>(name),
+                        registry.get_variant<otf2::definition::comm_group,
+                                             otf2::definition::comm_self_group>(group),
+                        registry.get<otf2::definition::comm>(parent),
+                        static_cast<otf2::definition::comm::comm_flag_type>(flags));
 
-                        reader->callback().definition(c);
-                    };
+                    reader->callback().definition(c);
 
-                    if (registry.has<otf2::definition::comm_group>(group))
-                    {
-                        process(registry.get<otf2::definition::comm_group>(group));
-                    }
-                    else
-                    {
-                        process(registry.get<otf2::definition::comm_self_group>(group));
-                    }
+                    return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+                }
+
+                OTF2_CallbackCode inter_comm(void* userData, OTF2_CommRef self, OTF2_StringRef name,
+                                             OTF2_GroupRef groupA, OTF2_GroupRef groupB,
+                                             OTF2_CommRef commonCommunicator, OTF2_CommFlag flags)
+                {
+                    otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                    auto& registry = reader->registry();
+
+                    const auto& c = registry.create<otf2::definition::inter_comm>(
+                        self, registry.get<otf2::definition::string>(name),
+                        registry.get_variant<otf2::definition::comm_group,
+                                             otf2::definition::comm_self_group>(groupA),
+                        registry.get_variant<otf2::definition::comm_group,
+                                             otf2::definition::comm_self_group>(groupB),
+                        registry.get_variant<otf2::definition::comm, otf2::definition::inter_comm>(
+                            commonCommunicator),
+                        static_cast<otf2::definition::comm::comm_flag_type>(flags));
+
+                    reader->callback().definition(c);
 
                     return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
                 }
@@ -321,7 +320,8 @@ namespace reader
                 OTF2_CallbackCode location_group(void* userData, OTF2_LocationGroupRef self,
                                                  OTF2_StringRef name,
                                                  OTF2_LocationGroupType locationGroupType,
-                                                 OTF2_SystemTreeNodeRef systemTreeParent)
+                                                 OTF2_SystemTreeNodeRef systemTreeParent,
+                                                 OTF2_LocationGroupRef creatingLocationGroup)
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                     auto& registry = reader->registry();
@@ -330,7 +330,8 @@ namespace reader
                         self, registry.get<otf2::definition::string>(name),
                         static_cast<otf2::definition::location_group::location_group_type>(
                             locationGroupType),
-                        registry.get<otf2::definition::system_tree_node>(systemTreeParent));
+                        registry.get<otf2::definition::system_tree_node>(systemTreeParent),
+                        registry.get<otf2::definition::location_group>(creatingLocationGroup));
 
                     reader->callback().definition(lg);
 
@@ -396,7 +397,8 @@ namespace reader
                     auto& registry = reader->registry();
 
                     // I love C++14 auto lambda paramters <3 <3 <3
-                    auto process = [&](const auto& scope) {
+                    auto process = [&](const auto& scope)
+                    {
                         const auto& mi = registry.create<otf2::definition::metric_instance>(
                             self, registry.get<otf2::definition::metric_class>(metricClass),
                             registry.get<otf2::definition::location>(recorder), scope);
@@ -493,14 +495,15 @@ namespace reader
                 }
 
                 OTF2_CallbackCode rma_win(void* userData, OTF2_RmaWinRef self, OTF2_StringRef name,
-                                          OTF2_CommRef comm)
+                                          OTF2_CommRef comm, OTF2_RmaWinFlag flags)
                 {
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                     auto& registry = reader->registry();
 
                     const auto& rw = registry.create<otf2::definition::rma_win>(
                         self, registry.get<otf2::definition::string>(name),
-                        registry.get<otf2::definition::comm>(comm));
+                        registry.get<otf2::definition::comm>(comm),
+                        static_cast<otf2::definition::rma_win::rma_win_flag_type>(flags));
 
                     reader->callback().definition(rw);
 
@@ -724,7 +727,8 @@ namespace reader
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                     auto& registry = reader->registry();
 
-                    auto process = [&](const auto& file) {
+                    auto process = [&](const auto& file)
+                    {
                         const auto& ioh = registry.create<otf2::definition::io_handle>(
                             self, registry.get<otf2::definition::string>(name), file,
                             registry.get<otf2::definition::io_paradigm>(ioParadigm),
@@ -789,7 +793,8 @@ namespace reader
                     otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                     auto& registry = reader->registry();
 
-                    auto process = [&](const auto& file) {
+                    auto process = [&](const auto& file)
+                    {
                         const auto& def = registry.create<otf2::definition::io_file_property>(
                             file, registry.get<otf2::definition::string>(name),
                             static_cast<otf2::definition::io_file_property::type_type>(type),

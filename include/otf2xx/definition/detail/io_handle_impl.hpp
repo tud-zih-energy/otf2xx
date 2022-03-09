@@ -112,18 +112,8 @@ namespace definition
                 return comm_;
             }
 
-            bool has_parent() const
-            {
-                return parent_.get() != nullptr;
-            }
-
             auto parent() const
             {
-                if (!has_parent())
-                {
-                    make_exception("The io handle '", name().str(), "' hasn't got a parent.");
-                }
-
                 return std::make_pair(parent_.get(), pref_);
             }
 

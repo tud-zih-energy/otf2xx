@@ -183,36 +183,35 @@ namespace writer
 
         void write(const otf2::event::metric& metric)
         {
-            otf2::reference<otf2::definition::detail::metric_base>::ref_type ref;
-
-            if (metric.has_metric_instance())
-            {
-                ref = metric.metric_instance_.ref();
-            }
-            else
-            {
-                ref = metric.metric_class_.ref();
-            }
-
             std::size_t num_members = metric.raw_values().size();
             const auto& type_ids = metric.raw_values().type_ids();
             const auto& metric_values = metric.raw_values().values();
 
-            check(OTF2_EvtWriter_Metric(evt_wrt_, metric.attribute_list().get(),
-                                        convert(metric.timestamp()), ref, num_members,
-                                        type_ids.data(), metric_values.data()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& metric_ref)
+                {
+                    check(OTF2_EvtWriter_Metric(evt_wrt_, metric.attribute_list().get(),
+                                                convert(metric.timestamp()), metric_ref.ref(),
+                                                num_members, type_ids.data(), metric_values.data()),
+                          "Couldn't write event to local event writer.");
+                },
+                metric.metric_);
             location_.event_written();
         }
 
     public:
         void write(const otf2::event::mpi_ireceive_complete& data)
         {
-            check(OTF2_EvtWriter_MpiIrecv(evt_wrt_, data.attribute_list().get(),
-                                          convert(data.timestamp()), data.sender(),
-                                          data.comm_.ref(), data.msg_tag(), data.msg_length(),
-                                          data.request_id()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_MpiIrecv(evt_wrt_, data.attribute_list().get(),
+                                                  convert(data.timestamp()), data.sender(),
+                                                  comm.ref(), data.msg_tag(), data.msg_length(),
+                                                  data.request_id()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.comm_);
             location_.event_written();
         }
 
@@ -226,11 +225,16 @@ namespace writer
 
         void write(const otf2::event::mpi_isend_request& data)
         {
-            check(OTF2_EvtWriter_MpiIsend(evt_wrt_, data.attribute_list().get(),
-                                          convert(data.timestamp()), data.receiver(),
-                                          data.comm_.ref(), data.msg_tag(), data.msg_length(),
-                                          data.request_id()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_MpiIsend(evt_wrt_, data.attribute_list().get(),
+                                                  convert(data.timestamp()), data.receiver(),
+                                                  comm.ref(), data.msg_tag(), data.msg_length(),
+                                                  data.request_id()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.comm_);
             location_.event_written();
         }
 
@@ -244,10 +248,15 @@ namespace writer
 
         void write(const otf2::event::mpi_receive& data)
         {
-            check(OTF2_EvtWriter_MpiRecv(evt_wrt_, data.attribute_list().get(),
-                                         convert(data.timestamp()), data.sender(), data.comm_.ref(),
-                                         data.msg_tag(), data.msg_length()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_MpiRecv(evt_wrt_, data.attribute_list().get(),
+                                                 convert(data.timestamp()), data.sender(),
+                                                 comm.ref(), data.msg_tag(), data.msg_length()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.comm_);
             location_.event_written();
         }
 
@@ -269,10 +278,15 @@ namespace writer
 
         void write(const otf2::event::mpi_send& data)
         {
-            check(OTF2_EvtWriter_MpiSend(evt_wrt_, data.attribute_list().get(),
-                                         convert(data.timestamp()), data.receiver(),
-                                         data.comm_.ref(), data.msg_tag(), data.msg_length()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_MpiSend(evt_wrt_, data.attribute_list().get(),
+                                                 convert(data.timestamp()), data.receiver(),
+                                                 comm.ref(), data.msg_tag(), data.msg_length()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.comm_);
             location_.event_written();
         }
 
@@ -286,11 +300,66 @@ namespace writer
 
         void write(const otf2::event::mpi_collective_end& data)
         {
-            check(OTF2_EvtWriter_MpiCollectiveEnd(
-                      evt_wrt_, data.attribute_list().get(), convert(data.timestamp()),
-                      static_cast<OTF2_CollectiveOp>(data.type()), data.comm_.ref(), data.root(),
-                      data.sent(), data.received()),
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_MpiCollectiveEnd(
+                              evt_wrt_, data.attribute_list().get(), convert(data.timestamp()),
+                              static_cast<OTF2_CollectiveOp>(data.type()), comm.ref(), data.root(),
+                              data.sent(), data.received()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.comm_);
+            location_.event_written();
+        }
+
+        void write(const otf2::event::non_blocking_collective_request& data)
+        {
+            check(OTF2_EvtWriter_NonBlockingCollectiveRequest(evt_wrt_, data.attribute_list().get(),
+                                                              convert(data.timestamp()),
+                                                              data.request_id()),
                   "Couldn't write event to local event writer.");
+            location_.event_written();
+        }
+
+        void write(const otf2::event::non_blocking_collective_complete& data)
+        {
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_NonBlockingCollectiveComplete(
+                              evt_wrt_, data.attribute_list().get(), convert(data.timestamp()),
+                              static_cast<OTF2_CollectiveOp>(data.type()), comm.ref(), data.root(),
+                              data.sent(), data.received(), data.request_id()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.comm_);
+            location_.event_written();
+        }
+
+        void write(const otf2::event::comm_create& data)
+        {
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_CommCreate(evt_wrt_, data.attribute_list().get(),
+                                                    convert(data.timestamp()), comm.ref()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.comm_);
+            location_.event_written();
+        }
+
+        void write(const otf2::event::comm_destroy& data)
+        {
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_CommDestroy(evt_wrt_, data.attribute_list().get(),
+                                                     convert(data.timestamp()), comm.ref()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.comm_);
             location_.event_written();
         }
 
@@ -433,80 +502,125 @@ namespace writer
 
         void write(const otf2::event::thread_task_complete& data)
         {
-            check(OTF2_EvtWriter_ThreadTaskComplete(evt_wrt_, data.attribute_list().get(),
-                                                    convert(data.timestamp()), data.team_.ref(),
-                                                    data.thread(), data.generation()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_ThreadTaskComplete(evt_wrt_, data.attribute_list().get(),
+                                                            convert(data.timestamp()), comm.ref(),
+                                                            data.thread(), data.generation()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.team_);
             location_.event_written();
         }
 
         void write(const otf2::event::thread_task_create& data)
         {
-            check(OTF2_EvtWriter_ThreadTaskCreate(evt_wrt_, data.attribute_list().get(),
-                                                  convert(data.timestamp()), data.team_.ref(),
-                                                  data.thread(), data.generation()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_ThreadTaskCreate(evt_wrt_, data.attribute_list().get(),
+                                                          convert(data.timestamp()), comm.ref(),
+                                                          data.thread(), data.generation()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.team_);
             location_.event_written();
         }
 
         void write(const otf2::event::thread_task_switch& data)
         {
-            check(OTF2_EvtWriter_ThreadTaskSwitch(evt_wrt_, data.attribute_list().get(),
-                                                  convert(data.timestamp()), data.team_.ref(),
-                                                  data.thread(), data.generation()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_ThreadTaskSwitch(evt_wrt_, data.attribute_list().get(),
+                                                          convert(data.timestamp()), comm.ref(),
+                                                          data.thread(), data.generation()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.team_);
             location_.event_written();
         }
 
         void write(const otf2::event::thread_team_begin& data)
         {
-            check(OTF2_EvtWriter_ThreadTeamBegin(evt_wrt_, data.attribute_list().get(),
-                                                 convert(data.timestamp()), data.comm_.ref()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_ThreadTeamBegin(evt_wrt_, data.attribute_list().get(),
+                                                         convert(data.timestamp()), comm.ref()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.comm_);
             location_.event_written();
         }
 
         void write(const otf2::event::thread_team_end& data)
         {
-            check(OTF2_EvtWriter_ThreadTeamEnd(evt_wrt_, data.attribute_list().get(),
-                                               convert(data.timestamp()), data.comm_.ref()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_ThreadTeamEnd(evt_wrt_, data.attribute_list().get(),
+                                                       convert(data.timestamp()), comm.ref()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.comm_);
             location_.event_written();
         }
 
         void write(const otf2::event::thread_create& data)
         {
-            check(OTF2_EvtWriter_ThreadCreate(
-                      evt_wrt_, data.attribute_list().get(), convert(data.timestamp()),
-                      data.thread_contingent_.ref(), data.sequence_number()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_ThreadCreate(evt_wrt_, data.attribute_list().get(),
+                                                      convert(data.timestamp()), comm.ref(),
+                                                      data.sequence_number()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.thread_contingent_);
             location_.event_written();
         }
 
         void write(const otf2::event::thread_begin& data)
         {
-            check(OTF2_EvtWriter_ThreadBegin(evt_wrt_, data.attribute_list().get(),
-                                             convert(data.timestamp()),
-                                             data.thread_contingent_.ref(), data.sequence_number()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_ThreadBegin(evt_wrt_, data.attribute_list().get(),
+                                                     convert(data.timestamp()), comm.ref(),
+                                                     data.sequence_number()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.thread_contingent_);
             location_.event_written();
         }
 
         void write(const otf2::event::thread_wait& data)
         {
-            check(OTF2_EvtWriter_ThreadWait(evt_wrt_, data.attribute_list().get(),
-                                            convert(data.timestamp()),
-                                            data.thread_contingent_.ref(), data.sequence_number()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_ThreadWait(evt_wrt_, data.attribute_list().get(),
+                                                    convert(data.timestamp()), comm.ref(),
+                                                    data.sequence_number()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.thread_contingent_);
             location_.event_written();
         }
 
         void write(const otf2::event::thread_end& data)
         {
-            check(OTF2_EvtWriter_ThreadEnd(evt_wrt_, data.attribute_list().get(),
-                                           convert(data.timestamp()), data.thread_contingent_.ref(),
-                                           data.sequence_number()),
-                  "Couldn't write event to local event writer.");
+            std::visit(
+                [&](auto&& comm)
+                {
+                    check(OTF2_EvtWriter_ThreadEnd(evt_wrt_, data.attribute_list().get(),
+                                                   convert(data.timestamp()), comm.ref(),
+                                                   data.sequence_number()),
+                          "Couldn't write event to local event writer.");
+                },
+                data.thread_contingent_);
             location_.event_written();
         }
 

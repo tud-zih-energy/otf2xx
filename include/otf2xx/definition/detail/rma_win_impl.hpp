@@ -56,10 +56,11 @@ namespace definition
         {
         public:
             using tag_type = rma_win;
+            using rma_win_flag_type = otf2::common::rma_win_flag_type;
 
             rma_win_impl(const otf2::definition::string& name, const otf2::definition::comm& comm,
-                         std::int64_t retain_count = 0)
-            : ref_counted(retain_count), name_(name), comm_(comm)
+                         rma_win_flag_type flags, std::int64_t retain_count = 0)
+            : ref_counted(retain_count), name_(name), comm_(comm), flags_(flags)
             {
             }
 
@@ -78,9 +79,15 @@ namespace definition
                 return comm_;
             }
 
+            rma_win_flag_type flags() const
+            {
+                return flags_;
+            }
+
         private:
             otf2::definition::string name_;
             otf2::definition::comm comm_;
+            rma_win_flag_type flags_;
         };
     } // namespace detail
 } // namespace definition

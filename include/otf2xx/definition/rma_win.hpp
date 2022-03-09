@@ -58,9 +58,11 @@ namespace definition
         using base::base;
 
     public:
+        using rma_win_flag_type = impl_type::rma_win_flag_type;
+
         rma_win(reference_type ref, const otf2::definition::string& name,
-                const otf2::definition::comm& comm)
-        : base(ref, new impl_type(name, comm))
+                const otf2::definition::comm& comm, rma_win_flag_type flags)
+        : base(ref, new impl_type(name, comm, flags))
         {
         }
 
@@ -87,6 +89,17 @@ namespace definition
         {
             assert(this->is_valid());
             return data_->comm();
+        }
+
+        /**
+         * Special characteristics of this RMA window.
+         * \brief Special characteristics of this RMA window
+         * \returns the rma window flags
+         */
+        rma_win_flag_type flags() const
+        {
+            assert(this->is_valid());
+            return data_->flags();
         }
     };
 } // namespace definition

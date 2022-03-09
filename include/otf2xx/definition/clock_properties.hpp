@@ -68,13 +68,22 @@ namespace definition
         }
 
         clock_properties(otf2::chrono::ticks ticks_per_second, otf2::chrono::ticks start_time,
+                         otf2::chrono::ticks length, otf2::chrono::ticks realtime_timestamp)
+        : ticks_per_second_(ticks_per_second), start_time_(start_time), length_(length),
+          realtime_timestamp_(realtime_timestamp)
+        {
+        }
+
+        clock_properties(otf2::chrono::ticks ticks_per_second, otf2::chrono::ticks start_time,
                          otf2::chrono::ticks length)
-        : ticks_per_second_(ticks_per_second), start_time_(start_time), length_(length)
+        : ticks_per_second_(ticks_per_second), start_time_(start_time), length_(length),
+          realtime_timestamp_(OTF2_UNDEFINED_TIMESTAMP)
         {
         }
 
         clock_properties()
-        : ticks_per_second_(otf2::chrono::duration::period::den), start_time_(0), length_(-1)
+        : ticks_per_second_(otf2::chrono::duration::period::den), start_time_(0), length_(-1),
+          realtime_timestamp_(0)
         {
         }
 
@@ -114,10 +123,24 @@ namespace definition
             return length_;
         }
 
+        /**
+         * \brief returns the realtime timestamp of the start of the trace file
+         *
+         * A realtime timestamp of the `globalOffset` timestamp in nanoseconds since
+         * 1970-01-01T00:00 UTC.
+         *
+         * \return start of the trace
+         */
+        otf2::chrono::ticks realtime_timestamp() const
+        {
+            return realtime_timestamp_;
+        }
+
     private:
         otf2::chrono::ticks ticks_per_second_;
         otf2::chrono::ticks start_time_;
         otf2::chrono::ticks length_;
+        otf2::chrono::ticks realtime_timestamp_;
     };
 } // namespace definition
 } // namespace otf2

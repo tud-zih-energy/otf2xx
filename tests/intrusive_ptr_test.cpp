@@ -228,8 +228,8 @@ TEST_CASE("test lifetime", "[intrusive_ptr]")
                     // So in the case of self-handle assignment a do-nothing or a free of the
                     // moved-from object is valid
                     REQUIRE_THAT(debug_ptr::refCts[raw_ptr],
-                                 Catch::Predicate<int64_t>(
-                                     [](int64_t val) -> bool { return val == 1 || val == 2; }));
+                                 Catch::Predicate<int64_t>([](int64_t val) -> bool
+                                                           { return val == 1 || val == 2; }));
                 }
             }
         }

@@ -37,6 +37,7 @@
 
 #include <otf2xx/definition/comm.hpp>
 #include <otf2xx/definition/fwd.hpp>
+#include <otf2xx/definition/inter_comm.hpp>
 
 #include <otf2xx/chrono/chrono.hpp>
 
@@ -57,16 +58,19 @@ namespace event
     public:
         typedef otf2::common::collective_type collective_type;
 
-        mpi_collective_end(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-                           collective_type type, const otf2::definition::comm& comm,
-                           std::uint32_t root, std::uint64_t sent, std::uint64_t received)
+        mpi_collective_end(
+            OTF2_AttributeList* al, otf2::chrono::time_point timestamp, collective_type type,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                comm,
+            std::uint32_t root, std::uint64_t sent, std::uint64_t received)
         : base<mpi_collective_end>(al, timestamp), type_(type), comm_(comm), root_(root),
           sent_(sent), received_(received)
         {
         }
 
         mpi_collective_end(const mpi_collective_end& other, otf2::chrono::time_point timestamp)
-        : base<mpi_collective_end>(other, timestamp), type_(other.type()), comm_(other.comm()),
+        : base<mpi_collective_end>(other, timestamp), type_(other.type()), comm_(other.comm_),
           root_(other.root()), sent_(other.sent()), received_(other.received())
         {
         }
@@ -76,9 +80,9 @@ namespace event
             return type_;
         }
 
-        otf2::definition::comm comm() const
+        auto comm() const
         {
-            return comm_;
+            return otf2::definition::variants_from_weak(comm_);
         }
 
         std::uint32_t root() const
@@ -100,7 +104,9 @@ namespace event
 
     private:
         collective_type type_;
-        otf2::definition::detail::weak_ref<otf2::definition::comm> comm_;
+        std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                     otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>
+            comm_;
         std::uint32_t root_;
         std::uint64_t sent_;
         std::uint64_t received_;

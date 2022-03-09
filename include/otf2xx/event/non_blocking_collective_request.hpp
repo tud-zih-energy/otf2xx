@@ -2,7 +2,7 @@
  * This file is part of otf2xx (https://github.com/tud-zih-energy/otf2xx)
  * otf2xx - A wrapper for the Open Trace Format 2 library
  *
- * Copyright (c) 2013-2016, Technische Universität Dresden, Germany
+ * Copyright (c) 2013-2022, Technische Universität Dresden, Germany
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,8 +32,7 @@
  *
  */
 
-#ifndef INCLUDE_OTF2XX_EVENT_THREAD_TEAM_BEGIN_HPP
-#define INCLUDE_OTF2XX_EVENT_THREAD_TEAM_BEGIN_HPP
+#pragma once
 
 #include <otf2xx/definition/fwd.hpp>
 
@@ -41,53 +40,50 @@
 
 #include <otf2xx/event/base.hpp>
 
-#include <otf2xx/definition/detail/weak_ref.hpp>
-#include <otf2xx/writer/fwd.hpp>
-
 namespace otf2
 {
 namespace event
 {
 
-    class thread_team_begin : public base<thread_team_begin>
+    /**
+     * @brief The class representing the non_blocking_collective_request event
+     */
+    class non_blocking_collective_request : public base<non_blocking_collective_request>
     {
     public:
-        thread_team_begin(
-            otf2::chrono::time_point timestamp,
-            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
-                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
-                comm)
-        : base<thread_team_begin>(timestamp), comm_(comm)
+        /**
+         * @brief standard constructor
+         * @param timestamp the timestamp, when the event has happen
+         */
+        non_blocking_collective_request(otf2::chrono::time_point timestamp, uint64_t request_id)
+        : base<non_blocking_collective_request>(timestamp), request_id_(request_id)
         {
         }
 
-        thread_team_begin(
-            OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
-            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
-                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
-                comm)
-        : base<thread_team_begin>(al, timestamp), comm_(comm)
+        non_blocking_collective_request(OTF2_AttributeList* al, otf2::chrono::time_point timestamp,
+                                        uint64_t request_id)
+        : base<non_blocking_collective_request>(al, timestamp), request_id_(request_id)
         {
         }
 
-        thread_team_begin(const otf2::event::thread_team_begin& other,
-                          otf2::chrono::time_point timestamp)
-        : base<thread_team_begin>(other, timestamp), comm_(other.comm_)
+        /**
+         * @brief special copy constructor
+         * @param other the other event
+         * @param timestamp the new timestamp
+         */
+        non_blocking_collective_request(const non_blocking_collective_request& other,
+                                        otf2::chrono::time_point timestamp)
+        : base<non_blocking_collective_request>(other, timestamp), request_id_(other.request_id())
         {
         }
 
-        auto team() const
+        uint64_t request_id() const
         {
-            return otf2::definition::variants_from_weak(comm_);
+            return request_id_;
         }
-        friend class otf2::writer::local;
 
     private:
-        std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
-                     otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>
-            comm_;
+        uint64_t request_id_;
     };
 } // namespace event
 } // namespace otf2
-
-#endif // INCLUDE_OTF2XX_EVENT_THREAD_TEAM_BEGIN_HPP

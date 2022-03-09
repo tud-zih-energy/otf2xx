@@ -973,7 +973,7 @@ namespace event
 
                     if (current->request_id() == event.request_id())
                     {
-                        current->attach_data(event.sender(), event.comm(), event.msg_tag(),
+                        current->attach_data(event.sender(), event.comm_, event.msg_tag(),
                                              event.msg_length());
                         node.completed = true;
                         break;

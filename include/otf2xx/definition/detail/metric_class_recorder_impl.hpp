@@ -52,46 +52,18 @@ namespace definition
             using tag_type = metric_class_recorder;
 
         public:
-            metric_class_recorder_impl(const otf2::definition::metric_class& metric,
-                                       const otf2::definition::location& recorder,
-                                       std::int64_t retain_count = 0)
-            : ref_counted(retain_count), metric_class_(metric), recorder_(recorder)
+            metric_class_recorder_impl(
+                const std::variant<otf2::definition::metric_class,
+                                   otf2::definition::metric_instance>& metric,
+                const otf2::definition::location& recorder, std::int64_t retain_count = 0)
+            : ref_counted(retain_count), metric_(metric), recorder_(recorder)
             {
             }
 
-            metric_class_recorder_impl(const otf2::definition::metric_instance& metric,
-                                       const otf2::definition::location& recorder,
-                                       std::int64_t retain_count = 0)
-            : ref_counted(retain_count), metric_instance_(metric), recorder_(recorder)
+            const std::variant<otf2::definition::metric_class, otf2::definition::metric_instance>&
+            metric() const
             {
-            }
-
-            bool has_metric_class() const
-            {
-                return metric_class_.is_valid();
-            }
-
-            const otf2::definition::metric_class& metric_class() const
-            {
-                if (!has_metric_class())
-                {
-                    make_exception("This has no metric_class");
-                }
-                return metric_class_;
-            }
-
-            bool has_metric_instance() const
-            {
-                return metric_instance_.is_valid();
-            }
-
-            const otf2::definition::metric_instance& metric_instance() const
-            {
-                if (!has_metric_instance())
-                {
-                    make_exception("This has no metric_instance");
-                }
-                return metric_instance_;
+                return metric_;
             }
 
             const otf2::definition::location& recorder() const
@@ -100,8 +72,7 @@ namespace definition
             }
 
         private:
-            otf2::definition::metric_class metric_class_;
-            otf2::definition::metric_instance metric_instance_;
+            std::variant<otf2::definition::metric_class, otf2::definition::metric_instance> metric_;
             otf2::definition::location recorder_;
         };
     } // namespace detail

@@ -52,6 +52,11 @@
 #include <otf2xx/event/mpi_request_cancelled.hpp>
 #include <otf2xx/event/mpi_request_test.hpp>
 #include <otf2xx/event/mpi_send.hpp>
+#include <otf2xx/event/non_blocking_collective_complete.hpp>
+#include <otf2xx/event/non_blocking_collective_request.hpp>
+
+#include <otf2xx/event/comm_create.hpp>
+#include <otf2xx/event/comm_destroy.hpp>
 
 #include <otf2xx/event/parameter_int.hpp>
 #include <otf2xx/event/parameter_string.hpp>

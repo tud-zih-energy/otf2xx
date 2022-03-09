@@ -36,6 +36,7 @@
 #define INCLUDE_OTF2XX_EVENT_MPI_IRECEIVE_HPP
 
 #include <otf2xx/definition/fwd.hpp>
+#include <otf2xx/event/fwd.hpp>
 
 #include <otf2xx/chrono/chrono.hpp>
 
@@ -52,24 +53,30 @@ namespace event
     class mpi_ireceive : public base<mpi_ireceive>
     {
     public:
-        mpi_ireceive(otf2::chrono::time_point timestamp, uint32_t sender,
-                     const otf2::definition::comm& comm, uint32_t msg_tag, uint64_t msg_length,
-                     uint64_t request_id)
+        mpi_ireceive(
+            otf2::chrono::time_point timestamp, uint32_t sender,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                comm,
+            uint32_t msg_tag, uint64_t msg_length, uint64_t request_id)
         : base<mpi_ireceive>(timestamp), sender_(sender), comm_(comm), msg_tag_(msg_tag),
           msg_length_(msg_length), request_id_(request_id)
         {
         }
 
-        mpi_ireceive(OTF2_AttributeList* al, otf2::chrono::time_point timestamp, uint32_t sender,
-                     const otf2::definition::comm& comm, uint32_t msg_tag, uint64_t msg_length,
-                     uint64_t request_id)
+        mpi_ireceive(
+            OTF2_AttributeList* al, otf2::chrono::time_point timestamp, uint32_t sender,
+            const std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                               otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>&
+                comm,
+            uint32_t msg_tag, uint64_t msg_length, uint64_t request_id)
         : base<mpi_ireceive>(al, timestamp), sender_(sender), comm_(comm), msg_tag_(msg_tag),
           msg_length_(msg_length), request_id_(request_id)
         {
         }
 
         mpi_ireceive(const otf2::event::mpi_ireceive& other, otf2::chrono::time_point timestamp)
-        : base<mpi_ireceive>(other, timestamp), sender_(other.sender()), comm_(other.comm()),
+        : base<mpi_ireceive>(other, timestamp), sender_(other.sender()), comm_(other.comm_),
           msg_tag_(other.msg_tag()), msg_length_(other.msg_length()),
           request_id_(other.request_id())
         {
@@ -80,9 +87,9 @@ namespace event
             return sender_;
         }
 
-        otf2::definition::comm comm() const
+        auto comm() const
         {
-            return comm_;
+            return otf2::definition::variants_from_weak(comm_);
         }
 
         uint32_t msg_tag() const
@@ -101,10 +108,13 @@ namespace event
         }
 
         friend class otf2::writer::local;
+        friend class otf2::event::buffer;
 
     private:
         uint32_t sender_;
-        otf2::definition::detail::weak_ref<otf2::definition::comm> comm_;
+        std::variant<otf2::definition::detail::weak_ref<otf2::definition::comm>,
+                     otf2::definition::detail::weak_ref<otf2::definition::inter_comm>>
+            comm_;
         uint32_t msg_tag_;
         uint64_t msg_length_;
         uint64_t request_id_;

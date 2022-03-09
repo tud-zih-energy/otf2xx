@@ -143,21 +143,12 @@ namespace reader
                     std::vector<OTF2_MetricValue>{ metricValues, metricValues + numberOfMetrics }
                 };
 
-                otf2::event::metric metric_event{ attributeList, timestamp,
-                                                  std::move(metric_values) };
-
-                // assumes a valid trace file
-                if (registry.has<otf2::definition::metric_class>(metric))
-                {
-                    // create metric_event that references a metric_class
-                    metric_event.metric_class(registry.get<otf2::definition::metric_class>(metric));
-                }
-                else
-                {
-                    // create metric_event that references a metric_instance
-                    metric_event.metric_instance(
-                        registry.get<otf2::definition::metric_instance>(metric));
-                }
+                otf2::event::metric metric_event{
+                    attributeList, timestamp,
+                    registry.get_variant_weak<otf2::definition::metric_class,
+                                              otf2::definition::metric_instance>(metric),
+                    std::move(metric_values)
+                };
 
                 reader->callback().event(registry.get<otf2::definition::location>(locationID),
                                          metric_event);
@@ -193,8 +184,47 @@ namespace reader
                     otf2::event::mpi_collective_end(
                         attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
                         static_cast<otf2::event::mpi_collective_end::collective_type>(collectiveOp),
-                        registry.get<otf2::definition::comm>(communicator), root, sizeSent,
-                        sizeReceived));
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(communicator),
+                        root, sizeSent, sizeReceived));
+
+                return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+            }
+
+            OTF2_CallbackCode non_blocking_collective_request(OTF2_LocationRef locationID,
+                                                              OTF2_TimeStamp time, void* userData,
+                                                              OTF2_AttributeList* attributeList,
+                                                              uint64_t requestID)
+            {
+                otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                auto& registry = reader->registry();
+
+                reader->callback().event(registry.get<otf2::definition::location>(locationID),
+                                         otf2::event::non_blocking_collective_request(
+                                             attributeList,
+                                             reader->clock_convert()(otf2::chrono::ticks(time)),
+                                             requestID));
+
+                return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+            }
+
+            OTF2_CallbackCode non_blocking_collective_complete(
+                OTF2_LocationRef locationID, OTF2_TimeStamp time, void* userData,
+                OTF2_AttributeList* attributeList, OTF2_CollectiveOp collectiveOp,
+                OTF2_CommRef communicator, uint32_t root, uint64_t sizeSent, uint64_t sizeReceived,
+                uint64_t requestID)
+            {
+                otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                auto& registry = reader->registry();
+
+                reader->callback().event(
+                    registry.get<otf2::definition::location>(locationID),
+                    otf2::event::non_blocking_collective_complete(
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
+                        static_cast<otf2::event::mpi_collective_end::collective_type>(collectiveOp),
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(communicator),
+                        root, sizeSent, sizeReceived, requestID));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -211,8 +241,9 @@ namespace reader
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::mpi_ireceive(
                         attributeList, reader->clock_convert()(otf2::chrono::ticks(time)), sender,
-                        registry.get<otf2::definition::comm>(communicator), msgTag, msgLength,
-                        requestID));
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(communicator),
+                        msgTag, msgLength, requestID));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -245,8 +276,9 @@ namespace reader
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::mpi_isend(
                         attributeList, reader->clock_convert()(otf2::chrono::ticks(time)), receiver,
-                        registry.get<otf2::definition::comm>(communicator), msgTag, msgLength,
-                        requestID));
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(communicator),
+                        msgTag, msgLength, requestID));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -279,7 +311,9 @@ namespace reader
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::mpi_receive(
                         attributeList, reader->clock_convert()(otf2::chrono::ticks(time)), sender,
-                        registry.get<otf2::definition::comm>(communicator), msgTag, msgLength));
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(communicator),
+                        msgTag, msgLength));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -329,7 +363,9 @@ namespace reader
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::mpi_send(
                         attributeList, reader->clock_convert()(otf2::chrono::ticks(time)), receiver,
-                        registry.get<otf2::definition::comm>(communicator), msgTag, msgLength));
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(communicator),
+                        msgTag, msgLength));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -829,12 +865,13 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(registry.get<otf2::definition::location>(locationID),
-                                         otf2::event::thread_task_complete(
-                                             attributeList,
-                                             reader->clock_convert()(otf2::chrono::ticks(time)),
-                                             registry.get<otf2::definition::comm>(threadTeam),
-                                             creatingThread, generationNumber));
+                reader->callback().event(
+                    registry.get<otf2::definition::location>(locationID),
+                    otf2::event::thread_task_complete(
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(threadTeam),
+                        creatingThread, generationNumber));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -847,12 +884,13 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(registry.get<otf2::definition::location>(locationID),
-                                         otf2::event::thread_task_create(
-                                             attributeList,
-                                             reader->clock_convert()(otf2::chrono::ticks(time)),
-                                             registry.get<otf2::definition::comm>(threadTeam),
-                                             creatingThread, generationNumber));
+                reader->callback().event(
+                    registry.get<otf2::definition::location>(locationID),
+                    otf2::event::thread_task_create(
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(threadTeam),
+                        creatingThread, generationNumber));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -865,12 +903,13 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(registry.get<otf2::definition::location>(locationID),
-                                         otf2::event::thread_task_switch(
-                                             attributeList,
-                                             reader->clock_convert()(otf2::chrono::ticks(time)),
-                                             registry.get<otf2::definition::comm>(threadTeam),
-                                             creatingThread, generationNumber));
+                reader->callback().event(
+                    registry.get<otf2::definition::location>(locationID),
+                    otf2::event::thread_task_switch(
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(threadTeam),
+                        creatingThread, generationNumber));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -882,11 +921,12 @@ namespace reader
                 otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
                 auto& registry = reader->registry();
 
-                reader->callback().event(registry.get<otf2::definition::location>(locationID),
-                                         otf2::event::thread_team_begin(
-                                             attributeList,
-                                             reader->clock_convert()(otf2::chrono::ticks(time)),
-                                             registry.get<otf2::definition::comm>(threadTeam)));
+                reader->callback().event(
+                    registry.get<otf2::definition::location>(locationID),
+                    otf2::event::thread_team_begin(
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(threadTeam)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -900,9 +940,10 @@ namespace reader
 
                 reader->callback().event(
                     registry.get<otf2::definition::location>(locationID),
-                    otf2::event::thread_team_end(attributeList,
-                                                 reader->clock_convert()(otf2::chrono::ticks(time)),
-                                                 registry.get<otf2::definition::comm>(threadTeam)));
+                    otf2::event::thread_team_end(
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(threadTeam)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -919,7 +960,9 @@ namespace reader
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::thread_create(
                         attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
-                        registry.get<otf2::definition::comm>(threadContingent), sequenceCount));
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(threadContingent),
+                        sequenceCount));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -936,7 +979,9 @@ namespace reader
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::thread_begin(
                         attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
-                        registry.get<otf2::definition::comm>(threadContingent), sequenceCount));
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(threadContingent),
+                        sequenceCount));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -953,7 +998,9 @@ namespace reader
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::thread_wait(
                         attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
-                        registry.get<otf2::definition::comm>(threadContingent), sequenceCount));
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(threadContingent),
+                        sequenceCount));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -969,7 +1016,9 @@ namespace reader
                     registry.get<otf2::definition::location>(locationID),
                     otf2::event::thread_end(
                         attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
-                        registry.get<otf2::definition::comm>(threadContingent), sequenceCount));
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(threadContingent),
+                        sequenceCount));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }
@@ -1273,6 +1322,40 @@ namespace reader
                     otf2::event::program_end(attributeList,
                                              reader->clock_convert()(otf2::chrono::ticks(time)),
                                              exitStatus));
+
+                return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+            }
+
+            OTF2_CallbackCode comm_create(OTF2_LocationRef location, OTF2_TimeStamp time,
+                                          void* userData, OTF2_AttributeList* attributeList,
+                                          OTF2_CommRef communicator)
+            {
+                otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                auto& registry = reader->registry();
+
+                reader->callback().event(
+                    registry.get<otf2::definition::location>(location),
+                    otf2::event::comm_create(
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(communicator)));
+
+                return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
+            }
+
+            OTF2_CallbackCode comm_destroy(OTF2_LocationRef location, OTF2_TimeStamp time,
+                                           void* userData, OTF2_AttributeList* attributeList,
+                                           OTF2_CommRef communicator)
+            {
+                otf2::reader::reader* reader = static_cast<otf2::reader::reader*>(userData);
+                auto& registry = reader->registry();
+
+                reader->callback().event(
+                    registry.get<otf2::definition::location>(location),
+                    otf2::event::comm_destroy(
+                        attributeList, reader->clock_convert()(otf2::chrono::ticks(time)),
+                        registry.get_variant_weak<otf2::definition::comm,
+                                                  otf2::definition::inter_comm>(communicator)));
 
                 return static_cast<OTF2_CallbackCode>(OTF2_SUCCESS);
             }

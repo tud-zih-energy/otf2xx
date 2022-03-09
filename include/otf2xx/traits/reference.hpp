@@ -82,7 +82,7 @@ namespace traits
     };
 
     template <>
-    struct reference_type<definition::comm> : identity<OTF2_CommRef>
+    struct reference_type<definition::detail::comm_base> : identity<OTF2_CommRef>
     {
     };
 
@@ -108,11 +108,6 @@ namespace traits
 
     template <>
     struct reference_type<definition::call_path> : identity<OTF2_CallpathRef>
-    {
-    };
-
-    template <>
-    struct reference_type<definition::call_site> : identity<OTF2_CallsiteRef>
     {
     };
 

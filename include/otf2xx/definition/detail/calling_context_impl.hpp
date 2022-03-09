@@ -90,18 +90,8 @@ namespace definition
                 return source_code_location_;
             }
 
-            bool has_parent() const
-            {
-                return parent_.get() != nullptr;
-            }
-
             auto parent() const
             {
-                if (!has_parent())
-                {
-                    make_exception("The calling context hasn't got a parent.");
-                }
-
                 return std::make_pair(parent_.get(), pref_);
             }
 

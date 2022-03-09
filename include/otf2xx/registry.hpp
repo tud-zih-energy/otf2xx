@@ -410,9 +410,44 @@ struct get_default_holder
                                                           property_holder>::type;
 };
 
+template <typename Registry, typename Result, typename Definition, typename... Variants>
+struct get_variant_helper
+{
+    const Registry& reg;
+    get_variant_helper(const Registry& reg) : reg(reg)
+    {
+    }
+
+    template <typename Key>
+    Result operator()(const Key& key)
+    {
+        if (reg.template has<Definition>(key))
+        {
+            return reg.template get<Definition>(key);
+        }
+        return get_variant_helper<Registry, Result, Variants...>(reg)(key);
+    }
+};
+
+template <typename Registry, typename Result, typename Definition>
+struct get_variant_helper<Registry, Result, Definition>
+{
+    const Registry& reg;
+    get_variant_helper(const Registry& reg) : reg(reg)
+    {
+    }
+
+    template <typename Key>
+    Result operator()(const Key& key)
+    {
+        return reg.template get<Definition>(key);
+    }
+};
+
 template <template <typename> class GetHolderForDefinition>
 class lookup_registry
 {
+    using self = lookup_registry<GetHolderForDefinition>;
 
     using holders =
         tmp::apply_t<tmp::transform_t<traits::usable_definitions, GetHolderForDefinition>,
@@ -478,6 +513,20 @@ public:
         return get_holder<Definition>().emplace(std::forward<Args>(args)...);
     }
 
+    template <typename... Variants, typename Key>
+    std::variant<Variants...> get_variant(const Key& key)
+    {
+        return get_variant_helper<self, std::variant<Variants...>, Variants...>(*this)(key);
+    }
+
+    template <typename... Variants, typename Key>
+    std::variant<otf2::definition::weak_ref<Variants>...> get_variant_weak(const Key& key)
+    {
+        return get_variant_helper<self, std::variant<otf2::definition::weak_ref<Variants>...>,
+                                  Variants...>(*this)(key);
+    }
+
+public:
     template <typename Definition, typename Key>
     auto& get(const Key& key)
     {
