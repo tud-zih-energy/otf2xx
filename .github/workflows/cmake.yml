@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        compiler: [g++-9, g++-10, clang++-10, clang++-11, clang++-12]
+        compiler: [g++-9, g++-10, g++-11, clang++-10, clang++-11, clang++-12]
 
     steps:
     - uses: actions/checkout@v2
@@ -34,6 +34,11 @@ jobs:
         cd otf2-${OTF2_VERSION}
         ./configure --prefix=/opt/otf2
         make -j2 install
+    - name: Install Dependencies
+      if: ${{ matrix.compiler }} == 'g++-11'
+      run: |
+        sudo apt-get update
+        sudo apt-get install g++-11 -y
     - name: Run CMake configure
       env:
         CXX: ${{ matrix.compiler }}
