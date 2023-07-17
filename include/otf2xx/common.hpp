@@ -82,8 +82,9 @@ namespace common
         socket,
         cache,
         core,
-        pu
-
+        pu,
+        accelerator_device,
+        networking_device
     };
 
     /**
@@ -138,7 +139,8 @@ namespace common
     enum class location_group_type : std::uint8_t
     {
         unknown,
-        process
+        process,
+        accelerator
     };
 
     enum class role_type : std::uint8_t

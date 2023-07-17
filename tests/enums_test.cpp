@@ -104,6 +104,7 @@ using namespace otf2::common;
     static_assert(sizeof(location_group_type) == sizeof(OTF2_LocationGroupType), "Enum size mismatch");
     static_assert(static_cast<int>(location_group_type::unknown) == OTF2_LOCATION_GROUP_TYPE_UNKNOWN, "Enum value mismatch");
     static_assert(static_cast<int>(location_group_type::process) == OTF2_LOCATION_GROUP_TYPE_PROCESS, "Enum value mismatch");
+    static_assert(static_cast<int>(location_group_type::accelerator) == OTF2_LOCATION_GROUP_TYPE_ACCELERATOR, "Enum value mismatch");
 
     static_assert(sizeof(role_type) == sizeof(OTF2_RegionRole), "Enum size mismatch");
     static_assert(static_cast<int>(role_type::unknown) == OTF2_REGION_ROLE_UNKNOWN, "Enum value mismatch");
@@ -267,6 +268,8 @@ using namespace otf2::common;
     static_assert(static_cast<int>(system_tree_node_domain::cache) == OTF2_SYSTEM_TREE_DOMAIN_CACHE, "Enum value mismatch");
     static_assert(static_cast<int>(system_tree_node_domain::core) == OTF2_SYSTEM_TREE_DOMAIN_CORE, "Enum value mismatch");
     static_assert(static_cast<int>(system_tree_node_domain::pu) == OTF2_SYSTEM_TREE_DOMAIN_PU, "Enum value mismatch");
+    static_assert(static_cast<int>(system_tree_node_domain::accelerator_device) == OTF2_SYSTEM_TREE_DOMAIN_ACCELERATOR_DEVICE, "Enum value mismatch");
+    static_assert(static_cast<int>(system_tree_node_domain::networking_device) == OTF2_SYSTEM_TREE_DOMAIN_NETWORKING_DEVICE , "Enum value mismatch");
 
     static_assert(sizeof(interrupt_generator_mode_type) == sizeof(OTF2_InterruptGeneratorMode), "Enum size mismatch");
     static_assert(static_cast<int>(interrupt_generator_mode_type::time) == OTF2_INTERRUPT_GENERATOR_MODE_TIME, "Enum value mismatch");
