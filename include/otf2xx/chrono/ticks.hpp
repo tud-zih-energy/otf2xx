@@ -35,6 +35,8 @@
 #ifndef INCLUDE_OTF2XX_CHRONO_TICKS_HPP
 #define INCLUDE_OTF2XX_CHRONO_TICKS_HPP
 
+#include <cstdint>
+
 namespace otf2
 {
 namespace chrono

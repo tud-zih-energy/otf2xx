@@ -35,6 +35,7 @@
 #ifndef INCLUDE_OTF2XX_DEFINITIONS_CLOCK_PROPERTIES_HPP
 #define INCLUDE_OTF2XX_DEFINITIONS_CLOCK_PROPERTIES_HPP
 
+#include <chrono>
 #include <otf2xx/chrono/chrono.hpp>
 #include <otf2xx/exception.hpp>
 #include <otf2xx/fwd.hpp>
@@ -58,8 +59,27 @@ namespace definition
         {
         }
 
+        clock_properties(otf2::chrono::time_point start_time, otf2::chrono::duration length,
+                         std::chrono::system_clock::time_point real_time)
+        : clock_properties(otf2::chrono::ticks(otf2::chrono::duration::period::den),
+                           otf2::chrono::ticks(start_time.time_since_epoch().count()),
+                           otf2::chrono::ticks(length.count()),
+                           otf2::chrono::ticks(real_time.time_since_epoch().count()))
+        {
+        }
+
         clock_properties(otf2::chrono::time_point start_time, otf2::chrono::time_point end_time)
         : clock_properties(start_time, end_time - start_time)
+        {
+            if (end_time < start_time)
+            {
+                make_exception("start_time must be before end_time");
+            }
+        }
+
+        clock_properties(otf2::chrono::time_point start_time, otf2::chrono::time_point end_time,
+                         std::chrono::system_clock::time_point real_time)
+        : clock_properties(start_time, end_time - start_time, real_time)
         {
             if (end_time < start_time)
             {
