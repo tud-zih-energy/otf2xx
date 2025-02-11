@@ -37,7 +37,6 @@ PenaltyReturnTypeOnItsOwnLine: 60
 
 
 SpaceBeforeAssignmentOperators: true
-SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 1
 
 
@@ -50,6 +49,5 @@ SpacesInAngles:  false
 SpaceInEmptyParentheses: false
 SpacesInCStyleCastParentheses: false
 SpaceAfterControlStatementKeyword: true
-SpaceBeforeAssignmentOperators: true
 ContinuationIndentWidth: 4
 ...

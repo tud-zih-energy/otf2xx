@@ -111,6 +111,11 @@ namespace definition
             return data_->class_name();
         }
 
+        void parent(const otf2::definition::system_tree_node& parent)
+        {
+            data_->parent(parent.get(), parent.ref());
+        }
+
         /**
          * \brief returns the parent
          * \returns otf2::definition::system_tree_node

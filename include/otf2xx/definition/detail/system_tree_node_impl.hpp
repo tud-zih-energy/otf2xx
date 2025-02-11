@@ -98,6 +98,12 @@ namespace definition
                 return std::make_pair(parent_.get(), pref_);
             }
 
+            void parent(system_tree_node_impl* parent, reference_type pref)
+            {
+                parent_ = otf2::intrusive_ptr<system_tree_node_impl>(parent);
+                pref_ = pref;
+            }
+
         private:
             otf2::definition::string name_;
             otf2::definition::string class_name_;
