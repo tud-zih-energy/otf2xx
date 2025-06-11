@@ -149,6 +149,8 @@ using namespace otf2::common;
     static_assert(static_cast<int>(role_type::deallocate) == OTF2_REGION_ROLE_DEALLOCATE, "Enum value mismatch");
     static_assert(static_cast<int>(role_type::reallocate) == OTF2_REGION_ROLE_REALLOCATE, "Enum value mismatch");
     static_assert(static_cast<int>(role_type::file_io_metadata) == OTF2_REGION_ROLE_FILE_IO_METADATA, "Enum value mismatch");
+    static_assert(static_cast<int>(role_type::cancel) == OTF2_REGION_ROLE_CANCEL, "Enum value mismatch");
+    static_assert(static_cast<int>(role_type::kernel) == OTF2_REGION_ROLE_KERNEL, "Enum value mismatch");
 
     static_assert(sizeof(parameter_type) == sizeof(OTF2_ParameterType), "Enum size mismatch");
     static_assert(static_cast<int>(paradigm_type::unknown) == OTF2_PARADIGM_UNKNOWN, "Enum value mismatch");
@@ -174,6 +176,9 @@ using namespace otf2::common;
     static_assert(static_cast<int>(paradigm_type::mtapi) == OTF2_PARADIGM_MTAPI, "Enum value mismatch");
     static_assert(static_cast<int>(paradigm_type::sampling) == OTF2_PARADIGM_SAMPLING, "Enum value mismatch");
     static_assert(static_cast<int>(paradigm_type::none) == OTF2_PARADIGM_NONE, "Enum value mismatch");
+    static_assert(static_cast<int>(paradigm_type::hip) == OTF2_PARADIGM_HIP, "Enum value mismatch");
+    static_assert(static_cast<int>(paradigm_type::kokkos) == OTF2_PARADIGM_KOKKOS, "Enum value mismatch");
+    static_assert(static_cast<int>(paradigm_type::openmp_target) == OTF2_PARADIGM_OPENMP_TARGET, "Enum value mismatch");
 
     static_assert(sizeof(paradigm_class_type) == sizeof(OTF2_ParadigmClass), "Enum size mismatch");
     static_assert(static_cast<int>(paradigm_class_type::process) == OTF2_PARADIGM_CLASS_PROCESS, "Enum value mismatch");

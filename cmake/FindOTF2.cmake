@@ -24,8 +24,8 @@ IF(NOT OTF2_CONFIG OR NOT EXISTS ${OTF2_CONFIG})
 ELSE()
     message(STATUS "OTF2 installation found. (using ${OTF2_CONFIG})")
 
-    execute_process(COMMAND ${OTF2_CONFIG} "--interface-version" OUTPUT_VARIABLE OTF2_VERSION)
-    STRING(REPLACE ":" "." OTF2_VERSION ${OTF2_VERSION})
+    execute_process(COMMAND ${OTF2_CONFIG} "--version" OUTPUT_VARIABLE OTF2_VERSION)
+    STRING(REPLACE "otf2-config: version" "" OTF2_VERSION ${OTF2_VERSION})
     STRING(STRIP ${OTF2_VERSION} OTF2_VERSION)
 
     execute_process(COMMAND ${OTF2_CONFIG} "--cppflags" OUTPUT_VARIABLE OTF2_INCLUDE_DIRS)
@@ -56,9 +56,17 @@ ELSE()
                 SET(_OTF2_NEEDS_PTHREAD TRUE)
                 continue()
             ENDIF()
-            FIND_LIBRARY(_OTF2_LIB_FROM_ARG NAMES ${_ARG}
-                HINTS ${OTF2_LINK_DIRS} NO_DEFAULT_PATH
-            )
+
+            # If --ldflags contains no -L/path/to/otf2, check default
+            # search paths instead (e.g. /usr/lib ...)
+            if(OTF2_LINK_DIRS STREQUAL "")
+                FIND_LIBRARY(_OTF2_LIB_FROM_ARG NAMES ${_ARG})
+            else()
+                FIND_LIBRARY(_OTF2_LIB_FROM_ARG NAMES ${_ARG}
+                    HINTS ${OTF2_LINK_DIRS} NO_DEFAULT_PATH
+                )
+            endif()
+
             IF(${_ARG} STREQUAL "otf2")
                 SET(OTF2_LIBRARY ${_OTF2_LIB_FROM_ARG})
             ELSE()

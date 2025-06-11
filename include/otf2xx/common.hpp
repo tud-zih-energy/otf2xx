@@ -183,7 +183,9 @@ namespace common
         allocate,
         deallocate,
         reallocate,
-        file_io_metadata
+        file_io_metadata,
+        cancel,
+        kernel
     };
 
     enum class paradigm_type
@@ -210,7 +212,10 @@ namespace common
         opencl,
         mtapi,
         sampling,
-        none
+        none,
+        hip,
+        kokkos,
+        openmp_target
     };
 
     enum class paradigm_class_type : std::uint8_t

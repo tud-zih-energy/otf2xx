@@ -29,16 +29,16 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
 
 project(otf2xx VERSION 2.0.0)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
-find_package(OTF2 10.0.0 EXACT)
+find_package(OTF2 3.1 EXACT)
 
 if (NOT OTF2_FOUND)
-    message(FATAL_ERROR "Please download and install OTF2 3.0.\n"
-    "Available from: https://perftools.pages.jsc.fz-juelich.de/cicd/otf2/tags/otf2-3.0/otf2-3.0.tar.gz")
+    message(FATAL_ERROR "Please download and install OTF2 3.1.\n"
+    "Available from: https://perftools.pages.jsc.fz-juelich.de/cicd/otf2/tags/otf2-3.1/otf2-3.1.tar.gz")
 endif()
 
 set(OTF2XX_CHRONO_DURATION_TYPE "picoseconds" CACHE STRING "The used underlying type for otf2::chrono::duration.")
