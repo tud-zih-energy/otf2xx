@@ -43,6 +43,7 @@
 #include <otf2xx/exception.hpp>
 
 #include <otf2xx/chrono/chrono.hpp>
+#include <otf2xx/chrono/convert.hpp>
 
 namespace otf2
 {
